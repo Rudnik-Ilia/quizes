@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-void ChangeString(char *word, int len_of_word)
+void ChangeString(char *word, int len_of_word)/* takes word and its len. ti convert to hex-format*/
+
 {
     int i = 0;
        
@@ -10,7 +11,7 @@ void ChangeString(char *word, int len_of_word)
     }   
 }
 
-float PowNumber(int n)
+float PowNumber(int n)/*exponent to by n*/
 {
 	float result = 1;
 	float number = 10;
@@ -27,7 +28,7 @@ float PowNumber(int n)
 	return result;
 }
 
-int SwapNumber(int x)
+int SwapNumber(int x)/*reverse a given number*/
 {
 	
 	int result = 0;
@@ -39,7 +40,7 @@ int SwapNumber(int x)
 	return result;
 }
 
-void Swap(int *x,int *y)
+void Swap(int *x,int *y)/* swaping two variable in memory*/
 {
 	int tmp;
 	tmp = *x;
@@ -50,6 +51,8 @@ void Swap(int *x,int *y)
 
 int main()
 {
+	int a = 10;
+	int b = 20;
 
 	
 	char word[] = "\"Hello word!\"";	
@@ -57,8 +60,7 @@ int main()
     	printf("\n%f\n",PowNumber(5));
     	printf("\n%f\n",PowNumber(-3));
     	printf("%d\n",SwapNumber(12340));
-        int a = 10;
-        int b = 20;
+       
     
     	Swap(&a,&b);
     
