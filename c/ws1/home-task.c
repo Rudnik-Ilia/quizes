@@ -1,21 +1,26 @@
 #include <stdio.h>
+#include<assert.h>
 
-# define RETURN return 0
 
-int Mystrcmp(char *s, char *t)
+
+
+
+
+int StrCmp(char *first_word, char *second_word)
 { 
-	for (; *s == *t; s++, t++) {
+	assert((NULL != first_word && NULL != second_word) && "SOMETHING WRONG!CHECK PARAM!");
+	for (;*first_word == *second_word; first_word++, second_word++) {
 		
-    		if (*s == '\0')
+    		if (*first_word == '\0')
     		{
-    	 		return (*s - *t);
+    	 		return (*first_word - *second_word);
     		}
   	} 
-  	printf("%c\n - %c\n", *s, *t);
-  	return(*s - *t);
+  	
+  	return(*first_word - *second_word);
 }
 
-int StrCmp (const char *p1, const char *p2)
+int OriginalStrCmp (const char *p1, const char *p2)
 {
 	const unsigned char *s1 = (const unsigned char *) p1;
   	const unsigned char *s2 = (const unsigned char *) p2;
@@ -31,17 +36,30 @@ int StrCmp (const char *p1, const char *p2)
   	while (c1 == c2);
   	return c1 - c2;
 }
-
+int StrLen(char *word)
+{
+	int count = 0;
+	
+	assert(NULL != word && "SOMETHING WRONG!CHECK PARAM!");
+	
+	while(*word++ != '\0')
+	{
+		count++;
+	}	
+	return count;
+}
 
 int main()
 {
-	//printf("%d",StrCmp("ilia","ilia"));
-	printf("%d",Mystrcmp("ilia","ilia"));
-
-	char a = "a";
-	char b = "d";
+	char a = 'a';
+	char* p_a;
+	p_a = a;
+	del a;
 	
-	//printf("%d", a);
+	//printf("%d",StrCmp(NULL,"Infiniqqq"));
+	printf("%d",StrLen(&p_a));
+
+	
 
 }
 
