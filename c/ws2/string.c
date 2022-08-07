@@ -54,18 +54,23 @@ char *StrCpyNum(char *dest,  char *src, int num)
                return dest;
 }
 
-int StrCmp(const char *first_word, const char *second_word, size_t num )
+int StrCmpNum(const char *first_word, const char *second_word, size_t num )
 { 
 	assert(NULL != first_word);
 	assert(NULL != second_word);
-	for (;*first_word == *second_word; first_word++, second_word++) {
-		
-    		if (*first_word == '\0')
-    		{
-    	 		return (*first_word - *second_word);
-    		}
+	
+	size_t count = 0;
+	
+	
+	for (;*first_word == *second_word && count < num; first_word++, second_word++) {
+		count++;
+		if( count == num)
+		{
+		 	return(*first_word - *second_word);
+		}
+    		
   	} 
-  	
+  	//printf("%d - %d\n", *first_word, *second_word);
   	return(*first_word - *second_word);
 }
 
