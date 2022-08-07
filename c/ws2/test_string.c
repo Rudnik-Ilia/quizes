@@ -8,13 +8,15 @@ int main()
 {	
 	
 	 char dest[5];
-	 char dest1[100];
+	 char dest1[]="11111111111111111111111111111111";
 	 char dest2[100];
 	
 	
-	printf("%s - %s\n", StrCpy(dest, "fffffffffffffffffffffffffffffffffffffffffffffff"), strcpy(dest,"fffffffffffffffffffffffffffffffffffffffffffffff"));
-	printf("%s - %s\n", StrCpy(dest1, ""), strcpy(dest1,""));
-	printf("%s - %s\n", StrCpy(dest2, "Hello"), strcpy(dest1,"Hello"));
+	printf("%s - %s - %s\n", StrCpyNum(dest1, "Hello World!", 5), StrCpyNum_2(dest1, "Hello World!", 5), strncpy(dest1,"Hello World!",5));
+	
+	
+	
+	
 	
 	
 	
