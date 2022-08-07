@@ -64,7 +64,7 @@ int StrCmpNum(const char *first_word, const char *second_word, size_t num )
 	
 	for (;*first_word == *second_word && count < num; first_word++, second_word++) {
 		count++;
-		if( count == num)
+		if( count == num-1)
 		{
 		 	return(*first_word - *second_word);
 		}
