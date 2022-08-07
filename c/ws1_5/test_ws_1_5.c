@@ -1,11 +1,13 @@
 #include<stdio.h>
 #include<assert.h>
+#include<string.h>
 #include"ws1_5.h"
 
 int main()
 {
-	const char *p_w = "ilia";
-	printf("%ld\n", (StrLen(p_w)));
+	
+	printf("%ld\n", (StrLen("illlll")));
+	printf("%ld\n", (strlen("illlll")));
 	
 	return 0;
 

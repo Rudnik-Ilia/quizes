@@ -6,6 +6,7 @@
 
 
 
+
 int StrCmp(char *first_word, char *second_word)
 { 
 	assert((NULL != first_word && NULL != second_word) && "SOMETHING WRONG!CHECK PARAM!");

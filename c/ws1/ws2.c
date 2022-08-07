@@ -44,17 +44,28 @@ int main()
 	static int s_i = 7;
 	int i = 7;
 	int *ptr = &i;
-	int *ptr2 = (int *)malloc(sizeof(int));
+	//int *ptr2 = (int *)malloc(sizeof(int));
 	
-	int *p_arr = (int*)malloc(sizeof(int)*5);
-	if (NULL == p_arr)
-	{
-		printf("Trouble!");
-	};
-	printf("%p\n",&s_i);
-	printf("%p\n",&i);
-	printf("%p\n",&ptr);
-	printf("%p\n",&ptr2);
+	unsigned int *ip =0;
+	float f = 3;
+	float *fp = &f;
+	ip = (unsigned int *) fp;
+	
+	//int *p_arr = (int*)malloc(sizeof(int)*5);
+	
+	//if (NULL == p_arr)
+	//{
+		//printf("Trouble!");
+	//};
+	//free(p_arr);
+	//printf("%p\n",&s_i);
+	//printf("%p\n",&i);
+	//printf("%p\n",&ptr);
+	//printf("%p\n",&ptr2);
+	
+	printf("%u", *ip);
+	
+	
 	
 	
 	
