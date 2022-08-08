@@ -27,3 +27,6 @@ char *StrDup(const char *string);
 char *StrCat(const char *str_src, char *str_dest);
 /* Second var. of previos func*/
 char *StrCat_2(char *str_dest, char *str_src);
+
+/*look for first match substring in a string*/
+char *StrStr(char *where_find, char *what_find);

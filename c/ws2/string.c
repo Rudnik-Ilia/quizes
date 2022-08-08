@@ -72,7 +72,7 @@ int StrCmpNum(const char *first_word, const char *second_word, size_t num )
 		}
     		
   	} 
-  	//printf("%d - %d\n", *first_word, *second_word);
+  	
   	return(*first_word - *second_word);
 }
 
@@ -161,7 +161,27 @@ char *StrCat_2(char *str_dest, char *str_src)
 	
 	return str_dest;
 }
+char *StrStr(char *where_find, char *what_find)
+{
+	int i, j;
+	size_t n = strlen(what_find);
+	
+	for (i = 0, j = 0; where_find[i]; i++, j++)
+		{       
+			
+			if (where_find[i] != what_find[j])
+			{
+			 	j = -1;
+			}
+        		if (j == n-1)
+        		{
+        			return (char *)where_find + i - n+1;
 
+        		}
+    		}   
+    		return NULL; 
+
+}
 
 
 
