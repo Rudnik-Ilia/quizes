@@ -6,6 +6,8 @@
 
 int main()
 {	
+	 char x = 'a';
+	 char y = 'x';
 	 char name[] = "Ilia";
 	 char name_2[] = "ilia";
 	 char name_3[] = "rudnik";
@@ -23,6 +25,10 @@ int main()
 	
 	//printf("%d - %d\n", StrCaseCmp(name, name_2), strcasecmp(name, name_2));
 	//printf("%d - %d\n", StrCaseCmp(name_3, name_4), strcasecmp(name_3, name_4));
+	
+	
+	//printf("%c - %c\n", *StrChar(name_2, x),*strchr(name_2, x));
+	printf("%p - %p\n", StrChar(name_2, y),strchr(name_2, y));
 	
 	
 	

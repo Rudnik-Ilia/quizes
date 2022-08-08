@@ -99,7 +99,20 @@ int StrCaseCmp( char *first_word,  char *second_word)
 
 char *StrChar(char *word, char x)
 {
-	asert(NULL !== word);
+	assert(NULL != word);
+	char *p_word = word;
+	while(*p_word++ != x)
+	{
+		if(*p_word == '\0')
+		{
+			return NULL;
+		}
+		if(*p_word == x)
+		{
+			return p_word;
+		}
+	}
+	return p_word;
 	
 	 
 

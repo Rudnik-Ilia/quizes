@@ -16,3 +16,6 @@ int StrCmpNum(const char *first_word, const char *second_word, size_t num );
 
 /* Func that compare two string without a case*/
 int StrCaseCmp( char *first_word,  char *second_word);
+
+/* Find a first char in string adn returns the pointer to it*/
+char *StrChar(char *word, char x);
