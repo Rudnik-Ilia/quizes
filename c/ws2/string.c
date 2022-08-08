@@ -2,7 +2,7 @@
 #include<assert.h>
 #include<stdio.h>
 #include<stdlib.h>
-#include"string.h"
+#include<string.h>
 
 
 
@@ -120,8 +120,8 @@ char *StrDup(const char *string)
 {
 	assert(NULL != string);
 	
-	char * p_res;
-	char * p_str;
+	char *p_res;
+	char *p_str;
 	p_str = string;
 	size_t i = 0;
 	size_t len_of_str = strlen(string);
@@ -138,13 +138,29 @@ char *StrDup(const char *string)
 	return p_res - len_of_str;
 }
 
-char *strcat(const char *str_src, char *str_dest)
+char *StrCat(char *str_dest, char *str_src)
 {
-
-
+	assert(NULL != str_dest);
+	assert(NULL != str_src);
+	
+	
+	char *temp = str_dest+strlen(str_dest);
+	while(*str_src++ != '\0')
+	{
+	*temp++ = *str_src;	
+	}	
+	return str_dest;
 }
 
-
+char *StrCat_2(char *str_dest, char *str_src)
+{
+	assert(NULL != str_dest);
+	assert(NULL != str_src);
+	
+	StrCpy(str_dest + strlen(str_dest), str_src);
+	
+	return str_dest;
+}
 
 
 

@@ -10,11 +10,12 @@ int main()
 	 char y = 'x';
 	 char name[] = "Ilia";
 	 char name_2[] = "ilia";
-	 char name_3[] = "rudnik";
+	 char name_3[310] = "Rudniko";
 	 char name_4[] = "rudnik";
 	 char dest[5];
 	 char dest1[]="11111111111111111111111111111111";
 	 char dest2[100];
+	 char * p_name = name;
 	
 	
 	//printf("%s - %s - %s\n", StrCpyNum(dest1, "Hello World!", 5), StrCpyNum_2(dest1, "Hello World!", 5), strncpy(dest1,"Hello World!",5));
@@ -36,6 +37,21 @@ int main()
 	
 	
 	
+	
+	/*
+	if(*StrCat(name_3, name) == *strcat(name_3, name) && *(StrCat(name_3, name)+9) == *(strcat(name_3, name) + 9))
+	{
+		printf("PASS\n");
+	};
+	
+	if(*StrCat_2(name_3, name) == *strcat(name_3, name) && *(StrCat_2(name_3, name)+9) == *(strcat(name_3, name) + 9))
+	{
+		printf("PASS\n");
+	};
+	*/
+	
+	
+
 	
 	
 	

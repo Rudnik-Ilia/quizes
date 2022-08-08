@@ -24,4 +24,6 @@ char *StrChar(char *word, char x);
 char *StrDup(const char *string);
 
 /*Add str_src to str_dest */
-char *strcat(const char *str_src, char *str_dest);
+char *StrCat(const char *str_src, char *str_dest);
+/* Second var. of previos func*/
+char *StrCat_2(char *str_dest, char *str_src);
