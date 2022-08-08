@@ -6,7 +6,7 @@
 
 int main()
 {	
-	 char name[] = "ilia";
+	 char name[] = "Ilia";
 	 char name_2[] = "ilia";
 	 char name_3[] = "rudnik";
 	 char dest[5];
