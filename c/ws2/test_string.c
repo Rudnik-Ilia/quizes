@@ -28,7 +28,10 @@ int main()
 	
 	
 	//printf("%c - %c\n", *StrChar(name_2, x),*strchr(name_2, x));
-	printf("%p - %p\n", StrChar(name_2, y),strchr(name_2, y));
+	//printf("%p - %p\n", StrChar(name_2, y),strchr(name_2, y));
+	
+	
+	printf("%p\n", StrDup(name));
 	
 	
 	

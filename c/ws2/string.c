@@ -113,9 +113,15 @@ char *StrChar(char *word, char x)
 		}
 	}
 	return p_word;
-	
-	 
+}
 
+char *StrDup(const char *string)
+{
+	assert(NULL != string);
+	
+	const char * p_res;
+	
+	return p_res;
 }
 
 

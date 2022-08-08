@@ -19,3 +19,6 @@ int StrCaseCmp( char *first_word,  char *second_word);
 
 /* Find a first char in string adn returns the pointer to it*/
 char *StrChar(char *word, char x);
+
+/*Returns a duplicate string of given string*/
+char *StrDup(const char *string);
