@@ -62,7 +62,8 @@ int StrCmpNum(const char *first_word, const char *second_word, size_t num )
 	size_t count = 0;
 	
 	
-	for (;*first_word == *second_word && count < num; first_word++, second_word++) {
+	for (;*first_word == *second_word && count < num; first_word++, second_word++) 
+	{
 		count++;
 		if( count == num-1)
 		{
@@ -79,21 +80,21 @@ int StrCaseCmp( char *first_word,  char *second_word)
 	assert(NULL != first_word);
 	assert(NULL != second_word);
 	
-	char *p_f = first_world;
-	char *p_s = second_world;
+	char *p_f = first_word;
+	char *p_s = second_word;
 	int result = 0;
 	
-	while((result == (tolower(*p_f) - tolower(*p_s)) == 0)
+	//while((result == (tolower(*p_f) - tolower(*p_s)) == 0))
+	for(; (tolower(*p_f) - tolower(*p_s)) == 0; *p_f++, *p_s++)
 	{
-		*p_f++;
-		*p_s++;
+		
 		if(*p_f == '\0')
 		{
-			return result;
+			return tolower(*p_f) - tolower(*p_s);
 		}
 		 
 	}
-	return result;
+	return tolower(*p_f) - tolower(*p_s);
 }
 
 
