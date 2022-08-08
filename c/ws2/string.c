@@ -84,7 +84,7 @@ int StrCaseCmp( char *first_word,  char *second_word)
 	char *p_s = second_word;
 	int result = 0;
 	
-	//while((result == (tolower(*p_f) - tolower(*p_s)) == 0))
+	
 	for(; (tolower(*p_f) - tolower(*p_s)) == 0; *p_f++, *p_s++)
 	{
 		
@@ -95,6 +95,14 @@ int StrCaseCmp( char *first_word,  char *second_word)
 		 
 	}
 	return tolower(*p_f) - tolower(*p_s);
+}
+
+char *StrChar(char *word, char x)
+{
+	asert(NULL !== word);
+	
+	 
+
 }
 
 
