@@ -138,6 +138,12 @@ char *StrDup(const char *string)
 	return p_res - len_of_str;
 }
 
+char *strcat(const char *str_src, char *str_dest)
+{
+
+
+}
+
 
 
 

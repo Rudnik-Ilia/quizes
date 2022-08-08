@@ -22,3 +22,6 @@ char *StrChar(char *word, char x);
 
 /*Returns a duplicate string of given string*/
 char *StrDup(const char *string);
+
+/*Add str_src to str_dest */
+char *strcat(const char *str_src, char *str_dest);
