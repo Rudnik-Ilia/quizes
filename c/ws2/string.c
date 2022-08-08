@@ -1,6 +1,7 @@
 #include<stddef.h>
 #include<assert.h>
 #include<stdio.h>
+#include<stdlib.h>
 #include"string.h"
 
 
@@ -119,9 +120,22 @@ char *StrDup(const char *string)
 {
 	assert(NULL != string);
 	
-	const char * p_res;
+	char * p_res;
+	char * p_str;
+	p_str = string;
+	size_t i = 0;
+	size_t len_of_str = strlen(string);
 	
-	return p_res;
+	p_res = (char *)malloc(sizeof(char)*len_of_str);
+	
+	while(i < len_of_str)
+	{
+		*p_res++ = *p_str++;
+		++i;
+		
+	}
+	
+	return p_res - len_of_str;
 }
 
 
