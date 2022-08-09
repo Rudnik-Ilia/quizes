@@ -161,6 +161,7 @@ char *StrCat_2(char *str_dest, char *str_src)
 	
 	return str_dest;
 }
+
 char *StrStr(char *where_find, char *what_find)
 {
 	int i, j;
@@ -192,17 +193,49 @@ int StrSpn(const char *str, const char *chars)
     return i;
 }
 
+
+
 int Palindrome(char word[])
 {
-    int l, i;
-    l = strlen(word);
-    for (i =0;i<l/2;i++)
+    int len;
+    int i;
+    len = strlen(word);
+    for (i =0; i < len/2 ;i++)
     {
-        if (word[i]!=word[l-1-i])
+        if (word[i] != word[len-1-i])
             return(0);
     }
     return(1);
 
+}
+
+int Boom(int first, int second)
+{
+	int len_dis = second - first;
+	int tmp = 0;
+	int flag = 1;
+	int count = 0;
+	
+	while(first++ != second)
+	{
+		
+		while(count != (second - first)) 
+		{
+			tmp = first;
+			first%=10;
+			++count;
+			printf("%d\n", first);
+			
+			if(first == 7)
+			{
+			 flag = 0;
+			 return 0;
+			}
+			
+		}
+		
+		printf("!!!\n");
+	}
 }
 
 

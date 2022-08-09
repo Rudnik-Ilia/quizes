@@ -30,7 +30,8 @@ void test_StrCpyNum()
 {
 
 	char dest1[]="11111111111111111111111111111111";
-	if (StrCpyNum(dest1, "Hello World!", 5) == strncpy(dest1,"Hello World!",5)) printf("PASS\n");
+	if (StrCpyNum_2(dest1, "Hello World!", 5) == strncpy(dest1,"Hello World!",5)) printf("PASS\n");
+	if (StrCpyNum_2(dest1, "H", 5) == strncpy(dest1,"H",5)) printf("PASS\n");
 	
 }
 void test_StrCaseCmp()
@@ -47,6 +48,8 @@ void test_StrChar()
  {
  	char x = 'a';
 	char y = 'x';
+	
+	
 	char name_2[4] = "ilia";
 	
  	if(StrChar(name_2, x) == strchr(name_2, x)) printf("PASS\n");
@@ -67,7 +70,7 @@ void test_StrSpn()
 void test_Palindrome()
 {
 	char word_1[] = "ilia";
-	char word_2[] = "ili";
+	char word_2[] = "illi";
 	
 	if (0 == Palindrome(word_1)) printf("PASS\n"); 
 	if (1 == Palindrome(word_2)) printf("PASS\n"); 

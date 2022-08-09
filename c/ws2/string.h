@@ -36,3 +36,5 @@ int StrSpn(const char *str, const char *chars);
 
 /* check the word if the word from end to start */
 int Palindrome(char *word);
+
+void Boom(int first, int second);
