@@ -215,27 +215,45 @@ int Boom(int first, int second)
 	int tmp = 0;
 	int flag = 1;
 	int count = 0;
+	assert(len_dis > 0 && "TROBLE!");
+	printf("%d", len_dis);
 	
-	while(first++ != second)
+	
+	while(first != second)
 	{
+		tmp = first;
 		
-		while(count != (second - first)) 
+		while(flag) 
 		{
-			tmp = first;
-			first%=10;
-			++count;
-			printf("%d\n", first);
 			
-			if(first == 7)
+			printf("%d\n", tmp);
+			
+			if(tmp%10 == 7)
 			{
 			 flag = 0;
-			 return 0;
 			}
+			tmp/=10;
 			
 		}
-		
+		if(0 == first % 7)
+		{
+			printf("Boom_2");
+		} 
 		printf("!!!\n");
 	}
+}
+
+int BoomHelper(int x)
+{
+	while(x)
+	{
+		if(x%10 == 7)
+		{
+	 	return 1;
+		}
+		x/=10;
+	}
+	return 0;
 }
 
 

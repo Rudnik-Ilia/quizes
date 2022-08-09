@@ -39,7 +39,7 @@ int main()
 	//printf(StrCpy(name, name_emp));
 	//printf(strcpy(name, name_emp));
 	
-	 Boom(116,118);
+	 printf("%d\n",BoomHelper(300));
 	
 	
 	
