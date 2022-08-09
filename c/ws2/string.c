@@ -162,6 +162,27 @@ char *StrCat_2(char *str_dest, char *str_src)
 	return str_dest;
 }
 
+char *StrCatNum(char *str_dest, char *str_src, int num)
+{
+	int size = 0;
+	int i = 0;
+
+	assert(NULL != str_src);
+	assert(NULL != str_dest);
+
+	size = strlen(str_dest);
+
+	while(*str_src != '\0' && i < num)
+	{
+		*(str_dest + (size + i++)) = *str_src++;
+	}
+
+	//*(srt_dest + (size + i)) = '\0';
+
+	return str_dest;
+}
+
+
 char *StrStr(char *where_find, char *what_find)
 {
 	int i, j;
@@ -186,26 +207,26 @@ char *StrStr(char *where_find, char *what_find)
 
 int StrSpn(const char *str, const char *chars) 
 {
-    int i = 0;
+	int i = 0;
     
-    while (str[i] && strchr(chars, str[i]))
-        i++;
-    return i;
+	while (str[i] && strchr(chars, str[i]))
+		i++;
+	return i;
 }
 
 
 
 int Palindrome(char word[])
 {
-    int len;
-    int i;
-    len = strlen(word);
-    for (i =0; i < len/2 ;i++)
-    {
-        if (word[i] != word[len-1-i])
-            return(0);
-    }
-    return(1);
+    	int len;
+    	int i;
+    	len = strlen(word);
+    	for (i =0; i < len/2 ;i++)
+    	{	
+       	if (word[i] != word[len-1-i])
+            	return(0);
+    	}
+    	return(1);
 
 }
 

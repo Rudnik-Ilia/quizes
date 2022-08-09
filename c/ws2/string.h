@@ -25,8 +25,12 @@ char *StrDup(const char *string);
 
 /*Add str_src to str_dest */
 char *StrCat(const char *str_src, char *str_dest);
+
 /* Second var. of previos func*/
 char *StrCat_2(char *str_dest, char *str_src);
+
+
+char *StrCatNum(char *srt_dest, const char *srt_src, int num);
 
 /*look for first match substring in a string*/
 char *StrStr(char *where_find, char *what_find);

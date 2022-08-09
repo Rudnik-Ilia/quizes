@@ -11,6 +11,8 @@ void test_StrCaseCmp();
 void test_StrChar();
 void test_StrSpn();
 void test_Palindrome();
+void test_StrCatNum();
+void test_Boom();
 
 
 int main()
@@ -39,7 +41,8 @@ int main()
 	//printf(StrCpy(name, name_emp));
 	//printf(strcpy(name, name_emp));
 	
-	 Boom(115,140);
+	 
+	 
 	
 	
 	
