@@ -209,37 +209,41 @@ int Palindrome(char word[])
 
 }
 
-int Boom(int first, int second)
+void Boom(int first, int second)
 {
-	int len_dis = second - first;
-	int tmp = 0;
-	int flag = 1;
-	int count = 0;
-	assert(len_dis > 0 && "TROBLE!");
-	printf("%d", len_dis);
 	
 	
-	while(first != second)
+	assert(second - first > 0 && "TROBLE!");
+	
+	while(first++ != second)
 	{
-		tmp = first;
-		
-		while(flag) 
+		if(BoomHelper(first) && 0 == first % 7)
 		{
-			
-			printf("%d\n", tmp);
-			
-			if(tmp%10 == 7)
-			{
-			 flag = 0;
-			}
-			tmp/=10;
+			printf("%d", first);
+			printf("BOOM!\n");
 			
 		}
-		if(0 == first % 7)
+		else if(BoomHelper(first))
 		{
-			printf("Boom_2");
-		} 
-		printf("!!!\n");
+			printf("%d", first);
+			printf("BOOM!\n");
+			
+			
+		}
+		else if(0 == first % 7)
+		{
+			printf("%d", first);
+			printf("BOOM!\n");
+			
+		}
+		else
+		{
+			
+			
+			printf("%d\n",first);
+		}
+		
+		
 	}
 }
 
