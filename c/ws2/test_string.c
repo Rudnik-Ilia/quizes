@@ -8,6 +8,10 @@
 void test_StrCmpNum();
 void test_StrCpyNum();
 void test_StrCaseCmp();
+void test_StrChar();
+void test_StrSpn();
+void test_Palindrome();
+
 
 int main()
 {	
@@ -27,6 +31,10 @@ int main()
 	//test_StrCmpNum();
 	//test_StrCpyNum();
 	//test_StrCaseCmp();
+	//test_StrChar();
+	
+	//test_StrSpn();
+	test_Palindrome();
 	
 	//printf(StrCpy(name, name_emp));
 	//printf(strcpy(name, name_emp));
@@ -34,16 +42,11 @@ int main()
 	
 	
 	
-	
-	
-	
-	//printf("%c - %c\n", *StrChar(name_2, x),*strchr(name_2, x));
-	//printf("%p - %p\n", StrChar(name_2, y),strchr(name_2, y));
+
 	
 	
 	//printf("%c - %c\n", *StrDup(name), *strdup(name));
 	//printf("%c - %c\n", *StrDup(name_4), *strdup(name_4));
-	
 	
 	
 	

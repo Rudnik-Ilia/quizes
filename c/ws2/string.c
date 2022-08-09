@@ -183,6 +183,28 @@ char *StrStr(char *where_find, char *what_find)
 
 }
 
+int StrSpn(const char *str, const char *chars) 
+{
+    int i = 0;
+    
+    while (str[i] && strchr(chars, str[i]))
+        i++;
+    return i;
+}
+
+int Palindrome(char word[])
+{
+    int l, i;
+    l = strlen(word);
+    for (i =0;i<l/2;i++)
+    {
+        if (word[i]!=word[l-1-i])
+            return(0);
+    }
+    return(1);
+
+}
+
 
 
 

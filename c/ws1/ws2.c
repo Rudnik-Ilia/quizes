@@ -10,6 +10,16 @@ void Swap(int *x,int *y)/* swaping two variable in memory*/
 	*y = tmp;
 }
 
+void SwapSizeT(size_t **x, size_t **y)
+{
+	int *temp = *x;
+    	*x = *y;
+    	*y = temp;
+	
+	
+	
+}
+
 
 void CopyArray( int *arr_org, int *arr_copy, int len_of_arr)
 {
@@ -37,8 +47,7 @@ void PrintArr(int arr[], int len_of_arr)
 
 int main()
 {
-	int a = 10;
-	int b = 20;
+	
 	int origin_array[5] = {1,2,3,4,5};
 	
 	static int s_i = 7;
@@ -63,7 +72,23 @@ int main()
 	//printf("%p\n",&ptr);
 	//printf("%p\n",&ptr2);
 	
-	printf("%u", *ip);
+	size_t a = 100;
+	size_t b = 200;
+	size_t *p_a = &a;
+	size_t *p_b = &b;
+	
+	
+	
+	
+	SwapSizeT(p_a, p_b);
+	printf("%ld - %ld\n",p_a,p_b);
+	
+	//printf("%ld - %ld",a,b);
+	
+	
+	
+	
+	
 	
 	
 	

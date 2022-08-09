@@ -30,3 +30,9 @@ char *StrCat_2(char *str_dest, char *str_src);
 
 /*look for first match substring in a string*/
 char *StrStr(char *where_find, char *what_find);
+
+ 
+int StrSpn(const char *str, const char *chars);
+
+/* check the word if the word from end to start */
+int Palindrome(char *word);
