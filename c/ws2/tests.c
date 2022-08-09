@@ -11,8 +11,6 @@ void test_StrCpy()
 	char name[] = "Ilia";
 	char name_2[4] = "";
 	
-	
-
 }
 
 void test_StrCmpNum()
@@ -85,6 +83,37 @@ void test_Palindrome()
 	printf("Test Palindrome\n");
 	if (0 == Palindrome(word_1)) printf("PASS\n"); 
 	if (1 == Palindrome(word_2)) printf("PASS\n"); 
+}
+void test_StrStr()
+
+{
+	printf("Test StrStr\n");
+	char name[] = "Ilia";
+	char sentence[] = "Who nows Ilia?";
+	if(StrStr(sentence, name) == strstr(sentence, name)) printf("PASS\n");
+	
+}
+
+void test_StrCat()
+{
+	char name_3[310] = "Rudnik";
+	char name[] = "Ilia";
+	
+	printf("Test Strcat\n");
+	
+	
+	if(*StrCat(name_3, name) == *strcat(name_3, name) && *(StrCat(name_3, name)+9) == *(strcat(name_3, name) + 9)) printf("PASS\n");
+	if(*StrCat_2(name_3, name) == *strcat(name_3, name) && *(StrCat_2(name_3, name)+9) == *(strcat(name_3, name) + 9)) printf("PASS\n");
+}
+
+
+void test_StrDup()
+{
+	char name[] = "Ilia";
+	char name_4[] = "rudnik";
+	printf("Test StrDup\n");
+	if (*StrDup(name) == *strdup(name)) printf("PASS\n");
+	if (*StrDup(name_4) == *strdup(name_4)) printf("PASS\n");;
 }
 
 void test_Boom()

@@ -76,7 +76,7 @@ int StrCmpNum(const char *first_word, const char *second_word, size_t num )
   	return(*first_word - *second_word);
 }
 
-int StrCaseCmp( char *first_word,  char *second_word)
+int StrCaseCmp(char *first_word,  char *second_word)
 {
 	assert(NULL != first_word);
 	assert(NULL != second_word);
@@ -177,8 +177,7 @@ char *StrCatNum(char *str_dest, char *str_src, int num)
 		*(str_dest + (size + i++)) = *str_src++;
 	}
 
-	//*(srt_dest + (size + i)) = '\0';
-
+	
 	return str_dest;
 }
 
@@ -263,10 +262,12 @@ void Boom(int first, int second)
 			
 			printf("%d\n",first);
 		}
-		
-		
+				
 	}
 }
+
+
+
 
 int BoomHelper(int x)
 {
