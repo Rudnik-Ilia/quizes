@@ -5,21 +5,65 @@
 #include"ws3.h"
 
 
-void PrintArray(int *arr, int x, int y)
+void PrintArray(int arr[2][3], int x, int y)
 {
-	int i;
-	int len = y*x;
-	int *ptr = &arr[0];
+
+	int i,j;
 	
-	for(i= 0 ; i < len; ++i)
+	
+	for(i = 0; i < x; i++)
 	{
-		if(i == y) printf("\n\n");
-		printf("%d\t", ptr[i]);
+		for(j = 0; j <  y; j++)
+		{
+			printf("%d\t", arr[i][j]);
+		}
+		printf("\n\n");
 	}
+	printf("\n");
 	
+}
+
+void PrintArray_2(int *arr, int x, int y)
+{
+
+	int i;
+	
+	for(i = 0; i < x*y ; ++i)
+	{
+		printf("%d\t", arr[i]);
+		
+	}
 	printf("\n");
 }
 
+void PrintArray_3(int *arr[], int x, int y)
+{
+
+	int i,j;
+	
+	
+	for(i = 0; i < x; i++)
+	{
+		for(j = 0; j <  y; j++)
+		{
+			printf("%d\t", arr[i][j]);
+		}
+		printf("\n\n");
+	}
+	printf("\n");
+}
+void PrintMatrix(int *arr, int x, int y)
+{
+
+	int i;
+	
+	for(i = 0; i < x*y ; ++i)
+	{
+		printf("%d\t", arr[i]);
+		
+	}
+	printf("\n");
+}
 
 
 
@@ -58,10 +102,23 @@ int main(int argc, char *argv[], char *env[])
 	printf("%ld\n", strlen("ilia"));
 
 */
-	int arr[2][4] = {{1,8,1,4},{2,2,9,4}};
 	
+	int arr[2][3] = {{1,8,1},{2,2,9}};
+	int *p_arr[2];
+	int i;
+	
+	for(i = 0; i < 2; i++)
+	{
+		p_arr[i] = arr[i];
+	} 
 	 
-	 PrintArray(arr[0], 2, 4);
+	 PrintArray(arr, 2, 3);
+	 
+	 
+	 PrintArray_2((int*)arr, 2, 3);
+	 
+	 
+	 PrintArray_3(p_arr, 2, 3);
 
 
 return 0;
