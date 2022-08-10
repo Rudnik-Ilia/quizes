@@ -20,14 +20,19 @@ void test_StrDup();
 
 int main()
 {	
+	test_StrCpyNum();
 	
 	test_StrCmpNum();
 	test_StrCpyNum();
 	test_StrCaseCmp();
 	test_StrChar();
 	test_StrSpn();
+	test_StrCatNum();
 	test_Palindrome();
-	test_StrDup();	
+	Boom(120,180);
+	test_StrDup();
+	
+	
 	
 	
 	

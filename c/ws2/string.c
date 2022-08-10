@@ -3,17 +3,20 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 
 
-
+int BoomHelper(int);
+char *strdup(const char *x);
 
 
 char *StrCpy(char *dest,  char *src) 
 {
+	char *start = dest;
 	assert(NULL != dest && "First");
 	assert(NULL != src && "second");
 	
-	char *start = dest;
+	
 	assert(NULL != start && "Third");
     
     	while (*src)
@@ -24,28 +27,14 @@ char *StrCpy(char *dest,  char *src)
     	return dest;
 }
 
-char *StrCpyNum_2(char *dest,  char *src, int num) 
-{
-	assert(NULL != dest && "First");
-	assert(NULL != src && "second");
-	
-	char *start = dest;
-	int count = 0;
-	assert(NULL != start && "Third");
-    
-    	while (count--)
-    	{
-    		*start++ = *src++;
-    	}
-        		
-    	return dest;
-}
+
 
 char *StrCpyNum(char *dest,  char *src, int num) 
 {
+	int count;
 	assert(NULL != dest && "First");
 	assert(NULL != src && "second");
-	int count;
+	
 
                for (count = 0; count < num && src[count] != '\0'; count++)
                    dest[count] = src[count];
@@ -57,10 +46,11 @@ char *StrCpyNum(char *dest,  char *src, int num)
 
 int StrCmpNum(const char *first_word, const char *second_word, size_t num )
 { 
+	size_t count = 0;
 	assert(NULL != first_word);
 	assert(NULL != second_word);
 	
-	size_t count = 0;
+	
 	
 	
 	for (;*first_word == *second_word && count < num; first_word++, second_word++) 
@@ -78,12 +68,14 @@ int StrCmpNum(const char *first_word, const char *second_word, size_t num )
 
 int StrCaseCmp(char *first_word,  char *second_word)
 {
+
+	char *p_f = first_word;
+	char *p_s = second_word;
+	
+	
 	assert(NULL != first_word);
 	assert(NULL != second_word);
 	
-	char *p_f = first_word;
-	char *p_s = second_word;
-	int result = 0;
 	
 	
 	for(; (tolower(*p_f) - tolower(*p_s)) == 0; *p_f++, *p_s++)
@@ -99,9 +91,10 @@ int StrCaseCmp(char *first_word,  char *second_word)
 }
 
 char *StrChar(char *word, char x)
-{
-	assert(NULL != word);
+{	
 	char *p_word = word;
+	assert(NULL != word);
+	
 	while(*p_word++ != x)
 	{
 		if(*p_word == '\0')
@@ -116,35 +109,28 @@ char *StrChar(char *word, char x)
 	return p_word;
 }
 
-char *StrDup(const char *string)
+char *StrDup(char *string)
 {
-	assert(NULL != string);
-	
-	char *p_res;
-	char *p_str;
-	p_str = string;
-	size_t i = 0;
+	char *p_res = NULL;
+	const char *p_str;
 	size_t len_of_str = strlen(string);
 	
-	p_res = (char *)malloc(sizeof(char)*len_of_str);
+	assert(NULL != string);
 	
-	while(i < len_of_str)
-	{
-		*p_res++ = *p_str++;
-		++i;
-		
-	}
+	p_res = (char *)malloc(len_of_str+1);
 	
-	return p_res - len_of_str;
+	strcpy(p_res, string);
+	return p_res;
 }
 
 char *StrCat(char *str_dest, char *str_src)
 {
+	char *temp = str_dest+strlen(str_dest);
 	assert(NULL != str_dest);
 	assert(NULL != str_src);
 	
 	
-	char *temp = str_dest+strlen(str_dest);
+	
 	while(*str_src++ != '\0')
 	{
 	*temp++ = *str_src;	
@@ -184,7 +170,7 @@ char *StrCatNum(char *str_dest, char *str_src, int num)
 
 char *StrStr(char *where_find, char *what_find)
 {
-	int i, j;
+	size_t i, j;
 	size_t n = strlen(what_find);
 	
 	for (i = 0, j = 0; where_find[i]; i++, j++)
@@ -204,13 +190,15 @@ char *StrStr(char *where_find, char *what_find)
 
 }
 
-int StrSpn(const char *str, const char *chars) 
+size_t StrSpn(const char *str, const char *chars) 
 {
-	int i = 0;
+	size_t i = 0;
     
 	while (str[i] && strchr(chars, str[i]))
+	{
 		i++;
-	return i;
+	}	
+	return (size_t)i;
 }
 
 
