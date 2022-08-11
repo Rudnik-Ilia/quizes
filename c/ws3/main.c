@@ -1,116 +1,61 @@
 #include<stdio.h>
-#include<assert.h>
+#include<stdlib.h> /* Malloc */
+#include<assert.h> /* Assert */
 #include<string.h>
-
+#include"func.c"
 #include"ws3.h"
 
 
-void PrintArray(int arr[2][3], int x, int y)
+void Test_SummArray();
+void PrintVar();
+/*
+
+void Josephus_circle(int arr[], int len)
 {
-
-	int i,j;
-	
-	
-	for(i = 0; i < x; i++)
-	{
-		for(j = 0; j <  y; j++)
-		{
-			printf("%d\t", arr[i][j]);
-		}
-		printf("\n\n");
-	}
-	printf("\n");
-	
-}
-
-void PrintArray_2(int *arr, int x, int y)
-{
-
+	int tmp_first;
 	int i;
+	int n = 1;
+	tmp_first = 0;
 	
-	for(i = 0; i < x*y ; ++i)
+	
+	while(n--)
 	{
-		printf("%d\t", arr[i]);
+		tmp_first = arr[0];
 		
-	}
-	printf("\n");
-}
-
-void PrintArray_3(int *arr[], int x, int y)
-{
-
-	int i,j;
-	
-	
-	for(i = 0; i < x; i++)
-	{
-		for(j = 0; j <  y; j++)
+		for(i = 0; i < len ; ++i)
 		{
-			printf("%d\t", arr[i][j]);
+			arr[i] = arr[i+1];
 		}
-		printf("\n\n");
-	}
-	printf("\n");
-}
-void PrintMatrix(int *arr, int x, int y)
-{
-
-	int i;
+		arr[len-1] = tmp_first;
+			
+	}			
 	
-	for(i = 0; i < x*y ; ++i)
-	{
-		printf("%d\t", arr[i]);
-		
-	}
-	printf("\n");
 }
 
 
-
+void Killer(int arr[], int len)
+{
+	int *p = arr;
+	
+	
+	while(1)
+	{
+		if(0 == *p % 2)
+		{
+			*p = 0;
+		}
+		
+		Josephus_circle(arr,len);
+	}	
+	
+}
+*/
 
 int main(int argc, char *argv[], char *env[])
 {
-	/*
-	printf("Hello %d\ args: %d\n", argv[1][1], argc);
-	int arr[][5] = {1, 2, 3, 4, 5};
-	int *p[5] = arr;
-	printf("%d", p[2][0]);
-	*/
-	/*
-	int i = 0;
-	for(i; env[i];i++);
-	if(strstr(env[i], "PATH"))
-	{
-	printf("%s\n", env[i]);
-	}
-	
-	int i = 0;
-	char *name = "ilia";
-	
-	int arr[][3] = {{1,1,1},{2,2,2},{3,3,3}};
-	
-	
-	int *p = &arr[0][0];
-	
-	for(i; i< 9; i++){
-	
-	printf("%d\n", p[i]);
-	
-	}
-	
-	printf("%ld\n", sizeof(arr));
-	printf("%ld\n", strlen("ilia"));
 
-*/
-	
-	int arr[2][3] = {{1,8,1},{2,2,9}};
-	int *p_arr[2];
-	int i;
-	
-	for(i = 0; i < 2; i++)
-	{
-		p_arr[i] = arr[i];
-	} 
+
+	 /*
 	 
 	 PrintArray(arr, 2, 3);
 	 
@@ -119,9 +64,41 @@ int main(int argc, char *argv[], char *env[])
 	 
 	 
 	 PrintArray_3(p_arr, 2, 3);
+	 for(i = 0; i < 17 ; ++i) printf("%d\n", solgers[i]);
+	*/
+	
+	 int i;
+	 int *p_i;
+	 int solgers[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
+	 
+	 
+	 for(i = 0; i < 17; ++i)
+	 {
+		 if(p_i[i]%2 == 0)
+		 {
+		  	p_i[i] = 0; 
+		 }
+	 }
+	 
+	 
+	 for(i = 0; i < 17 ; ++i) printf("%d\n", solgers[i]);
+	 
+	 
+	
+
+	
+	
+	
+	
+	
+	
+	
+	 
+	
+ 
 
 
-return 0;
+	return 0;
 }
 
 
