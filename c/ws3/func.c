@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<assert.h>
+#include <string.h>
+
 #include"ws3.h"
 
 
@@ -112,8 +114,9 @@ char **CreateArrayFromVar(char *env[])
 }
 void FreeMemory(char **arr, int len)
 {
-	assert(arr);
 	int i;
+	assert(arr);
+	
 	for(i = 0; i < len; ++i)
 	{
 		free(arr[i]);
@@ -124,24 +127,27 @@ void FreeMemory(char **arr, int len)
 }
 
 
-void Josephus_circle(int arr[], int len)
+int JosesProblem(int arr[], int len)
 {
-	int tmp_first;
-	int i;
-	int *p_kill = arr;
-	int one;
-	one = 1;
+	int i = 0;
 	
-	while(one--)
+	arr[len-1] = arr[0];
+	
+	for(i = 0; i != arr[i]; i = arr[i])
 	{
-		tmp_first = arr[0];
+		arr[i] = arr[arr[i]];
 		
-		for(i =0; i < len; ++i)
-		{
-			arr[i] = arr[i+1];
-		}
-		arr[len-1] = tmp_first;	
-	}		
+	}
+	
+	return i + 1;
+
 }
+
+
+
+
+
+
+
 
 

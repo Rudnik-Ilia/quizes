@@ -2,7 +2,7 @@
 #define _WS3H_
 
 
-void Josephus(int arr[], int len, int n);
+
 
 void PrintVar();
 
