@@ -1,7 +1,15 @@
-#include<stdio.h>
+/**********************
+* Title : Worksheet 3 
+* Author: Ilia Rudnik
+* Reviewer: Mariia Ivanski
+* Review status: not sent for review
+* Date : 13/08/2022
+***********************/
+
+
+#include<stdio.h> /* printf*/
 #include<stdlib.h> /* Malloc */
 #include<assert.h> /* Assert */
-#include<string.h>
 #include"func.c"
 #include"ws3.h"
 
@@ -70,7 +78,7 @@ int main(int argc, char *argv[], char *env[])
 	 int i;
 	 int *p_i;
 	 int solgers[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
-	 
+	 int mass[16];
 	 
 	 for(i = 0; i < 17; ++i)
 	 {
@@ -78,10 +86,16 @@ int main(int argc, char *argv[], char *env[])
 		 {
 		  	p_i[i] = 0; 
 		 }
+		 else
+		 {
+		 	mass[i] = p_i[i];
+	 	}
 	 }
 	 
 	 
 	 for(i = 0; i < 17 ; ++i) printf("%d\n", solgers[i]);
+	 
+	 
 	 
 	 
 	

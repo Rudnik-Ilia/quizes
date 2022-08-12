@@ -74,7 +74,7 @@ int *SummArray(int arr[2][3], int x, int y)
 	int res;
 	int cell;
 	int *summ = (int*)malloc(x*(sizeof(int)));
-	assert(NULL != summ);
+	assert(summ);
 	res = 0;
 	cell =0;
 	
@@ -88,24 +88,23 @@ int *SummArray(int arr[2][3], int x, int y)
 		++cell;
 		res = 0;
 	}
-	
 	return summ;
 }
 
 char **CreateArrayFromVar(char *env[])
 {
 	int i;
-	char **arr;
+	char **arr = NULL;
 	
 	arr = (char**)malloc(50 * sizeof(char *));
-	assert(NULL != arr);
+	assert(arr);
+	assert(env);
 	
 	for(i = 0; i < 50 || env[i] ; ++i)
 	{
 		arr[i] = (char*)malloc(strlen(env[i])+1);
 		arr[i] = env[i];
-		
-		
+			
 	}
 	for(i = 0; i < 50 ; ++i) printf("%s\n", arr[i] );
 	
@@ -113,6 +112,7 @@ char **CreateArrayFromVar(char *env[])
 }
 void FreeMemory(char **arr, int len)
 {
+	assert(arr);
 	int i;
 	for(i = 0; i < len; ++i)
 	{
