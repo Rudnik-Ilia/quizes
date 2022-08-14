@@ -67,9 +67,30 @@ int PrintAT_SWITCH()
 	return 0;
 }
 
+/*just empty func*/
+void Function()
+{
+	
+}
+
+
 
 int main()
-{
+{ 
+	
+	int i;
+	p_func arrayFunc[256];
+	
+	for(i = 0; i < 256; ++i)
+	{
+		arrayFunc[i] = Function;
+	}
+	
+	
+	
+	
+	for(i = 0; i < 256; ++i) printf("%p\n", arrayFunc[i]);
+	
 	
 	
 	
