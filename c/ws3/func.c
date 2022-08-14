@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<assert.h>
 #include <string.h>
-
+#include <stdlib.h>
 #include"ws3.h"
 
 
@@ -71,6 +71,7 @@ void PrintMatrix(int *arr, int x, int y)
 }
 
 int *SummArray(int arr[2][3], int x, int y)
+
 {
 	int i,j;
 	int res;
@@ -112,6 +113,7 @@ char **CreateArrayFromVar(char *env[])
 	
 	return arr;
 }
+
 void FreeMemory(char **arr, int len)
 {
 	int i;

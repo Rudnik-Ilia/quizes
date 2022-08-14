@@ -1,62 +1,60 @@
 /**********************
 * Title : Worksheet 3 
 * Author: Ilia Rudnik
-* Reviewer: Mariia Ivanski
+* Reviewer: 
 * Date : 13/08/2022
 ***********************/
 
-
+#include <ncurses.h>
 #include<stdio.h> /* printf*/
 #include<stdlib.h> /* Malloc */
 #include<assert.h> /* Assert */
-#include"func.c" /* my functions */
-#include"test_func.c" /* my tests*/
 #include"ws3.h"
 
 
-void Test_SummArray();
-void PrintVar();
-void Test_Joses();
+
+
+
+
+void Test_SummArray()
+{
+	int arr[2][3] = {{1,2,3},{4,5,6}};
+	
+	if(SummArray(arr, 2, 3)[1] == 15 && SummArray(arr, 2, 3)[0] == 6) printf("PASS\n");
+	else printf("FAIL");
+}
+
+void Test_Joses()
+{
+	int solgers[] = {1,2,3,4,5,6,7,8,9,10,11,12};
+	int solgers_2[] = {1,2,3,4,5,6,7};
+	
+	if (JosesProblem(solgers, 12) == 9 &&  JosesProblem(solgers_2, 7) == 7) printf("PASS\n");
+	else printf("FAIL!");
+}
+
+
+
+
+
 
 int main(int argc, char *argv[], char *env[])
 {
-
-
-	 /*
-	 
-	 PrintArray(arr, 2, 3);
-	 
-	 
-	 PrintArray_2((int*)arr, 2, 3);
-	 
-	 
-	 PrintArray_3(p_arr, 2, 3);
-	 
-	*/
+	char ** arrr= NULL;
+	(void)argc;
+	(void)argv;
 	
-	Test_Joses();
+	 Test_SummArray();
 	 
+	 Test_Joses();
 	 
+	 arrr = CreateArrayFromVar(env);
 	 
+	 FreeMemory(arrr, 50);
 	 
 	 
 	 
 	
-	 
-	 
-	 
-	
-
-	
-	
-	
-	
-	
-	
-	
-	 
-	
- 
 
 
 	return 0;
