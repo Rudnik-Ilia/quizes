@@ -33,8 +33,11 @@ void Test_Joses()
 	else printf("FAIL!");
 }
 
+void Test_PrintVar()
+{
+	PrintVar();
 
-
+}
 
 
 
@@ -43,6 +46,8 @@ int main(int argc, char *argv[], char *env[])
 	char ** arrr= NULL;
 	(void)argc;
 	(void)argv;
+	
+	Test_PrintVar();
 	
 	 Test_SummArray();
 	 
