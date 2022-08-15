@@ -5,18 +5,17 @@
 * Date : 16/08/2022
 ***********************/
 
-#include <ncurses.h> /*getchar compile with flag -lncurses!!!!!!!!!!!!!!!!!!!!!!!!*/
+
 #include<stdio.h> /* printf*/
 #include<stdlib.h> /* Malloc */
 #include<assert.h> /* Assert */
-#include"func.c" /* my functions */
-#include"tests.c" /* my tests*/
 #include"ws4.h"
 
 
+
+
+
 typedef void (*p_func)();
-
-
 
 
 
@@ -112,13 +111,12 @@ p_func *FillArraySpecial(p_func arrayFunc[], p_func func, int num)
 	return arrayFunc;
 }
 
-
+/* test for A and B! Q - is exit*/
 int test(p_func arrayFunc[])
 {
 	char x;
 	system("stty -icanon -echo");
-	printf("Insert the char: \n");
-	x = getchar();
+	
 	
 	do
 	{
@@ -127,10 +125,10 @@ int test(p_func arrayFunc[])
 		switch(x)
 		{
 			case 'b': 
-				arrayFunc[97]();
+				arrayFunc[98]();
 				break;
 			case 'a': 
-				arrayFunc[98]();
+				arrayFunc[97]();
 				break;
 			case 'q': 
 				arrayFunc[113]();
@@ -150,28 +148,19 @@ int test(p_func arrayFunc[])
 int main()
 { 
 	
-	int i;
+	
 	
 	p_func arrayFunc[256];
 	FillArray(arrayFunc, &Function);
 	FillArraySpecial(arrayFunc, &SpecialFuncA, 97);
 	FillArraySpecial(arrayFunc, &SpecialFuncB, 98);
 	FillArraySpecial(arrayFunc, &SpecialFuncQ, 113);
-	
 	test(arrayFunc);
 	
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	/*
-	for(i = 0; i < 256; ++i) printf("%p\n", arrayFunc[i]);
-	*/
 	
 	
 	
