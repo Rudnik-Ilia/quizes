@@ -1,7 +1,7 @@
-#include<stdio.h>
-#include<assert.h>
-#include <string.h>
-#include <stdlib.h>
+#include<stdio.h> /* printf*/
+#include<assert.h>/*assert */
+#include <string.h> /*len*/
+#include <stdlib.h> 
 #include"ws3.h"
 
 
@@ -37,7 +37,7 @@ void PrintArray_2(int *arr, int x, int y)
 {
 	int i;
 	
-	for(i = 0; i < x*y ; ++i)
+	for(i = 0; i < x * y ; ++i)
 	{
 		printf("%d\t", arr[i]);
 		
@@ -48,9 +48,9 @@ void PrintArray_2(int *arr, int x, int y)
 void PrintArray_3(int *arr[], int x, int y)
 {
 	int i,j;
-	for(i = 0; i < x; i++)
+	for(i = 0; i < x; ++i)
 	{
-		for(j = 0; j <  y; j++)
+		for(j = 0; j <  y; ++j)
 		{
 			printf("%d\t", arr[i][j]);
 		}
@@ -62,7 +62,7 @@ void PrintArray_3(int *arr[], int x, int y)
 void PrintMatrix(int *arr, int x, int y)
 {
 	int i;
-	for(i = 0; i < x*y ; ++i)
+	for(i = 0; i < x  * y ; ++i)
 	{
 		printf("%d\t", arr[i]);
 		
@@ -76,14 +76,15 @@ int *SummArray(int arr[2][3], int x, int y)
 	int i,j;
 	int res;
 	int cell;
-	int *summ = (int*)malloc(x*(sizeof(int)));
+	int *summ = (int*)malloc(x * (sizeof(int)));
+	if (NULL != summ) printf("We have trouble!");
 	assert(summ);
 	res = 0;
 	cell =0;
 	
-	for(i = 0; i < x; i++)
+	for(i = 0; i < x; ++i)
 	{
-		for(j = 0; j <  y; j++)
+		for(j = 0; j <  y; ++j)
 		{
 			res+=arr[i][j];
 		}

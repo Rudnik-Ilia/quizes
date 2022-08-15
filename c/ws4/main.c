@@ -17,6 +17,9 @@
 typedef void (*p_func)();
 
 
+
+
+
 int PrintAT_IF()
 {
 	char x;
@@ -73,23 +76,102 @@ void Function()
 	
 }
 
+/* special function for printing*/
+void SpecialFuncA()
+{
+	printf("A-pressed!\n");
+}
+void SpecialFuncB()
+{
+	printf("B-pressed!\n");
+}
+void SpecialFuncQ()
+{
+	system("stty icanon echo");
+	exit(0);
+}
+
+
+/* fill an empty array by func_pointers*/
+p_func *FillArray(p_func arrayFunc[], p_func func)
+{
+	int i = 0;
+	
+	for(i = 0; i < 256; ++i)
+	{
+		arrayFunc[i] = func;
+	}
+	
+	return arrayFunc;
+}
+
+/* fill an not empty array by special functions*/
+p_func *FillArraySpecial(p_func arrayFunc[], p_func func, int num)
+{
+	arrayFunc[num] = func;
+	return arrayFunc;
+}
+
+
+int test(p_func arrayFunc[])
+{
+	char x;
+	system("stty -icanon -echo");
+	printf("Insert the char: \n");
+	x = getchar();
+	
+	do
+	{
+		printf("Insert the char: \n");
+		x = getchar();
+		switch(x)
+		{
+			case 'b': 
+				arrayFunc[97]();
+				break;
+			case 'a': 
+				arrayFunc[98]();
+				break;
+			case 'q': 
+				arrayFunc[113]();
+				break;
+			default:
+				printf("Try again!\n");
+			
+			
+		}
+	}
+	while(27 != x);
+	system("stty icanon echo");
+	return 0;
+}
 
 
 int main()
 { 
 	
 	int i;
+	
 	p_func arrayFunc[256];
+	FillArray(arrayFunc, &Function);
+	FillArraySpecial(arrayFunc, &SpecialFuncA, 97);
+	FillArraySpecial(arrayFunc, &SpecialFuncB, 98);
+	FillArraySpecial(arrayFunc, &SpecialFuncQ, 113);
 	
-	for(i = 0; i < 256; ++i)
-	{
-		arrayFunc[i] = Function;
-	}
+	test(arrayFunc);
 	
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	/*
 	for(i = 0; i < 256; ++i) printf("%p\n", arrayFunc[i]);
+	*/
 	
 	
 	

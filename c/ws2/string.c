@@ -9,6 +9,30 @@
 int BoomHelper(int);
 char *strdup(const char *x);
 
+int StrLen( char *str)
+{
+	assert(NULL != str)
+	const char *p = str;
+	while ( *p != '\0' ) ++p
+		;
+	return p - str;
+}
+
+int StrCmp(char* str_1, char* str_2)
+{	
+	
+	while (*str_1++ == *str_2+ && '\0' != *str_1)
+	{
+		/*
+			empty body
+		*/		
+			
+	}
+	return str_1 - str_2;
+}
+
+
+
 
 char *StrCpy(char *dest,  char *src) 
 {

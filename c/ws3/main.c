@@ -5,7 +5,7 @@
 * Date : 13/08/2022
 ***********************/
 
-#include <ncurses.h>
+
 #include<stdio.h> /* printf*/
 #include<stdlib.h> /* Malloc */
 #include<assert.h> /* Assert */
