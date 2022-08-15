@@ -14,6 +14,7 @@
 
 typedef void (*p_func)(int);
 
+
 typedef struct
 {
     int number;
@@ -22,14 +23,15 @@ typedef struct
 } myStruct;
 
 
-void Print(int x)
+void Print(int number)
 {
-	printf("%d\n", x);
+	printf("%d\n", number);
 }
 
 myStruct* creater(int a, p_func func)
 {
     myStruct *print_me = (myStruct*)malloc(sizeof(myStruct));
+    assert(print_me);
     print_me -> number = a;
     print_me -> PrintMe = func;
     return print_me;
@@ -40,20 +42,22 @@ myStruct* creater(int a, p_func func)
 int main()
 {	
 	int i;
-	myStruct arrayOFstruct[10];
+	myStruct *arrayOFstruct[10];
 	
-	for(i = 10; i < 10; ++i)
+	for(i = 0; i < 10; ++i)
 	{
-		arrayOFstruct[i] = *creater((i+1), Print);
+		arrayOFstruct[i] = creater((i+1), Print);
 	}
 	
-	*arrayOFstruct[5]();
+	for(i = 0; i < 10; ++i)
+	{
+		arrayOFstruct[i] -> PrintMe(i);
+	}
 	
 	
-	/*
-	myStruct *ms = creater(8, Print);
-	ms->PrintMe(ms->number);
-	*/
+	
+	
+	
 	
 	
 	
