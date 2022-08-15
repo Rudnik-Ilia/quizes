@@ -90,24 +90,61 @@ int main(int argc, char *argv[], char *env[])
 		arrayOFstruct[i] -> PrintMe(i);
 	}
 	*/
-	
-	char nameFile[50];
+	int i;
+	int count;
+	char nameCommand[10];
+	char nameFile_0[8] = "-remove";
+	char nameFile_1[] = "-count";
+	char nameFile_2[] = "-exit";
 	
 	p_tostrcmp* StrCmp;
-	mySuperStruct* SS;
+	mySuperStruct* SS_0;
+	mySuperStruct* SS_1;
+	mySuperStruct* SS_2;
+	mySuperStruct* arrayOFsuper[3];
 	
 	
 	(void)argc;
 	(void)env;
 	
-	printf("Insert the command: \n");
-	scanf("%s", &nameFile);
+
+
+	
+	arrayOFsuper[0] = SuperCreater(nameFile_0, strcmp, Print);
+	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Print);
+	arrayOFsuper[2] = SuperCreater(nameFile_2, strcmp, Print);
+	
+	
+	/*
+	printf("%s",arrayOFsuper[0] -> command);
+	printf("%s",nameCommand);
+	printf("%d",strcmp(arrayOFsuper[0] -> command, nameCommand));
+	count = 0;
+	printf("%d", arrayOFsuper[0] -> Checking(arrayOFsuper[0] -> command, nameFile_0));
+	*/
+	while(count != 3)
+	{
+		printf("Insert the command: \n");
+		scanf("%s", &nameCommand);
+		for(i = 0; i < 3; ++i)
+		{
+			if( arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
+			{
+				printf("PASS\n");
+			}
+			else
+			{
+				printf("FAIL\n");
+			}
+			++count;
+		}
+		
+			
+	}
+		
 	
 	
 	
-	SS = SuperCreater(nameFile, strcmp, Print);
-	
-	printf("%d",SS -> Checking(SS -> command, argv[1]));
 	
 	
 	
