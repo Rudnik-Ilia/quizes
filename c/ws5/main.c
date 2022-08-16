@@ -2,7 +2,7 @@
 * Title : Worksheet 5 
 * Author: Ilia Rudnik
 * Reviewer: 
-* Date : 16/08/2022
+* Date : 20/08/2022
 ***********************/
 
 
@@ -175,27 +175,8 @@ mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_tostrcmp funcAct
 
 
 
+void logger(char *argv[]){
 
-
-
-
-
-int main(int argc, char *argv[], char *env[])
-{	
-	/*
-	int i;
-	myStruct *arrayOFstruct[10];
-	
-	for(i = 0; i < 10; ++i)
-	{
-		arrayOFstruct[i] = Creater((i+1), Print);
-	}
-	
-	for(i = 0; i < 10; ++i)
-	{
-		arrayOFstruct[i] -> PrintMe(i);
-	}
-	*/
 	int i;
 	int status;
 	int count;
@@ -226,12 +207,31 @@ int main(int argc, char *argv[], char *env[])
 			
 		}	
 	}
-		
+
+
+}
+
+
+
+int main(int argc, char *argv[], char *env[])
+{	
+	/*
+	int i;
+	myStruct *arrayOFstruct[10];
 	
+	for(i = 0; i < 10; ++i)
+	{
+		arrayOFstruct[i] = Creater((i+1), Print);
+	}
 	
+	for(i = 0; i < 10; ++i)
+	{
+		arrayOFstruct[i] -> PrintMe(i);
+	}
 	
+	*/
 	
-	
+	logger(argv);
 	
 	
 	
