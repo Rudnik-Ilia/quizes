@@ -92,15 +92,16 @@ int StrNcmp(const char *str1, const char *str2)
 	return strncmp(str1, str2, 1);
 }
 
-int Appender(const char *str1, const char *str2)
+int PreAppender(const char *str1, const char *str2)
 {	
 	FILE* f;
 	FILE* new_f;
+	
 	char temp_str[100];
 	assert(NULL != str1);
 	assert(NULL != str2);
 	
-	
+
 	new_f = fopen("new.txt", "w+");
 	f = fopen(str1, "r");
 	
@@ -109,7 +110,7 @@ int Appender(const char *str1, const char *str2)
 		perror("Can't open file");
 		return (-1);
 	}
-	fputs(str2, new_f);
+	fprintf(new_f,"%s", str2+1);
 	while(fgets(temp_str, sizeof(temp_str), f) != 0)
 	{	
 		fputs(temp_str, new_f);		
@@ -117,7 +118,6 @@ int Appender(const char *str1, const char *str2)
 	
 	remove(str1);
 	rename("new.txt", "txt.txt");
-	
 	
 	fclose(new_f);
 	fclose(f);
@@ -141,9 +141,7 @@ mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_tostrcmp funcAct
 void logger(char *argv[]){
 
 	int i;
-	int status;
-	int count;
-	char nameCommand[10];
+	char nameCommand[50];
 	char nameFile_0[8] = "-remove";
 	char nameFile_1[] = "-count";
 	char nameFile_2[] = "-exit";
@@ -155,18 +153,19 @@ void logger(char *argv[]){
 	arrayOFsuper[0] = SuperCreater(nameFile_0, strcmp, Remove);
 	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Count);
 	arrayOFsuper[2] = SuperCreater(nameFile_2, strcmp, Exit);
-	arrayOFsuper[3] = SuperCreater(nameFile_3, StrNcmp, Appender);
+	arrayOFsuper[3] = SuperCreater(nameFile_3, StrNcmp, PreAppender);
 	
 	while(1)
 	{
 		printf("Insert the command: \n");
-		scanf("%s", &nameCommand);
+		gets(nameCommand);
 		for(i = 0; i < 4; ++i)
 		{
 			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
 			{
 				arrayOFsuper[i] -> Action(argv[1], nameCommand);
 			}
+			
 		}	
 	}
 }
