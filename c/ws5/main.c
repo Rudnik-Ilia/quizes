@@ -111,6 +111,13 @@ int StrNcmp(const char *str1, const char *str2)
 	return strncmp(str1, str2, 1);
 }
 
+int Appender(const char *str1, const char *str2)
+{	
+	
+	printf("%s\n", str2);
+	return 0;
+}
+
 
 
 
@@ -175,13 +182,11 @@ int main(int argc, char *argv[], char *env[])
 	assert(argv[1]);
 	
 	
-	(void)argc;
-	(void)env;
 	
 	arrayOFsuper[0] = SuperCreater(nameFile_0, strcmp, Remove);
 	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Count);
 	arrayOFsuper[2] = SuperCreater(nameFile_2, strcmp, Exit);
-	arrayOFsuper[3] = SuperCreater(nameFile_3, StrNcmp, Exit);
+	arrayOFsuper[3] = SuperCreater(nameFile_3, StrNcmp, Appender);
 	
 	while(1)
 	{
@@ -191,7 +196,7 @@ int main(int argc, char *argv[], char *env[])
 		{
 			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
 			{
-				arrayOFsuper[i] -> Action(argv[1], "y");
+				arrayOFsuper[i] -> Action(argv[1], nameCommand);
 			}
 			
 		}	
@@ -242,7 +247,8 @@ int main(int argc, char *argv[], char *env[])
 
 
 
-
+(void)argc;
+(void)env;
 
 return 0;
 }
