@@ -125,6 +125,28 @@ int PreAppender(const char *str1, const char *str2)
 	return 0;
 }
 
+int Appender(const char *str1, const char *str2)
+{
+	FILE* f;
+	assert(NULL != str1);
+	assert(NULL != str2);
+	f = fopen(str1, "a");
+	printf("Im  here");
+	if( NULL == f)
+	{
+		perror("Can't open file");
+		return (-1);
+	}
+	fprintf(f,"%s", str2);
+	fclose(f);
+	return 0;
+}
+
+int StubFunc(const char *str1, const char *str2)
+{
+	(void)str1;
+	(void)str2;
+}
 
 /*super creater func for big struct*/
 mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_tostrcmp funcAct)
@@ -158,7 +180,7 @@ void logger(char *argv[]){
 	while(1)
 	{
 		printf("Insert the command: \n");
-		gets(nameCommand);
+		scanf("%[^\n]%*c", nameCommand); /* this staff for feading with spaces*/
 		for(i = 0; i < 4; ++i)
 		{
 			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
