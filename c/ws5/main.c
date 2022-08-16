@@ -16,8 +16,7 @@
 
 typedef void (*p_func)(int);
 
-typedef int (*p_tostrcmp)(const char*, const char*);
-
+typedef int (*p_tostrcmp)(const char*,const char*);
 
 /*simple struct*/
 typedef struct
@@ -32,7 +31,7 @@ typedef struct
 {
     char *command;
     p_tostrcmp Checking;
-    p_func Action;
+    p_tostrcmp Action;
     
 } mySuperStruct;
 
@@ -41,6 +40,79 @@ void Print(int number)
 {
 	printf("%d\n", number);
 }
+
+int Print_2(const char* x,const char* y)
+{
+	(void)x;
+	(void)y;
+	printf("YES\n");
+	return 0;
+}
+
+int Exit(const char* x,const char* y)
+{
+	(void)x;
+	(void)y;
+	
+	exit(0);
+	return 0;
+}
+
+int Remove(const char *file,const char *str)
+{	
+	(void) *str;
+	assert(NULL != str);
+	assert(NULL != file);	
+	
+	if(0 != remove(file))
+	{
+		perror("Can't remove file");
+		return (-1);
+	}
+	puts("File removed");
+	return 0;
+}
+
+int Count(const char *file, const char *str)
+{
+	FILE* f;
+	char c;
+	int counter = 0;
+	
+	assert(NULL != str);
+	assert(NULL != file);
+	
+	
+	f = fopen(file, "r");
+	
+	if(NULL == f)
+	{
+	perror("Can't open file");
+	return (-1);
+	}
+	
+	for(c = getc(f); c != EOF; c = getc(f))
+	{
+		if('\n' == c)
+		{
+		++counter;
+		}
+	}
+	printf("Number of lines: %d\n", counter);
+	return 0;
+}
+
+int StrNcmp(const char *str1, const char *str2)
+{	
+	
+	assert(NULL != str1);
+	assert(NULL != str2);
+	(void)str2;
+	return strncmp(str1, str2, 1);
+}
+
+
+
 
 
 
@@ -56,7 +128,7 @@ myStruct* Creater(int a, p_func func)
 }
 
 /*super creater func for big struct*/
-mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_func funcAct)
+mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_tostrcmp funcAct)
 {
     mySuperStruct *bigStruct = (mySuperStruct*)malloc(sizeof(mySuperStruct));
     
@@ -91,55 +163,38 @@ int main(int argc, char *argv[], char *env[])
 	}
 	*/
 	int i;
+	int status;
 	int count;
 	char nameCommand[10];
 	char nameFile_0[8] = "-remove";
 	char nameFile_1[] = "-count";
 	char nameFile_2[] = "-exit";
+	char nameFile_3[] = "<";
+	mySuperStruct* arrayOFsuper[4];
 	
-	p_tostrcmp* StrCmp;
-	mySuperStruct* SS_0;
-	mySuperStruct* SS_1;
-	mySuperStruct* SS_2;
-	mySuperStruct* arrayOFsuper[3];
+	assert(argv[1]);
 	
 	
 	(void)argc;
 	(void)env;
 	
-
-
+	arrayOFsuper[0] = SuperCreater(nameFile_0, strcmp, Remove);
+	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Count);
+	arrayOFsuper[2] = SuperCreater(nameFile_2, strcmp, Exit);
+	arrayOFsuper[3] = SuperCreater(nameFile_3, StrNcmp, Exit);
 	
-	arrayOFsuper[0] = SuperCreater(nameFile_0, strcmp, Print);
-	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Print);
-	arrayOFsuper[2] = SuperCreater(nameFile_2, strcmp, Print);
-	
-	
-	/*
-	printf("%s",arrayOFsuper[0] -> command);
-	printf("%s",nameCommand);
-	printf("%d",strcmp(arrayOFsuper[0] -> command, nameCommand));
-	count = 0;
-	printf("%d", arrayOFsuper[0] -> Checking(arrayOFsuper[0] -> command, nameFile_0));
-	*/
-	while(count != 3)
+	while(1)
 	{
 		printf("Insert the command: \n");
 		scanf("%s", &nameCommand);
-		for(i = 0; i < 3; ++i)
+		for(i = 0; i < 4; ++i)
 		{
-			if( arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
+			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
 			{
-				printf("PASS\n");
+				arrayOFsuper[i] -> Action(argv[1], "y");
 			}
-			else
-			{
-				printf("FAIL\n");
-			}
-			++count;
-		}
-		
 			
+		}	
 	}
 		
 	
