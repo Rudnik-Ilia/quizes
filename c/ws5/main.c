@@ -13,18 +13,7 @@
 
 #include"ws5.h"
 
-
-typedef void (*p_func)(int);
-
 typedef int (*p_tostrcmp)(const char*,const char*);
-
-/*simple struct*/
-typedef struct
-{
-    int number;
-    p_func PrintMe;
-    
-} myStruct;
 
 /* big another struct*/
 typedef struct
@@ -35,11 +24,6 @@ typedef struct
     
 } mySuperStruct;
 
-
-void Print(int number)
-{
-	printf("%d\n", number);
-}
 
 int Print_2(const char* x,const char* y)
 {
@@ -78,11 +62,8 @@ int Count(const char *file, const char *str)
 	FILE* f;
 	char c;
 	int counter = 1;
-	
 	assert(NULL != str);
 	assert(NULL != file);
-	
-	
 	f = fopen(file, "r");
 	
 	if(NULL == f)
@@ -105,7 +86,6 @@ int Count(const char *file, const char *str)
 
 int StrNcmp(const char *str1, const char *str2)
 {	
-	
 	assert(NULL != str1);
 	assert(NULL != str2);
 	(void)str2;
@@ -146,30 +126,13 @@ int Appender(const char *str1, const char *str2)
 }
 
 
-
-
-
-
-
-/* simple creater func for struct*/
-myStruct* Creater(int a, p_func func)
-{
-    myStruct *print_me = (myStruct*)malloc(sizeof(myStruct));
-    assert(print_me);
-    print_me -> number = a;
-    print_me -> PrintMe = func;
-    return print_me;
-}
-
 /*super creater func for big struct*/
 mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_tostrcmp funcAct)
 {
     mySuperStruct *bigStruct = (mySuperStruct*)malloc(sizeof(mySuperStruct));
-    
     bigStruct -> command = arr;
     bigStruct -> Checking = funcCheck;
     bigStruct -> Action = funcAct;
-    
     return bigStruct;
 }
 
@@ -204,77 +167,24 @@ void logger(char *argv[]){
 			{
 				arrayOFsuper[i] -> Action(argv[1], nameCommand);
 			}
-			
 		}	
 	}
-
-
 }
 
 
 
 int main(int argc, char *argv[], char *env[])
 {	
-	/*
-	int i;
-	myStruct *arrayOFstruct[10];
 	
-	for(i = 0; i < 10; ++i)
-	{
-		arrayOFstruct[i] = Creater((i+1), Print);
-	}
-	
-	for(i = 0; i < 10; ++i)
-	{
-		arrayOFstruct[i] -> PrintMe(i);
-	}
-	
-	*/
 	
 	logger(argv);
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	
-	
-	
-	
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 (void)argc;
 (void)env;
-
 return 0;
 }
 
