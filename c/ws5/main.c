@@ -146,6 +146,8 @@ int StubFunc(const char *str1, const char *str2)
 {
 	(void)str1;
 	(void)str2;
+	
+	return 0;
 }
 
 /*super creater func for big struct*/
@@ -168,7 +170,9 @@ void logger(char *argv[]){
 	char nameFile_1[] = "-count";
 	char nameFile_2[] = "-exit";
 	char nameFile_3[] = "<";
-	mySuperStruct* arrayOFsuper[4];
+	char nameFile_4[] = " ";
+	
+	mySuperStruct* arrayOFsuper[5];
 	
 	assert(argv[1]);
 	
@@ -176,16 +180,19 @@ void logger(char *argv[]){
 	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Count);
 	arrayOFsuper[2] = SuperCreater(nameFile_2, strcmp, Exit);
 	arrayOFsuper[3] = SuperCreater(nameFile_3, StrNcmp, PreAppender);
+	arrayOFsuper[4] = SuperCreater(nameFile_4, StubFunc, Appender);
+	
 	
 	while(1)
 	{
 		printf("Insert the command: \n");
 		scanf("%[^\n]%*c", nameCommand); /* this staff for feading with spaces*/
-		for(i = 0; i < 4; ++i)
+		for(i = 0; i < 5; ++i)
 		{
 			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
 			{
 				arrayOFsuper[i] -> Action(argv[1], nameCommand);
+				break;
 			}
 			
 		}	
