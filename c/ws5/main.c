@@ -9,7 +9,7 @@
 #include<stdio.h> /* printf*/
 #include<stdlib.h> /* Malloc */
 #include<assert.h> /* Assert */
-#include<string.h>
+#include<string.h> /* strlen */
 
 #include"ws5.h"
 
@@ -77,7 +77,7 @@ int Count(const char *file, const char *str)
 {
 	FILE* f;
 	char c;
-	int counter = 0;
+	int counter = 1;
 	
 	assert(NULL != str);
 	assert(NULL != file);
@@ -87,18 +87,19 @@ int Count(const char *file, const char *str)
 	
 	if(NULL == f)
 	{
-	perror("Can't open file");
-	return (-1);
+		perror("Can't open file");
+		return (-1);
 	}
 	
 	for(c = getc(f); c != EOF; c = getc(f))
 	{
 		if('\n' == c)
 		{
-		++counter;
+			++counter;
 		}
 	}
 	printf("Number of lines: %d\n", counter);
+	fclose(f);
 	return 0;
 }
 
@@ -113,8 +114,34 @@ int StrNcmp(const char *str1, const char *str2)
 
 int Appender(const char *str1, const char *str2)
 {	
+	FILE* f;
+	FILE* new_f;
+	char temp_str[100];
+	assert(NULL != str1);
+	assert(NULL != str2);
 	
-	printf("%s\n", str2);
+	
+	new_f = fopen("new.txt", "w+");
+	f = fopen(str1, "r");
+	
+	if(NULL == new_f || NULL == f)
+	{
+		perror("Can't open file");
+		return (-1);
+	}
+	fputs(str2, new_f);
+	while(fgets(temp_str, sizeof(temp_str), f) != 0)
+	{	
+		fputs(temp_str, new_f);		
+	}
+	
+	remove(str1);
+	rename("new.txt", "txt.txt");
+	
+	
+	fclose(new_f);
+	fclose(f);
+	
 	return 0;
 }
 
@@ -180,8 +207,6 @@ int main(int argc, char *argv[], char *env[])
 	mySuperStruct* arrayOFsuper[4];
 	
 	assert(argv[1]);
-	
-	
 	
 	arrayOFsuper[0] = SuperCreater(nameFile_0, strcmp, Remove);
 	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Count);
