@@ -3,6 +3,6 @@
 #ifndef __WS5_H__
 #define __WS5_H__
 
-
-void logger(char *argv[]);
+typedef enum {SUCCESS, EXIT} status_t;
+int logger(char *argv[]);
 #endif

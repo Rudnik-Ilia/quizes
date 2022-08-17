@@ -41,10 +41,11 @@ myStruct* Creater(int a, p_func func)
     return print_me;
 }
 
-void logger()
+int logger(char *argv[])
 {
 	int i;
 	myStruct *arrayOFstruct[10];
+	(void)argv;
 	
 	for(i = 0; i < 10; ++i)
 	{
@@ -55,22 +56,23 @@ void logger()
 	{
 		arrayOFstruct[i] -> PrintMe(i);
 	}
-	
+	return 0;
 }
 
 
 
 
-int main()
+int main(int argc, char *argv[], char *env[])
 {	
 	
 	
-	logger();
+	logger(argv);
 	
 	
 	
 
-	
+(void)argc;
+(void)env;
 
 return 0;
 }

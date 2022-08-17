@@ -10,27 +10,28 @@
 
 
 typedef int (*p_tostrcmp)(const char*,const char*);
+typedef status_t (*p_status_t)(const char *, const char *);
 
-/* big another struct*/
+
 typedef struct
 {
     char *command;
     p_tostrcmp Checking;
-    p_tostrcmp Action;
+    p_status_t Action;
     
 } mySuperStruct;
 
-/* exit from program*/
-int Exit(const char* x,const char* y)
+
+status_t Exit(const char* x,const char* y)
 {
 	(void)x;
 	(void)y;
 	
 	exit(0);
-	return 0;
+	return SUCCESS;
 }
-/* remove existing file*/
-int Remove(const char *file,const char *str)
+
+status_t Remove(const char *file,const char *str)
 {	
 	(void) *str;
 	assert(NULL != str);
@@ -39,13 +40,13 @@ int Remove(const char *file,const char *str)
 	if(0 != remove(file))
 	{
 		perror("Can't remove file");
-		return (-1);
+		return EXIT;
 	}
 	puts("File removed");
-	return 0;
+	return SUCCESS;
 }
-/* counting lines*/
-int Count(const char *file, const char *str)
+
+status_t Count(const char *file, const char *str)
 {
 	FILE* f;
 	char c;
@@ -57,7 +58,7 @@ int Count(const char *file, const char *str)
 	if(NULL == f)
 	{
 		perror("Can't open file");
-		return (-1);
+		return EXIT;
 	}
 	
 	for(c = getc(f); c != EOF; c = getc(f))
@@ -69,9 +70,9 @@ int Count(const char *file, const char *str)
 	}
 	printf("Number of lines: %d\n", counter);
 	fclose(f);
-	return 0;
+	return SUCCESS;
 }
-/*compare just a firrst char*/
+
 int StrNcmp(const char *str1, const char *str2)
 {	
 	assert(NULL != str1);
@@ -79,8 +80,8 @@ int StrNcmp(const char *str1, const char *str2)
 	(void)str2;
 	return strncmp(str1, str2, 1);
 }
-/*adding at the beginig*/
-int PreAppender(const char *str1, const char *str2)
+
+status_t PreAppender(const char *str1, const char *str2)
 {	
 	FILE* f;
 	FILE* new_f;
@@ -96,7 +97,7 @@ int PreAppender(const char *str1, const char *str2)
 	if(NULL == new_f || NULL == f)
 	{
 		perror("Can't open file");
-		return (-1);
+		return EXIT;
 	}
 	fprintf(new_f,"%s", str2+1);
 	while(fgets(temp_str, sizeof(temp_str), f) != 0)
@@ -110,16 +111,16 @@ int PreAppender(const char *str1, const char *str2)
 	fclose(new_f);
 	fclose(f);
 	
-	return 0;
+	return SUCCESS;
 }
-/*adding to EOF*/
-int Appender(const char *str1, const char *str2)
+
+status_t Appender(const char *str1, const char *str2)
 {
 	FILE* f;
 	assert(NULL != str1);
 	assert(NULL != str2);
 	f = fopen(str1, "a");
-	printf("Im  here");
+	
 	if( NULL == f)
 	{
 		perror("Can't open file");
@@ -127,9 +128,9 @@ int Appender(const char *str1, const char *str2)
 	}
 	fprintf(f,"%s", str2);
 	fclose(f);
-	return 0;
+	return SUCCESS;
 }
-/*empty func for default*/
+
 int StubFunc(const char *str1, const char *str2)
 {
 	(void)str1;
@@ -138,8 +139,8 @@ int StubFunc(const char *str1, const char *str2)
 	return 0;
 }
 
-/*super creater func for big struct*/
-mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_tostrcmp funcAct)
+
+mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_status_t funcAct)
 {
     mySuperStruct *bigStruct = (mySuperStruct*)malloc(sizeof(mySuperStruct));
     bigStruct -> command = arr;
@@ -150,7 +151,7 @@ mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_tostrcmp funcAct
 
 
 
-void logger(char *argv[]){
+int logger(char *argv[]){
 
 	int i;
 	char nameCommand[50];
@@ -159,10 +160,15 @@ void logger(char *argv[]){
 	char nameFile_2[] = "-exit";
 	char nameFile_3[] = "<";
 	char nameFile_4[] = " ";
-	
+	status_t SPECIAL;
 	mySuperStruct* arrayOFsuper[5];
+	SPECIAL = SUCCESS;
 	
-	assert(argv[1]);
+	if(!argv[1])
+	{
+		puts("You must add the FILE!Try again!");
+		return -1;
+	}
 	
 	arrayOFsuper[0] = SuperCreater(nameFile_0, strcmp, Remove);
 	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Count);
@@ -171,7 +177,7 @@ void logger(char *argv[]){
 	arrayOFsuper[4] = SuperCreater(nameFile_4, StubFunc, Appender);
 	
 	
-	while(1)
+	while(SPECIAL!=EXIT)
 	{
 		printf("Insert the command: \n");
 		scanf("%[^\n]%*c", nameCommand); /* this staff for feading with spaces*/
@@ -179,12 +185,12 @@ void logger(char *argv[]){
 		{
 			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
 			{
-				arrayOFsuper[i] -> Action(argv[1], nameCommand);
+				SPECIAL = arrayOFsuper[i] -> Action(argv[1], nameCommand);
 				break;
 			}
-			
 		}	
 	}
+	return 0;
 }
 
 
