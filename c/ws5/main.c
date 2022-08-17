@@ -13,6 +13,10 @@
 
 #include"ws5.h"
 
+
+
+
+
 typedef int (*p_tostrcmp)(const char*,const char*);
 
 /* big another struct*/
@@ -24,15 +28,7 @@ typedef struct
     
 } mySuperStruct;
 
-
-int Print_2(const char* x,const char* y)
-{
-	(void)x;
-	(void)y;
-	printf("YES\n");
-	return 0;
-}
-
+/* exit from program*/
 int Exit(const char* x,const char* y)
 {
 	(void)x;
@@ -41,7 +37,7 @@ int Exit(const char* x,const char* y)
 	exit(0);
 	return 0;
 }
-
+/* remove existing file*/
 int Remove(const char *file,const char *str)
 {	
 	(void) *str;
@@ -56,7 +52,7 @@ int Remove(const char *file,const char *str)
 	puts("File removed");
 	return 0;
 }
-
+/* counting lines*/
 int Count(const char *file, const char *str)
 {
 	FILE* f;
@@ -83,7 +79,7 @@ int Count(const char *file, const char *str)
 	fclose(f);
 	return 0;
 }
-
+/*compare just a firrst char*/
 int StrNcmp(const char *str1, const char *str2)
 {	
 	assert(NULL != str1);
@@ -91,7 +87,7 @@ int StrNcmp(const char *str1, const char *str2)
 	(void)str2;
 	return strncmp(str1, str2, 1);
 }
-
+/*adding at the beginig*/
 int PreAppender(const char *str1, const char *str2)
 {	
 	FILE* f;
@@ -124,7 +120,7 @@ int PreAppender(const char *str1, const char *str2)
 	
 	return 0;
 }
-
+/*adding to EOF*/
 int Appender(const char *str1, const char *str2)
 {
 	FILE* f;
@@ -141,7 +137,7 @@ int Appender(const char *str1, const char *str2)
 	fclose(f);
 	return 0;
 }
-
+/*empty func for default*/
 int StubFunc(const char *str1, const char *str2)
 {
 	(void)str1;
@@ -204,7 +200,17 @@ void logger(char *argv[]){
 int main(int argc, char *argv[], char *env[])
 {	
 	
-	
+	/*
+		Run the program: ./a.out [name.txt],
+		
+		command for program:
+							-remove  -removing [name.txt] if exists.
+							-count   -counting lines in [name.txt] .
+							<[text]  -adding text after '<' to beginig of file.
+							-exit    -exit from program.
+							
+							typing text without command is adding text to end of file.
+	*/
 	logger(argv);
 	
 	
