@@ -147,6 +147,27 @@ unsigned int ClosestDivBy16(unsigned int n)
 	return res/2;
 }
 
+void Swap2NoTemp(int *x, int *y)
+{
+	*x ^= *y;
+	*y ^= *x;
+	*x ^= *y;
+}
+
+size_t CountSetBits_Loop(unsigned int x)
+{
+	int byte;
+	size_t count;
+	count = 0;
+	byte = 32;
+	while(--byte)
+	{
+		count = count + ((x) & 1);
+		x = x >> 1;
+	}
+	return count;
+
+}
 
 
 

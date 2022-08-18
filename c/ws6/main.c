@@ -10,8 +10,6 @@
 #include<stdio.h> /* printf*/
 #include <math.h> /* pow*/
 
-
-
 #include"ws6.h"
 
 void test_for_Pow2()
@@ -23,6 +21,7 @@ void test_for_Pow2()
 	}else{
 	 	printf("FAIL\n");
 	}
+	printf("----------------------------\n");
 }
 
 void test_for_IsPowOf2_Loop()
@@ -34,7 +33,7 @@ void test_for_IsPowOf2_Loop()
 	}else{
 	 	printf("FAIL\n");
 	}
-
+	printf("----------------------------\n");
 } 
 void test_for_AddsOne()
 {
@@ -45,13 +44,14 @@ void test_for_AddsOne()
 	}else{
 	 	printf("FAIL\n");
 	}
+	printf("----------------------------\n");
 }
 void test_For_PrintOnly3BitsOn()
 {	
 	unsigned int arr[] = {11,2,7,14,5,11};
 	printf("Test PrintOnly3BitsOn\n");
 	PrintOnly3BitsOn(arr, 6);
-
+	printf("----------------------------\n");
 }
 
 void test_for_ByteMirror_Loop()
@@ -63,10 +63,7 @@ void test_for_ByteMirror_Loop()
 	}else{
 	 	printf("FAIL\n");
 	}
-
-	
-	
-	
+	printf("----------------------------\n");
 }
 
 void test_for_Is2And6_On()
@@ -79,7 +76,7 @@ void test_for_Is2And6_On()
 	}else{
 	 	printf("FAIL\n");
 	}
-	
+	printf("----------------------------\n");
 }
 
 void test_for_It2or6_On()
@@ -91,6 +88,7 @@ void test_for_It2or6_On()
 	}else{
 	 	printf("FAIL\n");
 	}
+	printf("----------------------------\n");
 }
 
 void test_for_Swap3and5()
@@ -102,7 +100,7 @@ void test_for_Swap3and5()
 	}else{
 	 	printf("FAIL\n");
 	}
-	
+	printf("----------------------------\n");
 }
 
 void test_for_ClosestDivBy16()
@@ -114,7 +112,44 @@ void test_for_ClosestDivBy16()
 	}else{
 	 	printf("FAIL\n");
 	}
+	printf("----------------------------\n");
+}
+
+void test_for_Swap2NoTemp()
+{
+	int x;
+	int y;
+	int a;
+	int b;
+	a = -2147483648;
+	b = 500;
+	x = -2147483648;
+	y = 500;
+	printf("Test Swap2NoTemp\n");
+	Swap2NoTemp(&x, &y);
+	if(a == y && b == x)
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+	printf("----------------------------\n");
 	
+}
+
+
+void test_for_CountSetBits_Loop()
+{
+	printf("Test CountSetBits_Loop\n");
+	
+	if(CountSetBits_Loop(4567) == 8 && CountSetBits_Loop(63890) == 9)
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+	printf("----------------------------\n");
+
 }
 
 
@@ -129,6 +164,10 @@ int main()
 	test_for_It2or6_On();
 	test_for_Swap3and5();
 	test_for_ClosestDivBy16();
+	test_for_Swap2NoTemp();
+	test_for_CountSetBits_Loop();
+	
+	
 	
 	
 
