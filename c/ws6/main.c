@@ -108,7 +108,12 @@ void test_for_Swap3and5()
 void test_for_ClosestDivBy16()
 {
 	printf("Test ClosestDivBy16\n");
-	printf("%d\n",  ClosestDivBy16(65));
+	if(ClosestDivBy16(18) == 16 && ClosestDivBy16(37) == 32 && ClosestDivBy16(67)==64)
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
 	
 }
 
