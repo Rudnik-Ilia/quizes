@@ -133,8 +133,18 @@ unsigned char Swap3and5(unsigned char c)
 
  	return (c ^ (x<< 2 |x << 4));
  	
- 	
+}
 
+unsigned int ClosestDivBy16(unsigned int n)
+{
+	int res = 1;
+	
+	while(n)
+	{
+		n = n>>1;
+		res = res*2;
+	}
+	return res/2;
 }
 
 

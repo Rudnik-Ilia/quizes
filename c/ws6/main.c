@@ -105,6 +105,13 @@ void test_for_Swap3and5()
 	
 }
 
+void test_for_ClosestDivBy16()
+{
+	printf("Test ClosestDivBy16\n");
+	printf("%d\n",  ClosestDivBy16(65));
+	
+}
+
 
 int main()
 {
@@ -116,6 +123,7 @@ int main()
 	test_for_Is2And6_On();
 	test_for_It2or6_On();
 	test_for_Swap3and5();
+	test_for_ClosestDivBy16();
 	
 	
 
