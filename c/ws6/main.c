@@ -69,6 +69,42 @@ void test_for_ByteMirror_Loop()
 	
 }
 
+void test_for_Is2And6_On()
+{
+	printf("Test Is2And6_On\n");
+	
+	if(Is2And6_On(94) && Is2And6_On(68))
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+	
+}
+
+void test_for_It2or6_On()
+{
+	printf("Test It2or6_On\n");
+	if(It2or6_On(32) || It2or6_On(36))
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+}
+
+void test_for_Swap3and5()
+{	
+	printf("Test Swap3and5\n");
+	if(Swap3and5(251) || Swap3and5(239))
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+	
+}
+
 
 int main()
 {
@@ -77,7 +113,9 @@ int main()
 	test_for_AddsOne();
 	test_For_PrintOnly3BitsOn();
 	test_for_ByteMirror_Loop();
-	
+	test_for_Is2And6_On();
+	test_for_It2or6_On();
+	test_for_Swap3and5();
 	
 	
 
