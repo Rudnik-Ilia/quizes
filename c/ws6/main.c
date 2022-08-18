@@ -9,40 +9,62 @@
 
 #include<stdio.h> /* printf*/
 #include <math.h> /* pow*/
+
+
+
 #include"ws6.h"
 
-unsigned long Pow2(unsigned int x, unsigned int y)
+void test_for_Pow2()
 {
-	
-	
-return 0;
-}
-
-
-int Pow(int n)
-{
-	int i;
-	int res = 2;
-	while(n--)
+	printf("Test Pow2\n");
+	if(Pow2(2,3) == 16)
 	{
-		res <<= 1;
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
 	}
-	return res;
-
 }
 
+void test_for_IsPowOf2_Loop()
+{
+	printf("Test IsPowOf2_Loop\n");
+	if(IsPowOf2_Loop(8) == 1 && IsPowOf2_Loop(7) == 0)
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
 
+} 
+void test_for_AddsOne()
+{
+	printf("Test AddsOne\n");
+	if(AddsOne(5) == 6)
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+}
+void test_For_PrintOnly3BitsOn()
+{	
+	unsigned int arr[] = {11,2,7,14,5,11};
+	printf("Test PrintOnly3BitsOn\n");
+	PrintOnly3BitsOn(arr, 6);
 
+}
 
 int main()
 {
-	int a;
-	int n;
-	n = 5;
-	a = 2;
+	test_for_Pow2();
+	test_for_IsPowOf2_Loop();
+	test_for_AddsOne();
 	
-
-	printf("%d", a << (n-1));
+	test_For_PrintOnly3BitsOn();
+	
+	
+	
+	
 
 
 
