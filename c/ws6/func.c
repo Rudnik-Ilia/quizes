@@ -73,6 +73,33 @@ void PrintOnly3BitsOn(unsigned int arr[], size_t len)
 		}
 	}
 }
+unsigned char ByteMirror_Loop(unsigned char c)
+{
+	unsigned char temp;
+	unsigned char mask_1;
+	unsigned char mask_2;
+	size_t i;
+
+	temp = 0;
+	mask_1 = 1;
+	mask_2 = 128;
+	
+	for(i = 0; i < 8; ++i)
+	{
+		if((c & mask_1) == mask_1)
+		{
+			temp = temp | mask_2;
+			mask_2 = mask_2 >> 1;
+			mask_1 = mask_1 << 1;
+		}else
+		{
+			mask_2 = mask_2 >> 1;
+			mask_1 = mask_1 << 1;
+		}
+	}
+	return temp;
+}
+
 
 
 

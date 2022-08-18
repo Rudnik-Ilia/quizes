@@ -54,14 +54,29 @@ void test_For_PrintOnly3BitsOn()
 
 }
 
+void test_for_ByteMirror_Loop()
+{	
+	printf("Test ByteMirror_Loop\n");
+	if(ByteMirror_Loop(78) == 114 && ByteMirror_Loop(34) == 68)
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+
+	
+	
+	
+}
+
+
 int main()
 {
 	test_for_Pow2();
 	test_for_IsPowOf2_Loop();
 	test_for_AddsOne();
-	
 	test_For_PrintOnly3BitsOn();
-	
+	test_for_ByteMirror_Loop();
 	
 	
 	
