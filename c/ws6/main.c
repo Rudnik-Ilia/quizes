@@ -8,11 +8,42 @@
 
 
 #include<stdio.h> /* printf*/
-#include <math.h> /* pow*/
+
 
 #include"ws6.h"
 
-void test_for_Pow2()
+void TestForPow2();
+void TestForIsPowOf2_Loop();
+void TestForAddsOne();
+void TestForPrintOnly3BitsOn();
+void TestForByteMirror_Loop();
+void TestForIs2And6_On();
+void TestForIt2or6_On();
+void TestForSwap3and5();
+void TestForClosestDivBy16();
+void TestForSwap2NoTemp();
+void TestForCountSetBits_Loop();
+	
+
+int main()
+{
+	TestForPow2();
+	TestForIsPowOf2_Loop();
+	TestForAddsOne();
+	TestForPrintOnly3BitsOn();
+	TestForByteMirror_Loop();
+	TestForIs2And6_On();
+	TestForIt2or6_On();
+	TestForSwap3and5();
+	TestForClosestDivBy16();
+	TestForSwap2NoTemp();
+	TestForCountSetBits_Loop();
+	
+return 0;
+}
+
+
+void TestForPow2()
 {
 	printf("Test Pow2\n");
 	if(Pow2(2,3) == 16)
@@ -24,7 +55,7 @@ void test_for_Pow2()
 	printf("----------------------------\n");
 }
 
-void test_for_IsPowOf2_Loop()
+void TestForIsPowOf2_Loop()
 {
 	printf("Test IsPowOf2_Loop\n");
 	if(IsPowOf2_Loop(8) == 1 && IsPowOf2_Loop(7) == 0)
@@ -35,7 +66,7 @@ void test_for_IsPowOf2_Loop()
 	}
 	printf("----------------------------\n");
 } 
-void test_for_AddsOne()
+void TestForAddsOne()
 {
 	printf("Test AddsOne\n");
 	if(AddsOne(5) == 6)
@@ -46,7 +77,7 @@ void test_for_AddsOne()
 	}
 	printf("----------------------------\n");
 }
-void test_For_PrintOnly3BitsOn()
+void TestForPrintOnly3BitsOn()
 {	
 	unsigned int arr[] = {11,2,7,14,5,11};
 	printf("Test PrintOnly3BitsOn\n");
@@ -54,7 +85,7 @@ void test_For_PrintOnly3BitsOn()
 	printf("----------------------------\n");
 }
 
-void test_for_ByteMirror_Loop()
+void TestForByteMirror_Loop()
 {	
 	printf("Test ByteMirror_Loop\n");
 	if(ByteMirror_Loop(78) == 114 && ByteMirror_Loop(34) == 68)
@@ -66,7 +97,7 @@ void test_for_ByteMirror_Loop()
 	printf("----------------------------\n");
 }
 
-void test_for_Is2And6_On()
+void TestForIs2And6_On()
 {
 	printf("Test Is2And6_On\n");
 	
@@ -79,7 +110,7 @@ void test_for_Is2And6_On()
 	printf("----------------------------\n");
 }
 
-void test_for_It2or6_On()
+void TestForIt2or6_On()
 {
 	printf("Test It2or6_On\n");
 	if(It2or6_On(32) || It2or6_On(36))
@@ -91,7 +122,7 @@ void test_for_It2or6_On()
 	printf("----------------------------\n");
 }
 
-void test_for_Swap3and5()
+void TestForSwap3and5()
 {	
 	printf("Test Swap3and5\n");
 	if(Swap3and5(251) || Swap3and5(239))
@@ -103,7 +134,7 @@ void test_for_Swap3and5()
 	printf("----------------------------\n");
 }
 
-void test_for_ClosestDivBy16()
+void TestForClosestDivBy16()
 {
 	printf("Test ClosestDivBy16\n");
 	if(ClosestDivBy16(18) == 16 && ClosestDivBy16(37) == 32 && ClosestDivBy16(67)==64)
@@ -115,7 +146,7 @@ void test_for_ClosestDivBy16()
 	printf("----------------------------\n");
 }
 
-void test_for_Swap2NoTemp()
+void TestForSwap2NoTemp()
 {
 	int x;
 	int y;
@@ -138,7 +169,7 @@ void test_for_Swap2NoTemp()
 }
 
 
-void test_for_CountSetBits_Loop()
+void TestForCountSetBits_Loop()
 {
 	printf("Test CountSetBits_Loop\n");
 	
@@ -150,37 +181,5 @@ void test_for_CountSetBits_Loop()
 	}
 	printf("----------------------------\n");
 
-}
-
-
-int main()
-{
-	test_for_Pow2();
-	test_for_IsPowOf2_Loop();
-	test_for_AddsOne();
-	test_For_PrintOnly3BitsOn();
-	test_for_ByteMirror_Loop();
-	test_for_Is2And6_On();
-	test_for_It2or6_On();
-	test_for_Swap3and5();
-	test_for_ClosestDivBy16();
-	test_for_Swap2NoTemp();
-	test_for_CountSetBits_Loop();
-	
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-return 0;
 }
 
