@@ -8,6 +8,10 @@
 
 #include"ws5.h"
 
+#define SIZE_COMMAND 50
+#define LEN_OF_ARR 5
+#define TEMP_STR 100
+#define UNUSED(x) (void)x
 
 typedef int (*p_tostrcmp)(const char*,const char*);
 typedef status_t (*p_status_t)(const char *, const char *);
@@ -24,18 +28,17 @@ typedef struct
 
 status_t Exit(const char* x,const char* y)
 {
-	(void)x;
-	(void)y;
-	
-	exit(0);
-	return SUCCESS;
+	UNUSED(x);
+	UNUSED(y);
+
+	return EXIT;
 }
 
 status_t Remove(const char *file,const char *str)
 {	
-	(void) *str;
-	assert(NULL != str);
-	assert(NULL != file);	
+	UNUSED(str);
+	assert(str);
+	assert(file);	
 	
 	if(0 != remove(file))
 	{
@@ -51,8 +54,8 @@ status_t Count(const char *file, const char *str)
 	FILE* f;
 	char c;
 	int counter = 1;
-	assert(NULL != str);
-	assert(NULL != file);
+	assert(str);
+	assert(file);
 	f = fopen(file, "r");
 	
 	if(NULL == f)
@@ -75,9 +78,9 @@ status_t Count(const char *file, const char *str)
 
 int StrNcmp(const char *str1, const char *str2)
 {	
-	assert(NULL != str1);
-	assert(NULL != str2);
-	(void)str2;
+	assert(str1);
+	assert(str2);
+	UNUSED(str2);
 	return strncmp(str1, str2, 1);
 }
 
@@ -86,9 +89,9 @@ status_t PreAppender(const char *str1, const char *str2)
 	FILE* f;
 	FILE* new_f;
 	
-	char temp_str[100];
-	assert(NULL != str1);
-	assert(NULL != str2);
+	char temp_str[TEMP_STR];
+	assert(str1);
+	assert(str2);
 	
 
 	new_f = fopen("new.txt", "w+");
@@ -105,7 +108,12 @@ status_t PreAppender(const char *str1, const char *str2)
 		fputs(temp_str, new_f);		
 	}
 	
-	remove(str1);
+	if(0 != remove(str1))
+	{
+		perror("Can't remove file");
+		return EXIT;
+	}
+	
 	rename("new.txt", "txt.txt");
 	
 	fclose(new_f);
@@ -117,8 +125,8 @@ status_t PreAppender(const char *str1, const char *str2)
 status_t Appender(const char *str1, const char *str2)
 {
 	FILE* f;
-	assert(NULL != str1);
-	assert(NULL != str2);
+	assert(str1);
+	assert(str2);
 	f = fopen(str1, "a");
 	
 	if( NULL == f)
@@ -131,11 +139,10 @@ status_t Appender(const char *str1, const char *str2)
 	return SUCCESS;
 }
 
-int StubFunc(const char *str1, const char *str2)
+int DoNothing(const char *str1, const char *str2)
 {
-	(void)str1;
-	(void)str2;
-	
+	UNUSED(str1);
+	UNUSED(str2);
 	return 0;
 }
 
@@ -143,6 +150,7 @@ int StubFunc(const char *str1, const char *str2)
 mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_status_t funcAct)
 {
     mySuperStruct *bigStruct = (mySuperStruct*)malloc(sizeof(mySuperStruct));
+    assert(bigStruct);
     bigStruct -> command = arr;
     bigStruct -> Checking = funcCheck;
     bigStruct -> Action = funcAct;
@@ -154,8 +162,8 @@ mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_status_t funcAct
 int logger(char *argv[]){
 
 	int i;
-	char nameCommand[50];
-	char nameFile_0[8] = "-remove";
+	char nameCommand[SIZE_COMMAND];
+	char nameFile_0[] = "-remove";
 	char nameFile_1[] = "-count";
 	char nameFile_2[] = "-exit";
 	char nameFile_3[] = "<";
@@ -174,14 +182,14 @@ int logger(char *argv[]){
 	arrayOFsuper[1] = SuperCreater(nameFile_1, strcmp, Count);
 	arrayOFsuper[2] = SuperCreater(nameFile_2, strcmp, Exit);
 	arrayOFsuper[3] = SuperCreater(nameFile_3, StrNcmp, PreAppender);
-	arrayOFsuper[4] = SuperCreater(nameFile_4, StubFunc, Appender);
+	arrayOFsuper[4] = SuperCreater(nameFile_4, DoNothing, Appender);
 	
 	
 	while(SPECIAL!=EXIT)
 	{
 		printf("Insert the command: \n");
 		scanf("%[^\n]%*c", nameCommand); /* this staff for feading with spaces*/
-		for(i = 0; i < 5; ++i)
+		for(i = 0; i < LEN_OF_ARR; ++i)
 		{
 			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
 			{
@@ -190,6 +198,13 @@ int logger(char *argv[]){
 			}
 		}	
 	}
+	
+	for(i = 0; i < LEN_OF_ARR; ++i)
+	{
+		free(arrayOFsuper[i]);
+		arrayOFsuper[i]= NULL;
+	}
+	
 	return 0;
 }
 

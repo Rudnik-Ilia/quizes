@@ -5,14 +5,8 @@
 * Date : 20/08/2022
 ***********************/
 
-
-#include<stdio.h> /* printf*/
-
-
 #include"ws5.h"
-
-
-
+#define UNUSED(x) (void)x
 
 int main(int argc, char *argv[], char *env[])
 {	
@@ -31,13 +25,9 @@ int main(int argc, char *argv[], char *env[])
 	
 	
 	logger(argv);
-	
-	
 
-	
-
-(void)argc;
-(void)env;
+UNUSED(argc);
+UNUSED(env);
 return 0;
 }
 
