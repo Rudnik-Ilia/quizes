@@ -168,6 +168,7 @@ size_t CountSetBits_Loop(unsigned int x)
 	return count;
 
 }
+
 size_t CountSetBits(unsigned int x)
 {
 	x = (x & 0x55555555) + (x >>  1 & 0x55555555); 
