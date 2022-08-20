@@ -9,7 +9,6 @@
 
 #include<stdio.h> /* printf*/
 
-
 #include"ws6.h"
 
 void TestForPow2();
@@ -23,6 +22,7 @@ void TestForSwap3and5();
 void TestForClosestDivBy16();
 void TestForSwap2NoTemp();
 void TestForCountSetBits_Loop();
+void TestForCountSetBits();
 	
 
 int main()
@@ -38,6 +38,7 @@ int main()
 	TestForClosestDivBy16();
 	TestForSwap2NoTemp();
 	TestForCountSetBits_Loop();
+	TestForCountSetBits();
 	
 return 0;
 }
@@ -182,4 +183,31 @@ void TestForCountSetBits_Loop()
 	printf("----------------------------\n");
 
 }
+
+void TestForCountSetBits()
+{
+	printf("Test CountSetBits\n");
+	if(CountSetBits_Loop(4567) == 8 && CountSetBits_Loop(63890) == 9)
+	{
+		printf("PASS\n");
+	}else{
+	 	printf("FAIL\n");
+	}
+	printf("----------------------------\n");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
