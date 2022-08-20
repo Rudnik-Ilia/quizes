@@ -4,6 +4,8 @@
 #include <stddef.h>/*size_t*/
 #include <stdio.h>/*printf*/
 
+#define BYTE 32
+
 
 unsigned long Pow2(unsigned int x, unsigned int y)
 {
@@ -159,7 +161,7 @@ size_t CountSetBits_Loop(unsigned int x)
 	int byte;
 	size_t count;
 	count = 0;
-	byte = 32;
+	byte = BYTE;
 	while(--byte)
 	{
 		count = count + ((x) & 1);
