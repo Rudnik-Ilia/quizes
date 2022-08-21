@@ -50,4 +50,7 @@ size_t CountSetBits(unsigned int x);
 /*Exercise 10*/
 void PrintFloatBits(float num);
 
+
+size_t CountSetBits_1(unsigned int x);
+
 #endif

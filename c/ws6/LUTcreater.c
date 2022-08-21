@@ -1,5 +1,6 @@
 
 #include <stdio.h>/*printf*/
+#define CHAR 255
 
 size_t CountSetBits_Loop(unsigned int x)
 {
@@ -13,7 +14,6 @@ size_t CountSetBits_Loop(unsigned int x)
 		x = x >> 1;
 	}
 	return count;
-
 }
 
 void CreaterLut()
@@ -21,13 +21,10 @@ void CreaterLut()
 	
 	unsigned int  i;
 	FILE* f = fopen("LUTtable.txt", "w");
-	for(i = 0; i < 20; ++i)
+	for(i = 0; i < CHAR; ++i)
 	{
-		fprintf( f,"%lu", CountSetBits_Loop(i));
-	}
-	
-	
-		
+		fprintf( f,"%lu\n", CountSetBits_Loop(i));
+	}	
 	fclose(f);
 }
 
@@ -37,7 +34,6 @@ int main()
 
 
 	CreaterLut();
-
 
 
 

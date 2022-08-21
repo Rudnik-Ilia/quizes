@@ -1,10 +1,11 @@
 
-
-
 #include <stddef.h>/*size_t*/
 #include <stdio.h>/*printf*/
 
 #define BYTE 32
+#define NIBBLE 4
+#define CHAR 255
+#define BUFF 50
 
 
 unsigned long Pow2(unsigned int x, unsigned int y)
@@ -178,8 +179,50 @@ size_t CountSetBits(unsigned int x)
     x = (x & 0x0F0F0F0F) + (x >>  4 & 0x0F0F0F0F); 
     x = (x & 0x00FF00FF) + (x >>  8 & 0x00FF00FF); 
     x = (x & 0x0000FFFF) + (x >> 16 & 0x0000FFFF); 
-    
+   
     return x;
+}
+
+
+/*prototype, doest work correctly, 0 - 255*/
+size_t CountSetBits_1(unsigned int x)
+{	
+	char str[BUFF];
+	size_t i = 0 ;
+	
+	FILE * f = fopen("LUTtable.txt", "r");
+	
+	while(fgets(str, BUFF, f) != NULL)
+	{
+		if(i == x)
+		{
+			puts(str);
+		}
+		++i;
+	}
+	return i;
+}
+
+void PrintFloatBits(float num)
+{
+	unsigned char *ptr = (unsigned char *)&num;
+	int i;
+	int j;
+	
+	for (j = NIBBLE - 1; j >= 0; --j)
+	{
+		for (i=7; i >= 0; --i)
+		{ 
+			if( (1<<i) == (*(ptr+j) & (1<<i)))
+			{
+				printf("1");
+			} else 
+			{ 
+				printf("0");
+			}
+		}
+	}
+	printf("\n");
 }
 
 

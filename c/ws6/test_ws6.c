@@ -23,7 +23,8 @@ void TestForClosestDivBy16();
 void TestForSwap2NoTemp();
 void TestForCountSetBits_Loop();
 void TestForCountSetBits();
-	
+void TestForPrintFloatBits();
+void TestForCountSetBits_1();
 
 int main()
 {
@@ -39,6 +40,10 @@ int main()
 	TestForSwap2NoTemp();
 	TestForCountSetBits_Loop();
 	TestForCountSetBits();
+	TestForPrintFloatBits();
+	TestForCountSetBits_1();
+	
+	
 	
 return 0;
 }
@@ -194,6 +199,28 @@ void TestForCountSetBits()
 	 	printf("FAIL\n");
 	}
 	printf("----------------------------\n");
+}
+
+void TestForCountSetBits_1()
+{
+	unsigned int x;
+	printf("Test TestForCountSetBits_1\n");
+	x = 67;
+	
+	printf("in num 67 bits: %ld\n", CountSetBits_1(x));
+	printf("----------------------------\n");
+}
+
+
+void TestForPrintFloatBits()
+{
+	float chek = 3.14;
+	printf("Test PrintFloatBits\n");
+	printf("3.14 - ");
+	PrintFloatBits(chek);
+	printf("PASS\n");
+	printf("----------------------------\n");
+
 }
 
 
