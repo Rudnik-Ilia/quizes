@@ -200,26 +200,25 @@ size_t CountSetBits_1(unsigned int x)
 		}
 		++i;
 	}
+	fclose(f);
 	return i;
 }
 
 void PrintFloatBits(float num)
 {
-	unsigned char *ptr = (unsigned char *)&num;
-	int i;
-	int j;
+	unsigned int *ptr = (unsigned int *)&num;
+	unsigned int i;
 	
-	for (j = NIBBLE - 1; j >= 0; --j)
+	for (i = 32; i > 0; )
 	{
-		for (i=7; i >= 0; --i)
+	
+		if( ((*ptr >> --i ) & 1) == 1 )
+		{
+			printf("1");
+		} 
+		else 
 		{ 
-			if( (1<<i) == (*(ptr+j) & (1<<i)))
-			{
-				printf("1");
-			} else 
-			{ 
-				printf("0");
-			}
+			printf("0");
 		}
 	}
 	printf("\n");
