@@ -7,17 +7,13 @@
 
 #include<stdio.h>/* printf */
 #include <stdlib.h> /*free*/
-#include"ws8.h"
 
+#include"ws8.h"
 
 #define LEN_OF_ARR 3
 
-
-
-
 int main()
 {
-	int i; 
 	int x = 5;
 	float y = 3.14;
 	
@@ -34,14 +30,10 @@ int main()
 	PrintEverything(arrayOFstruct[0]);
 	PrintEverything(arrayOFstruct[1]);
 	PrintEverything(arrayOFstruct[2]);
+	
+	Cleaner(arrayOFstruct, LEN_OF_ARR);   
 	   
-	   
-	free(arrayOFstruct[2] -> data);
-	for(i = 0; i < LEN_OF_ARR; ++i)
-	{
-		free(arrayOFstruct[i]);
-		arrayOFstruct[i]= NULL;
-	}
+	
 	
 	
 

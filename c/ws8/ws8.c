@@ -81,4 +81,18 @@ void PrintEverything(SuperStruct* p_struc)
 	}
 }
 
+void Cleaner(SuperStruct* arr[], int lenArr)
+{	
+	int i; 
+	free(arr[2] -> data);
+	
+	
+	for(i = 0; i < lenArr; ++i)
+	{
+		free(arr[i]);
+		arr[i] = NULL;
+	}
+	
+}
+
 

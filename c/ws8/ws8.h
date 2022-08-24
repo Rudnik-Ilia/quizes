@@ -19,5 +19,7 @@ typedef struct
 SuperStruct* CreaterStruct(type nameOf ,void *value);
 void AddEveryThing(int num, SuperStruct* p_struc);
 void PrintEverything(SuperStruct* p_struc);
+void Cleaner(SuperStruct* arr[], int lenArr);
+
 
 #endif
