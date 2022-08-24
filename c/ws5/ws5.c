@@ -150,7 +150,13 @@ int DoNothing(const char *str1, const char *str2)
 mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_status_t funcAct)
 {
     mySuperStruct *bigStruct = (mySuperStruct*)malloc(sizeof(mySuperStruct));
-    assert(bigStruct);
+    if(NULL == bigStruct)
+	{
+		puts("NO MEMORY FOR YOU!SORRY");
+	}
+    assert(funcCheck);
+    assert(funcAct);
+    
     bigStruct -> command = arr;
     bigStruct -> Checking = funcCheck;
     bigStruct -> Action = funcAct;
