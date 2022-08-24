@@ -11,6 +11,9 @@
 #include"ws8.h"
 
 #define LEN_OF_ARR 3
+#define MAX2(a,b) ((a > b) ? a : b) 
+#define MAX3(a,b,c) (a > b) && (a > c)  
+
 
 int main()
 {
@@ -23,15 +26,21 @@ int main()
 	arrayOFstruct[1] = CreaterStruct(FLOAT, &y);
 	arrayOFstruct[2] = CreaterStruct(STR, "Hello");
 	
-	AddEveryThing(10, arrayOFstruct[0]);
-	AddEveryThing(10, arrayOFstruct[1]);
-	AddEveryThing(10, arrayOFstruct[2]);
+	AddEveryThing(20, arrayOFstruct[0]);
+	AddEveryThing(20, arrayOFstruct[1]);
+	AddEveryThing(20, arrayOFstruct[2]);
 	
 	PrintEverything(arrayOFstruct[0]);
 	PrintEverything(arrayOFstruct[1]);
 	PrintEverything(arrayOFstruct[2]);
 	
-	Cleaner(arrayOFstruct, LEN_OF_ARR);   
+	Cleaner(arrayOFstruct, LEN_OF_ARR); 
+	printf("-------------------------------------\n"); 
+	 
+	printf("%d\n", MAX2(1,100));
+	printf("%d\n", MAX3(1,100,50));
+	
+	
 	   
 	
 	

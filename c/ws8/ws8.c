@@ -27,36 +27,30 @@ SuperStruct* CreaterStruct(type nameOf ,void *value)
 void AddEveryThing(int num, SuperStruct* p_struc)
 {
 
-	int res;
-	float res2;
-	char* res3 = NULL;
+	char* buff = NULL;
 	assert(p_struc);
 	
 	switch(p_struc -> name)
 	{
 		case 1:
-			
-			res = *(int*)(p_struc -> data);
-			res += num;
-			*(int*)(p_struc -> data) = res;
+		
+			*(int*)(p_struc -> data) = *(int*)(p_struc -> data) + num;
 			break;
 			
 		case 2:
-		
-			res2 = *(float*)(p_struc -> data);
-			res2 += (float)num;
-			*(float*)(p_struc -> data) = res2;
+			
+			*(float*)(p_struc -> data) = *(float*)(p_struc -> data) + (float)num;
 			break;
 			
 		case 3:
 		
-			res3 =(char*)malloc(BUFF_FOR_3_CASE);
-			if(NULL == res3)
+			buff =(char*)malloc(BUFF_FOR_3_CASE);
+			if(NULL == buff)
 			{
 				puts("NO MEMORY FOR YOU!SORRY");
 			}
-			sprintf(res3, "%s%d", (char*)(p_struc -> data), num);
-			(p_struc -> data) = res3;	
+			sprintf(buff, "%s%d", (char*)(p_struc -> data), num);
+			(p_struc -> data) = buff;	
 	}
 }
 
@@ -85,7 +79,6 @@ void Cleaner(SuperStruct* arr[], int lenArr)
 {	
 	int i; 
 	free(arr[2] -> data);
-	
 	
 	for(i = 0; i < lenArr; ++i)
 	{
