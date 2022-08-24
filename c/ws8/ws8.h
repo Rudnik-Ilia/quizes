@@ -6,3 +6,5 @@ typedef enum {
 	FLOAT = 2,
 	STR = 3
 } type;
+
+
