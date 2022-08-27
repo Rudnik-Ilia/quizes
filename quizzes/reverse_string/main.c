@@ -5,6 +5,7 @@
 
 #define LEN_STR 19
 #define LEN_REVERSE 22
+
 int main()
 {
 
@@ -17,22 +18,15 @@ int main()
 	count = 0;
 	record = 0;
 	
-	
 	for(i = LEN_STR ; i > 0; )
 	{	
 		--i;	
-		if(str[i] == ' ' || i == 0)
+		if(str[i] == ' ')
 		{	
 			count-=1;
 			for(j = 0; j < LEN_STR - count; ++j)
-			{
-				/*
-				*/
-				printf("%c\n",str[i+j]);
-				
+			{		
 				second[record++] = str[i+j];
-				
-	
 				++count;
 			}
 		}
