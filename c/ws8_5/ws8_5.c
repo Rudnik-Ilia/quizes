@@ -1,5 +1,4 @@
 #include <stdlib.h> /*free*/
-#include <string.h> /* strlen */
 #include<stdio.h>/* printf */
 
 

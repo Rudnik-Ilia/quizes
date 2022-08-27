@@ -26,9 +26,6 @@ typedef struct
 }student;
 
 
-
-
-
 int Reader(student * st);
 int Writer(student * st);
 

@@ -1,8 +1,9 @@
 /**********************
 * Title : Worksheet 8,5 
 * Author: Ilia Rudnik
-* Reviewer: 
+* Reviewer: Alena
 * Date : 28/08/2022
+* Status : approved)
 ***********************/
 #include<stdio.h>/* printf */
 #include <stdlib.h> /*free*/
