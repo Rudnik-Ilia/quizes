@@ -1,5 +1,5 @@
 
-#include <stdio.h>
+
 #include <stdlib.h> /* size_t*/
 #include <assert.h> /*assert*/
 
@@ -73,7 +73,7 @@ void *MemCpy(void *dest, const void *src, size_t n)
 				--n;
 			}
 	}
-	return ptr1;
+	return dest;
 }
 
 
@@ -81,8 +81,7 @@ void *MemMove(void *dest, const void *src, size_t n)
 {
 	char *p_d = (char*)dest;
 	const char *p_s = (char*)src;
-	const char *l_s;
-	char *l_d;
+	
 	
 	assert(dest);
 	assert(src);
@@ -97,13 +96,14 @@ void *MemMove(void *dest, const void *src, size_t n)
 		MemCpy(dest, src, n );
     } 	
   	else
-    {
-		l_s = p_s + (n-1);
-       	l_d = p_d + (n-1);
+    {	
+    	
+		p_s = p_s + (n-1);
+       	p_d = p_d + (n-1);
        	
         while(n--)
         {
-        	*l_d-- = *l_s--;
+        	*p_d-- = *p_s--;
     	}
     }
   	return dest;
