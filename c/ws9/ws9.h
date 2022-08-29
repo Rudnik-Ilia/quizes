@@ -1,6 +1,10 @@
 #ifndef __WS9_H__
 #define __WS9_H__
 
+
+#define SIZE_ARRAY 23
+#define SIZE_W 8
+
 /* Sets the first n bytes of source to the value c.
 Returns a pointer to source. Word boundry optimized.*/
 void *MemSet(void *source, int c, size_t n);
