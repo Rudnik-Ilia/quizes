@@ -37,20 +37,22 @@ void *MemSet(void *source, int c, size_t n)
 	loop = n / SIZE_W;
 	tail = n % SIZE_W;
 	
-    for (i = 0; i < loop ; ++i, sor += SIZE_W ) {
+    for (i = 0; i < loop ; ++i, sor += SIZE_W ) 
+    {
         *(size_t*)source = word;   
     }
-    for (i = 0; i < tail; ++i, ++sor) {
+    for (i = 0; i < tail; ++i, ++sor) 
+    {
         *sor = ch;
     }
-    return (void*)source;
+    return source;
 }
 
 void *MemCpy(void *dest, const void *src, size_t n)
 {
 	
-	char* ptr1 = dest;
-	const char* ptr2 = src; 
+	char* ptr1 = (char*)dest;
+	const char* ptr2 = (char*)src; 
 	
 	assert(dest);
 	assert(src);
@@ -71,14 +73,14 @@ void *MemCpy(void *dest, const void *src, size_t n)
 				--n;
 			}
 	}
-	return (void*)ptr1;
+	return ptr1;
 }
 
 
-void * MemMove(void *dest, const void *src, size_t n)
+void *MemMove(void *dest, const void *src, size_t n)
 {
-	char *p_d = dest;
-	const char *p_s = src;
+	char *p_d = (char*)dest;
+	const char *p_s = (char*)src;
 	const char *l_s;
 	char *l_d;
 	

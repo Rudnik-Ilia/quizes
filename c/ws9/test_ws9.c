@@ -55,8 +55,23 @@ void Test_MemMove()
 	char dest[30] = "abcdef";
 	char src[] = "*****";
     printf("String before move: %s\n",dest);
-    MemMove(dest,src,5);
+    MemMove(dest,dest+1,3);
+    printf("String after move: %s\n",dest);
+    printf("***********************************************\n");
+    printf("String before move: %s\n",dest);
+    MemMove(dest,src,4);
     printf("String after move: %s\n",dest);
     printf("***********************************************\n");	
+    printf("String before move: %s\n",dest);
+    MemMove(dest,dest,5);
+    printf("String after move: %s\n",dest);
+    printf("***********************************************\n");
 }
+
+
+
+
+
+
+
 
