@@ -58,6 +58,11 @@ void Test_ItoaBase36()
 {
 	int num = 1379;
 	char* buff = (char*)malloc(HelperCount36(num, 2)+1);
+	if(NULL == buff)
+	{
+		
+		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+	}
 	puts("Test for ItoaBase36");
 	
 	ItoaBase36(num, buff, 2);
@@ -99,6 +104,11 @@ void Test_ItoaBase10()
 {	
 	int num = 1234;
 	char* buff = (char*)malloc(HelperCount(num)+1);
+	if(NULL == buff)
+	{
+		
+		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+	}
 	puts("Test for ItoaBase10");
 	ItoaBase10(num, buff);
 	if(!strcmp(buff, "1234"))
