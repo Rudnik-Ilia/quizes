@@ -12,8 +12,9 @@
 
 #include "ws10.h"
 
-#define INDI(x) *((int *) & x) == 0 ? 0 : 1
+#define INDIAN (*(unsigned int*)"\0\xff" > 0x100)
 
+void Test_Macro();
 void Test_ItoaBase36();
 void Test_AtoiBase36();
 void Test_ItoaBase10();
@@ -24,6 +25,7 @@ void Test_IsLittleEndian();
 
 int main()
 {	
+	Test_Macro();
 	Test_ItoaBase36();
 	Test_AtoiBase36();
 	Test_ItoaBase10();
@@ -33,6 +35,24 @@ int main()
 	
 return 0;
 }
+void Test_Macro()
+{
+	puts("Test for MACRO");
+	if (1 == INDIAN)
+	{
+		puts("PASS");
+	}
+	else
+	{
+		puts("FAIL");
+	}
+	puts("=======================================");
+
+}
+
+
+
+
 
 void Test_ItoaBase36()
 {
