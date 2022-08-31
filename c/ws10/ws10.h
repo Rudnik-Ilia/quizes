@@ -2,6 +2,10 @@
 #define __WS10_H__
 
 
+
+int HelperCount(int x);
+int HelperCount36(int x, int base);
+
 /* Converts the string argument str to an integer. Returns the converted integral number as an int value. */
 int AtoiBase10(const char *str);
 
