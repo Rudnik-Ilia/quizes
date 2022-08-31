@@ -17,18 +17,18 @@ int MyPow(int x, int y)
 	while(y)
 	{
 		res = res * x;
-		y--;
+		--y;
 	}
 	return res;
 }
 
 int HelperCount(int x)
 {
-	int res;
-	res = 0;
+	int res = 0;
 	if(x < 0)
 	{
-		x*=-1;
+		x *= - 1;
+		res+=1;
 	}
 	while(x)
 	{
@@ -40,11 +40,10 @@ int HelperCount(int x)
 
 int HelperCount36(int x, int base)
 {
-	int res;
-	res = 0;
+	int res = 0;
 	if(x < 0)
 	{
-		x*=-1;
+		x *= -1;
 	}
 	while(x)
 	{
@@ -60,6 +59,11 @@ int HelpToChar(char c)
 		return c - '0';
 	else if (c >= 'a' && c <= 'z')
 		return c - 'a' + 10;
+	else if (c >= 'A' && c <= 'Z')
+	{
+		return c - 'A' + 10;
+	}
+
 	return 0;
 }
 
@@ -82,24 +86,25 @@ int AtoiBase10(const char *str)
 void ItoaBase10(int n, char *dest)
 {
 	char ch;
-	int i;
-	char *ptr;
+	int i = 0;
+	char *ptr = NULL;
 	assert(dest);
 	if(n < 0)
 	{
-		n*=-1;
+		n *= -1;
+		
 	}
-	i = HelperCount(n);
+	i += HelperCount(n);
 	ptr = dest + i - 1;
 	
 	while(n)
 	{
-		
 		ch = n % 10 + ASCII;
 		*ptr-- = ch;
 		n = n / 10;
 	}
 	ptr[i+1] = '\0';
+	
 }
 
 int AtoiBase36(const char *str, int base)
@@ -124,7 +129,7 @@ void ItoaBase36(int n, char *dest, int base)
 {
 	char ch;
 	int i;
-	char *ptr;
+	char *ptr = NULL;
 	int tail;
 	assert(dest);
 	if(n < 0)
@@ -151,9 +156,9 @@ void ItoaBase36(int n, char *dest, int base)
 		}
 	}
 
-	ptr[i+1] = '\0';
+	ptr[i + 1] = '\0';
 }
-
+/*
 void PrintCommonForTwo(const char *arr1, const char *arr2, const char *arr3)
 {
 	int *temp = (int*)calloc(ABC, sizeof(int));
@@ -193,6 +198,52 @@ void PrintCommonForTwo(const char *arr1, const char *arr2, const char *arr3)
 		arr1++;	
 	}
 	printf("\n");
+	
+	free(temp);
+}
+*/
+
+
+void PrintCommonForTwo(const char *arr1, const char *arr2, const char *arr3, size_t len1, size_t len2, size_t len3)
+{	
+	size_t i;
+	int *temp = (int*)calloc(ABC, sizeof(int));
+	
+	if(NULL == temp)
+	{
+		
+		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+	}	
+	assert(arr1);
+	assert(arr2);
+	assert(arr3);	
+	
+	for(i = 0; i < len3; ++i)
+	{
+		temp[arr3[i] - ASCII2] = -1;
+	}
+	for(i = 0; i < len2; ++i)
+	{
+		if( temp[arr2[i] - ASCII2] == -1)
+		{
+			/*empty*/
+		}
+		else
+		{
+			temp[arr2[i] - ASCII2] = 1;
+		}
+	}
+	for(i = 0; i < len1; ++i)
+	{
+		if(temp[arr1[i] - ASCII2] == 1)
+		{
+			printf("%c ",arr1[i]);
+			temp[arr1[i] - ASCII2] = -1;	
+		}
+			
+	}
+	printf("\n");
+	
 	free(temp);
 }
 

@@ -2,8 +2,9 @@
 #define __WS10_H__
 
 
-
+/*count amoumt of numbers */
 int HelperCount(int x);
+/*count amoumt of numbers for diffrent base*/
 int HelperCount36(int x, int base);
 
 /* Converts the string argument str to an integer. Returns the converted integral number as an int value. */
@@ -22,7 +23,7 @@ void ItoaBase36(int n, char *dest, int base);
 
 /* Prints the letters that only appear in both the first two arrays, but not the third one. Does not
 print the same character more than once. */
-void PrintCommonForTwo(const char *arr1, const char *arr2, const char *arr3);
+void PrintCommonForTwo(const char *arr1, const char *arr2, const char *arr3, size_t len1, size_t len2, size_t len3);
 
 /* Checks whether your system is little-endian. Returns 1, if the system is little endian. */
 int IsLittleEndian();

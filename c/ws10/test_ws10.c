@@ -33,6 +33,9 @@ int main()
 	Test_PrintCommonForTwo();
 	Test_IsLittleEndian();
 	
+	
+	
+	
 return 0;
 }
 void Test_Macro()
@@ -56,7 +59,7 @@ void Test_Macro()
 
 void Test_ItoaBase36()
 {
-	int num = 1379;
+	int num = -1379;
 	char* buff = (char*)malloc(HelperCount36(num, 2)+1);
 	if(NULL == buff)
 	{
@@ -102,7 +105,7 @@ void Test_AtoiBase36()
 
 void Test_ItoaBase10()
 {	
-	int num = 1234;
+	int num = -1234;
 	char* buff = (char*)malloc(HelperCount(num)+1);
 	if(NULL == buff)
 	{
@@ -111,6 +114,7 @@ void Test_ItoaBase10()
 	}
 	puts("Test for ItoaBase10");
 	ItoaBase10(num, buff);
+	puts(buff);
 	if(!strcmp(buff, "1234"))
 	{
 		puts("PASS");
@@ -160,13 +164,13 @@ void Test_IsLittleEndian()
 
 void Test_PrintCommonForTwo()
 {	
-	char arr1[] = "ABCD";
-	char arr2[] = "ABCD";
-	char arr3[] = "CEMN";
+	char arr1[] = {'A','B','C','D'};
+	char arr2[] = {'A','B','C','D'};
+	char arr3[] = {'C', 'E', 'M', 'N'};
 	puts("Test for PrintCommonForTwo: ");
-	printf("Array 1: %s\nArray 2: %s\nArray 3: %s\n", arr1, arr2, arr3);
+	printf("ABCD - ABCD - CEMN\n");
 	printf("Answer :");
-	PrintCommonForTwo(arr1, arr2, arr3);
+	PrintCommonForTwo(arr1, arr2, arr3, 4, 4, 4);
 	puts("=======================================");
 }
 
