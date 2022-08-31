@@ -37,7 +37,7 @@ return 0;
 }
 void Test_Macro()
 {
-	puts("Test for MACRO");
+	puts("Test for Test_Macro");
 	if (1 == INDIAN)
 	{
 		puts("PASS");

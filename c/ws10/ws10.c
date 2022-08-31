@@ -90,7 +90,7 @@ void ItoaBase10(int n, char *dest)
 		n*=-1;
 	}
 	i = HelperCount(n);
-	ptr = dest + i -1;
+	ptr = dest + i - 1;
 	
 	while(n)
 	{
@@ -160,7 +160,8 @@ void PrintCommonForTwo(const char *arr1, const char *arr2, const char *arr3)
 	
 	if(NULL == temp)
 	{
-		puts("SORRY, NO MEMORY FOR YOU");
+		
+		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 	}	
 	assert(arr1);
 	assert(arr2);
