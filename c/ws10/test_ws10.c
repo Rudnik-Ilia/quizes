@@ -5,7 +5,7 @@
 * Date : 01/09/2022
 * Status : 
 ***********************/
-#include <stdio.h>
+#include <stdio.h> /* printf*/
 #include <stdlib.h> /*malloc*/
 #include <string.h> /* strlen */
 #include <assert.h> /* assert*/
@@ -69,7 +69,6 @@ void Test_ItoaBase36()
 	puts("Test for ItoaBase36");
 	
 	ItoaBase36(num, buff, 2);
-	puts(buff);
 	if(!strcmp(buff, "10101100011"))
 	{
 		puts("PASS");

@@ -1,6 +1,6 @@
 
-#include <stdio.h>
-#include <stdlib.h> 
+#include <stdio.h> /* printf */
+#include <stdlib.h> /* calloc */
 #include <string.h> /* strlen */
 #include <assert.h> /* assert*/
 
@@ -74,13 +74,13 @@ int AtoiBase10(const char *str)
 	assert(str);
 	while(*str)
 	{
-		if ((*str >= 'a') && (*str <='z'))
+		if (*str >= '0' && *str <='9')
 		{	
-		 return 0;
+			result = result*10 + *str++ - '0';
+			return result;
 		}
-		result = result*10 + *str++ - '0';
 	}
-	return result;
+		 return 0;
 }
 
 void ItoaBase10(int n, char *dest)
