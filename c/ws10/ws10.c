@@ -4,11 +4,9 @@
 #include <string.h> /* strlen */
 #include <assert.h> /* assert*/
 
-
 #define ASCII 48
 #define ASCII2 65
 #define ABC 26
-
 
 
 int MyPow(int x, int y)
@@ -28,7 +26,6 @@ int HelperCount(int x)
 	if(x < 0)
 	{
 		x *= - 1;
-		res+=1;
 	}
 	while(x)
 	{
@@ -77,10 +74,13 @@ int AtoiBase10(const char *str)
 		if (*str >= '0' && *str <='9')
 		{	
 			result = result*10 + *str++ - '0';
-			return result;
+		}
+		else
+		{
+			return 0;
 		}
 	}
-		 return 0;
+	return result;
 }
 
 void ItoaBase10(int n, char *dest)
@@ -89,10 +89,10 @@ void ItoaBase10(int n, char *dest)
 	int i = 0;
 	char *ptr = NULL;
 	assert(dest);
+	
 	if(n < 0)
 	{
 		n *= -1;
-		
 	}
 	i += HelperCount(n);
 	ptr = dest + i - 1;
@@ -104,7 +104,6 @@ void ItoaBase10(int n, char *dest)
 		n = n / 10;
 	}
 	ptr[i+1] = '\0';
-	
 }
 
 int AtoiBase36(const char *str, int base)

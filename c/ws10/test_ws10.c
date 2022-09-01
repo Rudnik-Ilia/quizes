@@ -129,7 +129,8 @@ void Test_ItoaBase10()
 void Test_AtoiBase10()
 {
 	puts("Test for AtoiBase10");
-	if(AtoiBase10("134") == 134 && AtoiBase10("1s4") == 0)
+	
+	if(AtoiBase10("134") == 134 && AtoiBase10("1w2") == 0)
 	{
 		puts("PASS");
 	}
@@ -137,6 +138,7 @@ void Test_AtoiBase10()
 	{
 		puts("FAIL");
 	}
+	
 	puts("=======================================");
 
 
