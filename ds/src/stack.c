@@ -1,6 +1,4 @@
 
-
-
 #include <stdlib.h> /* malloc, free*/
 #include <stddef.h> /* size_t */
 #include <string.h> /* memcpy */
@@ -88,8 +86,6 @@ void StackPush(stack_t *stack, const void *data)
 	memcpy((char*)(stack -> p_item) + stack->size * stack->item_size, data, stack->item_size);
 	++stack->size;
 }
-
-
 
 
 void StackPop(stack_t *stack)

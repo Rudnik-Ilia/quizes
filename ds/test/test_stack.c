@@ -1,29 +1,45 @@
 
-
+/**********************
+* Title : Worksheet 8,5 
+* Author: Ilia Rudnik
+* Reviewer: NASTya
+* Date : 04/09/2022
+* Status : 
+***********************/
 
 #include <stdio.h>  /* printf */
 #include <stdlib.h> /* rand */
 
-
 #include "../include/stack.h"
 
-void Test_Integer()
+void Test_Integer();
+void Test_Float();
+void Test_Char();
+
+
+int main()
 {
 
+	Test_Integer();	
+	Test_Float();
+	Test_Char();
+
+return 0;
+}
+
+
+void Test_Integer()
+{	
 	int i;
-	int a = 60;
 	int arr1[] = {10, 20, 30, 40, 50};
 	stack_t* IntStack = StackCreate(4, 5);
+	printf("Test for Stack of integer\n");
 	for(i = 0; i < 5; ++i)
 	{ 	
 		StackPush(IntStack, &arr1[i]);
-		printf("%d\n", *(int*)StackPeek(IntStack));
-		printf("%ld\n", StackSize(IntStack));
+		printf("ITEM: %d\n", *(int*)StackPeek(IntStack));
+		printf("SIZE: %ld\n", StackSize(IntStack));
 	};
-	StackPush(IntStack, &a);
-	StackPush(IntStack, &a);
-	StackPush(IntStack, &a);
-	printf("%d\n", *(int*)StackPeek(IntStack));
 	
 	if(*(int*)StackPeek(IntStack) == 50 && StackSize(IntStack) == 5)
 	{
@@ -34,50 +50,97 @@ void Test_Integer()
 		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 	}
 	
-		
-
-}
-
-
-
-
-int main()
-{
-/*
 	StackPop(IntStack);
-
-		StackPush(IntStack, &arr1[i]);
-	printf("%d\n", *(int*)StackPeek(IntStack));
-
-	StackPush(IntStack, &b);
-	StackPush(IntStack, &a);
-	int a = 10;
-	int b = 20;
-	int c = 30;
-		printf("%d\n", *(int*)StackPeek(IntStack));
-		printf("%d\n", StackIsEmpty(IntStack));
-		StackIsEmpty(IntStack);
-	StackDestroy(IntStack);
-	int i = 10;
-	int a = 20;
 	
+	if(*(int*)StackPeek(IntStack) == 40 && StackSize(IntStack) == 4)
+	{
+		puts("PASS");
+	} 
+	else
+	{
+		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+	}
 	
-	stack_t* IntStack = StackCreate(4, 5);
-	printf("%d\n", *(int*)StackPeek(IntStack));
-	StackPush(IntStack, &i);
-*/
-	Test_Integer();
-	
-	
-
-	
-	
-	
-	
-
-
-
-return 0;
 }
+
+void Test_Float()
+{	
+	int i;
+	float arr1[] = {1.1, 2.2, 3.3, 4.4, 5.5};
+	stack_t* IntStack = StackCreate(4, 5);
+	printf("Test for Stack of float\n");
+	for(i = 0; i < 5; ++i)
+	{ 	
+		StackPush(IntStack, &arr1[i]);
+		printf("ITEM: %f\n", *(float*)StackPeek(IntStack));
+		printf("SIZE: %ld\n", StackSize(IntStack));
+	};	
+	if(*(float*)StackPeek(IntStack) == arr1[4] && StackSize(IntStack) == 5)
+	{
+		puts("PASS");
+	} 
+	else
+	{
+		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+	}
+	
+	StackPop(IntStack);
+	
+	if(*(float*)StackPeek(IntStack) == arr1[3] && StackSize(IntStack) == 4)
+	{
+		puts("PASS");
+	} 
+	else
+	{
+		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+
+	}
+	
+}
+
+void Test_Char()
+{	
+	int i;
+	char arr1[] = {'a', 'b', 'c', 'c', 'd'};
+	stack_t* IntStack = StackCreate(1, 5);
+	printf("Test for Stack of float\n");
+	for(i = 0; i < 5; ++i)
+	{ 	
+		StackPush(IntStack, &arr1[i]);
+		printf("ITEM: %c\n", *(char*)StackPeek(IntStack));
+		printf("SIZE: %ld\n", StackSize(IntStack));
+	};	
+	if(*(char*)StackPeek(IntStack) == arr1[4] && StackSize(IntStack) == 5)
+	{
+		puts("PASS");
+	} 
+	else
+	{
+		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+	}
+	
+	StackPop(IntStack);
+	
+	if(*(char*)StackPeek(IntStack) == arr1[3] && StackSize(IntStack) == 4)
+	{
+		puts("PASS");
+	} 
+	else
+	{
+		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
+
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
 
 
