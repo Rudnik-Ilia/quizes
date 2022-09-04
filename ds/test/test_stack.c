@@ -61,6 +61,8 @@ void Test_Integer()
 		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 	}
 	
+	StackDestroy(IntStack);
+	
 }
 
 void Test_Float()
@@ -95,7 +97,7 @@ void Test_Float()
 		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 
 	}
-	
+	StackDestroy(IntStack);
 }
 
 void Test_Char()
@@ -130,6 +132,7 @@ void Test_Char()
 		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 
 	}
+	StackDestroy(IntStack);
 	
 }
 
