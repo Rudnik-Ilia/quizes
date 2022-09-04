@@ -4,6 +4,7 @@
 #include <string.h> /* memcpy */
 #include <assert.h> /* assert */
 #include <stdio.h> /* printf */
+#include "../include/stack.h"
 
 /*
 typedef union u {
@@ -19,14 +20,14 @@ int main () {
 */
 
 
-
-typedef struct
+struct stack
 {
 	size_t max_item; 
 	size_t size;
 	size_t item_size;
 	void  *p_item;
-} stack_t;
+};
+
 
  /*
 
