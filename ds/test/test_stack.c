@@ -69,15 +69,15 @@ void Test_Float()
 {	
 	int i;
 	float arr1[] = {1.1, 2.2, 3.3, 4.4, 5.5};
-	stack_t* IntStack = StackCreate(4, 5);
+	stack_t* FloatStack = StackCreate(4, 5);
 	printf("Test for Stack of float\n");
 	for(i = 0; i < 5; ++i)
 	{ 	
-		StackPush(IntStack, &arr1[i]);
-		printf("ITEM: %f\n", *(float*)StackPeek(IntStack));
-		printf("SIZE: %ld\n", StackSize(IntStack));
+		StackPush(FloatStack, &arr1[i]);
+		printf("ITEM: %f\n", *(float*)StackPeek(FloatStack));
+		printf("SIZE: %ld\n", StackSize(FloatStack));
 	};	
-	if(*(float*)StackPeek(IntStack) == arr1[4] && StackSize(IntStack) == 5)
+	if(*(float*)StackPeek(FloatStack) == arr1[4] && StackSize(FloatStack) == 5)
 	{
 		puts("PASS");
 	} 
@@ -86,9 +86,9 @@ void Test_Float()
 		printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 	}
 	
-	StackPop(IntStack);
+	StackPop(FloatStack);
 	
-	if(*(float*)StackPeek(IntStack) == arr1[3] && StackSize(IntStack) == 4)
+	if(*(float*)StackPeek(FloatStack) == arr1[3] && StackSize(FloatStack) == 4)
 	{
 		puts("PASS");
 	} 
@@ -98,7 +98,7 @@ void Test_Float()
 
 	}
 	printf("=====================================================================\n");
-	StackDestroy(IntStack);
+	StackDestroy(FloatStack);
 }
 
 void Test_Char()
