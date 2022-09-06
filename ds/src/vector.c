@@ -80,10 +80,25 @@ int VectorPushBack(vector_t *vector, const void *data)
 
 void VectorPopBack(vector_t *vector)
 {
+	void* new;
 	assert(vector);
 	assert(0 != vector->size);
+	
 	--vector->size;
-	VectorShrink(vector);
+	if(vector->max_item > (float)vector->size / FACTOR*FACTOR)
+	{
+		new = realloc(vector->p_item, vector->max_item*vector->item_size*FACTOR);
+		if(NULL != new)
+		{
+			vector->p_item = new;
+			vector->max_item /= FACTOR;
+		}
+	}
+	if (vector->max_item == 0)
+	{
+		vector = VectorReserve(vector, 1);
+	}
+
 }
 	
 vector_t *VectorReserve(vector_t *vector, size_t new_capacity)
@@ -108,16 +123,19 @@ vector_t *VectorShrink(vector_t *vector)
 {
 	void* new;
 	assert(vector);
-	if(vector->max_item > vector->size)
+	
+	new = realloc(vector->p_item, vector->item_size*vector->size);
+	
+	if(NULL != new)
 	{
-		new = realloc(vector->p_item, vector->item_size*vector->size);
-		if(NULL == new)
-		{
-			return NULL;
-		}
-		vector->max_item = vector->size;
 		vector->p_item = new;
+		vector->max_item = vector->size;
 	}
+	else
+	{
+		return NULL;
+	}
+	
 	return vector;
 }
 
