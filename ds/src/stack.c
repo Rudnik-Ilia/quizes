@@ -57,7 +57,7 @@ stack_t *StackCreate(size_t element_size, size_t num_of_elements)
 	{
 		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 	}
-	MyStack -> p_item = malloc(sizeof(element_size) * sizeof(num_of_elements));
+	MyStack -> p_item = malloc(element_size * num_of_elements);
 	if(NULL == MyStack->p_item)
 	{
 		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);              
