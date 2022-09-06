@@ -51,8 +51,8 @@ void VectorDestroy(vector_t *vector)
 int VectorPushBack(vector_t *vector, const void *data)
 {
 	
-	void* p_new;
-	int st = 0;
+	void* p_new = NULL;
+	int st = 1;
 	
 	assert(vector);
 	assert(data);
@@ -65,9 +65,9 @@ int VectorPushBack(vector_t *vector, const void *data)
 		p_new = realloc(vector->p_item, (vector->item_size*vector->max_item)*FACTOR);
 		if(NULL != p_new)
 		{
-			st = 1;
 			vector->p_item = p_new;
-			vector->max_item = vector->max_item*FACTOR;
+			vector->max_item *= FACTOR;
+			st = 1;
 		}
 		else
 		{
