@@ -9,15 +9,23 @@ bit_array_t BitArraySetOn(bit_array_t bit_array, size_t index)
 	return bit_array | 1 << index;
 }
 
+
 bit_array_t BitArraySetOff(bit_array_t bit_array, size_t index)
 {
-
-
+	return bit_array & ~(1 << index);
 }
+
+
+bit_array_t BitArraySetAllOff(bit_array_t bit_array);
+{
+	(void)bit_array;
+	return 0lu;
+}
+
 bit_array_t BitArraySetAllOn(bit_array_t bit_array)
 {
-
-
+	(void)bit_array;
+	return -1lu;
 }
 
 size_t BitArrayCountOn(bit_array_t bit_array)
@@ -30,4 +38,7 @@ size_t BitArrayCountOn(bit_array_t bit_array)
 	}
 	return temp;
 }
+
+
+
 
