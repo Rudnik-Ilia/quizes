@@ -85,7 +85,7 @@ void VectorPopBack(vector_t *vector)
 	assert(0 != vector->size);
 	
 	--vector->size;
-	if(vector->max_item > (float)vector->size / FACTOR*FACTOR)
+	if(vector->max_item > (float)vector->size / (FACTOR*FACTOR))
 	{
 		new = realloc(vector->p_item, vector->max_item*vector->item_size*FACTOR);
 		if(NULL != new)
