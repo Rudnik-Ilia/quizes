@@ -54,24 +54,25 @@ int VectorPushBack(vector_t *vector, const void *data)
 	void* p_new;
 	int st = 0;
 	
+	assert(vector);
+	assert(data);
+	
+	memcpy((char*)(vector -> p_item) + vector->size * vector->item_size, data, vector->item_size);
+	++vector->size;
+	
 	if(vector->size == vector->max_item)
 	{	
-		puts("DO ALLOC");
 		p_new = realloc(vector->p_item, (vector->item_size*vector->max_item)*FACTOR);
-		if(NULL == p_new)
+		if(NULL != p_new)
+		{
+			st = 1;
+			vector->p_item = p_new;
+			vector->max_item = vector->max_item*FACTOR;
+		}
+		else
 		{
 			st = 0;
 		}
-		vector->p_item = p_new;
-		vector->max_item = vector->max_item*FACTOR;
-		memcpy((char*)(vector -> p_item) + vector->size * vector->item_size, data, vector->item_size);
-		++vector->size;
-	}
-	else
-	{
-		memcpy((char*)(vector -> p_item) + vector->size * vector->item_size, data, vector->item_size);
-		++vector->size;
-		st = 1;
 	}
 	return st;
 	

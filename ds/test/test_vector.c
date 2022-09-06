@@ -31,7 +31,7 @@ void Test_IntVector()
 		VectorPushBack(IntVector, &arr[i]);
 	}
 	
-	TEST(VectorCapacity(IntVector), 5);
+	TEST(VectorCapacity(IntVector), 10);
 	TEST(VectorSize(IntVector), 5);
 	TEST(*(int*)VectorGetAccessToElement(IntVector, 0), 10);
 	TEST(*(int*)VectorGetAccessToElement(IntVector, 4), 50);
@@ -76,7 +76,7 @@ void Test_CharVector()
 		VectorPushBack(IntVector, &arr[i]);
 	}
 	
-	TEST(VectorCapacity(IntVector), 5);
+	TEST(VectorCapacity(IntVector), 10);
 	TEST(VectorSize(IntVector), 5);
 	TEST(*(char*)VectorGetAccessToElement(IntVector, 0), 'd');
 	TEST(*(char*)VectorGetAccessToElement(IntVector, 4), 'i');
