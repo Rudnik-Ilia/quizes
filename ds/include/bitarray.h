@@ -51,6 +51,14 @@ bit_array_t BitArraySetAllOff(bit_array_t bit_array);
 */
 int BitArrayGetBit(bit_array_t bit_array, size_t index);
 
+/*
+ * Description: The function allows to set on/off particular bit in an instance of bit array
+ * Parameters: bit_array: an instance of bit array, index: a number of bit [0 .. 63], state to be set[0,1]
+ * Return: bit_array_t: an instance of bit array
+ * Complexity: O(1)
+*/
+
+bit_array_t BitArraySetBit(bit_array_t bit_array, size_t index, int state);
 /*************************************************************/
 
 /*
@@ -120,5 +128,16 @@ size_t BitArrayCountOff(bit_array_t bit_array);
  * Complexity: O(1)
 */
 char *BitArrayToString(bit_array_t bit_array, char *dest);
+
+void reverse_string(char *str);
+
+bit_array_t BitArrayMirrorBitsLUT(bit_array_t bit_array);
+
+size_t BitArrayCountOnLUT(bit_array_t bit_array);
+
+
+
+
+
 
 #endif
