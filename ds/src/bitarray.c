@@ -1,6 +1,5 @@
 #include <stdio.h>  /* printf */
 
-
 #include <limits.h> /* CHARBIT */
 #include <assert.h> /* assert */
 #include <string.h> /* strrev */
@@ -32,9 +31,9 @@ static unsigned int lut[256] =
 
 bit_array_t BitArraySetOn(bit_array_t bit_array, size_t index)
 {
-	assert (index <= CHAR_BIT * sizeof(bit_array_t));
-	return bit_array | 1 << index;
+	return (((bit_array_t)1 << index) | bit_array);
 }
+
 
 
 bit_array_t BitArraySetOff(bit_array_t bit_array, size_t index)
@@ -118,7 +117,6 @@ void reverse_string(char *str)
     char temp;
     assert(str);
 
-    
     while (end > start)
     {
        
@@ -161,7 +159,6 @@ bit_array_t BitArraySetBit(bit_array_t bit_array, size_t index, int state)
 bit_array_t BitArrayMirrorBitsLUT(bit_array_t bit_array)
 {
 	bit_array_t reverse = 0;
-
 	reverse = (lookup[bit_array & BYTE8_1] << 56) | 
     (lookup[(bit_array >>  8) & BYTE8_1] << 48) | 
     (lookup[(bit_array >> 16) & BYTE8_1] << 40) |
@@ -170,14 +167,13 @@ bit_array_t BitArrayMirrorBitsLUT(bit_array_t bit_array)
     (lookup[(bit_array >> 40) & BYTE8_1] << 16) |
     (lookup[(bit_array >> 48) & BYTE8_1] <<  8) |
     (lookup[(bit_array >> 56) & BYTE8_1]);
-	
 	return reverse;
 }
 
 
 size_t BitArrayCountOnLUT(bit_array_t bit_array)
 {
-	return  lut[bit_array & 0xff] 	  + lut[bit_array>>8 & 0xff]  +
+	return  lut[bit_array & 0xff] + lut[bit_array>>8 & 0xff]+
 		 	lut[bit_array>>16 & 0xff] + lut[bit_array>>24 & 0xff] +
 		    lut[bit_array>>32 & 0xff] +	lut[bit_array>>40 & 0xff] +
 		    lut[bit_array>>48 & 0xff] + lut[bit_array>>56 & 0xff];

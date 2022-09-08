@@ -20,14 +20,12 @@
 #define TEST(a, b) ((a) != (b)) ? printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__) : puts("PASS");
 
 
-
 /*
 static int lookup[] = {
 		#include "../include/LUTtableMir.txt"
 };
+	TEST(BitArraySetOn(0xFFFFFFFFFFFFFBFF, 10), NUMBER);
 */
-
-
 
 
 
@@ -37,7 +35,7 @@ int main()
 	TEST(BitArrayCountOn(NUMBER), 64);
 	TEST(BitArrayCountOff(0xFFFFFFFFFFFFFBFF), 1);
 	TEST(BitArraySetOff(NUMBER, 10), 0xFFFFFFFFFFFFFBFF);
-	TEST(BitArraySetOn(0xFFFFFFFFFFFFFBFF, 10), NUMBER);
+	TEST(BitArraySetOn(0, 1), 2);
 	TEST(BitArraySetAllOff(NUMBER),0);
 	TEST(BitArraySetAllOn(0),-1lu);
 	TEST(BitArrayFlipBit(0xFFFFFFFFFFFFFBFF, 10), NUMBER);
@@ -53,8 +51,6 @@ int main()
 	reverse_string(arr);
 	TEST(strcmp(arr, "10101100001010110000101011000010101100001010110000101111100"), 0);
 	TEST(BitArrayCountOnLUT(0xFFFFFFFBFFFFFBFF), 62);
-	
-	
 	
 return 0;
 }
