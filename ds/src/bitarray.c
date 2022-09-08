@@ -31,9 +31,9 @@ static unsigned int lut[256] =
 
 bit_array_t BitArraySetOn(bit_array_t bit_array, size_t index)
 {
-	return (((bit_array_t)1 << index) | bit_array);
+	assert (index <= CHAR_BIT * sizeof(bit_array_t));
+	return bit_array | 1 << index;
 }
-
 
 
 bit_array_t BitArraySetOff(bit_array_t bit_array, size_t index)
@@ -106,7 +106,7 @@ bit_array_t BitArrayRotateLeft(bit_array_t bit_array, size_t n)
 int BitArrayGetBit(bit_array_t bit_array, size_t index)
 {
 	assert (index <= CHAR_BIT * sizeof(bit_array_t));
-	return (bit_array >> index) & 1;
+	return 1lu & (bit_array >> index);
 }
 /* help function */
 void reverse_string(char *str)
@@ -148,11 +148,11 @@ bit_array_t BitArraySetBit(bit_array_t bit_array, size_t index, int state)
 	assert (index <= CHAR_BIT * sizeof(bit_array_t));
 	if(state == 1)
 	{
-		return bit_array | (1 << index);
+		return bit_array | (1lu << index);
 	}
 	else 
 	{
-		return bit_array & (~(1 << index));
+		return bit_array & (~(1lu << index));
 	}
 }
 

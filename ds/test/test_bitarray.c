@@ -31,6 +31,7 @@ static int lookup[] = {
 
 int main()
 {
+	bit_array_t ba = 111;
 	char arr[WORD + 1];
 	TEST(BitArrayCountOn(NUMBER), 64);
 	TEST(BitArrayCountOff(0xFFFFFFFFFFFFFBFF), 1);
@@ -51,6 +52,8 @@ int main()
 	reverse_string(arr);
 	TEST(strcmp(arr, "10101100001010110000101011000010101100001010110000101111100"), 0);
 	TEST(BitArrayCountOnLUT(0xFFFFFFFBFFFFFBFF), 62);
+	
+	TEST(1, BitArrayGetBit(ba, 5));
 	
 return 0;
 }
