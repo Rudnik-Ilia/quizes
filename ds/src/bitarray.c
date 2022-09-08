@@ -32,14 +32,14 @@ static unsigned int lut[256] =
 bit_array_t BitArraySetOn(bit_array_t bit_array, size_t index)
 {
 	assert (index <= CHAR_BIT * sizeof(bit_array_t));
-	return bit_array | 1 << index;
+	return bit_array | 1lu << index;
 }
 
 
 bit_array_t BitArraySetOff(bit_array_t bit_array, size_t index)
 {
 	assert (index <= CHAR_BIT * sizeof(bit_array_t));
-	return bit_array & ~(1 << index);
+	return bit_array & ~(1lu << index);
 }
 
 
@@ -58,7 +58,7 @@ bit_array_t BitArraySetAllOn(bit_array_t bit_array)
 bit_array_t BitArrayFlipBit(bit_array_t bit_array, size_t index)
 {
 	assert (index <= CHAR_BIT * sizeof(bit_array_t));
-	return bit_array ^ (1 << index);
+	return bit_array ^ (1lu << index);
 }
 
 
