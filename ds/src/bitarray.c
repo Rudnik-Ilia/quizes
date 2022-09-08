@@ -1,5 +1,11 @@
+/**********************
+* Title : Worksheet BItarray
+* Author: Ilia Rudnik
+* Reviewer: Maria
+* Date : 06/09/2022
+* Status : approved
+***********************/
 #include <stdio.h>  /* printf */
-
 #include <limits.h> /* CHARBIT */
 #include <assert.h> /* assert */
 #include <string.h> /* strrev */
