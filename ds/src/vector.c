@@ -1,8 +1,14 @@
+/**********************
+* Title : Worksheet vector 
+* Author: Ilia Rudnik
+* Reviewer: ouri
+* Date : 04/09/2022
+* Status : aproved
+***********************/
 #include <stdio.h>  /* printf */
 #include <stdlib.h> /* rand */
 #include <string.h> /* memcpy*/
 #include <assert.h> /* assert */
-
 
 #include "../include/vector.h"
 
@@ -16,7 +22,6 @@ struct vector
 	size_t item_size;
 	void  *p_item;
 };
-
 
 
 vector_t *VectorCreate(size_t element_size, size_t capacity)

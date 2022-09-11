@@ -1,23 +1,18 @@
 
+/**********************
+* Title : Worksheet stack 
+* Author: Ilia Rudnik
+* Reviewer: NASTya
+* Date : 04/09/2022
+* Status : aproved
+***********************/
+
 #include <stdlib.h> /* malloc, free*/
 #include <stddef.h> /* size_t */
 #include <string.h> /* memcpy */
 #include <assert.h> /* assert */
 #include <stdio.h> /* printf */
 #include "../include/stack.h"
-
-/*
-typedef union u {
-  char bytes [sizeof(double)];
-  double value;
-} u;
- 
-int main () {
-  u u1;
-  u1.value = 234.23;
-  char* p = &u1.bytes[4]; 
-}
-*/
 
 
 struct stack
@@ -29,26 +24,6 @@ struct stack
 };
 
 
- /*
-
-void StackPush(stack_t *stack, const void *data)
-{
-	memcpy((char*)(stack -> p_item) + stack->size * stack->item_size, data, stack->item_size);
-	++stack->size;
-}
-
-
-stack_t *StackCreate(size_t element_size, size_t num_of_elements)
-{
-	void *place = (void*)malloc(sizeof(stack_t) + sizeof(element_size) * sizeof(num_of_elements));
-	stack_t* MyStack = (stack_t*)((char*)place);
-	MyStack -> p_item = (void*)((char*)MyStack + sizeof(MyStack));
-	MyStack -> size = 0;
-	MyStack -> item_size = sizeof(element_size);
-	MyStack -> max_item = num_of_elements;
-	return MyStack;
-}
-*/
 
 stack_t *StackCreate(size_t element_size, size_t num_of_elements)
 {
@@ -122,6 +97,26 @@ size_t StackCapacity(const stack_t *stack)
 	return stack->max_item;
 }
 
+ /*
+for one allocation
+void StackPush(stack_t *stack, const void *data)
+{
+	memcpy((char*)(stack -> p_item) + stack->size * stack->item_size, data, stack->item_size);
+	++stack->size;
+}
+
+
+stack_t *StackCreate(size_t element_size, size_t num_of_elements)
+{
+	void *place = (void*)malloc(sizeof(stack_t) + sizeof(element_size) * sizeof(num_of_elements));
+	stack_t* MyStack = (stack_t*)((char*)place);
+	MyStack -> p_item = (void*)((char*)MyStack + sizeof(MyStack));
+	MyStack -> size = 0;
+	MyStack -> item_size = sizeof(element_size);
+	MyStack -> max_item = num_of_elements;
+	return MyStack;
+}
+*/
 
 
 
@@ -129,6 +124,19 @@ size_t StackCapacity(const stack_t *stack)
 
 
 
+
+/*
+typedef union u {
+  char bytes [sizeof(double)];
+  double value;
+} u;
+ 
+int main () {
+  u u1;
+  u1.value = 234.23;
+  char* p = &u1.bytes[4]; 
+}
+*/
 
 
 
