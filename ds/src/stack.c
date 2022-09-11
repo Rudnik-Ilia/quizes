@@ -14,7 +14,7 @@
 #include <stdio.h> /* printf */
 #include "../include/stack.h"
 
-
+/* need to delete printf*/
 struct stack
 {
 	size_t max_item; 
