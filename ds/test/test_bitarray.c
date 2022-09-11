@@ -17,7 +17,6 @@
 static int lookup[] = {
 		#include "../include/LUTtableMir.txt"
 };
-	TEST(BitArraySetOn(0xFFFFFFFFFFFFFBFF, 10), NUMBER);
 */
 
 
@@ -26,6 +25,7 @@ int main()
 {
 	bit_array_t ba = 111;
 	char arr[WORD + 1];
+	TEST(BitArraySetOn(0xFFFFFFFFFFFFFBFF, 10), NUMBER);
 	TEST(BitArrayCountOn(NUMBER), 64);
 	TEST(BitArrayCountOff(0xFFFFFFFFFFFFFBFF), 1);
 	TEST(BitArraySetOff(NUMBER, 10), 0xFFFFFFFFFFFFFBFF);
@@ -45,7 +45,6 @@ int main()
 	reverse_string(arr);
 	TEST(strcmp(arr, "10101100001010110000101011000010101100001010110000101111100"), 0);
 	TEST(BitArrayCountOnLUT(0xFFFFFFFBFFFFFBFF), 62);
-	
 	TEST(1, BitArrayGetBit(ba, 5));
 	
 return 0;
