@@ -100,6 +100,15 @@ iterator_t SllInsert(iterator_t iter, void *data)
 iterator_t SllFind(iterator_t from, iterator_t to, is_match_func is_match, void *param)
 {
 	assert(param);
+	assert(from);
+	assert(to);
+	assert(is_match);
+	
+	while(!SllIterIsEqual(from, to) && !is_match(param, from->data))
+	{
+		from = SllNext(from);
+	}
+	return from;
 }
 
 size_t SllCount(const sll_t *list)
@@ -149,16 +158,12 @@ int SllIsEmpty(const sll_t *list)
 	assert(list);
 	return SllBegin(list) == SllEnd(list);
 }
-
-
-/* is match */
-
-int MatchParam(const void *data, void *param)
+int SllIterIsEqual(iterator_t iter1, iterator_t iter2)
 {
-	
-
-} 
-
+	assert(iter1);
+	assert(iter2);
+	return iter1 == iter2;
+}
 
 
 

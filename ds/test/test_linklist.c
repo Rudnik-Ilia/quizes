@@ -8,6 +8,16 @@
 
 #define ERROR(str) fprintf(stderr, str)
 
+int MatchParam(const void *data, void *param)
+{
+	assert(data);
+	assert(param);
+	return *(char*)data == *(char*)param;
+} 
+
+is_match_func is_match = &MatchParam;
+
+
 int main()
 {	
 	char c = 'x';
@@ -25,6 +35,7 @@ int main()
 	printf("%p\n", SllNext(iterator)); 
 	SllSetData(iterator, &c);
 	printf("%c\n", *(char*)(SllGetData(iterator)));
+	SllFind(SllBegin(Mylist), SllEnd(Mylist), is_match, &arr[1]);
 	*/
 	printf("%p\n", SllBegin(Mylist));
 	printf("%p\n", SllEnd(Mylist)); 
@@ -40,6 +51,9 @@ int main()
 	printf("%ld\n", SllCount(Mylist));
 	printf("---------------------------------------------\n");
 	
+	
+	printf("%c\n", *(char*)(SllGetData(SllFind(SllBegin(Mylist), SllEnd(Mylist), is_match, &arr[1]))));
+	/*
 	printf("Removing 1 item: \n");
 	SllRemove(iterator);
 	printf("%p\n", SllBegin(Mylist));
@@ -68,7 +82,7 @@ int main()
 	printf("%ld\n", SllCount(Mylist));
 	printf("---------------------------------------------\n");
 	
-	
+	*/
 	
 	
 	
