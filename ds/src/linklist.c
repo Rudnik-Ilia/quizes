@@ -30,7 +30,7 @@ struct sll {
 static int PlusOne(void *data, void *param)
 {
 	(void)data;
-	assert(param);
+	assert(NULL != param);
 	*(size_t*)param += 1;
 	
 	return 0;
@@ -65,7 +65,7 @@ sll_t *SllCreate(void)
 iterator_t SllRemove(iterator_t iter)
 {
 	node_t *tmp = iter->next;
-	assert(iter);
+	assert(NULL != iter);
 	if(DEAD == iter->next)
 	{
 		return iter;
@@ -86,7 +86,7 @@ iterator_t SllRemove(iterator_t iter)
 void SllDestroy(sll_t *list)
 {
 	iterator_t temp = list->head;
-	assert(list);
+	assert(NULL != list);
 	while(list->head != list->tail)
 	{	
 		list->head = list->head->next;
@@ -106,8 +106,8 @@ iterator_t SllInsert(iterator_t iter, void *data)
 		return NULL;
 	}
 	
-	assert(data);
-	assert(iter);
+	assert(NULL != data);
+	assert(NULL != iter);
 	
 	new_node->data = iter->data;
 	new_node->next = iter->next;
@@ -123,10 +123,10 @@ iterator_t SllInsert(iterator_t iter, void *data)
 
 iterator_t SllFind(iterator_t from, iterator_t to, is_match_func is_match, void *param)
 {
-	assert(param);
-	assert(from);
-	assert(to);
-	assert(is_match);
+	assert(NULL != param);
+	assert(NULL != from);
+	assert(NULL != to);
+	assert(NULL != is_match);
 	while(!SllIterIsEqual(from, to) && !is_match(param, from->data))
 	{
 		from = SllNext(from);
@@ -139,7 +139,7 @@ iterator_t SllFind(iterator_t from, iterator_t to, is_match_func is_match, void 
 size_t SllCount(const sll_t *list)
 {
 	size_t count = 0;
-	assert(list);
+	assert(NULL != list);
 	SllForEach(SllBegin(list), SllEnd(list), PlusOne, &count);
 	return count;
 }
@@ -147,51 +147,51 @@ size_t SllCount(const sll_t *list)
 
 void *SllGetData(iterator_t iter)
 {
-	assert(iter);
+	assert(NULL != iter);
 	return iter->data;
 }
 void SllSetData(iterator_t iter, void *data)
 {
-	assert(data);
+	assert(NULL != data);
 	iter->data = data;
 }
 
 iterator_t SllBegin(const sll_t *list)
 {
-	assert(list);
+	assert(NULL != list);
 	return list->head;
 }
 
 iterator_t SllEnd(const sll_t *list)
 {
-	assert(list);
+	assert(NULL != list);
 	return list->tail;
 }
 iterator_t SllNext(iterator_t iter)
 {
-	assert(iter);
+	assert(NULL != iter);
 	return iter->next;
 }
 
 int SllIsEmpty(const sll_t *list)
 {
-	assert(list);
+	assert(NULL != list);
 	return SllBegin(list) == SllEnd(list);
 }
 int SllIterIsEqual(iterator_t iter1, iterator_t iter2)
 {
-	assert(iter1);
-	assert(iter2);
+	assert(NULL != iter1);
+	assert(NULL != iter2);
 	return iter1 == iter2;
 }
 
 int SllForEach(iterator_t from, iterator_t to, action_func func, void *param)
 {	
 	int st = 0;
-	assert(from);
-	assert(to);
-	assert(func);
-	assert(param);
+	assert(NULL != from);
+	assert(NULL != to);
+	assert(NULL != func);
+	assert(NULL != param);
 	while(DEAD != SllNext(from))
 	{	
 		func(from->data, param);
@@ -202,8 +202,8 @@ int SllForEach(iterator_t from, iterator_t to, action_func func, void *param)
 
 sll_t *SllAppend(sll_t *dest, sll_t *src)
 {	
-	assert(dest);
-	assert(src);
+	assert(NULL != dest);
+	assert(NULL != src);
 
 	dest->tail->data = src->head->data;
 	dest->tail->next = src->head->next;				

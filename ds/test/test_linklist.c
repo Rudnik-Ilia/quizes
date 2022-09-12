@@ -9,8 +9,8 @@
 
 int MatchParam(const void *data, void *param)
 {
-	assert(data);
-	assert(param);
+	assert(NULL != data);
+	assert(NULL != param);
 	return *(int*)data == *(int*)param;
 }
 
@@ -131,6 +131,9 @@ void Test_Append()
 	
 	TEST(SllCount(Mylist), 6);
 	TEST(SllCount(list_2), 0);
+	
+	SllDestroy(Mylist);
+	SllDestroy(list_2);
 }
 
 
