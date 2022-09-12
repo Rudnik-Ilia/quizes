@@ -17,7 +17,6 @@
 
 typedef struct node node_t;
 
-
 struct node {
     void *data;
     node_t *next;
@@ -34,27 +33,33 @@ static int PlusOne(void *data, void *param)
 	assert(param);
 	*(size_t*)param += 1;
 	
-	return 1;
+	return 0;
 }
 
 
 sll_t *SllCreate(void)
 {
-    sll_t *MyList = (sll_t *)malloc(sizeof(sll_t));
+    sll_t *myList = (sll_t *)malloc(sizeof(sll_t));
 	node_t *dummy_node = (node_t *)malloc(sizeof(node_t));
 	
-    if(NULL == MyList || NULL == dummy_node)
+    if(NULL == myList)
+    {
+    	LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+    }
+    if(NULL == dummy_node)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		free(dummy_node);
 		return NULL;
 	}
 	
-	dummy_node->data = MyList;
+	dummy_node->data = myList;
 	dummy_node->next = DEAD;
-    MyList->head = dummy_node;
-    MyList->tail = dummy_node; 
+    myList->head = dummy_node;
+    myList->tail = dummy_node; 
     
-    return MyList;
+    return myList;
 }
 
 iterator_t SllRemove(iterator_t iter)
@@ -109,7 +114,7 @@ iterator_t SllInsert(iterator_t iter, void *data)
 	iter->next = new_node;
 	iter->data = data;
 	
-	if(new_node->next == DEAD)
+	if(DEAD == new_node->next)
 	{
 		((sll_t*)(new_node->data))->tail = new_node; 
 	}
@@ -122,27 +127,14 @@ iterator_t SllFind(iterator_t from, iterator_t to, is_match_func is_match, void 
 	assert(from);
 	assert(to);
 	assert(is_match);
-	
 	while(!SllIterIsEqual(from, to) && !is_match(param, from->data))
 	{
 		from = SllNext(from);
-		return from;
+		return from;	
 	}
 	return NULL;
 }
-/*
-size_t SllCount(const sll_t *list)
-{
-	size_t count = 0;
-	iterator_t ptr = list->head;
-	while(ptr != list->tail)
-	{	
-		ptr = SllNext(ptr);
-		++count;
-	}
-	return count;
-}
-*/
+
 
 size_t SllCount(const sll_t *list)
 {
@@ -195,12 +187,12 @@ int SllIterIsEqual(iterator_t iter1, iterator_t iter2)
 
 int SllForEach(iterator_t from, iterator_t to, action_func func, void *param)
 {	
-	int st = 1;
+	int st = 0;
 	assert(from);
 	assert(to);
 	assert(func);
 	assert(param);
-	while(SllNext(from) != DEAD)
+	while(DEAD != SllNext(from))
 	{	
 		func(from->data, param);
 		from = SllNext(from);	
@@ -209,10 +201,9 @@ int SllForEach(iterator_t from, iterator_t to, action_func func, void *param)
 }
 
 sll_t *SllAppend(sll_t *dest, sll_t *src)
-{
-	
-	assert(NULL != dest);
-	assert(NULL != src);
+{	
+	assert(dest);
+	assert(src);
 
 	dest->tail->data = src->head->data;
 	dest->tail->next = src->head->next;				
@@ -221,7 +212,6 @@ sll_t *SllAppend(sll_t *dest, sll_t *src)
 	src->tail = src->head;
 	src->head->data = src;
 	src->head->next = DEAD;
-
 	return dest;
 }
 
