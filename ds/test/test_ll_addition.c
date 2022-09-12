@@ -68,10 +68,10 @@ int HasLoop(node_t * head)
 
 
 
-int FindIntersection(node_t * first, node_t *second)
+node_t *FindIntersection(node_t * first_head, node_t *second_head)
 {
-	node_t * ptr1 = first;
-	node_t * ptr2 = second;
+	node_t * ptr1 = first_head;
+	node_t * ptr2 = second_head;
 	assert(ptr1);
 	assert(ptr2);
 	
@@ -79,21 +79,20 @@ int FindIntersection(node_t * first, node_t *second)
 	{
 		if(ptr1 == ptr2)
 		{
-			return 1;
+			return first_head;
 		}
 		while(ptr2)
-		{
+		{	
 			if(ptr1 == ptr2)
 			{
-				return 1;
-				puts("333");
+				return first_head;
 			}
 			ptr2 = ptr2->next;
 		}
 	ptr1 = ptr1->next;
-	ptr2 = second;
+	ptr2 = second_head;
 	}
-	return 0;
+	return NULL;
 }
 
 void Test_HasLoop();
@@ -124,11 +123,26 @@ void Test_FindIntersec()
 	node_t * item_4 = BornNode(&arr[1], item_3);
 	node_t * item_5 = BornNode(&arr[0], item_4);
 	
-	TEST(FindIntersection(item_5, item3), 0);
+	if(FindIntersection(item3, item_5) == NULL)
+	{
+		puts("PASS");
+	}
+	else
+	{
+		puts("FAIL");
+	}
+	
 	
 	item1->next = item_2;
 	
-	TEST(FindIntersection(item3, item_5), 1);
+	if(FindIntersection(item3, item_5) != NULL)
+	{
+		puts("PASS");
+	}
+	else
+	{
+		puts("FAIL");
+	}
 	
 	free(item_5);
 	free(item_4);
