@@ -63,6 +63,7 @@ int SllForEach(iterator_t from, iterator_t to,
         action_func func, void *param);
         
         
+sll_t *SllAppend(sll_t *dest, sll_t *src);      
 
 
 

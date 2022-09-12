@@ -208,3 +208,21 @@ int SllForEach(iterator_t from, iterator_t to, action_func func, void *param)
 	return st;
 }
 
+sll_t *SllAppend(sll_t *dest, sll_t *src)
+{
+	
+	assert(NULL != dest);
+	assert(NULL != src);
+
+	dest->tail->data = src->head->data;
+	dest->tail->next = src->head->next;				
+	dest->tail = src->tail;
+	dest->tail->data = dest;
+	src->tail = src->head;
+	src->head->data = src;
+	src->head->next = DEAD;
+
+	return dest;
+}
+
+

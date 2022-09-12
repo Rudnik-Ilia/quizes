@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <assert.h>
 #define TEST(a, b) ((a) != (b)) ? printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__) : puts("PASS");
 
 
@@ -15,6 +15,12 @@ typedef struct node
 node_t *BornNode(void *data, void *next)
 {
 	node_t *new_node = (node_t*)malloc(sizeof(node_t));
+	assert(data);
+	
+	if(NULL == new_node)
+	{
+		return NULL;
+	}
 	new_node->data = data;
 	new_node->next = next;
 	return new_node;
@@ -26,7 +32,7 @@ node_t *Flip(node_t * head)
 {
 	node_t *curr = NULL;
 	node_t *next = NULL;
-	
+	assert(head);
 	while(NULL != head)
 	{
 		head->next = curr;
@@ -42,6 +48,7 @@ int HasLoop(node_t * head)
 {
 	node_t *a = NULL;
 	node_t *b = NULL;
+	assert(head);
 	a = head;
 	b = head;
 	
@@ -65,11 +72,13 @@ int FindIntersection(node_t * first, node_t *second)
 {
 	node_t * ptr1 = first;
 	node_t * ptr2 = second;
+	assert(ptr1);
+	assert(ptr2);
+	
 	while(ptr1)
 	{
 		if(ptr1 == ptr2)
 		{
-			printf("%c - %c\n", *(char*)ptr1->data, *(char*)ptr2->data);
 			return 1;
 		}
 		while(ptr2)
