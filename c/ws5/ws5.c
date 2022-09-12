@@ -156,6 +156,7 @@ mySuperStruct* SuperCreater(char arr[], p_tostrcmp funcCheck, p_status_t funcAct
 	}
     assert(funcCheck);
     assert(funcAct);
+    assert(arr);
     
     bigStruct -> command = arr;
     bigStruct -> Checking = funcCheck;
@@ -204,7 +205,7 @@ int logger(char *argv[]){
 			}
 		}	
 	}
-	
+	/*free mem*/
 	for(i = 0; i < LEN_OF_ARR; ++i)
 	{
 		free(arrayOFsuper[i]);

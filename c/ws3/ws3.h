@@ -7,7 +7,7 @@ void PrintVar();
 
 void Test_SummArray();
 /* sum rows in 2d array*/
-int *SummArray(int arr[2][3], int x, int y);
+int *SummArray(int *arr, int row, int col);
 /*free memory after CreateArrayFromVar*/
 void FreeMemory(char **arr, int len);
 /* create dinamic 2d array*/

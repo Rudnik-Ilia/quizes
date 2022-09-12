@@ -15,13 +15,31 @@
 
 
 
+void Test_SummArray();
+void Test_Joses();
+void Test_PrintVar();
+
+
+int main()
+{
+	
+	
+	Test_SummArray();
+
+	return 0;
+}
+
 
 void Test_SummArray()
 {
 	int arr[2][3] = {{1,2,3},{4,5,6}};
 	
-	if(SummArray(arr, 2, 3)[1] == 15 && SummArray(arr, 2, 3)[0] == 6) printf("PASS\n");
+	if(SummArray(*arr, 2, 3)[1] == 15 && SummArray(*arr, 2, 3)[0] == 6) printf("PASS\n");
 	else printf("FAIL");
+	
+	
+	
+	
 }
 
 void Test_Joses()
@@ -38,33 +56,6 @@ void Test_PrintVar()
 	PrintVar();
 
 }
-
-
-
-int main(int argc, char *argv[], char *env[])
-{
-	char ** arrr= NULL;
-	(void)argc;
-	(void)argv;
-	
-	Test_PrintVar();
-	
-	 Test_SummArray();
-	 
-	 Test_Joses();
-	 
-	 arrr = CreateArrayFromVar(env);
-	 
-	 FreeMemory(arrr, 50);
-	 
-	 
-	 
-	
-
-
-	return 0;
-}
-
 
 
 

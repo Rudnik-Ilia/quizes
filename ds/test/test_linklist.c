@@ -4,8 +4,7 @@
 #include <string.h> /* strrev */
 
 #include "SLL.h"
-#include "MYHEAD.h"
-
+#include "utils.h"
 
 
 int MatchParam(const void *data, void *param)
@@ -61,6 +60,7 @@ int main()
 	TEST(*(int*)(SllGetData(SllFind(SllBegin(Mylist), SllEnd(Mylist), is_match, &arr[1]))), 2);
 	
 	SllForEach(SllBegin(Mylist), SllEnd(Mylist), func, &x);
+	
 	TEST(*(int*)(SllGetData(iterator)), 300);
 	
 	SllInsert(iterator, &ins);

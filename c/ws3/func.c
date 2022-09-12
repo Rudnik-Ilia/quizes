@@ -4,6 +4,8 @@
 #include <stdlib.h> 
 #include"ws3.h"
 
+#define LEN_OF_ENV 50
+
 
 
 void PrintVar()
@@ -69,48 +71,46 @@ void PrintMatrix(int *arr, int x, int y)
 	}
 	printf("\n");
 }
-
-int *SummArray(int arr[2][3], int x, int y)
-
+/*you have to do free memory by self*/
+int *SummArray(int *arr, int row, int col)
 {
-	int i,j;
-	int res;
-	int cell;
-	int *summ = (int*)malloc(x * (sizeof(int)));
-	if (NULL != summ) printf("We have trouble!");
-	assert(summ);
-	res = 0;
-	cell =0;
+
+	int i = 0;
+	int j = 0;
+	int *sum; 
+	assert (arr);
+	sum = (int*)malloc (row * sizeof(int));
+	assert (sum);
 	
-	for(i = 0; i < x; ++i)
-	{
-		for(j = 0; j <  y; ++j)
+	while (i < row)
+	{	
+		sum[i] = 0;
+		for (j = 0; j < col; ++j)
 		{
-			res+=arr[i][j];
+			sum[i] = sum[i] + *(arr + i*col + j);	
 		}
-		summ[cell] = res;
-		++cell;
-		res = 0;
+		++i;
 	}
-	return summ;
+	return sum;
 }
 
+/*you have to do free memory by self with FreeMemory function*/
 char **CreateArrayFromVar(char *env[])
 {
 	int i;
 	char **arr = NULL;
 	
-	arr = (char**)malloc(50 * sizeof(char *));
+	arr = (char**)malloc(LEN_OF_ENV * sizeof(char *));
 	assert(arr);
 	assert(env);
 	
-	for(i = 0; i < 50 || env[i] ; ++i)
+	for(i = 0; i < LEN_OF_ENV || env[i] ; ++i)
 	{
 		arr[i] = (char*)malloc(strlen(env[i])+1);
 		arr[i] = env[i];
 			
 	}
-	for(i = 0; i < 50 ; ++i) printf("%s\n", arr[i] );
+	for(i = 0; i < LEN_OF_ENV ; ++i) printf("%s\n", arr[i] );
 	
 	return arr;
 }

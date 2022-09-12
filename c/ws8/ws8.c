@@ -18,6 +18,7 @@ SuperStruct* CreaterStruct(type nameOf ,void *value)
     if(NULL == BigStruct)
 	{
 		puts("NO MEMORY FOR YOU!SORRY");
+		return -1;
 	}
     BigStruct -> name = nameOf;
     BigStruct -> data = value;
@@ -48,6 +49,7 @@ void AddEveryThing(int num, SuperStruct* p_struc)
 			if(NULL == buff)
 			{
 				puts("NO MEMORY FOR YOU!SORRY");
+				return -1;
 			}
 			sprintf(buff, "%s%d", (char*)(p_struc -> data), num);
 			(p_struc -> data) = buff;	
@@ -85,7 +87,6 @@ void Cleaner(SuperStruct* arr[], int lenArr)
 		free(arr[i]);
 		arr[i] = NULL;
 	}
-	
 }
 
 

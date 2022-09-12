@@ -8,6 +8,8 @@
 #define BUFF 50
 
 
+
+
 unsigned long Pow2(unsigned int x, unsigned int y)
 {
 	unsigned long res;

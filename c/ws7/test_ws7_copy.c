@@ -1,9 +1,10 @@
 
 #include<stdio.h>
-#include"ws7.h"
+#include"example.h"
+#include"example.h"
 
 int main()
 {
-	Pr();
+	funcX();
 	return 0;
 }

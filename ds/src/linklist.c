@@ -10,8 +10,8 @@
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
 
-#include "../include/SLL.h"
-#include "../include/MYHEAD.h"
+#include "SLL.h"
+#include "utils.h"
 
 #define DEAD (node_t*)0xDEADBEEF
 
@@ -28,6 +28,15 @@ struct sll {
     node_t *tail;
 };
 
+static int PlusOne(void *data, void *param)
+{
+	(void)data;
+	assert(param);
+	*(size_t*)param += 1;
+	
+	return 1;
+}
+
 
 sll_t *SllCreate(void)
 {
@@ -36,6 +45,7 @@ sll_t *SllCreate(void)
 	
     if(NULL == MyList || NULL == dummy_node)
 	{
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return NULL;
 	}
 	
@@ -70,15 +80,24 @@ iterator_t SllRemove(iterator_t iter)
 
 void SllDestroy(sll_t *list)
 {
-	
-
+	iterator_t temp = list->head;
+	assert(list);
+	while(list->head != list->tail)
+	{	
+		list->head = list->head->next;
+		free(temp);
+		temp = list->head;
+	}
+	free(list->tail);
+	free(list);
 }
 
 iterator_t SllInsert(iterator_t iter, void *data)
 {
 	node_t *new_node = (node_t *)malloc(sizeof(node_t));
 	if(NULL == new_node)
-	{
+	{	
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return NULL;
 	}
 	
@@ -107,22 +126,31 @@ iterator_t SllFind(iterator_t from, iterator_t to, is_match_func is_match, void 
 	while(!SllIterIsEqual(from, to) && !is_match(param, from->data))
 	{
 		from = SllNext(from);
+		return from;
 	}
-	return from;
+	return NULL;
 }
-
+/*
 size_t SllCount(const sll_t *list)
 {
 	size_t count = 0;
 	iterator_t ptr = list->head;
 	while(ptr != list->tail)
 	{	
-		ptr = ptr->next;
+		ptr = SllNext(ptr);
 		++count;
 	}
 	return count;
 }
+*/
 
+size_t SllCount(const sll_t *list)
+{
+	size_t count = 0;
+	assert(list);
+	SllForEach(SllBegin(list), SllEnd(list), PlusOne, &count);
+	return count;
+}
 
 
 void *SllGetData(iterator_t iter)
@@ -165,27 +193,18 @@ int SllIterIsEqual(iterator_t iter1, iterator_t iter2)
 	return iter1 == iter2;
 }
 
-
-
-
-
-/* returns one new node */
-/*
-
-node_t* SingleNode(void *data, node_t *next)
+int SllForEach(iterator_t from, iterator_t to, action_func func, void *param)
 {	
-	node_t *new_node = NULL;
-	assert(next);
-	assert(data);
-	new_node = (node_t*)malloc(sizeof(node_t));
-	if(NULL == new_node)
-	{
-		printf("error");
-	}
-	new_node->data;
-	new_node->next;
-	return new_node;
+	int st = 1;
+	assert(from);
+	assert(to);
+	assert(func);
+	assert(param);
+	while(SllNext(from) != DEAD)
+	{	
+		func(from->data, param);
+		from = SllNext(from);	
+	}	
+	return st;
 }
-node_t* SingleNode( void *data, node_t *next);
-*/
 

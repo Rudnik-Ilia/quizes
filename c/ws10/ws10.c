@@ -210,7 +210,6 @@ void PrintCommonForTwo(const char *arr1, const char *arr2, const char *arr3, siz
 	
 	if(NULL == temp)
 	{
-		
 		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 	}	
 	assert(arr1);
