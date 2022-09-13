@@ -64,35 +64,43 @@ int HasLoop(node_t * head)
 	return 0;
 }
 
-
+size_t LenOf(node_t *head)
+{
+	assert(head);
+	size_t count = 0;
+	while(head)
+	{
+		head = head->next;
+		++count;
+	}
+	return count;
+}
 
 
 
 node_t *FindIntersection(node_t * first_head, node_t *second_head)
 {
-	node_t * ptr1 = first_head;
-	node_t * ptr2 = second_head;
-	assert(ptr1);
-	assert(ptr2);
+	size_t len1 = LenOf(first_head);
+	size_t len2 = LenOf(second_head);
+	node_t *res = NULL;
 	
-	while(ptr1)
+	while(len1 > len2)
 	{
-		if(ptr1 == ptr2)
-		{
-			return first_head;
-		}
-		while(ptr2)
-		{	
-			if(ptr1 == ptr2)
-			{
-				return first_head;
-			}
-			ptr2 = ptr2->next;
-		}
-	ptr1 = ptr1->next;
-	ptr2 = second_head;
+		first_head = first_head->next;
+		--len1;
 	}
-	return NULL;
+	while(len1 < len2)
+	{
+		second_head = second_head->next;
+		--len2;
+	}
+	while((first_head != NULL || second_head != NULL) && first_head != second_head)
+	{
+		first_head = first_head->next;
+		second_head = second_head->next;
+		res = first_head;
+	}
+	return res;
 }
 
 void Test_HasLoop();
