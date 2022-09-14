@@ -9,26 +9,37 @@
 
 int main()
 {	
-	char arr[] = {'x', 'b', 'c'};	
-	char de[1];
-	cbuff_t *buff = CBuffCreate(100);
+	size_t i;
+	cbuff_t *buff = NULL;
+	char arr[] = {'h', 'e', 'l','o'};
+	char arr3[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'i', 'o'};	
+	char de[4];
 	
-	printf("%d\n", CBuffIsEmpty(buff));
-	CBuffWrite(buff, &arr[0] , 1);
-	printf("%d\n", CBuffIsEmpty(buff));
+	buff = CBuffCreate(10);
+	printf("%ld\n", CBuffFreeSpace(buff));
+	CBuffWrite(buff, arr , 4);
+	printf("%ld\n", CBuffFreeSpace(buff));
 	
-	CBuffRead(buff, de, 1);
 	
-	printf("%c\n", de[0]);
-	/*
+	TEST(CBuffRead(buff, de, 3), 3);
+	printf("%ld\n", CBuffFreeSpace(buff));
 	
-	printf("%c\n", buff->capacity));
+	printf("Test for contain: \n");
+	for(i=0; i < 3; ++i)
+	{
+		TEST(de[i], arr[i]);
+	}
+	CBuffWrite(buff, arr3 , 9);
+	printf("%ld\n", CBuffFreeSpace(buff));
+	TEST(CBuffIsEmpty(buff), 1);
+	
+	CBuffRead(buff, de, 3);
+	printf("%ld\n", CBuffFreeSpace(buff));
+	
+	TEST(CBuffWrite(buff, arr3 , 144), 3);
 	
 
-*/
-
-
-
+	CBuffDestroy(buff);
 return 0;
 }
 

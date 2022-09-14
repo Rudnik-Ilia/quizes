@@ -12,27 +12,40 @@
 #include <string.h> /* memcpy */
 #include <assert.h>
 
+#include "utils.h"
 #include "cbuff.h"
+
+
 
 struct cbuff{
 	
+	#ifndef NDEBUG
+	void *mine;
+	#endif
+
 	size_t capacity;
+	size_t freespace;
 	size_t read;
 	size_t write;
 	char buffer[1];
 
 };
-static void buf_reset(cbuff_t *cbuff);
+static int buf_reset(cbuff_t *cbuff);
 
 cbuff_t *CBuffCreate(size_t capacity)
 {
-	cbuff_t * new_cbuff = malloc(sizeof(cbuff_t*) + capacity);
+	cbuff_t * new_cbuff = malloc(sizeof(cbuff_t) + capacity);
 	if(NULL == new_cbuff)
 	{
-		return 0;
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
 	}
-	new_cbuff->capacity = capacity;
+	#ifndef NDEBUG
+	new_cbuff->mine = DEAD;
+	#endif
 	
+	new_cbuff->capacity = capacity;
+	new_cbuff->freespace = capacity;
 	buf_reset(new_cbuff);
 	return new_cbuff;	
 
@@ -43,34 +56,49 @@ ssize_t CBuffWrite(cbuff_t *cbuff, const void *src, size_t num_of_bytes)
 	assert(cbuff);
 	assert(src);
 	
-	memcpy(&cbuff->buffer[cbuff->write], src, num_of_bytes);
-	
-	if(num_of_bytes > cbuff->capacity)
+	#ifndef NDEBUG
+	if(cbuff->mine != DEAD)
 	{
-		cbuff->write = num_of_bytes % cbuff->capacity;
+		return -1;
+	}	
+	#endif
+	
+	if(CBuffFreeSpace(cbuff) < num_of_bytes)
+	{
+		num_of_bytes = CBuffFreeSpace(cbuff);
 	}
-	cbuff->write = num_of_bytes + 1;
+	memcpy(&cbuff->buffer[cbuff->write + 1], src, num_of_bytes);
 	
 	
-	return 0;
+	cbuff->write = (cbuff->write + num_of_bytes) % cbuff->capacity;
+	
+	cbuff->freespace = cbuff->freespace - num_of_bytes;
+	
+	return num_of_bytes;
 }
 
 ssize_t CBuffRead(cbuff_t *cbuff, void *dest, size_t num_of_bytes)
 {
-	int st = -1;
+
 	assert(cbuff);
 	assert(dest);
-	
+	#ifndef NDEBUG
+	if(cbuff->mine != DEAD)
+	{
+		return -1;
+	}	
+	#endif
 
 	if(!CBuffIsEmpty(cbuff))
 	{
-		printf("!!!\n");
-		memcpy(dest, &cbuff->buffer[cbuff->read], num_of_bytes);
-		st = 0;
+		memcpy(dest, &cbuff->buffer[cbuff->read + 1], num_of_bytes);
 	}
 	
-	cbuff->read = num_of_bytes + 1;
-	return st;
+	cbuff->read = (cbuff->read + num_of_bytes) % cbuff->capacity;
+	
+	cbuff->freespace = cbuff->freespace + num_of_bytes;
+	
+	return num_of_bytes;
 }
 
 void CBuffDestroy(cbuff_t *cbuff)
@@ -92,13 +120,26 @@ int CBuffIsEmpty(const cbuff_t *cbuff)
 	return cbuff->read == cbuff->write;
 }
 
-
-
-static void buf_reset(cbuff_t *cbuff)
+size_t CBuffFreeSpace(const cbuff_t *cbuff)
 {
 	assert(cbuff);
+	return cbuff->freespace;
+
+}
+
+static int buf_reset(cbuff_t *cbuff)
+{
+	assert(cbuff);
+	
+	#ifndef NDEBUG
+	if(cbuff->mine != DEAD)
+	{
+		return -1;
+	}	
+	#endif
 	cbuff->write = 0;
 	cbuff->read = 0;
+	return 0;
 }
 
 
