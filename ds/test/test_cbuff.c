@@ -61,7 +61,7 @@ int main()
 	printf("Test write 9 byte: \n");
 	CBuffWrite(buff, arr3 , 9);
 	TEST(CBuffFreeSpace(buff), 0);
-	TEST(CBuffIsEmpty(buff), 1);
+	TEST(CBuffIsEmpty(buff), 0);
 	printf("-----------------------------------------\n");
 	
 	printf("Test write 33 byte: \n");
