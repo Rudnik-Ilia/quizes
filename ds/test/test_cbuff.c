@@ -26,6 +26,7 @@ int main()
 	char arr[] = {'h', 'e', 'l','o'};
 	char arr3[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'i', 'o'};	
 	char de[4];
+	
 	#ifndef NDEBUG
 		fake_cbuff_t *fcbuff = NULL;
 		fcbuff = (fake_cbuff_t *)malloc(sizeof(fake_cbuff_t));
