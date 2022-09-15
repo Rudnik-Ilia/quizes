@@ -5,9 +5,10 @@
 
 #define ASSERT(x) (NULL == x);
 #define TEST(a, b) ((a) != (b)) ? printf("TEST FAIL! ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__) : puts("PASS");
-/*
+
+
 #define DEAD (node_t*) 0xDEADBEEF
-*/
+
 #define CAFE (void*) 0xCAFEBABE 
 
 
