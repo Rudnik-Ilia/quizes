@@ -30,8 +30,7 @@ struct cbuff{
 	char buffer[1];
 
 };
-static int buf_reset(cbuff_t *cbuff);
-static size_t check(size_t num, size_t free);
+
 
 cbuff_t *CBuffCreate(size_t capacity)
 {
@@ -76,21 +75,6 @@ ssize_t CBuffWrite(cbuff_t *cbuff, const void *src, size_t num_of_bytes)
 	}
 	cbuff->write = (cbuff->write + i) % cbuff->capacity;
 
-
-	/* old version
-	
-	if(CBuffFreeSpace(cbuff) < num_of_bytes)
-	{
-		num_of_bytes = CBuffFreeSpace(cbuff);
-	}
-	
-	
-	i = check(num_of_bytes, CBuffFreeSpace(cbuff));
-	memcpy(&cbuff->buffer[cbuff->write + 1], src, i);
-	cbuff->write = (cbuff->write + i) % cbuff->capacity;
-	cbuff->freespace = cbuff->freespace - i;
-	*/
-	
 	return i;
 }
 
@@ -114,18 +98,6 @@ ssize_t CBuffRead(cbuff_t *cbuff, void *dest, size_t num_of_bytes)
 	}
 	cbuff->read = (cbuff->read + i) % cbuff->capacity;
 
-
-	/* old version
-	
-	if(!CBuffIsEmpty(cbuff))
-	{
-		memcpy(dest, &cbuff->buffer[cbuff->read + 1], num_of_bytes);
-	}
-	
-	cbuff->read = (cbuff->read + num_of_bytes) % cbuff->capacity;
-	cbuff->freespace = cbuff->freespace + num_of_bytes;
-	*/
-	
 	return i;
 }
 
@@ -155,11 +127,27 @@ size_t CBuffFreeSpace(const cbuff_t *cbuff)
 
 }
 
-static size_t check(size_t num, size_t free)
-{
-	return num > free ? free : num;
-}
-
-
-
+	/* old version
+	
+	if(CBuffFreeSpace(cbuff) < num_of_bytes)
+	{
+		num_of_bytes = CBuffFreeSpace(cbuff);
+	}
+	
+	
+	i = check(num_of_bytes, CBuffFreeSpace(cbuff));
+	memcpy(&cbuff->buffer[cbuff->write + 1], src, i);
+	cbuff->write = (cbuff->write + i) % cbuff->capacity;
+	cbuff->freespace = cbuff->freespace - i;
+	*/
+	/* old version
+	
+	if(!CBuffIsEmpty(cbuff))
+	{
+		memcpy(dest, &cbuff->buffer[cbuff->read + 1], num_of_bytes);
+	}
+	
+	cbuff->read = (cbuff->read + num_of_bytes) % cbuff->capacity;
+	cbuff->freespace = cbuff->freespace + num_of_bytes;
+	*/
 

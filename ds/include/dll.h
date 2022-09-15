@@ -1,10 +1,10 @@
 #ifndef __DLL_H__
 #define __DLL_H__
 
-#define <stddef.h> /* size_t */
+#include <stddef.h> /* size_t */
 
 typedef struct dllist dllist_t;
-typedef struct node * dllist_iter_t;
+typedef struct dll_node *dllist_iter_t;
 
 
 /* CONSTRUCT & DESTRUCT FUNCS */

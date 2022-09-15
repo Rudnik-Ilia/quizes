@@ -1,6 +1,7 @@
 #pragma once
 #ifndef __SLL_H__
 #define __SLL_H__
+
 typedef struct sll sll_t;
 
 typedef struct node* iterator_t;
