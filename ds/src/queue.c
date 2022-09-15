@@ -69,7 +69,8 @@ queue_t *QueueAppend(queue_t *dest, queue_t *src)
 {
 	assert(dest);
 	assert(src);
-	SllAppend(dest->p_q, src->p_q);  
+	SllAppend(dest->p_q, src->p_q); 
+	QueueDestroy(src);  
 	return dest;
 }
 
