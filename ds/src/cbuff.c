@@ -24,7 +24,7 @@ struct cbuff{
 	#endif
 
 	size_t capacity;
-	size_t freespace;
+	size_t space;
 	size_t read;
 	size_t write;
 	char buffer[1];
@@ -47,8 +47,9 @@ cbuff_t *CBuffCreate(size_t capacity)
 	#endif
 	
 	new_cbuff->capacity = capacity;
-	new_cbuff->freespace = capacity;
-	buf_reset(new_cbuff);
+	new_cbuff->space = 0;
+	new_cbuff->write = 0;
+	new_cbuff->read = 0;
 	return new_cbuff;	
 
 }
@@ -65,18 +66,19 @@ ssize_t CBuffWrite(cbuff_t *cbuff, const void *src, size_t num_of_bytes)
 		return -1;
 	}	
 	#endif
-	for ( ; i<num_of_bytes && cbuff->freespace > 0; ++i)
+	
+	for (i = 0; i < num_of_bytes && (cbuff->capacity > cbuff->space); ++i)
 	{
-		if (cbuff->write == cbuff->capacity)
-		{
-			cbuff->write = 0;
-		}
-		*(cbuff->buffer + cbuff->write) = *((char*)src+i);
-		++cbuff->write;
-		--cbuff->freespace;
+		
+		cbuff -> buffer [(cbuff->write + i) % (cbuff->capacity)] = *((char *)src + i);
+			
+		++cbuff->space;
 	}
+	cbuff->write = (cbuff->write + i) % cbuff->capacity;
 
-	/*
+
+	/* old version
+	
 	if(CBuffFreeSpace(cbuff) < num_of_bytes)
 	{
 		num_of_bytes = CBuffFreeSpace(cbuff);
@@ -95,8 +97,6 @@ ssize_t CBuffWrite(cbuff_t *cbuff, const void *src, size_t num_of_bytes)
 ssize_t CBuffRead(cbuff_t *cbuff, void *dest, size_t num_of_bytes)
 {
 	size_t i = 0;
-	size_t space_for_read = cbuff->capacity - cbuff->freespace;
-
 	assert(cbuff);
 	assert(dest);
 	
@@ -107,18 +107,16 @@ ssize_t CBuffRead(cbuff_t *cbuff, void *dest, size_t num_of_bytes)
 	}	
 	#endif
 	
-	for ( ; i<num_of_bytes && space_for_read > 0; ++i)
+	for (i = 0; i < num_of_bytes && cbuff->space > 0; ++i)
 	{
-		if (cbuff->read == cbuff->capacity)
-		{
-			cbuff->read = 0;
-		}
-		*((char*)dest+i) = *(cbuff->buffer + cbuff->read);
-		++cbuff->freespace;
-		++cbuff->read;
-		--space_for_read;
+		*((char *)dest + i) = cbuff -> buffer [(cbuff->read + i) % (cbuff->capacity)];	
+		--cbuff->space;
 	}
-	/*
+	cbuff->read = (cbuff->read + i) % cbuff->capacity;
+
+
+	/* old version
+	
 	if(!CBuffIsEmpty(cbuff))
 	{
 		memcpy(dest, &cbuff->buffer[cbuff->read + 1], num_of_bytes);
@@ -127,6 +125,7 @@ ssize_t CBuffRead(cbuff_t *cbuff, void *dest, size_t num_of_bytes)
 	cbuff->read = (cbuff->read + num_of_bytes) % cbuff->capacity;
 	cbuff->freespace = cbuff->freespace + num_of_bytes;
 	*/
+	
 	return i;
 }
 
@@ -146,16 +145,15 @@ size_t CBuffCapacity(const cbuff_t *cbuff)
 int CBuffIsEmpty(const cbuff_t *cbuff)
 {
 	assert(cbuff);
-	return cbuff->freespace == cbuff->capacity;
+	return !cbuff->space;
 }
 
 size_t CBuffFreeSpace(const cbuff_t *cbuff)
 {
 	assert(cbuff);
-	return cbuff->freespace;
+	return cbuff->capacity - cbuff->space;
 
 }
-
 
 static size_t check(size_t num, size_t free)
 {
@@ -163,12 +161,5 @@ static size_t check(size_t num, size_t free)
 }
 
 
-static int buf_reset(cbuff_t *cbuff)
-{
-	assert(cbuff);
-	cbuff->write = 0;
-	cbuff->read = 0;
-	return 0;
-}
 
 
