@@ -38,6 +38,8 @@ int main()
 	Test_Main();
 	Test_Append();	
 
+
+	
 return 0;
 }
 
@@ -48,6 +50,7 @@ void Test_Main()
 	int arr[] = {1,2,3,4,5,6,7};
 	sll_t* Mylist = SllCreate();
 	iterator_t iterator = SllBegin(Mylist);
+	iterator_t temp2 = SllBegin(Mylist);
 	
 	printf("Main test: \n");
 	TEST(SllBegin(Mylist), SllEnd(Mylist));
@@ -102,6 +105,13 @@ void Test_Main()
 	printf("%p\n", (void*)SllEnd(Mylist)); 
 	TEST(SllCount(Mylist), 0);
 	printf("---------------------------------------------\n");
+	
+	
+	for(;temp2 != SllEnd(Mylist); temp2 = SllNext(temp2))
+	{
+		temp2 = SllRemove(temp2);
+	}
+	          
 	
 	SllDestroy(Mylist);
 }

@@ -96,6 +96,9 @@ dllist_iter_t DLLInsert(dllist_iter_t iter, void *data)
 	return iter;
 }
 
+
+
+
 dllist_iter_t DLLPushFront(dllist_t *list, void *data)
 {
 	assert(list);
@@ -112,35 +115,60 @@ dllist_iter_t DLLPushBack(dllist_t *list, void *data)
 
 dllist_iter_t DLLRemove(dllist_iter_t iter)
 {
-	
-	node_t *tmp = iter->next;
+	node_t *tmp = NULL;
+	tmp = iter->next;
 	assert(NULL != iter);
-	if(DEAD == iter->next)
-	{
-		return iter;
-	}
+	
 	
 	iter->data = (iter->next)->data;
 	iter->next = (iter->next)->next;
 	
-	if(DEAD == iter->next->next)
+	if(DEAD == iter->next)
 	{	
 		printf("TAil\n");
-		((dllist_t*)(iter->data))->tail = iter; 
+		
+		((dllist_t*)(iter->data))->tail = iter;
+			 
 	}
 	else
 	{
 		printf("head\n");
-		iter->next->next->previous = iter;
+		iter->next->previous = iter;
 	}
-	tmp = NULL;
+	
 	
 	free(tmp);
 	return iter;
-
 }
 
 
+void *DLLPopFront(dllist_t *list)
+{
+	assert(list);
+	return DLLRemove(DLLBegin(list));
+}
+
+void *DLLPopBack(dllist_t *list)
+{	
+
+	assert(list);
+	
+	DLLRemove(DLLEnd(list));
+	return
+}
+
+void *DLLGetData(const dllist_iter_t iter)
+{
+	assert(iter);
+
+	if(iter->next == DEAD)
+	{
+		return NULL;
+	}
+
+	return iter->data;
+
+}
 
 
 
