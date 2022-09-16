@@ -125,7 +125,7 @@ dllist_iter_t DLLRemove(dllist_iter_t iter)
 	
 	if(DEAD == iter->next)
 	{	
-		printf("TAil\n");
+		printf("tail\n");
 		
 		((dllist_t*)(iter->data))->tail = iter;
 			 
@@ -154,7 +154,7 @@ void *DLLPopBack(dllist_t *list)
 	assert(list);
 	
 	DLLRemove(DLLEnd(list));
-	return
+	return 0;
 }
 
 void *DLLGetData(const dllist_iter_t iter)

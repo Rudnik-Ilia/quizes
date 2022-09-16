@@ -78,14 +78,10 @@ int main()
 	printf("%p\n", (void*)DLLEnd(list)); 
 	printf("-------------------------------------------\n");
 	
-<<<<<<< HEAD
-=======
 	DLLRemove(DLLBegin(list));
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
-	printf("-------------------------------------------\n");
 	
->>>>>>> 00043a1f0e22fea1f66fd7ec0d9dcc7caf57dc2a
 	
 	/*
 	
