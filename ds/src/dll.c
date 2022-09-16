@@ -117,7 +117,7 @@ dllist_iter_t DLLRemove(dllist_iter_t iter)
 {
 	node_t *tmp = NULL;
 	tmp = iter->next;
-	assert(NULL != iter);
+	assert(iter);
 	
 	
 	iter->data = (iter->next)->data;
@@ -208,10 +208,11 @@ dllist_iter_t DLLNext(const dllist_iter_t iter)
 dllist_iter_t DLLPrev(const dllist_iter_t iter)
 {   
 	assert(iter);
+	/*
 	if(iter->previous == CAFE)
 	{	
 		return iter;
-	}
+	}*/
 	return iter->previous;
 }
 
@@ -244,65 +245,51 @@ int DLLIsEqualIter(const dllist_iter_t iter1, const dllist_iter_t iter2)
 }
 
 
-dllist_iter_t DLLFind(const dllist_iter_t from, const dllist_iter_t to, int (*is_match_func)(const void *data, void *param), void *param)
+dllist_iter_t DLLFind(const dllist_iter_t from, const dllist_iter_t to, int (*is_match_func)(const void *data, void *params), void *param)
 {
 	dllist_iter_t tmp = from;
 	assert(NULL != param);
 	assert(NULL != from);
 	assert(NULL != to);
-	while(!DLLIsEqualIter(from, to) && !is_match(from->data, param))
-	{	
-		printf("!!!\n");
-		
-		return from;	
-	}
-	return to;
-}
-
-
-
 	
+	for(; !DLLIsEqualIter(from, to) || !is_match_func(tmp->data, param); tmp = tmp->next)
+	{
+		break;
+	}	
+	return tmp;
 
-
-
-
-
-
-
-
-
-
-
-
-
+}
 /*
-
-dllist_iter_t DLLPushBack(dllist_t *list, void *data)
-{
-	node_t *new_node = (node_t *)malloc(sizeof(node_t));
-	if(NULL == new_node)
+int DLLForEach(const dllist_iter_t from, const dllist_iter_t to, int (*action_func)(void *data, void *params), void *param);
+{	
+	int st = 0;
+	assert(NULL != from);
+	assert(NULL != to);
+	assert(NULL != func);
+	assert(NULL != param);
+	while(DEAD != SllNext(from))
 	{	
-		LOGERROR("SORRY, NO MEMORY FOR YOU");
-		return NULL;
-	}
-	
-	assert(NULL != data);
-	assert(NULL != list);
-	
-	new_node->data = data;
-	new_node->next = DEAD;
-	new_node->previous = list->tail;
-	
-	list->tail->next = new_node;
-	list->tail = new_node;
-	
-	return DLLEnd(list);
+		func(from->data, param);
+		from = SllNext(from);	
+	}	
+	return st;
 }
-
-dllist_iter_t DLLInsert(dllist_iter_t iter, void *data);
-
-
-
-
 */
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

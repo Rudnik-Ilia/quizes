@@ -9,14 +9,20 @@
 
 
 
-int MatchParam(const void *data, void *param)
+int MatchParam(const void *data, void *params)
 {
 	assert(NULL != data);
-	assert(NULL != param);
-	return *(int*)data == *(int*)param;
+	assert(NULL != params);
+	return *(int*)data == *(int*)params;
 }
 
-is_match_func is_match = &MatchParam;
+int SomeAct(const void *data, void *params)
+{
+	assert(NULL != data);
+	assert(NULL != params);
+	return *(int*)data + *(int*)params;
+}
+
 
 
 int main()
@@ -43,8 +49,8 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
-	DLLInsert(DLLEnd(list), &arr[0]);
-	
+	DLLInsert(DLLEnd(list), &arr[1]);
+	printf("-------------------------------------------\n");
 	printf("Compare two iterator: ");
 	printf("%d\n", DLLIsEqualIter(DLLBegin(list), DLLEnd(list)));
 	
@@ -52,23 +58,24 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
-	DLLInsert(DLLEnd(list), &arr[0]);
+	DLLInsert(DLLEnd(list), &arr[2]);
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
-	
-	printf("Test for find: \n ");
-	
-	DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), is_match, &arr[0]));
-	printf("Test for find: \n ");
 	/*
-	printf("%d\n", *(int*)DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), is_match, &arr[0])));
+	DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), is_match, &arr[0]));
 	*/
-	DLLInsert(DLLBegin(list), &arr[0]);
+	DLLInsert(DLLBegin(list), &arr[3]);
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
+	printf("-------------------------------------------\n");
+	printf("Test for find: \n ");
+	
+	printf("%d\n", *(int*)DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), &MatchParam, &arr[2])));
+	
+	printf("-------------------------------------------\n");
 	
 	DLLPushBack(list, &arr[1]);
 	
