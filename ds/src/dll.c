@@ -196,10 +196,12 @@ dllist_iter_t DLLEnd(const dllist_t *list)
 dllist_iter_t DLLNext(const dllist_iter_t iter)
 {
 	assert(iter);
+	/*
 	if(iter->next == DEAD)
 	{	
 		return iter;
 	}
+	*/
 	return iter->next;
 }
 
@@ -238,10 +240,28 @@ int DLLIsEqualIter(const dllist_iter_t iter1, const dllist_iter_t iter2)
 {
 	assert(iter1);
 	assert(iter2);
-	return !(iter1 == iter2);
+	return (iter1 == iter2);
 }
 
 
+dllist_iter_t DLLFind(const dllist_iter_t from, const dllist_iter_t to, int (*is_match_func)(const void *data, void *param), void *param)
+{
+	dllist_iter_t tmp = from;
+	assert(NULL != param);
+	assert(NULL != from);
+	assert(NULL != to);
+	while(!DLLIsEqualIter(from, to) && !is_match(from->data, param))
+	{	
+		printf("!!!\n");
+		
+		return from;	
+	}
+	return to;
+}
+
+
+
+	
 
 
 

@@ -6,6 +6,9 @@
 typedef struct dllist dllist_t;
 typedef struct dll_node *dllist_iter_t;
 
+typedef int (*action_func)(void *data, void *param);
+
+typedef int (*is_match_func)(const void *data, void *param);
 
 /* CONSTRUCT & DESTRUCT FUNCS */
 

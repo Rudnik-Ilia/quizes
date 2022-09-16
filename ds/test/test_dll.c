@@ -1,11 +1,22 @@
 
 
 #include <stdio.h>
+#include <assert.h>
 
 #include "utils.h"
 #include "dll.h"
 #include "utils.h"
 
+
+
+int MatchParam(const void *data, void *param)
+{
+	assert(NULL != data);
+	assert(NULL != param);
+	return *(int*)data == *(int*)param;
+}
+
+is_match_func is_match = &MatchParam;
 
 
 int main()
@@ -46,7 +57,13 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
+	printf("Test for find: \n ");
 	
+	DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), is_match, &arr[0]));
+	printf("Test for find: \n ");
+	/*
+	printf("%d\n", *(int*)DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), is_match, &arr[0])));
+	*/
 	DLLInsert(DLLBegin(list), &arr[0]);
 	
 	printf("%p\n", (void*)DLLBegin(list));
@@ -82,6 +99,7 @@ int main()
 	
 	printf("Test for size: \n");
 	printf("%ld\n", DLLSize(list));
+	
 	
 	
 	
