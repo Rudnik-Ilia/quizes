@@ -62,12 +62,12 @@ int main()
 	DLLRemove(DLLBegin(list));
 	DLLRemove(DLLBegin(list));
 	DLLRemove(DLLBegin(list));
-	
-	
-	
-	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
+	
+	
+	
+	
 	/*
 	
 	DLLInsert(DLLBegin(list), &arr[1]);

@@ -66,8 +66,8 @@ int HasLoop(node_t * head)
 
 size_t LenOf(node_t *head)
 {
-	assert(head);
 	size_t count = 0;
+	assert(head);
 	while(head)
 	{
 		head = head->next;
