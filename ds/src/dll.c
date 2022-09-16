@@ -144,17 +144,20 @@ dllist_iter_t DLLRemove(dllist_iter_t iter)
 
 void *DLLPopFront(dllist_t *list)
 {
+	void * data = NULL;
 	assert(list);
-	return DLLRemove(DLLBegin(list));
+	data = DLLGetData(DLLBegin(list));
+	DLLRemove(DLLBegin(list));
+	return data;
 }
 
 void *DLLPopBack(dllist_t *list)
 {	
-
+	void * data = NULL;
 	assert(list);
-	
+	data = DLLGetData(DLLEnd(list));
 	DLLRemove(DLLEnd(list));
-	return 0;
+	return data;
 }
 
 void *DLLGetData(const dllist_iter_t iter)
@@ -165,9 +168,15 @@ void *DLLGetData(const dllist_iter_t iter)
 	{
 		return NULL;
 	}
-
 	return iter->data;
-
+}
+void DLLSetData(dllist_iter_t iter, void *data)
+{
+	assert(iter);
+	if(iter->next != DEAD)
+	{
+		iter->data = data;
+	}
 }
 
 
@@ -187,6 +196,10 @@ dllist_iter_t DLLEnd(const dllist_t *list)
 dllist_iter_t DLLNext(const dllist_iter_t iter)
 {
 	assert(iter);
+	if(iter->next == DEAD)
+	{	
+		return iter;
+	}
 	return iter->next;
 }
 
@@ -195,11 +208,11 @@ dllist_iter_t DLLPrev(const dllist_iter_t iter)
 	assert(iter);
 	if(iter->previous == CAFE)
 	{	
-		printf("cafe");
-		return iter->previous;
+		return iter;
 	}
-	return iter;
+	return iter->previous;
 }
+
 
 int DLLIsEmpty(const dllist_t *list)
 {
@@ -209,14 +222,24 @@ int DLLIsEmpty(const dllist_t *list)
 
 
 
+size_t DLLSize(const dllist_t *list)
+{
+	size_t count = 0;
+	dllist_iter_t tmp = list->head;
+	assert(list);
+	for(; tmp != list->tail; tmp = tmp->next)
+	{
+		++count;
+	} 
+	return count;
+}
 
-
-
-
-
-
-
-
+int DLLIsEqualIter(const dllist_iter_t iter1, const dllist_iter_t iter2)
+{
+	assert(iter1);
+	assert(iter2);
+	return !(iter1 == iter2);
+}
 
 
 
@@ -259,13 +282,6 @@ dllist_iter_t DLLPushBack(dllist_t *list, void *data)
 dllist_iter_t DLLInsert(dllist_iter_t iter, void *data);
 
 
-size_t DLLSize(const dllist_t *list)
-{
-	assert(list);
-	size_t count;
-	
-	return count;
-}
 
 
 */

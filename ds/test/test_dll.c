@@ -16,6 +16,9 @@ int main()
 	dllist_t* list = DLLCreate();
 	dllist_iter_t iter = DLLEnd(list);
 	
+	printf("Compare two iterator: ");
+	printf("%d\n", DLLIsEqualIter(DLLBegin(list), DLLEnd(list)));
+	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
@@ -30,6 +33,10 @@ int main()
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
 	DLLInsert(DLLEnd(list), &arr[0]);
+	
+	printf("Compare two iterator: ");
+	printf("%d\n", DLLIsEqualIter(DLLBegin(list), DLLEnd(list)));
+	
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
@@ -56,14 +63,28 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
+	printf("Test for size: \n");
+	printf("%ld\n", DLLSize(list));
+	
+	
 	printf("Removing by one: \n");
 	DLLRemove(DLLBegin(list));
 	DLLRemove(DLLBegin(list));
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
+	printf("-------------------------------------------\n");
 	
-	DLLRemove(DLLBegin(list));
+	printf("Test for PopFront: ");
+	DLLSetData(DLLBegin(list), &arr[4]);
+	printf("%d\n",*(int*)DLLPopFront(list));
+	printf("-------------------------------------------\n");
+	
+	printf("Test for size: \n");
+	printf("%ld\n", DLLSize(list));
+	
+	
+	
 	DLLRemove(DLLBegin(list));
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
@@ -78,7 +99,7 @@ int main()
 	printf("%p\n", (void*)DLLEnd(list)); 
 	printf("-------------------------------------------\n");
 	
-	DLLRemove(DLLBegin(list));
+	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
