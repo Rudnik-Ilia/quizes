@@ -13,7 +13,7 @@
 #include "SLL.h"
 #include "utils.h"
 
-#define DEAD (node_t*)0xDEADBEEF
+
 
 typedef struct node node_t;
 
@@ -66,18 +66,21 @@ iterator_t SllRemove(iterator_t iter)
 {
 	node_t *tmp = iter->next;
 	assert(NULL != iter);
-	if(DEAD == iter->next)
-	{
-		return iter;
-	}
+	
 	
 	iter->data = (iter->next)->data;
 	iter->next = (iter->next)->next;
 	
-	if(DEAD == iter->next)
+	
+	if(iter->next == DUMMY)
 	{
-		((sll_t*)(iter->data)) -> tail = iter;
+		((dllist_t *)(iter->data))->tail = iter;
 	}
+	else
+	{
+		(iter->next)->prev = iter;
+	}
+
 	
 	free(tmp);
 	return iter;

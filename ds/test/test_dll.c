@@ -20,6 +20,7 @@ int main()
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
 	printf("%d\n", DLLIsEmpty(list)); 
+	printf("Adding by one: \n");
 
 	DLLInsert(DLLEnd(list), &arr[0]);
 	
@@ -55,19 +56,32 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
-	printf("!!!!\n");
+	printf("Removing by one: \n");
 	DLLRemove(DLLBegin(list));
 	DLLRemove(DLLBegin(list));
-	DLLRemove(DLLBegin(list));
-	DLLRemove(DLLBegin(list));
-	DLLRemove(DLLBegin(list));
-	DLLRemove(DLLBegin(list));
-	
-	
-	
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
+	
+	DLLRemove(DLLBegin(list));
+	DLLRemove(DLLBegin(list));
+	
+	printf("%p\n", (void*)DLLBegin(list));
+	printf("%p\n", (void*)DLLEnd(list)); 
+	printf("-------------------------------------------\n");
+	
+	DLLRemove(DLLBegin(list));
+	printf("-------------------------------------------\n");
+	printf("%p\n", (void*)DLLBegin(list));
+	printf("%p\n", (void*)DLLEnd(list)); 
+	printf("-------------------------------------------\n");
+	
+	DLLRemove(DLLBegin(list));
+	printf("%p\n", (void*)DLLBegin(list));
+	printf("%p\n", (void*)DLLEnd(list)); 
+	printf("-------------------------------------------\n");
+	
+	
 	/*
 	
 	DLLInsert(DLLBegin(list), &arr[1]);
