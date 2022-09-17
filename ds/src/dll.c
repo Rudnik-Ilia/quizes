@@ -116,10 +116,14 @@ dllist_iter_t DLLPushBack(dllist_t *list, void *data)
 dllist_iter_t DLLRemove(dllist_iter_t iter)
 {
 	node_t *tmp = NULL;
-	tmp = iter->next;
 	assert(iter);
 	
+	if(DEAD == iter->next && CAFE != iter->previous)
+	{
+		iter = iter->previous;
+	}
 	
+	tmp = iter->next;
 	iter->data = (iter->next)->data;
 	iter->next = (iter->next)->next;
 	
@@ -133,9 +137,8 @@ dllist_iter_t DLLRemove(dllist_iter_t iter)
 	else
 	{
 		printf("head\n");
-		iter->next->previous = iter;
+		iter->next->previous = iter;	
 	}
-	
 	
 	free(tmp);
 	return iter;
@@ -158,6 +161,7 @@ void *DLLPopBack(dllist_t *list)
 	data = DLLGetData(DLLEnd(list));
 	DLLRemove(DLLEnd(list));
 	return data;
+	
 }
 
 void *DLLGetData(const dllist_iter_t iter)

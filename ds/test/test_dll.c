@@ -82,7 +82,18 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
+	printf("Size:  %ld\n", DLLSize(list));
+	
 	DLLPushFront(list, &arr[1]);
+	DLLPushFront(list, &arr[1]);
+	DLLPushFront(list, &arr[1]);
+	printf("Size:  %ld\n", DLLSize(list));
+	DLLPopBack(list);
+	DLLPopBack(list);
+	DLLRemove(DLLEnd(list));
+	printf("Size:  %ld\n", DLLSize(list));
+	
+	
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
@@ -105,32 +116,47 @@ int main()
 	printf("-------------------------------------------\n");
 	
 	printf("Test for size: \n");
-	printf("%ld\n", DLLSize(list));
+	printf("Size:  %ld\n", DLLSize(list));
 	
 	
 	
-	
-	DLLRemove(DLLBegin(list));
-	printf("%p\n", (void*)DLLBegin(list));
-	printf("%p\n", (void*)DLLEnd(list)); 
-	
-	printf("%p\n", (void*)DLLBegin(list));
-	printf("%p\n", (void*)DLLEnd(list)); 
-	printf("-------------------------------------------\n");
+	DLLRemove(DLLEnd(list));
+	DLLPushFront(list, &arr[1]);
 	
 	DLLRemove(DLLBegin(list));
+	printf("%p\n", (void*)DLLBegin(list));
+	printf("%p\n", (void*)DLLEnd(list)); 
+	
+	printf("%p\n", (void*)DLLBegin(list));
+	printf("%p\n", (void*)DLLEnd(list)); 
+	printf("-------------------------------------------\n");
+	
+	DLLRemove(DLLBegin(list));
 	printf("-------------------------------------------\n");
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	printf("-------------------------------------------\n");
 	
+	printf("Removing the iast one: \n");
+	printf("Size:  %ld\n", DLLSize(list));
+	DLLPushFront(list, &arr[1]);
+	DLLRemove(DLLBegin(list));
+	DLLPushFront(list, &arr[1]);
+	printf("%p\n", (void*)DLLBegin(list));
+	printf("%p\n", (void*)DLLEnd(list)); 
+	printf("Size:  %ld\n", DLLSize(list));
+	DLLRemove(DLLEnd(list));
+	printf("Size:  %ld\n", DLLSize(list));
+	
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
+	printf("-------------------------------------------\n");
 	
 	
 	/*
 	
+	printf("%d\n",*(int*)DLLPopBack(list));
 	DLLInsert(DLLBegin(list), &arr[1]);
 	
 	*/

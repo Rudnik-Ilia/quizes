@@ -84,6 +84,7 @@ iterator_t SllRemove(iterator_t iter)
 	
 	free(tmp);
 	return iter;
+
 }
 
 void SllDestroy(sll_t *list)
