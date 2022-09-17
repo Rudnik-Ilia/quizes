@@ -167,7 +167,6 @@ void *DLLPopBack(dllist_t *list)
 void *DLLGetData(const dllist_iter_t iter)
 {
 	assert(iter);
-
 	if(iter->next == DEAD)
 	{
 		return NULL;
@@ -261,24 +260,49 @@ dllist_iter_t DLLFind(const dllist_iter_t from, const dllist_iter_t to, int (*is
 		break;
 	}	
 	return tmp;
-
 }
-/*
-int DLLForEach(const dllist_iter_t from, const dllist_iter_t to, int (*action_func)(void *data, void *params), void *param);
+
+
+int DLLMultiFind(const dllist_iter_t from, const dllist_iter_t to, int (*is_match_func)(const void *data, void *params), void *param, dllist_t *output_list)
+{
+	dllist_iter_t tmp = from;
+	size_t count = 0;
+	assert(param);
+	assert(from);
+	assert(to);
+	while(!DLLIsEqualIter(tmp, to))
+	{
+		if(is_match_func(tmp->data, param))
+		{
+			DLLPushBack(output_list, tmp->data);
+			++count;
+		}
+		tmp = tmp->next;
+	}	
+	return count;
+}
+
+
+
+int DLLForEach(const dllist_iter_t from, const dllist_iter_t to, int (*action_func)(void *data, void *params), void *param)
 {	
 	int st = 0;
-	assert(NULL != from);
-	assert(NULL != to);
-	assert(NULL != func);
-	assert(NULL != param);
-	while(DEAD != SllNext(from))
+	dllist_iter_t tmp = from;
+	assert(from);
+	assert(to);
+	assert(action_func);
+	assert(param);
+	while(DEAD != tmp->next)
 	{	
-		func(from->data, param);
-		from = SllNext(from);	
+		if(action_func(tmp->data, param))
+		{
+			st = 0;
+		}
+		tmp = tmp->next;	
 	}	
 	return st;
 }
-*/
+
 
 
 	

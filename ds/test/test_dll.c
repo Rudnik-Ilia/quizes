@@ -5,33 +5,71 @@
 
 #include "utils.h"
 #include "dll.h"
-#include "utils.h"
+
 
 
 
 int MatchParam(const void *data, void *params)
 {
-	assert(NULL != data);
-	assert(NULL != params);
+	assert(data);
+	assert(params);
 	return *(int*)data == *(int*)params;
 }
 
-int SomeAct(const void *data, void *params)
+static int PlusOne(void *data, void *param)
 {
-	assert(NULL != data);
-	assert(NULL != params);
-	return *(int*)data + *(int*)params;
+	size_t tmp = *(size_t*)data;
+	int status  = 0;
+	(void)param;
+	assert(param);
+	*(size_t*)data += 1;
+	if(tmp == *(size_t*)data)
+	{
+		status = 1;
+	}
+	return status;
 }
+
+
+	
+void Test_for_MultiFind()
+{
+	int arr[] = {100, 200, 100, 400, 100};
+	dllist_t* list = DLLCreate();
+	dllist_t* output = DLLCreate();
+	dllist_iter_t tmp = DLLBegin(output);
+	printf("-------------------------------------------\n");
+	printf("Test for Multyfind: \n");
+	DLLPushFront(list, &arr[0]);
+	DLLPushFront(list, &arr[1]);
+	DLLPushFront(list, &arr[2]);
+	DLLPushFront(list, &arr[3]);
+	DLLPushFront(list, &arr[4]);
+	
+	TEST(DLLMultiFind(DLLBegin(list), DLLEnd(list), &MatchParam, &arr[0], output), 3);
+	
+	
+	while(!DLLIsEqualIter(tmp, DLLEnd(output)))
+	{
+		TEST(*(int*)DLLGetData(tmp), 100);
+		tmp = DLLNext(tmp);
+	
+	}
+	printf("-------------------------------------------\n");
+	
+
+}
+
 
 
 
 int main()
 {
-	size_t i;
+
 	int arr[] = {100, 200, 300, 400, 500};
 	
 	dllist_t* list = DLLCreate();
-	dllist_iter_t iter = DLLEnd(list);
+	
 	
 	printf("Compare two iterator: ");
 	printf("%d\n", DLLIsEqualIter(DLLBegin(list), DLLEnd(list)));
@@ -62,9 +100,9 @@ int main()
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
-	/*
-	DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), is_match, &arr[0]));
-	*/
+	printf("Test for find: \n ");
+	printf("%d\n", *(int*)DLLGetData(DLLFind(DLLBegin(list), DLLEnd(list), &MatchParam, &arr[2])));
+	
 	DLLInsert(DLLBegin(list), &arr[3]);
 	
 	printf("%p\n", (void*)DLLBegin(list));
@@ -118,6 +156,10 @@ int main()
 	printf("Test for size: \n");
 	printf("Size:  %ld\n", DLLSize(list));
 	
+	printf("Test for foreach: \n");
+	printf("%d\n",DLLForEach(DLLBegin(list), DLLEnd(list), &PlusOne, &arr[0]));
+	
+	printf("%d\n",*(int*)DLLGetData(DLLBegin(list)));
 	
 	
 	DLLRemove(DLLEnd(list));
@@ -153,6 +195,7 @@ int main()
 	printf("%p\n", (void*)DLLEnd(list)); 
 	printf("-------------------------------------------\n");
 	
+	Test_for_MultiFind();
 	
 	/*
 	
