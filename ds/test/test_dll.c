@@ -47,8 +47,6 @@ void Test_for_MultiFind()
 	DLLPushFront(list, &arr[4]);
 	
 	TEST(DLLMultiFind(DLLBegin(list), DLLEnd(list), &MatchParam, &arr[0], output), 3);
-	
-	
 	while(!DLLIsEqualIter(tmp, DLLEnd(output)))
 	{
 		TEST(*(int*)DLLGetData(tmp), 100);
@@ -57,7 +55,6 @@ void Test_for_MultiFind()
 	}
 	printf("-------------------------------------------\n");
 	
-
 }
 
 
@@ -196,13 +193,6 @@ int main()
 	printf("-------------------------------------------\n");
 	
 	Test_for_MultiFind();
-	
-	/*
-	
-	printf("%d\n",*(int*)DLLPopBack(list));
-	DLLInsert(DLLBegin(list), &arr[1]);
-	
-	*/
 	
 	
 
