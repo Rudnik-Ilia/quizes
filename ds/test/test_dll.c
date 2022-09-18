@@ -59,28 +59,54 @@ void Test_for_MultiFind()
 
 void Test_for_Splice()
 {
-	int arr[] = {100, 200, 300, 400, 500};
+	int arr[] = {100, 200, 300, 400, 500, 600, 700, 800};
 	
-	dllist_t* list1 = DLLCreate();
-	dllist_t* list2 = DLLCreate();
+	dllist_iter_t iter1 = NULL;
+	dllist_iter_t iter2 = NULL;
+	dllist_iter_t iter3 = NULL;
+	
+	dllist_t* list1 = SpecialDLLCreate();
+	dllist_t* list2 = SpecialDLLCreate();
+	dllist_iter_t tmp = NULL;
+	
+	
+	
 	printf("-------------------------------------------\n");
 	printf("Test for Multyfind: \n");
 	
 	DLLPushFront(list1, &arr[0]);
 	DLLPushFront(list1, &arr[1]);
 	DLLPushFront(list1, &arr[2]);
-	DLLPushFront(list2, &arr[3]);
-	DLLPushFront(list2, &arr[4]);
+	DLLPushFront(list1, &arr[3]);
+	DLLPushFront(list1, &arr[4]);
+	DLLPushFront(list1, &arr[5]);
+	
+	DLLPushFront(list2, &arr[6]);
+	DLLPushFront(list2, &arr[7]);
+	
+	/*
+	while(!DLLIsEqualIter(tmp, DLLEnd(list2)))
+	{
+		printf("%d\n", *(int*)DLLGetData(tmp));
+		tmp = DLLNext(tmp);
+	
+	tmp = DLLNext(DLLBegin(list2));
+	}
+	
+	
+	*/
+	printf("Size:  %ld\n", DLLSize(list1));
+	printf("Size:  %ld\n", DLLSize(list2));
+	
+	iter1 = DLLNext(DLLNext(DLLBegin(list1)));
+	iter2 = DLLPrev(DLLEnd(list1));
+	iter3 = DLLNext(DLLBegin(list2));
+	
+	DLLSplice(iter1, iter2, iter3);
 	
 	printf("Size:  %ld\n", DLLSize(list1));
 	printf("Size:  %ld\n", DLLSize(list2));
 	
-	
-	
-
-
-
-
 	printf("-------------------------------------------\n");
 
 }
