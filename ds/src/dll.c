@@ -296,6 +296,34 @@ int DLLMultiFind(const dllist_iter_t from, const dllist_iter_t to, int (*is_matc
 }
 
 
+void DLLSplice(dllist_iter_t from, dllist_iter_t to, dllist_iter_t dest)
+{
+	dllist_iter_t tempPrevFrom = from->previous;
+	dllist_iter_t tempNextTo = to->next;
+	
+	assert(from);
+	assert(to);
+	asseret(dest);
+	
+	to->next = dest;
+	dest->previous = to;
+	
+	if(DLLPrev(from) == NULL)
+	{
+		to->next->previous = NULL;
+	}
+	if(DLLNext(to) == NULL)
+	{
+		from->previous->next = NULL;
+	}
+	if(DLLPrev(dest) == NULL)
+	{
+		from->previous = NULL;
+	}
+		
+
+}
+
 
 
 
