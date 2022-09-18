@@ -2,6 +2,7 @@
 #define __VECTOR_H__
 
 typedef struct vector vector_t;
+#include <stddef.h>
 
 
 /*
