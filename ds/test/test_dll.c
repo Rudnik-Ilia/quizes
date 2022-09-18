@@ -40,12 +40,12 @@ void Test_for_MultiFind()
 	dllist_iter_t tmp = DLLBegin(output);
 	printf("-------------------------------------------\n");
 	printf("Test for Multyfind: \n");
+	
 	DLLPushFront(list, &arr[0]);
 	DLLPushFront(list, &arr[1]);
 	DLLPushFront(list, &arr[2]);
 	DLLPushFront(list, &arr[3]);
 	DLLPushFront(list, &arr[4]);
-	
 	TEST(DLLMultiFind(DLLBegin(list), DLLEnd(list), &MatchParam, &arr[0], output), 3);
 	while(!DLLIsEqualIter(tmp, DLLEnd(output)))
 	{
@@ -54,8 +54,38 @@ void Test_for_MultiFind()
 	
 	}
 	printf("-------------------------------------------\n");
-	
+		
 }
+
+void Test_for_Splice()
+{
+	int arr[] = {100, 200, 300, 400, 500};
+	
+	dllist_t* list1 = DLLCreate();
+	dllist_t* list2 = DLLCreate();
+	printf("-------------------------------------------\n");
+	printf("Test for Multyfind: \n");
+	
+	DLLPushFront(list1, &arr[0]);
+	DLLPushFront(list1, &arr[1]);
+	DLLPushFront(list1, &arr[2]);
+	DLLPushFront(list2, &arr[3]);
+	DLLPushFront(list2, &arr[4]);
+	
+	printf("Size:  %ld\n", DLLSize(list1));
+	printf("Size:  %ld\n", DLLSize(list2));
+	
+	
+	
+
+
+
+
+	printf("-------------------------------------------\n");
+
+}
+
+
 
 
 
@@ -193,6 +223,8 @@ int main()
 	printf("-------------------------------------------\n");
 	
 	Test_for_MultiFind();
+	
+	Test_for_Splice();
 	
 	
 

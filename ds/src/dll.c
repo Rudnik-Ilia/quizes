@@ -30,6 +30,7 @@ struct dllist{
 /**********************************************************************************************/
 static int One(void *data, void *param);
 node_t *BornNode(node_t *prev, node_t *next, void *data);
+dllist_iter_t FindDummy(dllist_iter_t iter);
 
 /**********************************************************************************************/
  
@@ -49,6 +50,7 @@ dllist_t *DLLCreate(void)
 	if(NULL == dummy_node)
 	{
 	LOGERROR("SORRY, NO MEMORY FOR YOU");
+		free(myList);
 		return NULL;
 	}
 	myList->head = dummy_node;
@@ -301,24 +303,27 @@ void DLLSplice(dllist_iter_t from, dllist_iter_t to, dllist_iter_t dest)
 	dllist_iter_t tempPrevFrom = from->previous;
 	dllist_iter_t tempNextTo = to->next;
 	
+	
+	
 	assert(from);
 	assert(to);
-	asseret(dest);
+	assert(dest);
 	
 	to->next = dest;
 	dest->previous = to;
 	
+	if(DLLPrev(dest) == NULL)
+	{
+		from->previous = NULL;
+	}
 	if(DLLPrev(from) == NULL)
 	{
 		to->next->previous = NULL;
+		
 	}
 	if(DLLNext(to) == NULL)
 	{
 		from->previous->next = NULL;
-	}
-	if(DLLPrev(dest) == NULL)
-	{
-		from->previous = NULL;
 	}
 		
 
@@ -359,7 +364,59 @@ node_t *BornNode(node_t *prev, node_t *next, void *data)
 }
 
 	
+dllist_iter_t FindDummy(dllist_iter_t iter)
+{
+	dllist_iter_t tmp = iter;
+	assert(iter);
+	if(tmp->next == DEAD)
+	{
+		return tmp;	
+	}
+	while(tmp->next != DEAD)
+	{
+		tmp = DLLNext(tmp);
+	}
 
+	return (node_t*)tmp;
+}
+
+
+dllist_t *SpecialDLLCreate(void)
+{
+	node_t * dummy_node1 = NULL;
+	node_t * dummy_node2 = NULL;
+	
+	dllist_t *myList = (dllist_t *)malloc(sizeof(dllist_t));
+	if(NULL == myList)
+	{
+	LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+	}
+	
+	dummy_node1 = BornNode(CAFE, DEAD, myList);
+	if(NULL == dummy_node1)
+	{
+	LOGERROR("SORRY, NO MEMORY FOR YOU");
+		free(myList);
+		return NULL;
+	}
+	
+	dummy_node2 = BornNode(dummy_node1, DEAD, myList);
+	if(NULL == dummy_node2)
+	{
+	LOGERROR("SORRY, NO MEMORY FOR YOU");
+		free(dummy_node1);
+		free(myList);
+		return NULL;
+	}
+	
+	myList->head = dummy_node1;
+	myList->tail = dummy_node2; 
+	myList->head->previous; 
+	
+
+	return myList;
+}
 
 
 
