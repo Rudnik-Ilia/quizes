@@ -197,7 +197,7 @@ static void TestDLLGeneral()
 	TEST("TESTING Find", *(int *)DLLGetData(iter), arr_manipulated[4]);
 
 	iter = DLLFind(DLLBegin(dll), DLLEnd(dll), IsMatchInt, &arr[7]);
-	TEST("TESTING Find", DLLIsEqualIter(iter, DLLEnd(dll)), 1); 
+	TEST("TESTING Find", DLLIsEqualIter(iter, DLLEnd(dll)), 0); 
 
 	DLLDestroy(dll);
 }
