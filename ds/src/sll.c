@@ -6,66 +6,39 @@
 * Status : approved
 ***********************/
 
+
+#include <stdio.h>  /* printf */
+#include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
-#include <assert.h>
 #include "srtll.h"
 #include "utils.h"
+#include "dll.h"
 
+typedef int (*cmp_func_t)(const void *data1, const void *data2);
 typedef struct sll_node node_t;
 
-/*
-struct sorted_list_iterator
+struct  sorted_list 
 {
-	#ifndef NDEBUG
-	sorted_list_t *list;
-	#endif
-	
-	dllist_iter_t dll_iter;
-};
-*/
-
-struct sorted_list{
-
-	node_t *head;
-	node_t *tail;	
+	dllist_t *dll;
+	cmp_func_t func;
 };
 
-
-struct sll_node{
-
-	void *data;
-  	node_t *next;	
-};
-
-/**************************************************************/
-node_t *BornNode(void *data, node_t *next);
-/***************************************************************/
-
-
-
-sorted_list_t *SortedLLCreate(int (*cmp_func)(const void *data1, const void *data2))
+sorted_list_t *SortedLLCreate(cmp_func_t func_cmp)
 {
-	assert(cmp_func);
-		
-	
-
-}
-
-
-node_t *BornNode(void *data, node_t *next)
-{	
-	node_t *new_node = (node_t *)malloc(sizeof(node_t));
-	assert(next);
-	assert(data); 
-	if(NULL == new_node)
+	sorted_list_t *srtll = (sorted_list_t *)malloc(sizeof(sorted_list_t));
+	if(NULL == srtll)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return NULL;
-	}
+	} 
+	srtll -> dll = DLLCreate();
+	srtll -> func = func_cmp;
 	
-	new_node->data = data;
-	new_node->next = next;
-	
-	return new_node;
+	return srtll;
 }
+
+
+
+
+
 

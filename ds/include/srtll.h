@@ -2,22 +2,19 @@
 #define __SORTED_LL_H_
 
 #include <stddef.h> /* size_t */
-
+#include "dll.h"
 typedef struct sorted_list sorted_list_t;
-
 typedef struct sorted_list_iterator sorted_list_iterator_t;
 
-/*
+
 struct sorted_list_iterator
 {
 	#ifndef NDEBUG
-	sorted_list *list;
+	sorted_list_t *list;
 	#endif
 	
 	dllist_iter_t dll_iter;
 };
-
-*/
 
 /* CONSTRUCT & DESTRUCT FUNCS */
 
@@ -214,3 +211,6 @@ sorted_list_t *SortedLLMerge(sorted_list_t *dest, sorted_list_t *src);
 
 
 #endif /* __SORTED_LL_H_ */
+
+
+
