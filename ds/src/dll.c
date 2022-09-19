@@ -89,8 +89,8 @@ void DLLDestroy(dllist_t *list)
 dllist_iter_t DLLInsert(dllist_iter_t iter, void *data)
 {
 	node_t *new_node = NULL;
-	assert(data);
-	assert(iter);
+	assert(NULL != data);
+	assert(NULL != iter);
 	
 	new_node = BornNode(data, iter, iter->previous);
 	
@@ -101,28 +101,31 @@ dllist_iter_t DLLInsert(dllist_iter_t iter, void *data)
 	}
 	
 	iter->previous->next = new_node;
-	iter->previous = new_node;	
+	iter->previous = new_node;
+		
 	return new_node;
 }
 
 dllist_iter_t DLLPushFront(dllist_t *list, void *data)
 {
-	assert(list);
-	assert(data);
+	assert(NULL != list);
+	assert(NULL != data);
+	
 	return DLLInsert(DLLBegin(list), data);
 }
 
 dllist_iter_t DLLPushBack(dllist_t *list, void *data)
 {
-	assert(list);
-	assert(data);
+	assert(NULL != list);
+	assert(NULL != data);
+	
 	return DLLInsert(DLLEnd(list), data);;
 }
 
 dllist_iter_t DLLRemove(dllist_iter_t iter)
 {
 	node_t *tmp = NULL;
-	assert(iter);
+	assert(NULL != iter);
 	
 	if(DEAD == iter->next && CAFE != iter->previous)
 	{
@@ -151,18 +154,24 @@ dllist_iter_t DLLRemove(dllist_iter_t iter)
 void *DLLPopFront(dllist_t *list)
 {
 	void * data = NULL;
-	assert(list);
+	
+	assert(NULL != list);
+	
 	data = DLLGetData(DLLBegin(list));
 	DLLRemove(DLLBegin(list));
+	
 	return data;
 }
 
 void *DLLPopBack(dllist_t *list)
 {
 	void * data = NULL;
-	assert(list);
+	
+	assert(NULL != list);
+	
 	data = DLLGetData(DLLEnd(list)->previous);
 	DLLRemove(DLLEnd(list)->previous);
+	
 	return data;
 	
 }
@@ -171,7 +180,8 @@ void *DLLPopBack(dllist_t *list)
 
 void *DLLGetData(const dllist_iter_t iter)
 {
-	assert(iter);
+	assert(NULL != iter);
+	
 	if(iter->next == DEAD)
 	{
 		return NULL;
@@ -180,7 +190,8 @@ void *DLLGetData(const dllist_iter_t iter)
 }
 void DLLSetData(dllist_iter_t iter, void *data)
 {
-	assert(iter);
+	assert(NULL != iter);
+	
 	if(iter->next != DEAD)
 	{
 		iter->data = data;
@@ -191,50 +202,45 @@ void DLLSetData(dllist_iter_t iter, void *data)
 
 dllist_iter_t DLLBegin(const dllist_t *list)
 {
-	assert(list);
+	assert(NULL != list);
+	
 	return list->head->next;
 
 }
 dllist_iter_t DLLEnd(const dllist_t *list)
 {
-	assert(list);
+	assert(NULL != list);
+	
 	return list->tail;
 }
 
 dllist_iter_t DLLNext(const dllist_iter_t iter)
 {
-	assert(iter);
-	/*
-	if(iter->next == DEAD)
-	{	
-		return iter;
-	}
-	*/
+	assert(NULL != iter);
+	
 	return iter->next;
 }
 
 dllist_iter_t DLLPrev(const dllist_iter_t iter)
 {   
-	assert(iter);
-	/*
-	if(iter->previous == CAFE)
-	{	
-		return iter;
-	}*/
+	assert(NULL != iter);
+	
 	return iter->previous;
 }
 
 int DLLIsEqualIter(const dllist_iter_t iter1, const dllist_iter_t iter2)
 {
-	assert(iter1);
-	assert(iter2);
+	assert(NULL != iter1);
+	assert(NULL != iter2);
+	
 	return (iter1 == iter2);
 }
 
 /********************** UTILS FUNCTIONS****************************************************/
 int DLLIsEmpty(const dllist_t *list)
 {
-	assert(list);
+	assert(NULL != list);
+	
 	return DLLBegin(list) == DLLEnd(list);
 }
 
@@ -242,7 +248,9 @@ int DLLIsEmpty(const dllist_t *list)
 size_t DLLSize(const dllist_t *list)
 {
 	size_t count = 0;
-	assert(list);
+	
+	assert(NULL != list);
+	
 	DLLForEach(DLLBegin(list), DLLEnd(list), &One, &count);
 	return count;
 }
@@ -251,10 +259,12 @@ int DLLForEach(const dllist_iter_t from, const dllist_iter_t to, int (*action_fu
 {	
 	int st = 0;
 	dllist_iter_t tmp = from;
-	assert(from);
-	assert(to);
-	assert(action_func);
-	assert(param);
+	
+	assert(NULL != from);
+	assert(NULL != to);
+	assert(NULL != action_func);
+	assert(NULL != param);
+	
 	while(DEAD != tmp->next)
 	{	
 		if(action_func(tmp->data, param))
@@ -262,7 +272,8 @@ int DLLForEach(const dllist_iter_t from, const dllist_iter_t to, int (*action_fu
 			st = 0;
 		}
 		tmp = tmp->next;	
-	}	
+	}
+		
 	return st;
 }
 
@@ -270,14 +281,16 @@ int DLLForEach(const dllist_iter_t from, const dllist_iter_t to, int (*action_fu
 dllist_iter_t DLLFind(const dllist_iter_t from, const dllist_iter_t to, int (*is_match_func)(const void *data, void *params), void *param)
 {
 	dllist_iter_t tmp = from;
-	assert(param);
-	assert(from);
-	assert(to);
+	
+	assert(NULL != param);
+	assert(NULL != from);
+	assert(NULL != to);
 	
 	for(; !DLLIsEqualIter(tmp, to) && !is_match_func(tmp->data, param); tmp = tmp->next)
 	{
 		/*EMPTY BODY*/
-	}	
+	}
+		
 	return tmp;
 }
 
@@ -286,9 +299,11 @@ int DLLMultiFind(const dllist_iter_t from, const dllist_iter_t to, int (*is_matc
 {
 	dllist_iter_t tmp = from;
 	size_t count = 0;
-	assert(param);
-	assert(from);
-	assert(to);
+	
+	assert(NULL != param);
+	assert(NULL != from);
+	assert(NULL != to);
+	
 	while(!DLLIsEqualIter(tmp, to))
 	{
 		if(is_match_func(tmp->data, param))
@@ -308,9 +323,9 @@ void DLLSplice(dllist_iter_t from, dllist_iter_t to, dllist_iter_t dest)
 	dllist_iter_t from_prev = NULL;
 	dllist_iter_t to_prev = to->previous;
 
-	assert(from);
-	assert(to);
-	assert(dest);
+	assert(NULL != from);
+	assert(NULL != to);
+	assert(NULL != dest);
 		
 	from_prev = from->previous;																						
 	from_prev->next = to;
@@ -330,17 +345,21 @@ void DLLSplice(dllist_iter_t from, dllist_iter_t to, dllist_iter_t dest)
 static int One(void *data, void *param)
 {
 	(void)data;
-	assert(param);
+	
+	assert(NULL != param);
 	*(size_t*)param += 1;
+	
 	return 0;
 }
 
 node_t *BornNode(void *data, node_t *next, node_t *prev)
 {	
 	node_t *new_node = (node_t *)malloc(sizeof(node_t));
-	assert(prev);
-	assert(next);
-	assert(data); 
+	
+	assert(NULL != prev);
+	assert(NULL != next);
+	assert(NULL != data);
+	 
 	if(NULL == new_node)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
@@ -355,23 +374,7 @@ node_t *BornNode(void *data, node_t *next, node_t *prev)
 }
 
 
-/*****OLD FUCTIONS*********/
 
-
-/*
-
-size_t DLLSize(const dllist_t *list)
-{
-	size_t count = 0;
-	dllist_iter_t tmp = list->head;
-	assert(list);
-	for(; tmp != list->tail; tmp = tmp->next)
-	{
-		++count;
-	} 
-	return count;
-}
-*/
 
 
 

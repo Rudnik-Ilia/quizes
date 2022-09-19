@@ -15,6 +15,7 @@
 #include "dll.h"
 
 typedef int (*cmp_func_t)(const void *data1, const void *data2);
+
 typedef struct sll_node node_t;
 
 struct  sorted_list 
@@ -37,6 +38,12 @@ sorted_list_t *SortedLLCreate(cmp_func_t func_cmp)
 	return srtll;
 }
 
+sorted_list_iterator_t SortedLLBegin(const sorted_list_t *list)
+{
+	assert(NULL != list);
+	
+
+}
 
 
 
