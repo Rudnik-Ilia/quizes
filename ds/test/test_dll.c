@@ -62,9 +62,8 @@ void Test_for_MultiFind()
 void Test_for_Splice()
 {
 	int arr[] = {100, 200, 300, 400, 500, 600, 700, 800, 900};
-	size_t i = 0;
 
-	dllist_iter_t tmp = NULL;
+	
 	dllist_t* list1 = DLLCreate();
 	dllist_t* list2 = DLLCreate();
 	
@@ -87,56 +86,41 @@ void Test_for_Splice()
 	printf("Size:  %ld\n", DLLSize(list2));
 	
 	
-	DLLSplice(DLLBegin(list1), DLLPrev(DLLEnd(list1)), DLLBegin(list2));
+	DLLSplice(DLLBegin(list1), DLLEnd(list1), DLLBegin(list2));
 	
 	
 	printf("Size:  %ld\n", DLLSize(list1));
 	printf("Size:  %ld\n", DLLSize(list2));
-	
-	
-	tmp = DLLNext(DLLBegin(list2));
-	while(i < 5)
-	{
-		printf("%d\n", *(int*)DLLGetData(tmp));
-		tmp = DLLNext(tmp);
-		++i;
-	
-	}
-	
-	
+
 	printf("-------------------------------------------\n");
+	DLLDestroy(list1);
+	DLLDestroy(list2);
+	
 }
 
-
-
-
-
-
-int main()
+void Test_Main()
 {
-
 	int arr[] = {100, 200, 300, 400, 500};
 	
 	dllist_t* list = DLLCreate();
 	
-	
-	printf("Compare two iterator: ");
-	printf("%d\n", DLLIsEqualIter(DLLBegin(list), DLLEnd(list)));
+	printf("Compare two iterator: \n");
+	TEST(DLLBegin(list), DLLEnd(list));
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
-	printf("%d\n", DLLIsEmpty(list)); 
+	TEST(DLLIsEmpty(list), 1); 
 	printf("Adding by one: \n");
 
 	DLLInsert(DLLEnd(list), &arr[0]);
-	printf("%d\n", DLLIsEmpty(list)); 
+	TEST(DLLIsEmpty(list), 0); 
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
 	DLLInsert(DLLEnd(list), &arr[1]);
-	printf("Size:  %ld\n", DLLSize(list));
+	TEST(DLLSize(list), 2);
 	printf("-------------------------------------------\n");
 	printf("Compare two iterator: ");
 	printf("%d\n", DLLIsEqualIter(DLLBegin(list), DLLEnd(list)));
@@ -169,24 +153,22 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
-	printf("Size:  %ld\n", DLLSize(list));
+	TEST(DLLSize(list), 5);
 	
 	DLLPushFront(list, &arr[1]);
 	DLLPushFront(list, &arr[1]);
 	DLLPushFront(list, &arr[1]);
-	printf("Size:  %ld\n", DLLSize(list));
+	TEST(DLLSize(list), 8);
 	DLLPopBack(list);
 	DLLPopBack(list);
 	DLLRemove(DLLEnd(list));
-	printf("Size:  %ld\n", DLLSize(list));
-	
-	
+	TEST(DLLSize(list), 5);
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
 	printf("Test for size: \n");
-	printf("%ld\n", DLLSize(list));
+	TEST(DLLSize(list),5);
 	
 	
 	printf("Removing by one: \n");
@@ -199,16 +181,16 @@ int main()
 	
 	printf("Test for PopFront: ");
 	DLLSetData(DLLBegin(list), &arr[4]);
-	printf("%d\n",*(int*)DLLPopFront(list));
+	TEST(*(int*)DLLPopFront(list), 500);
 	printf("-------------------------------------------\n");
 	
 	printf("Test for size: \n");
-	printf("Size:  %ld\n", DLLSize(list));
+	TEST(DLLSize(list), 2);
 	
 	printf("Test for foreach: \n");
-	printf("%d\n",DLLForEach(DLLBegin(list), DLLEnd(list), &PlusOne, &arr[0]));
+	TEST(DLLForEach(DLLBegin(list), DLLEnd(list), &PlusOne, &arr[0]), 0);
 	
-	printf("%d\n",*(int*)DLLGetData(DLLBegin(list)));
+	TEST(*(int*)DLLGetData(DLLBegin(list)), 401);
 	
 	DLLRemove(DLLEnd(list));
 	DLLPushFront(list, &arr[1]);
@@ -241,13 +223,20 @@ int main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	printf("-------------------------------------------\n");
-	
+	DLLDestroy(list);
+}
+
+
+
+
+int main()
+{
+
+	Test_Main();
 	Test_for_MultiFind();
-	/*
-	*/
+
 	Test_for_Splice();
 
-	DLLDestroy(list);
 return 0;
 }
 

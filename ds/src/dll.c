@@ -29,7 +29,7 @@ struct dllist{
 
 /**********************************************************************************************/
 static int One(void *data, void *param);
-node_t *BornNode(node_t *prev, node_t *next, void *data);
+node_t *BornNode(void *data, node_t *next, node_t *prev);
 
 /**********************************************************************************************/
  
@@ -47,7 +47,7 @@ dllist_t *DLLCreate(void)
 		return NULL;
 	}
 
-	dll -> head = BornNode(DEAD, DEAD, dll);
+	dll -> head = BornNode(dll, DEAD, DEAD);
 	if(NULL == dll -> head)
 	{
 		free(dll);
@@ -55,7 +55,7 @@ dllist_t *DLLCreate(void)
 		return NULL;
 	}
 
-	dll -> tail = BornNode(dll -> head,DEAD,  dll);
+	dll -> tail = BornNode(dll, DEAD, dll->head);
 	if(NULL == dll -> tail)
 	{
 		free(dll);
@@ -92,20 +92,17 @@ dllist_iter_t DLLInsert(dllist_iter_t iter, void *data)
 	assert(data);
 	assert(iter);
 	
-	new_node = BornNode(iter, iter->next, iter->data);
+	new_node = BornNode(data, iter, iter->previous);
 	
-	iter->data = data;
-	iter->next = new_node;
-	
-	if(DEAD == iter->next->next)
-	{	
-		((dllist_t*)(new_node->data))->tail = new_node; 
-	}
-	else
+	if(new_node == NULL)
 	{
-		iter->next->previous = new_node;
-	}	
-	return iter;
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+	}
+	
+	iter->previous->next = new_node;
+	iter->previous = new_node;	
+	return new_node;
 }
 
 dllist_iter_t DLLPushFront(dllist_t *list, void *data)
@@ -167,16 +164,6 @@ void *DLLPopBack(dllist_t *list)
 	data = DLLGetData(DLLEnd(list)->previous);
 	DLLRemove(DLLEnd(list)->previous);
 	return data;
-	
-	/*
-	void *data = NULL;
-
-	assert(NULL != list);
-	data = DLLEnd(list) -> previous -> data;
-	DLLRemove(DLLEnd(list) -> previous);
-
-	return data;
-	*/
 	
 }
 
@@ -251,20 +238,6 @@ int DLLIsEmpty(const dllist_t *list)
 	return DLLBegin(list) == DLLEnd(list);
 }
 
-/*
-
-size_t DLLSize(const dllist_t *list)
-{
-	size_t count = 0;
-	dllist_iter_t tmp = list->head;
-	assert(list);
-	for(; tmp != list->tail; tmp = tmp->next)
-	{
-		++count;
-	} 
-	return count;
-}
-*/
 
 size_t DLLSize(const dllist_t *list)
 {
@@ -306,21 +279,6 @@ dllist_iter_t DLLFind(const dllist_iter_t from, const dllist_iter_t to, int (*is
 		/*EMPTY BODY*/
 	}	
 	return tmp;
-	
-	/*
-	
-	dllist_iter_t iter = (dllist_iter_t)from;
-
-	assert(NULL != from);
-	assert(NULL != to);
-	assert(NULL != is_match_func);
-	assert(NULL != param);
-
-	for(;!DLLIsEqualIter(iter, to) && !is_match_func(iter->data, param); iter = DLLNext(iter));
-
-	return iter;
-	*/
-
 }
 
 
@@ -350,9 +308,9 @@ void DLLSplice(dllist_iter_t from, dllist_iter_t to, dllist_iter_t dest)
 	dllist_iter_t from_prev = NULL;
 	dllist_iter_t to_prev = to->previous;
 
-	assert(NULL != from);
-	assert(NULL != to);
-	assert(NULL != dest);
+	assert(from);
+	assert(to);
+	assert(dest);
 		
 	from_prev = from->previous;																						
 	from_prev->next = to;
@@ -364,11 +322,7 @@ void DLLSplice(dllist_iter_t from, dllist_iter_t to, dllist_iter_t dest)
 	
 	dest->previous->next = from;
 	dest->previous = to_prev; 
-	
 }
-
-
-
 
 
 
@@ -381,17 +335,15 @@ static int One(void *data, void *param)
 	return 0;
 }
 
-node_t *BornNode(node_t *prev, node_t *next, void *data)
+node_t *BornNode(void *data, node_t *next, node_t *prev)
 {	
-	node_t *new_node = NULL;
+	node_t *new_node = (node_t *)malloc(sizeof(node_t));
 	assert(prev);
 	assert(next);
-	assert(data);
-	new_node = (node_t *)malloc(sizeof(node_t));
+	assert(data); 
 	if(NULL == new_node)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
-		free(new_node);
 		return NULL;
 	}
 	
@@ -403,9 +355,23 @@ node_t *BornNode(node_t *prev, node_t *next, void *data)
 }
 
 
+/*****OLD FUCTIONS*********/
 
 
+/*
 
+size_t DLLSize(const dllist_t *list)
+{
+	size_t count = 0;
+	dllist_iter_t tmp = list->head;
+	assert(list);
+	for(; tmp != list->tail; tmp = tmp->next)
+	{
+		++count;
+	} 
+	return count;
+}
+*/
 
 
 
