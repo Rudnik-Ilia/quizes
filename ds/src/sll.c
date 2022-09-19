@@ -11,6 +11,7 @@
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
 #include "srtll.h"
+#include "test.h"
 #include "utils.h"
 #include "dll.h"
 
@@ -40,9 +41,24 @@ sorted_list_t *SortedLLCreate(cmp_func_t func_cmp)
 
 sorted_list_iterator_t SortedLLBegin(const sorted_list_t *list)
 {
-	assert(NULL != list);
+	sorted_list_iterator_t iter;
 	
+	assert(list);
+	
+	iter.dll_iter = DLLBegin(list->dll);
+	
+	return iter;
+}
 
+sorted_list_iterator_t SortedLLEnd(const sorted_list_t *list)
+{
+	sorted_list_iterator_t iter;
+	
+	assert(list);
+	
+	iter.dll_iter = DLLEnd(list->dll);
+	
+	return iter;
 }
 
 

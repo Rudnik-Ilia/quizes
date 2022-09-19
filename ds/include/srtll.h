@@ -4,6 +4,7 @@
 #include <stddef.h> /* size_t */
 #include "dll.h"
 typedef struct sorted_list sorted_list_t;
+
 typedef struct sorted_list_iterator sorted_list_iterator_t;
 
 

@@ -5,6 +5,7 @@
 #include <stdlib.h> /* malloc */
 #include "srtll.h"
 #include "utils.h"
+#include "test.h"
 #include "dll.h"
 
 int Foo(const void *data_one, const void *data_two)
@@ -18,11 +19,10 @@ int main()
 {
 	sorted_list_t *srtll = SortedLLCreate(Foo);
 	
-	/*
-	DLLBegin(srtll->dll); 
-	*/
-	sorted_list_iterator_t iter; 
-	iter.dll_iter = DLLBegin(srtll->dll);
+	printf("%p\n", SortedLLBegin(srtll)); 
+	printf("%p\n", SortedLLEnd(srtll)); 
+	
+	
 	
 	return 0;
 }
