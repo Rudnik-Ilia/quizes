@@ -48,13 +48,44 @@ void SortedLLDestroy(sorted_list_t *list)
 
 sorted_list_iterator_t SortedLLInsert(sorted_list_t *list, void *data)
 {	
+	sorted_list_iterator_t tmp;
 	assert(NULL != data);
+	
+	tmp = SortedLLBegin(list);
+
+	
+	for(; !SortedLLIsEqualIter(tmp, SortedLLEnd(list)) && (list->func(data, SortedLLGetData(tmp)) >= 0); tmp = SortedLLNext(tmp))
+	{
+	 /* empty body*/
+	}
+	
+	tmp.dll_iter = DLLInsert(tmp.dll_iter, data);
+	
+	return tmp;
 	
 
 }
 
+sorted_list_iterator_t SortedLLRemove(sorted_list_iterator_t iter)
+{
+	iter.dll_iter = DLLRemove(iter.dll_iter);
+	return iter;
+}
 
+void *SortedLLPopFront(sorted_list_t *list)
+{
+	return DLLPopFront(list->dll);
+}
+void *SortedLLPopBack(sorted_list_t *list)
+{
+	return DLLPopBack(list->dll);
+}
 
+int SortedLLForEach(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*action_func)(void *data, void *params), void *params)
+{
+
+	return DLLForEach(from.dll_iter, to.dll_iter, action_func, params);
+}
 
 
 int SortedLLIsEqualIter(const sorted_list_iterator_t iter1, const sorted_list_iterator_t iter2)
@@ -113,6 +144,24 @@ sorted_list_iterator_t SortedLLPrev(sorted_list_iterator_t iter)
 	iter.dll_iter = DLLPrev(iter.dll_iter); 
 	return iter;
 }
+
+
+sorted_list_iterator_t SortedLLFind(const sorted_list_t *list, const sorted_list_iterator_t from, const sorted_list_iterator_t to, const void *data)
+{
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
