@@ -148,10 +148,37 @@ sorted_list_iterator_t SortedLLPrev(sorted_list_iterator_t iter)
 
 sorted_list_iterator_t SortedLLFind(const sorted_list_t *list, const sorted_list_iterator_t from, const sorted_list_iterator_t to, const void *data)
 {
+	
+	sorted_list_iterator_t tmp = from;
+	
+	assert(NULL != data);
+	assert(NULL != list);
 
-
-
+	for(;!SortedLLIsEqualIter(tmp, to) && !(list->func(data, SortedLLGetData(tmp)) == 0); tmp = SortedLLNext(tmp))
+	{
+	 /* empty body*/
+	};
+		
+	return tmp;
 }
+
+sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*is_match)(void *data, void *params), void *params)
+{
+	sorted_list_iterator_t tmp = from;
+	
+	
+	assert(NULL != params);
+
+	for(;!SortedLLIsEqualIter(tmp, to) && !is_match ; tmp = SortedLLNext(tmp))
+	{
+
+	 /* empty body*/
+	};
+		
+	return tmp;
+}
+
+
 
 
 

@@ -27,11 +27,21 @@ static int PlusOne(void *data, void *param)
 	return status;
 }
 
+int Match(void *data, void *params)
+{
+	(void)params;
+	return *(int*)data < 0 ? 1: 0;
+}
+
 
 int main()
 {
 	
 	int arr[] = {10, 20, 30, 40, 50};
+	int x = 77;
+	int one = 1;
+	int max = 100;
+	int negative = -8;
 	sorted_list_t *srtll = SortedLLCreate(CmpLowHigh);
 	
 	printf("%p\n", SortedLLBegin(srtll).dll_iter); 
@@ -70,8 +80,21 @@ int main()
 	
 	TEST("Size", SortedLLSize(srtll), 1);
 	
+	SortedLLInsert(srtll, &x);
+	
+	SortedLLInsert(srtll, &negative);
 	
 	
+	SortedLLGetData(SortedLLFind(srtll, SortedLLBegin(srtll), SortedLLEnd(srtll), &max));
+	
+	printf("FIND %d\n",*(int*)SortedLLGetData(SortedLLFind(srtll, SortedLLBegin(srtll), SortedLLPrev(SortedLLEnd(srtll)), &negative)));
+	
+	printf("%d\n", *(int*)SortedLLGetData(SortedLLFindIf(SortedLLBegin(srtll), SortedLLPrev(SortedLLEnd(srtll)), &Match, &negative)));
+	
+	
+	/*
+	
+	*/
 	
 	
 	SortedLLDestroy(srtll);
