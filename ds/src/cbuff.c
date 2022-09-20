@@ -130,39 +130,3 @@ size_t CBuffFreeSpace(const cbuff_t *cbuff)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-	/* old version
-	
-	if(CBuffFreeSpace(cbuff) < num_of_bytes)
-	{
-		num_of_bytes = CBuffFreeSpace(cbuff);
-	}
-	
-	
-	i = check(num_of_bytes, CBuffFreeSpace(cbuff));
-	memcpy(&cbuff->buffer[cbuff->write + 1], src, i);
-	cbuff->write = (cbuff->write + i) % cbuff->capacity;
-	cbuff->freespace = cbuff->freespace - i;
-	*/
-	/* old version
-	
-	if(!CBuffIsEmpty(cbuff))
-	{
-		memcpy(dest, &cbuff->buffer[cbuff->read + 1], num_of_bytes);
-	}
-	
-	cbuff->read = (cbuff->read + num_of_bytes) % cbuff->capacity;
-	cbuff->freespace = cbuff->freespace + num_of_bytes;
-	*/
-
