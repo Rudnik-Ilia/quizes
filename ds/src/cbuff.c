@@ -130,3 +130,22 @@ size_t CBuffFreeSpace(const cbuff_t *cbuff)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

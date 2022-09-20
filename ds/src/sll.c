@@ -96,11 +96,13 @@ int SortedLLIsEqualIter(const sorted_list_iterator_t iter1, const sorted_list_it
 
 int SortedLLIsEmpty(const sorted_list_t *list)
 {
+	assert(NULL != list);
 	return DLLBegin(list->dll) == DLLEnd(list->dll);
 }
 
 size_t SortedLLSize(const sorted_list_t *list)
 {
+	assert(NULL != list);
 	return DLLSize(list->dll);
 }
 
@@ -113,8 +115,8 @@ void *SortedLLGetData(const sorted_list_iterator_t iter)
 sorted_list_iterator_t SortedLLBegin(const sorted_list_t *list)
 {
 	sorted_list_iterator_t iter;
-	
 	assert(NULL != list);
+	
 	
 	iter.dll_iter = DLLBegin(list->dll);
 	
@@ -166,7 +168,6 @@ sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const s
 {
 	sorted_list_iterator_t tmp = from;
 	
-	
 	assert(NULL != params);
 
 	for(;!SortedLLIsEqualIter(tmp, to) && !is_match ; tmp = SortedLLNext(tmp))
@@ -176,6 +177,31 @@ sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const s
 	};
 		
 	return tmp;
+}
+
+sorted_list_t *SortedLLMerge(sorted_list_t *dest, sorted_list_t *src)
+{
+	size_t count = 0;
+	size_t size_src = SortedLLSize(src);
+	sorted_list_iterator_t iter_dest = SortedLLBegin(dest);
+	
+	assert(NULL != dest);
+	assert(NULL != src);
+	
+	while(count < size_src)
+	{
+		if(dest->func(SortedLLGetData(SortedLLBegin(src)) ,SortedLLGetData(iter_dest)) <= 0 )
+		{	
+			
+			DLLSplice(SortedLLBegin(src).dll_iter, SortedLLNext(SortedLLBegin(src)).dll_iter, iter_dest.dll_iter);
+			++count;	
+		}
+		else 
+		{   
+			iter_dest = SortedLLNext(iter_dest);
+		}
+	}
+	return dest;
 }
 
 
