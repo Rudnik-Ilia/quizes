@@ -101,7 +101,10 @@ int SortedLLForEach(const sorted_list_iterator_t from, const sorted_list_iterato
 
 
 int SortedLLIsEqualIter(const sorted_list_iterator_t iter1, const sorted_list_iterator_t iter2)
-{
+{	
+	assert(NULL != iter1.dll_iter);
+	assert(NULL != iter2.dll_iter);
+
 	return DLLIsEqualIter(iter1.dll_iter, iter2.dll_iter);
 
 }

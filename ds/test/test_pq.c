@@ -28,7 +28,7 @@ int main()
 {
 	pq_t *pq = PQCreate(CmpLowHigh);
 	int arr[] = {10, 20, 30};
-	
+	int n = -7;
 	TEST("IsEmpty after creater", PQIsEmpty(pq), 1);
 	TEST("Size after creater", PQSize(pq), 0);
 	
@@ -43,13 +43,18 @@ int main()
 	
 	PQEnqueue(pq, &arr[2]);
 	PQEnqueue(pq, &arr[2]);
-	PQEnqueue(pq, &arr[2]);
+	PQEnqueue(pq, &n);
 	TEST("Size after insert", PQSize(pq), 4);
 	printf("%d\n",*(int*)PQPeek(pq));
+	TEST("Erase",*(int*)PQErase(pq, &Match, &arr[0]), -7);
+	
+	TEST("Size after insert", PQSize(pq), 3);
 	
 	PQFlush(pq);
-	
 	TEST("Size after creater", PQSize(pq), 0);
+	/*
+	*/
+	
 	PASS;
 	
 	PQDestroy(pq);
