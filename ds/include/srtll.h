@@ -199,7 +199,7 @@ sorted_list_iterator_t SortedLLFind(const sorted_list_t *list, const sorted_list
  *  @to, if the element was not found.
  * Complexity: O(n)
  */
-sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*is_match)(void *data, void *params), void *params);
+sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*is_match)(const void *data, void *params), void *params);
 
 /*
  * Description: Merges a source list to a destination list. Source list will be emptied

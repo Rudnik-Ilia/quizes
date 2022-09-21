@@ -190,7 +190,7 @@ sorted_list_iterator_t SortedLLFind(const sorted_list_t *list, const sorted_list
 	return tmp;
 }
 
-sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*is_match)(void *data, void *params), void *params)
+sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*is_match)(const void *data, void *params), void *params)
 {
 	sorted_list_iterator_t tmp = from;
 	
@@ -199,15 +199,10 @@ sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const s
 	#ifndef NDEBUG
 	assert(from.list == to.list);
 	#endif
-
-
-	for(;!SortedLLIsEqualIter(tmp, to) && !is_match ; tmp = SortedLLNext(tmp))
-	{
-
-	 /* empty body*/
-	};
-		
+	
+	tmp.dll_iter = DLLFind(from.dll_iter, to.dll_iter, is_match, params);
 	return tmp;
+
 }
 
 sorted_list_t *SortedLLMerge(sorted_list_t *dest, sorted_list_t *src)

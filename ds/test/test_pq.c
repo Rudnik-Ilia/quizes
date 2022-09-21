@@ -15,8 +15,15 @@ int CmpLowHigh(const void *new, const void *old)
 	return *(int*)new - *(int*)old;
 }
 
-
-
+int Match(const void *data, void *params)
+{
+	(void)params;
+	
+	assert(NULL != data);
+	assert(NULL != params);
+	
+	return *(int*)data < 0 ? 1: 0;
+}
 int main()
 {
 	pq_t *pq = PQCreate(CmpLowHigh);
@@ -35,8 +42,14 @@ int main()
 	TEST("Size after insert", PQSize(pq), 1);
 	
 	PQEnqueue(pq, &arr[2]);
+	PQEnqueue(pq, &arr[2]);
+	PQEnqueue(pq, &arr[2]);
+	TEST("Size after insert", PQSize(pq), 4);
 	printf("%d\n",*(int*)PQPeek(pq));
 	
+	PQFlush(pq);
+	
+	TEST("Size after creater", PQSize(pq), 0);
 	PASS;
 	
 	PQDestroy(pq);

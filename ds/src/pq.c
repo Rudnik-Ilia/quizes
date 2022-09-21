@@ -84,14 +84,40 @@ size_t PQSize(const pq_t *pqueue)
 }
 
 pq_t *PQMerge(pq_t *dest, pq_t *src)
-
 {
 	assert(NULL != dest);
 	assert(NULL != src);
 	
-	return dest->list = SortedLLMerge(dest->list, src->list);
+	SortedLLMerge(dest->list, src->list);
+	return dest;
 }
 
+void PQFlush(pq_t *pqueue)
+{
+	sorted_list_iterator_t tmp = SortedLLBegin(pqueue -> list);
+	
+	assert(NULL != pqueue);
+	
+	for(; !SortedLLIsEqualIter(tmp, SortedLLEnd(pqueue -> list)); SortedLLRemove(tmp))
+	{
+		/* EMPTY BODY*/
+	}
+}
+
+void *PQErase(pq_t *pqueue, int (*is_match)(const void *data, void *params), void *params)
+{
+	sorted_list_iterator_t tmp;
+	
+	void * ptr = NULL;	
+		
+	assert(NULL != pqueue);
+	assert(NULL != is_match);
+	assert(NULL != params);
+	
+	tmp = SortedLLFindIf(SortedLLBegin(pqueue -> list),  SortedLLEnd(pqueue -> list), is_match, params);
+	
+	return SortedLLGetData(tmp);
+}
 
 
 

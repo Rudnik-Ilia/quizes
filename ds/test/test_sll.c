@@ -25,7 +25,7 @@ static int PlusOne(void *data, void *param)
 	return 0;
 }
 
-int Match(void *data, void *params)
+int Match(const void *data, void *params)
 {
 	(void)params;
 	
@@ -142,6 +142,7 @@ int main()
 	TestMerge();
 	
 	PASS;
+	
 	
 return 0;
 }
