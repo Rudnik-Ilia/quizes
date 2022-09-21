@@ -6,7 +6,6 @@
 * Status : approved
 ***********************/
 
-
 #include <stdio.h>  /* printf */
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
@@ -14,6 +13,7 @@
 
 #include "utils.h"
 #include "dll.h"
+
 
 typedef int (*cmp_func_t)(const void *data1, const void *data2);
 
@@ -53,7 +53,6 @@ sorted_list_iterator_t SortedLLInsert(sorted_list_t *list, void *data)
 	
 	tmp = SortedLLBegin(list);
 
-	
 	for(; !SortedLLIsEqualIter(tmp, SortedLLEnd(list)) && (list->func(data, SortedLLGetData(tmp)) >= 0); tmp = SortedLLNext(tmp))
 	{
 	 /* empty body*/
@@ -64,7 +63,6 @@ sorted_list_iterator_t SortedLLInsert(sorted_list_t *list, void *data)
 	#endif
 	
 	tmp.dll_iter = DLLInsert(tmp.dll_iter, data);
-	
 	return tmp;
 }
 
@@ -184,7 +182,6 @@ sorted_list_iterator_t SortedLLFind(const sorted_list_t *list, const sorted_list
 	assert(from.list == to.list);
 	#endif
 
-
 	for(;!SortedLLIsEqualIter(tmp, to) && !(list->func(data, SortedLLGetData(tmp)) == 0); tmp = SortedLLNext(tmp))
 	{
 	 /* empty body*/
@@ -197,8 +194,6 @@ sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const s
 {
 	sorted_list_iterator_t tmp = from;
 	
-	assert(NULL != params);
-	
 	#ifndef NDEBUG
 	assert(from.list == to.list);
 	#endif
@@ -210,28 +205,33 @@ sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const s
 
 sorted_list_t *SortedLLMerge(sorted_list_t *dest, sorted_list_t *src)
 {
-	size_t count = 0;
-	size_t size_src = SortedLLSize(src);
+	
 	sorted_list_iterator_t iter_dest = SortedLLBegin(dest);
 	
 	assert(NULL != dest);
 	assert(NULL != src);
 	
-	while(count < size_src)
+	while(iter_dest.dll_iter != SortedLLEnd(dest).dll_iter && !SortedLLIsEmpty(src))
 	{
 		if(dest->func(SortedLLGetData(SortedLLBegin(src)) ,SortedLLGetData(iter_dest)) <= 0 )
 		{	
 			
 			DLLSplice(SortedLLBegin(src).dll_iter, SortedLLNext(SortedLLBegin(src)).dll_iter, iter_dest.dll_iter);
-			++count;	
+		
 		}
 		else 
 		{   
 			iter_dest = SortedLLNext(iter_dest);
 		}
 	}
+	if(!SortedLLIsEmpty(src))
+	{
+		DLLSplice(SortedLLBegin(src).dll_iter, SortedLLEnd(src).dll_iter, SortedLLEnd(dest).dll_iter );
+	}
 	return dest;
 }
+
+
 
 
 

@@ -8,7 +8,7 @@
 #include "test.h"
 #include "dll.h"
 
-int CmpLowHigh(const void *new, const void *old)
+int Compare(const void *new, const void *old)
 {	
 	return *(int*)new - *(int*)old;
 }
@@ -42,20 +42,13 @@ void Main_test()
 	
 	int max = 100;
 	int negative = -8;
-	sorted_list_t *srtll = SortedLLCreate(CmpLowHigh);
-	/*
-	printf("%p\n",SortedLLBegin(srtll).dll_iter); 
-	printf("%p\n", SortedLLEnd(srtll).dll_iter); 
-	*/
-	
+	sorted_list_t *srtll = SortedLLCreate(Compare);
+
 	TEST("ADRESS",SortedLLBegin(srtll).dll_iter, SortedLLEnd(srtll).dll_iter); 
-	
-	 
 	
 	TEST("Equal adress start", 1, SortedLLIsEqualIter(SortedLLBegin(srtll), SortedLLEnd(srtll)));
 	TEST("Equal isEmpty start", 1, SortedLLIsEmpty(srtll));
 	TEST("Equal Size start", 0, SortedLLSize(srtll));
-	
 	
 	SortedLLInsert(srtll, &arr[4]);
 	TEST("Size", SortedLLSize(srtll), 1);
@@ -76,7 +69,6 @@ void Main_test()
 	
 	SortedLLInsert(srtll, &arr[2]);
 	
-	
 	SortedLLPopFront(srtll);
 	SortedLLPopBack(srtll);
 	
@@ -85,7 +77,6 @@ void Main_test()
 	SortedLLInsert(srtll, &x);
 	
 	SortedLLInsert(srtll, &negative);
-	
 	
 	SortedLLGetData(SortedLLFind(srtll, SortedLLBegin(srtll), SortedLLEnd(srtll), &max));
 	
@@ -107,8 +98,8 @@ void TestMerge()
 	int data2 = 4;
 	int data3 = 6;
 	
-	sorted_list_t *srtll_src = SortedLLCreate(CmpLowHigh);
-	sorted_list_t *srtll_dest = SortedLLCreate(CmpLowHigh);
+	sorted_list_t *srtll_src = SortedLLCreate(Compare);
+	sorted_list_t *srtll_dest = SortedLLCreate(Compare);
 	
 	SortedLLInsert(srtll_src, &data_one);
 	SortedLLInsert(srtll_src, &data_two);
@@ -143,9 +134,10 @@ int main()
 	
 	PASS;
 	
-	
 return 0;
 }
+
+
 
 
 

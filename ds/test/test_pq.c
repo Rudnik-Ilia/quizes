@@ -46,6 +46,7 @@ int main()
 	PQEnqueue(pq, &n);
 	TEST("Size after insert", PQSize(pq), 4);
 	printf("%d\n",*(int*)PQPeek(pq));
+
 	TEST("Erase",*(int*)PQErase(pq, &Match, &arr[0]), -7);
 	
 	TEST("Size after insert", PQSize(pq), 3);
