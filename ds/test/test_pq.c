@@ -21,13 +21,15 @@ int main()
 {
 	pq_t *pq = PQCreate(CmpLowHigh);
 	
+	TEST("IsEmpty after creater", PQIsEmpty(pq), 1);
+	TEST("Size after creater", PQSize(pq), 0);
 	
 	
+	
+	
+	PASS;
 	
 	PQDestroy(pq);
-
-
-
 
 return 0;
 }

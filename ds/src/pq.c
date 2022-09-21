@@ -47,3 +47,45 @@ void PQDestroy(pq_t *pqueue)
 	free(pqueue);
 }
 
+int PQIsEmpty(const pq_t *pqueue)
+{
+	assert(NULL != pqueue);
+	return SortedLLIsEmpty(pqueue->list);
+}
+size_t PQSize(const pq_t *pqueue)
+{	
+	assert(NULL != pqueue);
+	return SortedLLSize(pqueue->list);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
