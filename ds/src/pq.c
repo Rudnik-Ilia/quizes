@@ -41,6 +41,30 @@ pq_t *PQCreate(priority_cmp_func func_cmp)
 	return pq;
 }
 
+
+int PQEnqueue(pq_t *pqueue, void *data)
+{
+	assert(NULL != pqueue);
+	assert(NULL != data);
+	
+	SortedLLInsert(pqueue->list, data);
+	
+	return 0;
+}
+
+void *PQDequeue(pq_t *pqueue)
+{
+	assert(NULL != pqueue);
+	return SortedLLPopBack(pqueue->list);
+}
+
+
+void *PQPeek(const pq_t *pqueue)
+{	
+	assert(NULL != pqueue);
+	return SortedLLGetData(SortedLLPrev(SortedLLEnd(pqueue->list)));
+}
+
 void PQDestroy(pq_t *pqueue)
 {
 	SortedLLDestroy(pqueue->list);
@@ -59,7 +83,14 @@ size_t PQSize(const pq_t *pqueue)
 
 }
 
+pq_t *PQMerge(pq_t *dest, pq_t *src)
 
+{
+	assert(NULL != dest);
+	assert(NULL != src);
+	
+	return dest->list = SortedLLMerge(dest->list, src->list);
+}
 
 
 
