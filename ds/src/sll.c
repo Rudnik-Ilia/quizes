@@ -59,11 +59,13 @@ sorted_list_iterator_t SortedLLInsert(sorted_list_t *list, void *data)
 	 /* empty body*/
 	}
 	
+	#ifndef NDEBUG
+	tmp.list = list;
+	#endif
+	
 	tmp.dll_iter = DLLInsert(tmp.dll_iter, data);
 	
 	return tmp;
-	
-
 }
 
 sorted_list_iterator_t SortedLLRemove(sorted_list_iterator_t iter)
@@ -74,15 +76,25 @@ sorted_list_iterator_t SortedLLRemove(sorted_list_iterator_t iter)
 
 void *SortedLLPopFront(sorted_list_t *list)
 {
+	assert(NULL != list);
+	
 	return DLLPopFront(list->dll);
 }
 void *SortedLLPopBack(sorted_list_t *list)
-{
+{	
+	assert(NULL != list);
+	
 	return DLLPopBack(list->dll);
 }
 
 int SortedLLForEach(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*action_func)(void *data, void *params), void *params)
 {
+	assert(NULL != params);
+	
+	#ifndef NDEBUG
+	assert(from.list == to.list);
+	#endif
+
 
 	return DLLForEach(from.dll_iter, to.dll_iter, action_func, params);
 }
@@ -117,6 +129,10 @@ sorted_list_iterator_t SortedLLBegin(const sorted_list_t *list)
 	sorted_list_iterator_t iter;
 	assert(NULL != list);
 	
+	#ifndef NDEBUG
+	iter.list = list;
+	#endif
+
 	
 	iter.dll_iter = DLLBegin(list->dll);
 	
@@ -126,8 +142,12 @@ sorted_list_iterator_t SortedLLBegin(const sorted_list_t *list)
 sorted_list_iterator_t SortedLLEnd(const sorted_list_t *list)
 {
 	sorted_list_iterator_t iter;
-	
 	assert(NULL != list);
+	
+	#ifndef NDEBUG
+	iter.list = list;
+	#endif
+
 	
 	iter.dll_iter = DLLEnd(list->dll);
 	
@@ -155,6 +175,12 @@ sorted_list_iterator_t SortedLLFind(const sorted_list_t *list, const sorted_list
 	
 	assert(NULL != data);
 	assert(NULL != list);
+	
+	#ifndef NDEBUG
+	assert(list == to.list);
+	assert(from.list == to.list);
+	#endif
+
 
 	for(;!SortedLLIsEqualIter(tmp, to) && !(list->func(data, SortedLLGetData(tmp)) == 0); tmp = SortedLLNext(tmp))
 	{
@@ -169,6 +195,11 @@ sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const s
 	sorted_list_iterator_t tmp = from;
 	
 	assert(NULL != params);
+	
+	#ifndef NDEBUG
+	assert(from.list == to.list);
+	#endif
+
 
 	for(;!SortedLLIsEqualIter(tmp, to) && !is_match ; tmp = SortedLLNext(tmp))
 	{

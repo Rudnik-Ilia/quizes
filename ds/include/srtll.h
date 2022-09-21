@@ -10,9 +10,12 @@ typedef struct sorted_list_iterator sorted_list_iterator_t;
 
 struct sorted_list_iterator
 {
+
+	
 	#ifndef NDEBUG
-	sorted_list_t *list;
+	const sorted_list_t *list;
 	#endif
+
 	
 	dllist_iter_t dll_iter;
 };
