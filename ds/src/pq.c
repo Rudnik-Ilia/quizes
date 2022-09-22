@@ -118,13 +118,11 @@ void *PQErase(pq_t *pqueue, int (*is_match)(const void *data, void *params), voi
 	
 	tmp = SortedLLFindIf(SortedLLBegin(pqueue -> list),  SortedLLEnd(pqueue -> list), is_match, params);
 	
-	if(SortedLLIsEqualIter(tmp, SortedLLEnd(pqueue -> list)))
+	if(!(SortedLLIsEqualIter(tmp, SortedLLEnd(pqueue -> list))))
 	{
-		return NULL;
+		ptr = SortedLLGetData(tmp);
+		SortedLLRemove(tmp);
 	}
-	ptr = SortedLLGetData(tmp);
-	SortedLLRemove(tmp);
-	
 	return ptr;
 }
 
