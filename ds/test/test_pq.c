@@ -1,15 +1,26 @@
 
-
-#include <stdio.h>  /* printf */
 #include <stdio.h>  /* printf */
 #include <assert.h> /* assert */
-#include <stdlib.h> /* malloc */
-#include "srtll.h"
 #include "utils.h"
 #include "test.h"
-#include "dll.h"
 #include "pqueue.h"
 
+
+int Compare();
+int Match();
+void TestMerge();
+void Test();
+
+int main()
+{
+	Test();
+	TestMerge();
+	PASS;
+
+return 0;
+}
+
+/**********HELP**************/
 int Compare(const void *data1, const void *data2)
 {	
 	return *(int*)data2 - *(int*)data1;
@@ -43,15 +54,7 @@ void TestMerge()
 	PQEnqueue(pq2, &arr2[2]);
 
 	PQMerge(pq, pq2);
-/*
-	printf("%d", *(int *)SortedLLGetData((SortedLLBegin(srtll_dest))));
-	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLBegin(srtll_dest))));
-	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest)))));
-	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest))))));
-	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest)))))));
-	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest))))))));
-*/
-	
+
 	TEST("Final length", PQSize(pq),6);
 	TEST("Final length", PQSize(pq2),0);
 	
@@ -96,11 +99,3 @@ void Test()
 }
 
 
-int main()
-{
-	Test();
-	TestMerge();
-	PASS;
-
-return 0;
-}
