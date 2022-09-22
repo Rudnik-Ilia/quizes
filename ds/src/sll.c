@@ -1,7 +1,7 @@
 /**********************
-* Title : Worksheet SLL
+* Title : Worksheet linklist
 * Author: Ilia Rudnik
-* Reviewer: 
+* Reviewer: Vadim
 * Date : 06/09/2022
 * Status : approved
 ***********************/
@@ -9,242 +9,214 @@
 #include <stdio.h>  /* printf */
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
-#include "srtll.h"
 
+#include "SLL.h"
 #include "utils.h"
-#include "dll.h"
 
 
-typedef int (*cmp_func_t)(const void *data1, const void *data2);
 
-typedef struct sll_node node_t;
+typedef struct node node_t;
 
-struct  sorted_list 
-{
-	dllist_t *dll;
-	cmp_func_t func;
+struct node {
+    void *data;
+    node_t *next;
 };
 
-sorted_list_t *SortedLLCreate(cmp_func_t func_cmp)
+struct sll {
+    node_t *head;
+    node_t *tail;
+};
+
+static int PlusOne(void *data, void *param)
 {
-	sorted_list_t *srtll = (sorted_list_t *)malloc(sizeof(sorted_list_t));
-	if(NULL == srtll)
+	(void)data;
+	assert(NULL != param);
+	*(size_t*)param += 1;
+	
+	return 0;
+}
+
+
+sll_t *SllCreate(void)
+{
+    sll_t *myList = (sll_t *)malloc(sizeof(sll_t));
+	node_t *dummy_node = (node_t *)malloc(sizeof(node_t));
+	
+    if(NULL == myList)
+    {
+    	LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+    }
+    if(NULL == dummy_node)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		free(dummy_node);
 		return NULL;
-	} 
-	srtll -> dll = DLLCreate();
-	srtll -> func = func_cmp;
-	
-	return srtll;
-}
-
-void SortedLLDestroy(sorted_list_t *list)
-{
-	 DLLDestroy(list->dll);
-	 free(list);
-	
-}
-
-sorted_list_iterator_t SortedLLInsert(sorted_list_t *list, void *data)
-{	
-	sorted_list_iterator_t tmp;
-	assert(NULL != data);
-	
-	tmp = SortedLLBegin(list);
-
-	for(; !SortedLLIsEqualIter(tmp, SortedLLEnd(list)) && (list->func(data, SortedLLGetData(tmp)) >= 0); tmp = SortedLLNext(tmp))
-	{
-	 /* empty body*/
 	}
 	
-	#ifndef NDEBUG
-	tmp.list = list;
-	#endif
-	
-	tmp.dll_iter = DLLInsert(tmp.dll_iter, data);
-	return tmp;
+	dummy_node->data = myList;
+	dummy_node->next = DEAD;
+    myList->head = dummy_node;
+    myList->tail = dummy_node; 
+    
+    return myList;
 }
 
-sorted_list_iterator_t SortedLLRemove(sorted_list_iterator_t iter)
+iterator_t SllRemove(iterator_t iter)
 {
-	iter.dll_iter = DLLRemove(iter.dll_iter);
+	node_t *tmp = iter->next;
+	assert(NULL != iter);
+	
+	
+	iter->data = (iter->next)->data;
+	iter->next = (iter->next)->next;
+	
+	
+	if(iter->next == DUMMY)
+	{
+		((dllist_t *)(iter->data))->tail = iter;
+	}
+	else
+	{
+		(iter->next)->prev = iter;
+	}
+
+	
+	free(tmp);
 	return iter;
+
 }
 
-void *SortedLLPopFront(sorted_list_t *list)
+void SllDestroy(sll_t *list)
 {
+	iterator_t temp = list->head;
 	assert(NULL != list);
-	
-	return DLLPopFront(list->dll);
-}
-void *SortedLLPopBack(sorted_list_t *list)
-{	
-	assert(NULL != list);
-	
-	return DLLPopBack(list->dll);
+	while(list->head != list->tail)
+	{	
+		list->head = list->head->next;
+		free(temp);
+		temp = list->head;
+	}
+	free(list->tail);
+	free(list);
 }
 
-int SortedLLForEach(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*action_func)(void *data, void *params), void *params)
+iterator_t SllInsert(iterator_t iter, void *data)
 {
-	assert(NULL != params);
-	
-	#ifndef NDEBUG
-	assert(from.list == to.list);
-	#endif
-
-
-	return DLLForEach(from.dll_iter, to.dll_iter, action_func, params);
-}
-
-
-int SortedLLIsEqualIter(const sorted_list_iterator_t iter1, const sorted_list_iterator_t iter2)
-{	
-	assert(NULL != iter1.dll_iter);
-	assert(NULL != iter2.dll_iter);
-
-	return DLLIsEqualIter(iter1.dll_iter, iter2.dll_iter);
-
-}
-
-int SortedLLIsEmpty(const sorted_list_t *list)
-{
-	assert(NULL != list);
-	return DLLBegin(list->dll) == DLLEnd(list->dll);
-}
-
-size_t SortedLLSize(const sorted_list_t *list)
-{
-	assert(NULL != list);
-	return DLLSize(list->dll);
-}
-
-void *SortedLLGetData(const sorted_list_iterator_t iter)
-{
-	return DLLGetData(iter.dll_iter);
-}
-
-
-sorted_list_iterator_t SortedLLBegin(const sorted_list_t *list)
-{
-	sorted_list_iterator_t iter;
-	assert(NULL != list);
-	
-	#ifndef NDEBUG
-	iter.list = list;
-	#endif
-
-	
-	iter.dll_iter = DLLBegin(list->dll);
-	
-	return iter;
-}
-
-sorted_list_iterator_t SortedLLEnd(const sorted_list_t *list)
-{
-	sorted_list_iterator_t iter;
-	assert(NULL != list);
-	
-	#ifndef NDEBUG
-	iter.list = list;
-	#endif
-
-	
-	iter.dll_iter = DLLEnd(list->dll);
-	
-	return iter;
-}
-
-sorted_list_iterator_t SortedLLNext(sorted_list_iterator_t iter)
-{
-	iter.dll_iter = DLLNext(iter.dll_iter); 
-	return iter;
-	
-	
-}
-sorted_list_iterator_t SortedLLPrev(sorted_list_iterator_t iter)
-{
-	iter.dll_iter = DLLPrev(iter.dll_iter); 
-	return iter;
-}
-
-
-sorted_list_iterator_t SortedLLFind(const sorted_list_t *list, const sorted_list_iterator_t from, const sorted_list_iterator_t to, const void *data)
-{
-	
-	sorted_list_iterator_t tmp = from;
+	node_t *new_node = (node_t *)malloc(sizeof(node_t));
+	if(NULL == new_node)
+	{	
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+	}
 	
 	assert(NULL != data);
-	assert(NULL != list);
+	assert(NULL != iter);
 	
-	#ifndef NDEBUG
-	assert(list == to.list);
-	assert(from.list == to.list);
-	#endif
-
-	for(;!SortedLLIsEqualIter(tmp, to) && !(list->func(data, SortedLLGetData(tmp)) == 0); tmp = SortedLLNext(tmp))
+	new_node->data = iter->data;
+	new_node->next = iter->next;
+	iter->next = new_node;
+	iter->data = data;
+	
+	if(DEAD == new_node->next)
 	{
-	 /* empty body*/
-	};
-		
-	return tmp;
+		((sll_t*)(new_node->data))->tail = new_node; 
+	}
+	return iter;
 }
 
-sorted_list_iterator_t SortedLLFindIf(const sorted_list_iterator_t from, const sorted_list_iterator_t to, int (*is_match)(const void *data, void *params), void *params)
+iterator_t SllFind(iterator_t from, iterator_t to, is_match_func is_match, void *param)
 {
-	sorted_list_iterator_t tmp = from;
-	
-	#ifndef NDEBUG
-	assert(from.list == to.list);
-	#endif
-	
-	tmp.dll_iter = DLLFind(from.dll_iter, to.dll_iter, is_match, params);
-	return tmp;
-
+	assert(NULL != param);
+	assert(NULL != from);
+	assert(NULL != to);
+	assert(NULL != is_match);
+	while(!SllIterIsEqual(from, to) && !is_match(param, from->data))
+	{
+		from = SllNext(from);
+		return from;	
+	}
+	return NULL;
 }
 
-sorted_list_t *SortedLLMerge(sorted_list_t *dest, sorted_list_t *src)
+
+size_t SllCount(const sll_t *list)
 {
-	
-	sorted_list_iterator_t iter_dest = SortedLLBegin(dest);
-	
+	size_t count = 0;
+	assert(NULL != list);
+	SllForEach(SllBegin(list), SllEnd(list), PlusOne, &count);
+	return count;
+}
+
+
+void *SllGetData(iterator_t iter)
+{
+	assert(NULL != iter);
+	return iter->data;
+}
+void SllSetData(iterator_t iter, void *data)
+{
+	assert(NULL != data);
+	iter->data = data;
+}
+
+iterator_t SllBegin(const sll_t *list)
+{
+	assert(NULL != list);
+	return list->head;
+}
+
+iterator_t SllEnd(const sll_t *list)
+{
+	assert(NULL != list);
+	return list->tail;
+}
+iterator_t SllNext(iterator_t iter)
+{
+	assert(NULL != iter);
+	return iter->next;
+}
+
+int SllIsEmpty(const sll_t *list)
+{
+	assert(NULL != list);
+	return SllBegin(list) == SllEnd(list);
+}
+int SllIterIsEqual(iterator_t iter1, iterator_t iter2)
+{
+	assert(NULL != iter1);
+	assert(NULL != iter2);
+	return iter1 == iter2;
+}
+
+int SllForEach(iterator_t from, iterator_t to, action_func func, void *param)
+{	
+	int st = 0;
+	assert(NULL != from);
+	assert(NULL != to);
+	assert(NULL != func);
+	assert(NULL != param);
+	while(DEAD != SllNext(from))
+	{	
+		func(from->data, param);
+		from = SllNext(from);	
+	}	
+	return st;
+}
+
+sll_t *SllAppend(sll_t *dest, sll_t *src)
+{	
 	assert(NULL != dest);
 	assert(NULL != src);
-	
-	while(iter_dest.dll_iter != SortedLLEnd(dest).dll_iter && !SortedLLIsEmpty(src))
-	{
-		if(dest->func(SortedLLGetData(SortedLLBegin(src)) ,SortedLLGetData(iter_dest)) <= 0 )
-		{	
-			
-			DLLSplice(SortedLLBegin(src).dll_iter, SortedLLNext(SortedLLBegin(src)).dll_iter, iter_dest.dll_iter);
-		
-		}
-		else 
-		{   
-			iter_dest = SortedLLNext(iter_dest);
-		}
-	}
-	if(!SortedLLIsEmpty(src))
-	{
-		DLLSplice(SortedLLBegin(src).dll_iter, SortedLLEnd(src).dll_iter, SortedLLEnd(dest).dll_iter );
-	}
+
+	dest->tail->data = src->head->data;
+	dest->tail->next = src->head->next;				
+	dest->tail = src->tail;
+	dest->tail->data = dest;
+	src->tail = src->head;
+	src->head->data = src;
+	src->head->next = DEAD;
 	return dest;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
