@@ -44,25 +44,27 @@ pq_t *PQCreate(priority_cmp_func func_cmp)
 
 int PQEnqueue(pq_t *pqueue, void *data)
 {
+	sorted_list_iterator_t tmp;
+	
 	assert(NULL != pqueue);
 	assert(NULL != data);
 	
-	SortedLLInsert(pqueue->list, data);
+	tmp = SortedLLInsert(pqueue->list, data);
 	
-	return 0;
+	return NULL == tmp.dll_iter ? 0 : 1;
 }
 
 void *PQDequeue(pq_t *pqueue)
 {
 	assert(NULL != pqueue);
-	return SortedLLPopBack(pqueue->list);
+	return SortedLLPopFront(pqueue->list);
 }
 
 
 void *PQPeek(const pq_t *pqueue)
 {	
 	assert(NULL != pqueue);
-	return SortedLLGetData(SortedLLPrev(SortedLLEnd(pqueue->list)));
+	return SortedLLGetData(SortedLLBegin(pqueue->list));
 }
 
 void PQDestroy(pq_t *pqueue)

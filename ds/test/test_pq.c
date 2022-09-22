@@ -10,9 +10,9 @@
 #include "dll.h"
 #include "pqueue.h"
 
-int CmpLowHigh(const void *new, const void *old)
+int Compare(const void *data1, const void *data2)
 {	
-	return *(int*)new - *(int*)old;
+	return *(int*)data2 - *(int*)data1;
 }
 
 int Match(const void *data, void *params)
@@ -24,10 +24,46 @@ int Match(const void *data, void *params)
 	
 	return *(int*)data < 0 ? 1: 0;
 }
-int main()
+
+void TestMerge()
 {
-	pq_t *pq = PQCreate(CmpLowHigh);
-	int arr[] = {10, 20, 30};
+	int arr[] = {1,3,5};
+	int arr2[] = {2,4,6};
+
+	
+	pq_t *pq = PQCreate(Compare);
+	pq_t *pq2 = PQCreate(Compare);
+	
+	PQEnqueue(pq, &arr[0]);
+	PQEnqueue(pq, &arr[1]);
+	PQEnqueue(pq, &arr[2]);
+	
+	PQEnqueue(pq2, &arr2[0]);
+	PQEnqueue(pq2, &arr2[1]);
+	PQEnqueue(pq2, &arr2[2]);
+
+	PQMerge(pq, pq2);
+/*
+	printf("%d", *(int *)SortedLLGetData((SortedLLBegin(srtll_dest))));
+	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLBegin(srtll_dest))));
+	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest)))));
+	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest))))));
+	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest)))))));
+	printf("%d", *(int *)SortedLLGetData(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLNext(SortedLLBegin(srtll_dest))))))));
+*/
+	
+	TEST("Final length", PQSize(pq),6);
+	TEST("Final length", PQSize(pq2),0);
+	
+	
+	PQDestroy(pq);
+	PQDestroy(pq2);
+}
+
+void Test()
+{
+	pq_t *pq = PQCreate(Compare);
+	int arr[] = {10, 20, 30, 55};
 	int n = -7;
 	TEST("IsEmpty after creater", PQIsEmpty(pq), 1);
 	TEST("Size after creater", PQSize(pq), 0);
@@ -42,10 +78,12 @@ int main()
 	TEST("Size after insert", PQSize(pq), 1);
 	
 	PQEnqueue(pq, &arr[2]);
-	PQEnqueue(pq, &arr[2]);
+	PQEnqueue(pq, &arr[3]);
+	
 	PQEnqueue(pq, &n);
 	TEST("Size after insert", PQSize(pq), 4);
-	printf("%d\n",*(int*)PQPeek(pq));
+	
+	TEST("PEEK", *(int*)PQPeek(pq), 55);
 
 	TEST("Erase",*(int*)PQErase(pq, &Match, &arr[0]), -7);
 	
@@ -53,12 +91,16 @@ int main()
 	
 	PQFlush(pq);
 	TEST("Size after creater", PQSize(pq), 0);
-	/*
-	*/
-	
-	PASS;
 	
 	PQDestroy(pq);
+}
+
+
+int main()
+{
+	Test();
+	TestMerge();
+	PASS;
 
 return 0;
 }
