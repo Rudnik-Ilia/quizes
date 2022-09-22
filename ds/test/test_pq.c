@@ -6,8 +6,8 @@
 #include "pqueue.h"
 
 
-int Compare();
-int Match();
+static int Compare();
+static int Match();
 void TestMerge();
 void Test();
 
@@ -21,12 +21,12 @@ return 0;
 }
 
 /**********HELP**************/
-int Compare(const void *data1, const void *data2)
+static int Compare(const void *data1, const void *data2)
 {	
 	return *(int*)data2 - *(int*)data1;
 }
 
-int Match(const void *data, void *params)
+static int Match(const void *data, void *params)
 {
 	(void)params;
 	
