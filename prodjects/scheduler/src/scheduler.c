@@ -22,7 +22,6 @@ struct scheduler
 {
     pq_t *tasks;
     int is_running;
-    
 };
 
 
@@ -55,9 +54,61 @@ sched_t *SchedCreate(void)
 
 void SchedDestroy(sched_t *sched)
 {
-
+	PQDestroy(sched->tasks);
 	free(sched);
 }
+
+size_t SchedSize(const sched_t *sched)
+{	
+	assert(NULL != sched);
+	return PQSize(sched->tasks);
+}
+
+int SchedIsEmpty(const sched_t *sched)
+{
+	assert(NULL != sched);
+	return PQIsEmpty(sched->tasks);
+}
+
+void SchedClear(sched_t *sched)
+{
+	assert(NULL != sched);
+	PQFlush(sched->tasks);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
