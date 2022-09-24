@@ -27,7 +27,13 @@ struct scheduler
 
 
 
-static int Compare(const void *data1, const void *data2)
+static int CompareTime(const void *data1, const void *data2)
+{
+
+return 0;
+}
+
+static int CompareUID(const void *data1, const void *data2)
 {
 
 return 0;
@@ -42,7 +48,7 @@ sched_t *SchedCreate(void)
 		return NULL;
 	}	
 	
-	new_sched -> tasks = PQCreate(Compare);
+	new_sched -> tasks = PQCreate(CompareTime);
 
 	return new_sched;
 }

@@ -8,11 +8,12 @@
 ilrd_uid_t UIDCreate(void)
 {
 	ilrd_uid_t new_uid;
+	static int i = 0;
 	
-	new_uid.counter = 0;
+	new_uid.counter = ++i;
 	new_uid.pid = getpid();
 	new_uid.created_time = time(0);
-	++new_uid.counter;
+	
 	return new_uid;
 }
 
