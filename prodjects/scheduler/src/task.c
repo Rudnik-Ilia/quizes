@@ -1,5 +1,9 @@
 
+#include <stdlib.h>
+#include <assert.h>
+
 #include "task.h"
+#include "utils.h"
 
 
 
@@ -15,9 +19,10 @@ struct task
 
 task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task_func)(void *params), void *params)
 {	
+	task_t *new_task = (task_t*)malloc(sizeof(task_t));
+	
 	assert(NULL != task_func);
 	
-	task_t *new_task = (task_t*)malloc(sizeof(task_t));
 	
 	if(NULL == new_task)
 	{
@@ -34,4 +39,49 @@ task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task
 	
 	return new_task;
 }
+
+void TaskDestroy(task_t *task)
+{
+	assert(NULL != task);
+	free(task); 
+}
+
+int TaskExecute(task_t *task)
+{
+	assert(NULL != task);
+	return task->task_func(task->params);
+}
+
+int TaskIsRepeating(task_t *task)
+{
+	assert(NULL != task);
+	return task->is_repeated;
+}
+time_t TaskGetTime(task_t *task)
+{
+	assert(NULL != task);
+	return task->exec_time;
+}
+
+ilrd_uid_t TaskGetUID(task_t *task)
+{
+	assert(NULL != task);
+	return task->uid;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
