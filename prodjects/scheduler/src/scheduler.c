@@ -65,17 +65,24 @@ sched_t *SchedCreate(void)
 
 
 ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating, int (*task_func)(void *params), void *params)
-{
-	task_t *new_task = NULL;
+{	
+	 
 	ilrd_uid_t new_uid = UIDCreate();
-	
-	/*
-	*/
+	void *new_task = TaskCreate(new_uid, interval_in_sec, is_repeating, task_func, params);
 	
 	assert(NULL != sched);
 	assert(NULL != task_func);
 	
+	/*
+	*/
 	
+	if(PQEnqueue(sched->tasks, new_task))
+	{
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		free(new_task);
+		return BadUID;
+	}
+	return new_uid;
 
 }
 

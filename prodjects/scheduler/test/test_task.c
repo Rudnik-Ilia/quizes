@@ -24,8 +24,8 @@ int main()
 	ilrd_uid_t id = UIDCreate();
 	ilrd_uid_t id2 = UIDCreate();
 	
-	task_t *new = TaskCreate(id, 0, 60, Exam, &a);
-	task_t *new2 = TaskCreate(id2, 0, 60, Exam, &a);
+	task_t *new = TaskCreate(id, 60, 0, Exam, &a);
+	task_t *new2 = TaskCreate(id2, 60, 0, Exam, &a);
 	
 	TEST("Test for func ",TaskExecute(new), 22);
 	TEST("Test for repeat ",TaskIsRepeating(new), 0);
