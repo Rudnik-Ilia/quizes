@@ -11,12 +11,13 @@
 #include <stdio.h>  /* printf */
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
+
 #include "scheduler.h"
-#include "ilrd_uid.h"
+
+
 #include "pqueue.h"
 #include "task.h"
 #include "utils.h"
-
 
 
 struct scheduler
@@ -35,7 +36,7 @@ return 0;
 }
 
 static int CompareUID(const void *data1, const void *data2)
-{(void)data1;
+{	(void)data1;
 	(void)data2;
 
 return 0;
@@ -66,8 +67,10 @@ sched_t *SchedCreate(void)
 ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating, int (*task_func)(void *params), void *params)
 {
 	task_t *new_task = NULL;
-	
 	ilrd_uid_t new_uid = UIDCreate();
+	
+	/*
+	*/
 	
 	assert(NULL != sched);
 	assert(NULL != task_func);

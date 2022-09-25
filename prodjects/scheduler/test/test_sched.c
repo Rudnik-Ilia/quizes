@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "scheduler.h"
+#include "ilrd_uid.h"
 
 
 
