@@ -35,7 +35,7 @@ static int CompareTime(const void *data1, const void *data2)
 return 0;
 }
 
-static int CompareUID(const void *data1, const void *data2)
+static int CompareUID(const void *data1, void *data2)
 {	(void)data1;
 	(void)data2;
 
@@ -68,15 +68,13 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 {	
 	 
 	ilrd_uid_t new_uid = UIDCreate();
+	
 	void *new_task = TaskCreate(new_uid, interval_in_sec, is_repeating, task_func, params);
 	
 	assert(NULL != sched);
 	assert(NULL != task_func);
 	
-	/*
-	*/
-	
-	if(PQEnqueue(sched->tasks, new_task))
+	if(!PQEnqueue(sched->tasks, new_task))
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		free(new_task);
@@ -84,6 +82,14 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 	}
 	return new_uid;
 
+}
+
+void SchedRemoveTask(sched_t *sched, ilrd_uid_t uid)
+{
+	void * id = &uid;
+	assert(NULL != sched);
+	PQErase(sched->tasks, CompareUID, id);
+	
 }
 
 void SchedDestroy(sched_t *sched)

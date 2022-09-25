@@ -7,17 +7,33 @@
 #include "ilrd_uid.h"
 
 
+int Exam(void *x)
+{
+	return *(int*)x*2;
+}
+
+int Exam2(void *x)
+{
+	return *(int*)x*100;
+}
 
 
 int main()
 {
+	int a = 11;
+	sched_t *new_sched  = SchedCreate();
 	
-	time_t a = time(0);
+	printf("%ld\n",SchedSize(new_sched));
 	
-	printf("%ld\n", a);
+	SchedAddTask(new_sched, 40, 1, Exam, &a);
 	
-	printf("%d\n", rand());
-	printf("%d\n", rand());
-
+	printf("%ld\n",SchedSize(new_sched));
+	
+	SchedAddTask(new_sched, 40, 1, Exam2, &a);
+	
+	printf("%ld\n",SchedSize(new_sched));
+	
+	SchedDestroy(new_sched);
+	
 return 0;
 }
