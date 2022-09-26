@@ -35,11 +35,10 @@ static int CompareTime(const void *data1, const void *data2)
 return 0;
 }
 
-static int CompareUID(const void *data1, void *data2)
-{	(void)data1;
-	(void)data2;
-
-return 0;
+static int CompareUID(const void *task, void *uid)
+{	
+	assert(NULL != task);	
+	return UIDIsSame(TaskGetUID((task_t*)task), *(ilrd_uid_t*)uid);
 }
 
 sched_t *SchedCreate(void)
@@ -81,6 +80,21 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 		return BadUID;
 	}
 	return new_uid;
+
+}
+
+void SchedRun(sched_t *sched)
+{
+	assert(NULL != sched);
+	
+	sched->is_running = 1;
+	/*
+	for(;sched->is_running &&  SchedIsEmpty(sched); )
+	{
+	
+	}
+	*/
+
 
 }
 

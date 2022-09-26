@@ -24,5 +24,5 @@ ilrd_uid_t UIDCreate(void)
 
 int UIDIsSame(ilrd_uid_t uid1, ilrd_uid_t uid2)
 {
-	return (int)(uid1.counter - uid2.counter) + (int)(uid1.pid - uid2.pid) + (int)(uid1.created_time - uid2.created_time);	
+	return !((int)(uid1.counter - uid2.counter) + (int)(uid1.pid - uid2.pid) + (int)(uid1.created_time - uid2.created_time));	
 }

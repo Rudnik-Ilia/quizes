@@ -2,9 +2,9 @@
 
 #include <unistd.h>
 #include <stdio.h>
-/*
+
 #include "ilrd_uid.h"
-*/
+
 
 
 
@@ -16,13 +16,13 @@ int main()
 	
 	
 	id = UIDCreate();
-	/*
+	
 	sleep(3);
-	*/
+	
 	id2 = UIDCreate();
 	id3 = UIDCreate();
 	
-	printf("%d\n", UIDIsSame(id,id2));
+	printf("%d\n", UIDIsSame(id,id));
 	printf("%d\n", UIDIsSame(id,id3));
 	printf("%d\n", UIDIsSame(id2,id3));
 	
