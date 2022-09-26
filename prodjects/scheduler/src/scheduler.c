@@ -12,6 +12,7 @@
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
 
+#include <unistd.h> /* getpid */
 #include "scheduler.h"
 
 
@@ -83,14 +84,25 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 }
 
 void SchedRun(sched_t *sched)
-{
+{	
+	task_t *tmp ;
 	assert(NULL != sched);
-	
 	sched->is_running = 1;
 	
-	for(;sched->is_running &&  SchedIsEmpty(sched); TaskExecute((task_t*)PQPeek(sched->tasks)))
-	{
+	while(sched->is_running &&  !SchedIsEmpty(sched))
+	{	
+		tmp = PQPeek(sched->tasks);
+		printf("!!!!!\n");
+		sleep(TaskGetTime(tmp) - time(0));
+		TaskExecute((task_t*)PQPeek(sched->tasks));
 		PQDequeue(sched->tasks);
+		
+		if(TaskIsRepeating(tmp))
+		{	
+			printf("?????");
+			TaskCalculateNewTime(tmp);
+			PQEnqueue(sched->tasks, tmp);
+		}
 	}
 
 }

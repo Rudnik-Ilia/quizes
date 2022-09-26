@@ -1,27 +1,27 @@
 
 #include <stdio.h>
 #include <unistd.h> /* getpid */
-#include <time.h>
 #include <stdlib.h>
+
 #include "scheduler.h"
 #include "ilrd_uid.h"
 
 
 int Exam(void *x)
 {	
-	printf("first");
+	printf("first\n");
 	return *(int*)x*2;
 }
 
 int Exam2(void *x)
 {
-	printf("second");
+	printf("second\n");
 	return *(int*)x*100;
 }
 
 int Exam3(void *x)
 {
-	printf("thrid");
+	printf("thrid\n");
 	return *(int*)x*100;
 }
 
@@ -35,23 +35,24 @@ int main()
 	
 	int a = 11;
 	sched_t *new_sched  = SchedCreate();
+	printf("ISempty: %d\n",SchedIsEmpty(new_sched));
 	
 	printf("Size: %ld\n",SchedSize(new_sched));
 	
-	first = SchedAddTask(new_sched, 10, 1, Exam, &a);
+	first = SchedAddTask(new_sched, 1, 3, Exam, &a);
 	
 	printf("Size: %ld\n",SchedSize(new_sched));
 	
-	second = SchedAddTask(new_sched, 20, 1, Exam2, &a);
+	second = SchedAddTask(new_sched, 0, 5, Exam2, &a);
 	
 	printf("Size: %ld\n",SchedSize(new_sched));
 	
-	thrid = SchedAddTask(new_sched, 20, 1, Exam3, &a);
+	thrid = SchedAddTask(new_sched, 0, 10, Exam3, &a);
+	
+	printf("ISempty: %d\n",SchedIsEmpty(new_sched));
 	
 	
-	SchedRun(sched);
-	
-	
+	SchedRun(new_sched);
 	/*
 	printf("Size after remove: %ld\n",SchedSize(new_sched));
 	SchedRemoveTask(new_sched, first);

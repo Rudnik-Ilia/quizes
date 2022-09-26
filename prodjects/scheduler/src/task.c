@@ -32,9 +32,9 @@ task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task
 	
 	new_task -> task_func = task_func;
 	new_task -> params = params;
-	new_task -> is_repeated;
+	new_task -> is_repeated = is_repeating;
 	new_task -> uid = uid;
-	new_task -> interval;
+	new_task -> interval = interval;
 	new_task -> exec_time = time(0) + interval;
 	
 	return new_task;
@@ -69,6 +69,12 @@ ilrd_uid_t TaskGetUID(task_t *task)
 	return task->uid;
 }
 
+void TaskCalculateNewTime(task_t *task)
+{
+	assert(NULL != task);
+	task->exec_time = time(0) + task->interval;
+
+}
 
 
 
