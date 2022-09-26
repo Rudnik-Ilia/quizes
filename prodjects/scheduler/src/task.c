@@ -35,7 +35,7 @@ task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task
 	new_task -> is_repeated;
 	new_task -> uid = uid;
 	new_task -> interval;
-	new_task -> exec_time = 0;
+	new_task -> exec_time = time(0) + interval;
 	
 	return new_task;
 }

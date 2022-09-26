@@ -27,12 +27,11 @@ struct scheduler
 };
 
 
-
-static int CompareTime(const void *data1, const void *data2)
+static int CompareTime(const void *tsk1, const void *tsk2)
 {
-	(void)data1;
-	(void)data2;
-return 0;
+	assert(NULL != tsk1);
+	assert(NULL != tsk2);
+	return TaskGetTime((task_t*)tsk1) == TaskGetTime((task_t*)tsk2);
 }
 
 static int CompareUID(const void *task, void *uid)
@@ -73,7 +72,7 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 	assert(NULL != sched);
 	assert(NULL != task_func);
 	
-	if(!PQEnqueue(sched->tasks, new_task))
+	if(PQEnqueue(sched->tasks, new_task))
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		free(new_task);
@@ -88,13 +87,11 @@ void SchedRun(sched_t *sched)
 	assert(NULL != sched);
 	
 	sched->is_running = 1;
-	/*
-	for(;sched->is_running &&  SchedIsEmpty(sched); )
-	{
 	
+	for(;sched->is_running &&  SchedIsEmpty(sched); TaskExecute((task_t*)PQPeek(sched->tasks)))
+	{
+		PQDequeue(sched->tasks);
 	}
-	*/
-
 
 }
 

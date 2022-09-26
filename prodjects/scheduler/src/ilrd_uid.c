@@ -6,7 +6,7 @@
 #include "ilrd_uid.h"
 
 
-const ilrd_uid_t BadUID = { 0, 0, 0 };
+const ilrd_uid_t BadUID = {0};
 
 
 ilrd_uid_t UIDCreate(void)
