@@ -32,7 +32,10 @@ static int CompareTime(const void *tsk1, const void *tsk2)
 {
 	assert(NULL != tsk1);
 	assert(NULL != tsk2);
-	return TaskGetTime((task_t*)tsk1) == TaskGetTime((task_t*)tsk2);
+	return TaskGetTime((task_t *)tsk1) - TaskGetTime((task_t *)tsk2); 
+	/*
+	return TaskGetTime((task_t *)tsk1) == TaskGetTime((task_t *)tsk2);
+	*/
 }
 
 static int CompareUID(const void *task, void *uid)
@@ -85,24 +88,36 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 
 void SchedRun(sched_t *sched)
 {	
-	task_t *tmp ;
+	task_t *tmp = NULL;
+	
 	assert(NULL != sched);
 	sched->is_running = 1;
 	
 	while(sched->is_running &&  !SchedIsEmpty(sched))
 	{	
 		tmp = PQPeek(sched->tasks);
-		printf("!!!!!\n");
+		
+		printf("!\n");
+		printf("%ld\n", TaskGetTime(tmp) - time(0));
 		sleep(TaskGetTime(tmp) - time(0));
-		TaskExecute((task_t*)PQPeek(sched->tasks));
+		
+		TaskExecute(tmp);
+	
 		PQDequeue(sched->tasks);
 		
 		if(TaskIsRepeating(tmp))
 		{	
-			printf("?????");
+			printf("?\n");
 			TaskCalculateNewTime(tmp);
 			PQEnqueue(sched->tasks, tmp);
 		}
+		else
+		{
+			TaskDestroy(tmp);
+		}
+		/*
+		TaskExecute((task_t*)PQPeek(sched->tasks));
+		*/
 	}
 
 }

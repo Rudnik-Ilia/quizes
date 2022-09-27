@@ -39,7 +39,7 @@ int main()
 	
 	printf("Size: %ld\n",SchedSize(new_sched));
 	
-	first = SchedAddTask(new_sched, 1, 3, Exam, &a);
+	first = SchedAddTask(new_sched, 1, 7, Exam, &a);
 	
 	printf("Size: %ld\n",SchedSize(new_sched));
 	
