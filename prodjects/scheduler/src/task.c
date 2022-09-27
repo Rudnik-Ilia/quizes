@@ -63,6 +63,7 @@ time_t TaskGetTime(task_t *task)
 	return task->exec_time;
 }
 
+
 ilrd_uid_t TaskGetUID(task_t *task)
 {
 	assert(NULL != task);
@@ -76,6 +77,30 @@ void TaskCalculateNewTime(task_t *task)
 
 }
 
+/**********************************************************************************/
+time_t TaskGetInterval(task_t *task)
+{
+	assert(NULL != task);
+	return task->interval;
+}
+
+time_t TaskSetInterval(task_t *task, time_t new_interval)
+{
+	assert(NULL != task);
+	return task->interval = new_interval;
+}
+
+void TaskSetONRepeat(task_t *task)
+{
+	assert(NULL != task);
+	task->is_repeated = 1;
+}
+
+void TaskSetOFFRepeat(task_t *task)
+{
+	assert(NULL != task);
+	task->is_repeated = 0;
+}
 
 
 

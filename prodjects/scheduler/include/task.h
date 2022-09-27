@@ -79,5 +79,42 @@ int TaskIsRepeating(task_t *task);
 */
 ilrd_uid_t TaskGetUID(task_t *task);
 
+/**************************************************************************************************/
+
+/*
+ * Description: The function returns interval of a given task
+ * Parameters: @task - the task
+ * Return: @ilrd_uid_t - interval of task
+ * Time complexity: O(1)
+*/
+time_t TaskGetInterval(task_t *task);
+
+/*
+ * Description: The function set new interval of a given task
+ * Parameters: @task - the task, new interval(sec).
+ * Return: @ilrd_uid_t - new interval of task
+ * Time complexity: O(1)
+*/
+time_t TaskSetInterval(task_t *task, time_t new_interval);
+
+/*
+ * Description: The function set is_repeated param to 1
+ * Parameters: @task - the task
+ * Return: 
+ * Time complexity: O(1)
+*/
+
+void TaskSetONRepeat(task_t *task);
+
+/*
+ * Description: The function set is_repeated param to 0
+ * Parameters: @task - the task
+ * Return: 
+ * Time complexity: O(1)
+*/
+
+void TaskSetOFFRepeat(task_t *task);
+
+
 #endif /* __TASK_H__ */
 
