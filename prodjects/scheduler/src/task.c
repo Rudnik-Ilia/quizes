@@ -11,6 +11,7 @@ struct task
 {
     int (*task_func)(void *params);
     void *params;
+    size_t lap;
     int is_repeated;
     ilrd_uid_t uid;
     time_t interval;
@@ -32,6 +33,7 @@ task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task
 	
 	new_task -> task_func = task_func;
 	new_task -> params = params;
+	new_task -> lap = 0;
 	new_task -> is_repeated = is_repeating;
 	new_task -> uid = uid;
 	new_task -> interval = interval;
@@ -77,7 +79,8 @@ void TaskCalculateNewTime(task_t *task)
 
 }
 
-/**********************************************************************************/
+/*********************************MY FUNCTIONS*************************************************/
+
 time_t TaskGetInterval(task_t *task)
 {
 	assert(NULL != task);
@@ -100,6 +103,12 @@ void TaskSetOFFRepeat(task_t *task)
 {
 	assert(NULL != task);
 	task->is_repeated = 0;
+}
+
+size_t TaskGetLap(task_t *task)
+{
+	assert(NULL != task);
+	return task->lap;
 }
 
 

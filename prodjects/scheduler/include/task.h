@@ -115,6 +115,17 @@ void TaskSetONRepeat(task_t *task);
 
 void TaskSetOFFRepeat(task_t *task);
 
+/*
+ * Description: The function return lap param from the task
+ * Parameters: @task - the task
+ * Return: size_t 
+ * Time complexity: O(1)
+*/
+size_t TaskGetLap(task_t *task)
+
+
+
+
 
 #endif /* __TASK_H__ */
 

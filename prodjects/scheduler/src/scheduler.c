@@ -97,21 +97,16 @@ void SchedRun(sched_t *sched)
 	
 	while(sched->is_running &&  !SchedIsEmpty(sched))
 	{	
-		printf("enter loop\n");
-		
 		tmp = PQPeek(sched->tasks);
 		interval = TaskGetInterval(tmp);
 		
-		printf("%ld\n", interval);
 		sleep(interval);
 		
 		TaskExecute(tmp);
-	
 		PQDequeue(sched->tasks);
 		
 		if(TaskIsRepeating(tmp))
 		{	
-			printf("enter if\n");
 			TaskSetInterval(tmp, interval);
 			PQEnqueue(sched->tasks, tmp);
 			++count;
@@ -120,7 +115,6 @@ void SchedRun(sched_t *sched)
 			{
 				TaskSetOFFRepeat(tmp);
 			}
-			
 		}
 		else
 		{
