@@ -89,17 +89,20 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 void SchedRun(sched_t *sched)
 {	
 	task_t *tmp = NULL;
+	time_t my_time = 0;
 	
 	assert(NULL != sched);
 	sched->is_running = 1;
 	
 	while(sched->is_running &&  !SchedIsEmpty(sched))
 	{	
-		tmp = PQPeek(sched->tasks);
+		printf("enter loop\n");
 		
-		printf("!\n");
-		printf("%ld\n", TaskGetTime(tmp) - time(0));
-		sleep(TaskGetTime(tmp) - time(0));
+		tmp = PQPeek(sched->tasks);
+		my_time = (TaskGetTime(tmp) - time(0));
+		
+		printf("%ld\n", my_time);
+		sleep(my_time);
 		
 		TaskExecute(tmp);
 	
@@ -107,7 +110,7 @@ void SchedRun(sched_t *sched)
 		
 		if(TaskIsRepeating(tmp))
 		{	
-			printf("?\n");
+			printf("enter if\n");
 			TaskCalculateNewTime(tmp);
 			PQEnqueue(sched->tasks, tmp);
 		}
@@ -115,12 +118,15 @@ void SchedRun(sched_t *sched)
 		{
 			TaskDestroy(tmp);
 		}
-		/*
-		TaskExecute((task_t*)PQPeek(sched->tasks));
-		*/
 	}
-
 }
+
+void SchedStop(sched_t *sched)
+{
+	assert(NULL != sched);
+	sched->is_running = 0;
+}
+
 
 void SchedRemoveTask(sched_t *sched, ilrd_uid_t uid)
 {

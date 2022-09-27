@@ -47,7 +47,7 @@ int main()
 	
 	printf("Size: %ld\n",SchedSize(new_sched));
 	
-	thrid = SchedAddTask(new_sched, 0, 10, Exam3, &a);
+	thrid = SchedAddTask(new_sched, 0, 6, Exam3, &a);
 	
 	printf("ISempty: %d\n",SchedIsEmpty(new_sched));
 	

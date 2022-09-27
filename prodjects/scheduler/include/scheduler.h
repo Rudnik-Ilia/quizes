@@ -70,10 +70,10 @@ void SchedRun(sched_t *sched);
 /*
  * Description: The function stops execution of the tasks in scheduler
  * Parameters: @sched - a pointer to the scheduler to be stopped
- * Return: @int is status from task function that called @SchedStop
+ * Return: 
  * Time complexity: O(1)
 */
-int SchedStop(sched_t *sched);
+void SchedStop(sched_t *sched);
 
 /*
  * Description: The function counts the number of tasks in a scheduler
