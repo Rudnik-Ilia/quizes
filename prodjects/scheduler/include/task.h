@@ -121,7 +121,7 @@ void TaskSetOFFRepeat(task_t *task);
  * Return: size_t 
  * Time complexity: O(1)
 */
-size_t TaskGetLap(task_t *task)
+size_t TaskGetLap(task_t *task);
 
 
 

@@ -95,7 +95,7 @@ void SchedRun(sched_t *sched)
 	assert(NULL != sched);
 	sched->is_running = 1;
 	
-	while(sched->is_running &&  !SchedIsEmpty(sched))
+	while(sched->is_running && !SchedIsEmpty(sched))
 	{	
 		tmp = PQPeek(sched->tasks);
 		interval = TaskGetInterval(tmp);

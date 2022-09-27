@@ -24,6 +24,12 @@ int Exam3(void *x)
 	printf("thrid\n");
 	return *(int*)x*100;
 }
+int Stop(void *x)
+{
+	printf("stop\n");
+	SchedStop(x);
+	return 0;
+}
 
 
 int main()
@@ -31,6 +37,7 @@ int main()
 	ilrd_uid_t first;
 	ilrd_uid_t second;
 	ilrd_uid_t thrid;
+	ilrd_uid_t stop;
 	
 	
 	int a = 11;
@@ -51,6 +58,8 @@ int main()
 	
 	printf("ISempty: %d\n",SchedIsEmpty(new_sched));
 	
+	
+	stop = SchedAddTask(new_sched, 0, 8, Stop, new_sched);
 	
 	SchedRun(new_sched);
 	/*
