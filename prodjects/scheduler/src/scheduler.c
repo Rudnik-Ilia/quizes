@@ -25,6 +25,8 @@ struct scheduler
 {
     pq_t *tasks;
     int is_running;
+    
+    ilrd_uid_t error;
 };
 
 
@@ -61,6 +63,7 @@ sched_t *SchedCreate(void)
 		return NULL;
 	}
 	new_sched -> is_running = 0;
+	new_sched->error = BadUID;
 
 	return new_sched;
 }
@@ -82,6 +85,8 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 		free(new_task);
 		return BadUID;
 	}
+	
+	
 	return new_uid;
 
 }
@@ -105,6 +110,7 @@ void SchedRun(sched_t *sched)
 		if(-1 == TaskExecute(tmp))
 		{
 			printf("ERROR");
+			sched->error = TaskGetUID(tmp);
 			SchedStop(sched);
 			break;
 			
@@ -144,7 +150,7 @@ void SchedRemoveTask(sched_t *sched, ilrd_uid_t uid)
 {
 	void * id = &uid;
 	assert(NULL != sched);
-	PQErase(sched->tasks, CompareUID, id);	
+	TaskDestroy((task_t*)PQErase(sched->tasks, CompareUID, id));	
 }
 
 void SchedDestroy(sched_t *sched)
