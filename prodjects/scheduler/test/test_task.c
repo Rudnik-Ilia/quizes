@@ -34,8 +34,6 @@ int main()
 	
 	TEST("For UID NOT the same", UIDIsSame(TaskGetUID(new2), TaskGetUID(new)),1);
 	
-
-
 	TaskDestroy(new2);
 	TaskDestroy(new);
 	PASS;

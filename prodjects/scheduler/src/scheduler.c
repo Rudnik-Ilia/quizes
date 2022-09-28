@@ -99,7 +99,6 @@ int SchedRun(sched_t *sched)
 	time_t interval = 0;
 	int error = 0;
 	
-	
 	assert(NULL != sched);
 	sched->is_running = 1;
 	
@@ -109,19 +108,18 @@ int SchedRun(sched_t *sched)
 		interval = TaskGetInterval(tmp);
 		
 		sleep(interval);
-		
-		if(0 > (error = TaskExecute(tmp)))
+		if(0 != TaskExecute(tmp))
 		{
+		
 			#ifndef NDEBUG
 			sched->error = TaskGetUID(tmp);
 			#endif
 			
 			LOGERROR("FUNCTION FAIL");
 			
-			SchedStop(sched);
-			break;
-			
+			return error;
 		}
+		
 		PQDequeue(sched->tasks);
 		
 		if(TaskIsRepeating(tmp))
@@ -129,15 +127,7 @@ int SchedRun(sched_t *sched)
 			TaskSetInterval(tmp, interval);
 			PQEnqueue(sched->tasks, tmp);
 			TaskSetOFFRepeat(tmp);
-			/*
-			++count;
-			
-			if(2 == count)
-			{
-				TaskSetOFFRepeat(tmp);
-			}
-			
-			*/
+
 		}
 		else
 		{
@@ -182,7 +172,11 @@ int SchedIsEmpty(const sched_t *sched)
 void SchedClear(sched_t *sched)
 {
 	assert(NULL != sched);
-	PQFlush(sched->tasks);
+	while (!PQIsEmpty(sched->tasks))
+	{
+		task_t *task = PQDequeue(sched->tasks);
+		TaskDestroy(task);
+	}
 }
 
 
