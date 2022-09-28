@@ -44,7 +44,6 @@ task_t *TaskCreate(ilrd_uid_t uid, time_t interval, int is_repeating, int (*task
 
 void TaskDestroy(task_t *task)
 {
-	assert(NULL != task);
 	free(task); 
 }
 

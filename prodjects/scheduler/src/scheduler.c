@@ -96,9 +96,9 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 int SchedRun(sched_t *sched)
 {	
 	task_t *tmp = NULL;
-	time_t interval = 0;
 	time_t mytime = 0;
 	int error = 0;
+	ilrd_uid_t uid= BadUID;
 	
 	assert(NULL != sched);
 	sched->is_running = 1;
@@ -106,42 +106,45 @@ int SchedRun(sched_t *sched)
 	while(sched->is_running && !SchedIsEmpty(sched))
 	{	
 		tmp = PQPeek(sched->tasks);
+		mytime = time(NULL);
+		uid = TaskGetUID(tmp);
+		
 		/*
 		interval = TaskGetInterval(tmp);
 		*/
-		mytime = time(NULL);
 		
 		sleep(TaskGetTime(tmp)-mytime);
 		
 		
 		if(0 != TaskExecute(tmp))
 		{
-		
 			#ifndef NDEBUG
 			sched->error = TaskGetUID(tmp);
 			#endif
-			
 			LOGERROR("FUNCTION FAIL");
-			
 			return error;
 		}
 		
-		PQDequeue(sched->tasks);
 		
-		if(TaskIsRepeating(tmp))
-		{	
-			TaskCalculateNewTime(tmp);;
-			PQEnqueue(sched->tasks, tmp);
-			
-			/*
-			TaskSetOFFRepeat(tmp);
-			*/
-
-		}
-		else
+		
+		if(!PQIsEmpty(sched->tasks) && UIDIsSame(uid, TaskGetUID(PQPeek(sched->tasks))))
 		{
-			TaskDestroy(tmp);
-		}
+			PQDequeue(sched->tasks);
+			
+			if(TaskIsRepeating(tmp))
+			{	
+				TaskCalculateNewTime(tmp);;
+				PQEnqueue(sched->tasks, tmp);
+				
+				/*
+				TaskSetOFFRepeat(tmp);
+				*/
+			}
+			else
+			{
+				TaskDestroy(tmp);
+			}
+		}	
 	}
 	return error;
 }
@@ -162,9 +165,12 @@ void SchedRemoveTask(sched_t *sched, ilrd_uid_t uid)
 
 void SchedDestroy(sched_t *sched)
 {
+	assert(NULL != sched);
+	SchedClear(sched);	
 	PQDestroy(sched->tasks);
-	free(sched);
+	free(sched);	
 }
+
 
 size_t SchedSize(const sched_t *sched)
 {	
