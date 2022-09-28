@@ -29,7 +29,7 @@ struct task
  * Return: @task_t* is a pointer to the created Task or NULL if failed
  * Time complexity: O(1)
 */
-task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task_func)(void *params), void *params);
+task_t *TaskCreate(ilrd_uid_t uid, time_t interval, int is_repeating, int (*task_func)(void *params), void *params);
 
 /*
  * Description: The function destroys a task 

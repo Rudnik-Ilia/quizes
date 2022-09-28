@@ -18,7 +18,7 @@ struct task
     time_t exec_time;
 };
 
-task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task_func)(void *params), void *params)
+task_t *TaskCreate(ilrd_uid_t uid, time_t interval, int is_repeating, int (*task_func)(void *params), void *params)
 {	
 	task_t *new_task = (task_t*)malloc(sizeof(task_t));
 	
@@ -37,7 +37,7 @@ task_t *TaskCreate(ilrd_uid_t uid, int is_repeating, time_t interval, int (*task
 	new_task -> is_repeated = is_repeating;
 	new_task -> uid = uid;
 	new_task -> interval = interval;
-	new_task -> exec_time = time(0) + interval;
+	new_task -> exec_time = time(NULL) + interval;
 	
 	return new_task;
 }
@@ -75,7 +75,7 @@ ilrd_uid_t TaskGetUID(task_t *task)
 void TaskCalculateNewTime(task_t *task)
 {
 	assert(NULL != task);
-	task->exec_time = time(0) + task->interval;
+	task->exec_time = time(NULL) + task->interval;
 
 }
 

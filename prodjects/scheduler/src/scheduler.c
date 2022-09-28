@@ -97,6 +97,7 @@ int SchedRun(sched_t *sched)
 {	
 	task_t *tmp = NULL;
 	time_t interval = 0;
+	time_t mytime = 0;
 	int error = 0;
 	
 	assert(NULL != sched);
@@ -105,9 +106,14 @@ int SchedRun(sched_t *sched)
 	while(sched->is_running && !SchedIsEmpty(sched))
 	{	
 		tmp = PQPeek(sched->tasks);
+		/*
 		interval = TaskGetInterval(tmp);
+		*/
+		mytime = time(NULL);
 		
-		sleep(interval);
+		sleep(TaskGetTime(tmp)-mytime);
+		
+		
 		if(0 != TaskExecute(tmp))
 		{
 		
@@ -124,9 +130,12 @@ int SchedRun(sched_t *sched)
 		
 		if(TaskIsRepeating(tmp))
 		{	
-			TaskSetInterval(tmp, interval);
+			TaskCalculateNewTime(tmp);;
 			PQEnqueue(sched->tasks, tmp);
+			
+			/*
 			TaskSetOFFRepeat(tmp);
+			*/
 
 		}
 		else
@@ -171,7 +180,7 @@ int SchedIsEmpty(const sched_t *sched)
 
 void SchedClear(sched_t *sched)
 {
-	assert(NULL != sched);
+	assert(NULL != sched);     
 	while (!PQIsEmpty(sched->tasks))
 	{
 		task_t *task = PQDequeue(sched->tasks);
