@@ -65,7 +65,7 @@ void SchedRemoveTask(sched_t *sched, ilrd_uid_t uid);
  * Return: nothing
  * Time complexity: O(∞)
  */
-void SchedRun(sched_t *sched);
+int SchedRun(sched_t *sched);
 
 /*
  * Description: The function stops execution of the tasks in scheduler

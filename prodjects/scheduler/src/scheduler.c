@@ -25,8 +25,10 @@ struct scheduler
 {
     pq_t *tasks;
     int is_running;
-    
+    #ifndef NDEBUG
     ilrd_uid_t error;
+    #endif
+	
 };
 
 
@@ -35,9 +37,6 @@ static int CompareTime(const void *tsk1, const void *tsk2)
 	assert(NULL != tsk1);
 	assert(NULL != tsk2);
 	return TaskGetTime((task_t *)tsk1) - TaskGetTime((task_t *)tsk2); 
-	/*
-	return TaskGetTime((task_t *)tsk1) == TaskGetTime((task_t *)tsk2);
-	*/
 }
 
 static int CompareUID(const void *task, void *uid)
@@ -63,8 +62,11 @@ sched_t *SchedCreate(void)
 		return NULL;
 	}
 	new_sched -> is_running = 0;
+	
+	#ifndef NDEBUG
 	new_sched->error = BadUID;
-
+	#endif
+	
 	return new_sched;
 }
 
@@ -91,11 +93,12 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 
 }
 
-void SchedRun(sched_t *sched)
+int SchedRun(sched_t *sched)
 {	
 	task_t *tmp = NULL;
 	time_t interval = 0;
-	size_t count = 0;
+	int error = 0;
+	
 	
 	assert(NULL != sched);
 	sched->is_running = 1;
@@ -107,10 +110,14 @@ void SchedRun(sched_t *sched)
 		
 		sleep(interval);
 		
-		if(-1 == TaskExecute(tmp))
+		if(0 > (error = TaskExecute(tmp)))
 		{
-			printf("ERROR");
+			#ifndef NDEBUG
 			sched->error = TaskGetUID(tmp);
+			#endif
+			
+			LOGERROR("FUNCTION FAIL");
+			
 			SchedStop(sched);
 			break;
 			
@@ -137,6 +144,7 @@ void SchedRun(sched_t *sched)
 			TaskDestroy(tmp);
 		}
 	}
+	return error;
 }
 
 void SchedStop(sched_t *sched)
