@@ -102,19 +102,29 @@ void SchedRun(sched_t *sched)
 		
 		sleep(interval);
 		
-		TaskExecute(tmp);
+		if(-1 == TaskExecute(tmp))
+		{
+			printf("ERROR");
+			SchedStop(sched);
+			break;
+			
+		}
 		PQDequeue(sched->tasks);
 		
 		if(TaskIsRepeating(tmp))
 		{	
 			TaskSetInterval(tmp, interval);
 			PQEnqueue(sched->tasks, tmp);
+			TaskSetOFFRepeat(tmp);
+			/*
 			++count;
 			
 			if(2 == count)
 			{
 				TaskSetOFFRepeat(tmp);
 			}
+			
+			*/
 		}
 		else
 		{
@@ -134,8 +144,7 @@ void SchedRemoveTask(sched_t *sched, ilrd_uid_t uid)
 {
 	void * id = &uid;
 	assert(NULL != sched);
-	PQErase(sched->tasks, CompareUID, id);
-	
+	PQErase(sched->tasks, CompareUID, id);	
 }
 
 void SchedDestroy(sched_t *sched)
