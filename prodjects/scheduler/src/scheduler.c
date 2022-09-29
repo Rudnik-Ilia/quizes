@@ -97,7 +97,7 @@ int SchedRun(sched_t *sched)
 {	
 	task_t *tmp = NULL;
 	time_t mytime = 0;
-	int error = 0;
+	int status = 0;
 	ilrd_uid_t uid= BadUID;
 	
 	assert(NULL != sched);
@@ -116,13 +116,13 @@ int SchedRun(sched_t *sched)
 		sleep(TaskGetTime(tmp)-mytime);
 		
 		
-		if(0 != TaskExecute(tmp))
+		if(0 != (status = TaskExecute(tmp)))
 		{
 			#ifndef NDEBUG
 			sched->error = TaskGetUID(tmp);
 			#endif
 			LOGERROR("FUNCTION FAIL");
-			return error;
+			return status;
 		}
 		
 		
@@ -146,7 +146,7 @@ int SchedRun(sched_t *sched)
 			}
 		}	
 	}
-	return error;
+	return status;
 }
 
 void SchedStop(sched_t *sched)

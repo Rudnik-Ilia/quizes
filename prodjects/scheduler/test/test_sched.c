@@ -71,6 +71,7 @@ int main()
 	
 	printf("ISempty: %d\n",SchedIsEmpty(new_sched));
 	
+	SchedAddTask(new_sched, 15, 0, Stop, new_sched);
 	
 	printf("Size: %ld\n",SchedSize(new_sched));
 	
@@ -80,8 +81,10 @@ int main()
 	
 	SchedRun(new_sched);
 	
+	printf("Size: %ld\n",SchedSize(new_sched));
+	
+	
 	/*
-	SchedAddTask(new_sched, 10, 0, Stop, new_sched);
 	SchedAddTask(new_sched, 4, 0, ExamFail, &a);
 	printf("Size after remove: %ld\n",SchedSize(new_sched));
 	SchedRemoveTask(new_sched, first);
