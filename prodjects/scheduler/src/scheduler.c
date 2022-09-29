@@ -78,6 +78,12 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 	
 	void *new_task = TaskCreate(new_uid, interval_in_sec, is_repeating, task_func, params);
 	
+	if(NULL == new_tasks)
+	{
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+	}
+	
 	assert(NULL != sched);
 	assert(NULL != task_func);
 	
