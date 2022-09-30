@@ -20,7 +20,7 @@ struct task
 
 task_t *TaskCreate(ilrd_uid_t uid, time_t interval, int is_repeating, int (*task_func)(void *params), void *params)
 {	
-	task_t *new_task = (task_t*)malloc(sizeof(1000000000));
+	task_t *new_task = (task_t*)malloc(sizeof(task_t));
 	
 	assert(NULL != task_func);
 	

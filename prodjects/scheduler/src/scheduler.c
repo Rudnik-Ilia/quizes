@@ -78,10 +78,10 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 	
 	void *new_task = TaskCreate(new_uid, interval_in_sec, is_repeating, task_func, params);
 	
-	if(NULL == new_tasks)
+	if(NULL == new_task)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
-		return NULL;
+		return BadUID;
 	}
 	
 	assert(NULL != sched);
@@ -118,8 +118,9 @@ int SchedRun(sched_t *sched)
 		/*
 		interval = TaskGetInterval(tmp);
 		*/
-		
+		printf("%d\n", TaskGetTime(tmp)-mytime);
 		sleep(TaskGetTime(tmp)-mytime);
+		
 		
 		
 		if(0 != (status = TaskExecute(tmp)))
@@ -141,8 +142,8 @@ int SchedRun(sched_t *sched)
 			{	
 				TaskCalculateNewTime(tmp);;
 				PQEnqueue(sched->tasks, tmp);
-				
 				/*
+				TaskSetInterval(tmp, 10);
 				TaskSetOFFRepeat(tmp);
 				*/
 			}
