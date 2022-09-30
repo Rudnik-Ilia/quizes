@@ -118,7 +118,6 @@ int SchedRun(sched_t *sched)
 		/*
 		interval = TaskGetInterval(tmp);
 		*/
-		printf("%d\n", TaskGetTime(tmp)-mytime);
 		sleep(TaskGetTime(tmp)-mytime);
 		
 		
@@ -140,8 +139,9 @@ int SchedRun(sched_t *sched)
 			
 			if(TaskIsRepeating(tmp))
 			{	
-				TaskCalculateNewTime(tmp);;
+				TaskCalculateNewTime(tmp);
 				PQEnqueue(sched->tasks, tmp);
+				
 				/*
 				TaskSetInterval(tmp, 10);
 				TaskSetOFFRepeat(tmp);
