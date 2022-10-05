@@ -16,7 +16,9 @@ int main()
 	void *block2 = NULL;
 	void *block3 = NULL;
 	
-	void *space = (void *)malloc(100);
+	void *tmp = NULL;
+	
+	void *space = (void *)calloc(100, 1);
 	if(NULL == space)
 	{
 		puts("ERROR!");
@@ -69,7 +71,28 @@ int main()
 	printf("freespace: %ld\n", fsa->freespace);
 	printf("block size: %ld\n", fsa->block_size);
 	printf("count: %ld\n", FSACountFree(fsa));
-
+	
+	printf("---------------------------------------------\n");
+	FSAFree(fsa, block2);
+	printf("Block: %p\n", block2);
+	printf("BASE: %p\n", fsa->base);
+	
+	
+	printf("offset: %ld\n", fsa->offset);
+	printf("freespace: %ld\n", fsa->freespace);
+	printf("block size: %ld\n", fsa->block_size);
+	printf("count: %ld\n", FSACountFree(fsa));
+	
+	printf("---------------------------------------------\n");
+	tmp = FSAAlloc(fsa);
+	printf("Block: %p\n", tmp);
+	printf("BASE: %p\n", fsa->base);
+	
+	
+	printf("offset: %ld\n", fsa->offset);
+	printf("freespace: %ld\n", fsa->freespace);
+	printf("block size: %ld\n", fsa->block_size);
+	printf("count: %ld\n", FSACountFree(fsa));
 
 return 0;
 }
