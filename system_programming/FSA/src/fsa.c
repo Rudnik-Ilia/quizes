@@ -6,7 +6,6 @@
 #include "fsa.h"
 
 
-
 /*
 struct fsa{
 	void *base;
@@ -21,14 +20,16 @@ struct fsa{
 fsa_t *FSAInit(void *memory, size_t mem_size, size_t block_size)
 {
 	fsa_t* fsa = NULL;
-	
+	size_t freespace = 0;
 	assert(NULL != memory);
 	
 	fsa = (fsa_t*)memory;
 	fsa->base = (void*)(fsa + sizeof(fsa_t));
-	fsa->freespace = mem_size - sizeof(fsa_t); /*???????????*/
 	fsa->block_size = (block_size - block_size % 8) + 8;
 	fsa->offset = 0;
+	freespace = mem_size - sizeof(fsa_t);
+	
+
 
 	return fsa;
 }

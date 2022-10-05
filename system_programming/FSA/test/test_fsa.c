@@ -93,6 +93,51 @@ int main()
 	printf("freespace: %ld\n", fsa->freespace);
 	printf("block size: %ld\n", fsa->block_size);
 	printf("count: %ld\n", FSACountFree(fsa));
-
+	
+	
+	printf("---------------------------------------------\n");
+	FSAFree(fsa, block3);
+	printf("Block: %p\n", block3);
+	printf("BASE: %p\n", fsa->base);
+	
+	
+	printf("offset: %ld\n", fsa->offset);
+	printf("freespace: %ld\n", fsa->freespace);
+	printf("block size: %ld\n", fsa->block_size);
+	printf("count: %ld\n", FSACountFree(fsa));
+	
+	printf("---------------------------------------------\n");
+	FSAFree(fsa, block2);
+	printf("Block: %p\n", block2);
+	printf("BASE: %p\n", fsa->base);
+	
+	
+	printf("offset: %ld\n", fsa->offset);
+	printf("freespace: %ld\n", fsa->freespace);
+	printf("block size: %ld\n", fsa->block_size);
+	printf("count: %ld\n", FSACountFree(fsa));
+	
+	printf("---------------------------------------------\n");
+	FSAFree(fsa, block1);
+	printf("Block: %p\n", block1);
+	printf("BASE: %p\n", fsa->base);
+	
+	
+	printf("offset: %ld\n", fsa->offset);
+	printf("freespace: %ld\n", fsa->freespace);
+	printf("block size: %ld\n", fsa->block_size);
+	printf("count: %ld\n", FSACountFree(fsa));
+	
+	printf("---------------------------------------------\n");
+	block1 = FSAAlloc(fsa);
+	assert(NULL != block1);
+	printf("Block: %p\n", block1);
+	printf("BASE: %p\n", fsa->base);
+	
+	
+	printf("offset: %ld\n", fsa->offset);
+	printf("freespace: %ld\n", fsa->freespace);
+	printf("block size: %ld\n", fsa->block_size);
+	printf("count: %ld\n", FSACountFree(fsa));
 return 0;
 }
