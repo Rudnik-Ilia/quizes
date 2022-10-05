@@ -24,10 +24,12 @@ int main()
 	printf("%p\n", fsa);
 	printf("%p\n", fsa->base);
 	
-	printf("%ld\n", fsa->offset);
-	printf("%ld\n", fsa->count);
-	printf("%ld\n", fsa->freespace);
-	printf("%ld\n", fsa->block_size);
+	printf("offset: %ld\n", fsa->offset);
+	printf("count: %ld\n", fsa->count);
+	printf("freespace: %ld\n", fsa->freespace);
+	printf("block size: %ld\n", fsa->block_size);
+	
+	printf("count: %ld\n", FSACountFree(fsa));
 	
 
 
