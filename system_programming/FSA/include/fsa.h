@@ -7,7 +7,7 @@ typedef struct fsa fsa_t;
 struct fsa{
 	void *base;
 	size_t offset;
-	size_t count;
+	size_t next_offset;
 	size_t block_size;
 	size_t freespace;
 }; 
