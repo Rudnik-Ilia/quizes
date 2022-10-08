@@ -12,7 +12,7 @@ struct fsa{
 	size_t offset;
 }; 
 */
-size_t static ResizeBlock(size_t block_size)
+static size_t ResizeBlock(size_t block_size)
 {
 	return (block_size - block_size % CHAR_BIT) + CHAR_BIT;
 }
@@ -25,7 +25,7 @@ fsa_t *FSAInit(void *memory, size_t mem_size, size_t block_size)
 	size_t number_of_blocks = 0;
 	size_t tmp_offset = sizeof(fsa_t);
 	
-	assert(0 != mem_size);
+	assert(tmp_offset <= mem_size);
 	assert(NULL != memory);
 	
 	fsa = (fsa_t *)memory;
@@ -34,26 +34,20 @@ fsa_t *FSAInit(void *memory, size_t mem_size, size_t block_size)
 	block_size = ResizeBlock(block_size);
 	number_of_blocks = (mem_size - tmp_offset)/block_size;
 	
-	
-	for(; i < number_of_blocks - 1; ++i)
+	for(; i < number_of_blocks; ++i)
 	{	
 		*(size_t*)((char*)fsa + tmp_offset) = tmp_offset + block_size;
 		tmp_offset += block_size;
 		
 	}
+	*(size_t*)((char*)fsa + tmp_offset) = 0;
+	
+	printf("TMP:%ld\n", tmp_offset);
 	printf("OFF:%ld\n", fsa->offset);
 	
-	printf("%ld\n", block_size);
-	printf("%ld\n", number_of_blocks);
 
 	return fsa;
-	
-/*
-	(void *)((size_t)fsa->base + offset) = 0;
-	freespace = ((mem_size - sizeof(fsa_t)) / block_size) * block_size;
-	size_t freespace = 0;
-	
-*/
+
 }
 	
 	
@@ -63,12 +57,18 @@ void *FSAAlloc(fsa_t *fsa)
 {
 	void *memory = NULL;
 
-	
 	assert(NULL != fsa);
 	
-	memory = (void *)((char *)fsa + fsa->offset);
+	if((char *)fsa == (char *)(fsa + fsa->offset))
+	{
+		printf("STOP!!!\n");
+	}
 	
-	printf("ID: %ld\n", *(size_t *)memory);
+	
+	memory = (void *)((char *)fsa + fsa->offset);
+	fsa->offset = *(size_t *)memory;
+	
+	printf("ID NEXT: %ld\n", *(size_t *)memory);
 	return memory;
 }
 
@@ -77,8 +77,13 @@ void FSAFree(fsa_t *fsa, void *block_to_free)
 	assert(NULL != fsa);
 	assert(NULL != block_to_free);
 	
-	*(char*)block_to_free = fsa->offset;
+
+	
+	*(size_t *)block_to_free = fsa->offset;
 	fsa->offset = (char*)block_to_free - (char*)fsa;
+	
+	printf("FREE: %ld\n", fsa->offset);
+	
 }
 
 size_t FSACountFree(const fsa_t *fsa)
