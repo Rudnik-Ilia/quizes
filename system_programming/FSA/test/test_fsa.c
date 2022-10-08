@@ -29,15 +29,15 @@ int main()
 	printf("BASE: %p\n", fsa + fsa->offset);
 	
 	
-	/*
-	printf("%p\n", space);
+	
 	printf("---------------------------------------------\n");
 	block1 = FSAAlloc(fsa);
 	assert(NULL != block1);
+	printf("BASE: %p\n", fsa + fsa->offset);	
 	printf("Block: %p\n", block1);
-	printf("BASE: %p\n", fsa);	
 	printf("offset: %ld\n", fsa->offset);
 
+	/*
 	
 	printf("---------------------------------------------\n");
 	block2 = FSAAlloc(fsa);

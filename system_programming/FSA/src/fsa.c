@@ -21,6 +21,8 @@ size_t static ResizeBlock(size_t block_size)
 fsa_t *FSAInit(void *memory, size_t mem_size, size_t block_size)
 {
 	fsa_t* fsa = NULL;
+	size_t i = 0;
+	size_t number_of_blocks = 0;
 	size_t tmp_offset = sizeof(fsa_t);
 	
 	assert(0 != mem_size);
@@ -30,22 +32,28 @@ fsa_t *FSAInit(void *memory, size_t mem_size, size_t block_size)
 	fsa->offset = tmp_offset;
 	
 	block_size = ResizeBlock(block_size);
+	number_of_blocks = (mem_size - tmp_offset)/block_size;
 	
-	/*
+	
+	for(; i < number_of_blocks - 1; ++i)
+	{	
+		*(size_t*)((char*)fsa + tmp_offset) = tmp_offset + block_size;
+		tmp_offset += block_size;
+		
+	}
+	printf("OFF:%ld\n", fsa->offset);
+	
+	printf("%ld\n", block_size);
+	printf("%ld\n", number_of_blocks);
+
+	return fsa;
+	
+/*
+	(void *)((size_t)fsa->base + offset) = 0;
 	freespace = ((mem_size - sizeof(fsa_t)) / block_size) * block_size;
 	size_t freespace = 0;
 	
-	while (mem_size - offset >= block_size)
-	{	
-		(void *)((size_t)fsa->base + offset) =(size_t)fsa->base + offset + block_size);
-		offset += block_size;	
-	}
-	(void *)((size_t)fsa->base + offset) = 0;
 */
-	
-	printf("%ld\n", block_size);
-
-	return fsa;
 }
 	
 	
@@ -58,21 +66,9 @@ void *FSAAlloc(fsa_t *fsa)
 	
 	assert(NULL != fsa);
 	
-	memory = (char*)fsa + fsa->offset;
+	memory = (void *)((char *)fsa + fsa->offset);
 	
-	
-	
-	if(*(char*)memory)
-	{
-		fsa->offset = *(char*)memory;
-	}
-	else
-	{		
-		
-		fsa->offset += fsa->offset;	
-	}	
-	
-	printf("ID: %d\n", *(char*)memory);
+	printf("ID: %ld\n", *(size_t *)memory);
 	return memory;
 }
 
