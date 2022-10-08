@@ -15,23 +15,22 @@ int main()
 	void *block1 = NULL;
 	void *block2 = NULL;
 	void *block3 = NULL;
-	
 	void *block4 = NULL;
 	
-	void *space = (void *)calloc(100, 1);
+	void *space = (void *)malloc(100);
 	if(NULL == space)
 	{
 		puts("ERROR!");
 	}
 	
 	fsa = FSAInit(space, 100, 10);
-	
-	printf("%p\n", space);
-	printf("BASE: %p\n", fsa);
 	printf("offset: %ld\n", fsa->offset);
-	printf("block size: %ld\n", fsa->block_size);
+	printf("BASE: %p\n", fsa);
+	printf("BASE: %p\n", fsa + fsa->offset);
 	
 	
+	/*
+	printf("%p\n", space);
 	printf("---------------------------------------------\n");
 	block1 = FSAAlloc(fsa);
 	assert(NULL != block1);
@@ -84,7 +83,7 @@ int main()
 	printf("BASE: %p\n", fsa);
 	printf("offset: %ld\n", fsa->offset);
 
-	
+	*/
 
 
 	

@@ -6,53 +6,70 @@
 
 #include "fsa.h"
 
-#define CAFE (void*) 0xCAFEBABE 
 
 /*
 struct fsa{
 	size_t offset;
-	size_t block_size;
 }; 
 */
-
+size_t static ResizeBlock(size_t block_size)
+{
+	return (block_size - block_size % CHAR_BIT) + CHAR_BIT;
+}
 
 
 fsa_t *FSAInit(void *memory, size_t mem_size, size_t block_size)
 {
 	fsa_t* fsa = NULL;
-	
-	size_t freespace = 0;
-	
+	size_t tmp_offset = sizeof(fsa_t);
 	
 	assert(0 != mem_size);
 	assert(NULL != memory);
 	
-	fsa = (void*)((char*)memory + sizeof(fsa_t));
+	fsa = (fsa_t *)memory;
+	fsa->offset = tmp_offset;
 	
-	fsa->block_size = (block_size - block_size % CHAR_BIT) + CHAR_BIT;
-	fsa->offset = 0;
-	freespace = ((mem_size - sizeof(fsa_t)) / fsa->block_size) * fsa->block_size;
+	block_size = ResizeBlock(block_size);
 	
-
-	printf("%ld\n", freespace);
+	/*
+	freespace = ((mem_size - sizeof(fsa_t)) / block_size) * block_size;
+	size_t freespace = 0;
+	
+	while (mem_size - offset >= block_size)
+	{	
+		(void *)((size_t)fsa->base + offset) =(size_t)fsa->base + offset + block_size);
+		offset += block_size;	
+	}
+	(void *)((size_t)fsa->base + offset) = 0;
+*/
+	
+	printf("%ld\n", block_size);
 
 	return fsa;
 }
+	
+	
+
 
 void *FSAAlloc(fsa_t *fsa)
 {
 	void *memory = NULL;
+
 	
 	assert(NULL != fsa);
 	
 	memory = (char*)fsa + fsa->offset;
+	
+	
+	
 	if(*(char*)memory)
 	{
 		fsa->offset = *(char*)memory;
 	}
 	else
 	{		
-		fsa->offset += fsa->block_size;	
+		
+		fsa->offset += fsa->offset;	
 	}	
 	
 	printf("ID: %d\n", *(char*)memory);
@@ -76,6 +93,11 @@ size_t FSACountFree(const fsa_t *fsa)
 	*/
 	return 0;
 
+}
+
+size_t FSASuggestSize(size_t num_of_blocks, size_t block_size)
+{
+	return ResizeBlock(block_size)*num_of_blocks + sizeof(fsa_t);
 }
 
 

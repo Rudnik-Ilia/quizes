@@ -6,7 +6,6 @@ typedef struct fsa fsa_t;
 
 struct fsa{
 	size_t offset;
-	size_t block_size;
 }; 
 
 
