@@ -30,7 +30,7 @@ static size_t ResizeBlock(size_t block_size)
 	return !(block_size % CHAR_BIT) ? block_size : (block_size - block_size % CHAR_BIT + CHAR_BIT);
 }
 
-static block_t *Next(block_t *block)
+block_t *Next(block_t *block)
 {
 	long step = 0;
 	assert(NULL != block);
@@ -68,7 +68,7 @@ vsa_t *VSAInit(void *memory, size_t mem_size)
 	
 	block = (block_t *)memory;
 	
-	freespace = mem_size - (sizeof(block_t) * 2);
+	freespace = mem_size - SIZE_STR * 2;
 	freespace -= freespace % CHAR_BIT;
 	
 	block->size = freespace;
@@ -84,13 +84,15 @@ vsa_t *VSAInit(void *memory, size_t mem_size)
 
 void *VSAAlloc(vsa_t *vsa, size_t block_size)
 {
-	block_t *b = (block_t *)vsa;
-	size_t old_size = 0;
-	long step = 0;
+	block_t *b = NULL;
 	void *memory = NULL;
+	size_t old_size = 0;
+	
+	assert(NULL != vsa);
+	
+	b = (block_t *)vsa;
 	
 	block_size = ResizeBlock(block_size);
-	
 	
 	while(0 != b->size )
 	{
@@ -108,30 +110,49 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 			old_size = b->size;
 			b->size = block_size * -1;
 			b = Next(b);
-			/*
-			b = (block_t *)((char *)b + SIZE_STR + block_size);	
-			*/
+		
 			b->size = old_size - block_size - SIZE_STR;
 
 			return memory;
 		}
 		else
 		{	
-			b = Next(b);
-			/*
-			step = b->size < 0 ? b->size * -1 : b->size;
-			b = (block_t *)((char *)b + step + SIZE_STR);
-			*/	
+			b = Next(b);	
 		}
 	}
 	printf("END\n");
 	return memory;
 }
 
+void VSAFree(void *block_to_free)
+{	
+	block_t *block = NULL;
+	assert(NULL != block_to_free);
+	
+	block = (block_t *)((char *)block_to_free - SIZE_STR);	
+	printf("%d\n", block->size);
+
+}
+
+/*
+
+static struct block_header *BlockGetHeader(void *block)
+{
+	assert(NULL != block);
+	return (struct block_header*)((size_t)block - sizeof(struct block_header));
+}
+
+void VSAFree(void *block_to_free)
+{
+	struct block_header *header = NULL;
+	assert(NULL != block_to_free);
+
+	header = BlockGetHeader(block_to_free);
+	assert(NULL == header->is_free);
+	header->size *= -1;
 
 
-
-
+*/
 
 
 

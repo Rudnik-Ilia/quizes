@@ -7,30 +7,36 @@
 #include "vsa.h"
 
 
-
+block_t *Next(block_t *block);
 
 int main()
 {	
-	vsa_t * arr[4] = {0};
+	void * arr[4];
 	void *memory = (void *)malloc(100);
 	vsa_t *vsa = VSAInit(memory, 100);
-	block_t * block = vsa;
+	
+	arr[0] = VSAAlloc(vsa,16);
+	arr[1] = VSAAlloc(vsa,32);
+	arr[2] = VSAAlloc(vsa,8);
 	
 	
+	assert(arr[0] != NULL && "111");
+	assert(arr[1] != NULL && "222");
+	assert(arr[2] != NULL && "333");
 	
-	assert(VSAAlloc(vsa,16) != NULL && "111");
-	printf("-----------------------------------\n");
-	assert(VSAAlloc(vsa,32) != NULL && "222");
-	printf("-----------------------------------\n");
-	assert(VSAAlloc(vsa,8) != NULL && "333");
+	VSAFree(arr[0]);
+	VSAFree(arr[1]);
+	VSAFree(arr[2]);
+	
 	/*
-	assert(VSAAlloc(vsa,8) != NULL && "444");
+	arr[3] = VSAAlloc(vsa,8);
+	assert(arr[3] != NULL && "444");
 	VSAAlloc(vsa,8);
 	printf("-----------------------------------\n");
 	printf("%ld\n", *(long*)(char *)vsa);
 	printf("%ld\n", *(long*)(char *)vsa + 24);
 	printf("%ld\n", *(long*)(char *)vsa + 64);
-	printf("%d\n",Next(block)->size);
+	VSAFree(VSAAlloc(vsa,8));
 	*/
 
 	free(memory);
