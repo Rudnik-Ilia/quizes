@@ -12,7 +12,11 @@ int main()
 {	
 	void *memory = (void *)malloc(100);
 	vsa_t *vsa = VSAInit(memory, 100);
+	
+	
+	
+	
 
-
+	free(memory);
 return 0;
 }

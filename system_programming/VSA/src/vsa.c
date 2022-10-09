@@ -2,7 +2,7 @@
 /**********************
 * Title : FSA
 * Author: Ilia Rudnik
-* Reviewer: Olga
+* Reviewer: Alena
 * Date : 12/10/2022
 * Status : approved
 **********************/
@@ -31,7 +31,8 @@ static size_t ResizeBlock(size_t block_size)
 
 
 vsa_t *VSAInit(void *memory, size_t mem_size)
-{
+{	
+	vsa_t *vsa = memory;
 	block_t * block = NULL;
 	size_t freespace = 0;
 	assert(NULL != memory);
@@ -39,10 +40,37 @@ vsa_t *VSAInit(void *memory, size_t mem_size)
 	block = (block_t *)memory;
 	
 	freespace = mem_size - (sizeof(block_t) * 2);
+	freespace -= freespace % CHAR_BIT;
 	
+	block->size = freespace;
 	
-	printf("%ld\n", sizeof(block_t) * 2);
+	block = (block_t *)((char *)memory + sizeof(block_t) + freespace);
+	block->size = 0;
 	
-	
-	return memory;
+	printf("%ld\n", freespace);
+
+	return vsa;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
