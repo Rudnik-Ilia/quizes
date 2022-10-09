@@ -13,7 +13,16 @@ struct block_header{
     
 };
 
+
 */
+typedef struct block_header{
+
+    	long size;
+    
+   	#ifndef NDEBUG
+	
+	#endif   
+}block_t;
 /*
  * Description: The function returns an instanse of VSA
  * Parameters: @memory is a pointer to the start of preallocated memory
