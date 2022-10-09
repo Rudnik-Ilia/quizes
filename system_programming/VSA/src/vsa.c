@@ -134,25 +134,7 @@ void VSAFree(void *block_to_free)
 
 }
 
-/*
 
-static struct block_header *BlockGetHeader(void *block)
-{
-	assert(NULL != block);
-	return (struct block_header*)((size_t)block - sizeof(struct block_header));
-}
-
-void VSAFree(void *block_to_free)
-{
-	struct block_header *header = NULL;
-	assert(NULL != block_to_free);
-
-	header = BlockGetHeader(block_to_free);
-	assert(NULL == header->is_free);
-	header->size *= -1;
-
-
-*/
 
 
 
