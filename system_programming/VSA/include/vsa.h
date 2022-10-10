@@ -7,23 +7,6 @@ typedef void vsa_t;
 
 /*
 
-struct block_header{
-    long size;
-    #ifndef NDEBUG....
-    
-};
-
-
-*/
-typedef struct block_header{
-
-    	long size;
-    
-   	#ifndef NDEBUG
-	
-	#endif   
-}block_t;
-/*
  * Description: The function returns an instanse of VSA
  * Parameters: @memory is a pointer to the start of preallocated memory
  *             @mem_size is amount of all bytes 
@@ -37,8 +20,10 @@ vsa_t *VSAInit(void *memory, size_t mem_size);
  * Parameters: @vsa instanse of vsa
  *             @size a block_size of needee block
  * Return: a pointer to the block of memory with size equal @size
+ * or NULL if suitable block was not found
  * Time complexity: O(n)
 */
+
 void *VSAAlloc(vsa_t *vsa, size_t block_size);
 
 /*
