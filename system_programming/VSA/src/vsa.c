@@ -28,6 +28,7 @@ typedef struct block_header{
 	#endif   
 }block_t;
 
+/**************HELP FUNCTIONS****************************************************************************/
 
 static size_t ResizeBlock(size_t block_size)
 {
@@ -38,7 +39,6 @@ static long Abs(long value)
 {
 	return value < 0 ? value * -1 : value;
 }
-
 
 static block_t *Next(block_t *block)
 {
@@ -69,6 +69,8 @@ static int Defragment(block_t *block)
 	return 0;
 }
 
+/********************MAIN FUNCTIONS******************************************************************************/
+
 vsa_t *VSAInit(void *memory, size_t mem_size)
 {	
 	vsa_t *vsa = memory;
@@ -98,7 +100,6 @@ vsa_t *VSAInit(void *memory, size_t mem_size)
 	return vsa;
 }
 
-
 void *VSAAlloc(vsa_t *vsa, size_t block_size)
 {
 	block_t *b = NULL;
@@ -115,7 +116,6 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 	
 	while(0 != b->size )
 	{
-		
 		if((long)block_size <= b->size)
 		{	
 			if((long)block_size == b->size)
@@ -127,12 +127,9 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 				
 			}
 			memory = (char *)b + SIZE_STR;
-			
 			old_size = b->size;
 			b->size = block_size * -1;
-			
 			b = Next(b);
-		
 			b->size = old_size - block_size - SIZE_STR;
 			
 			#ifndef NDEBUG
