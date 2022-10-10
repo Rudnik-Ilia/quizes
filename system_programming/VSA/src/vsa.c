@@ -40,25 +40,23 @@ block_t *Next(block_t *block)
 	return (block_t *)((char *)block + SIZE_STR + step);
 }
 
-static void Defragment(block_t *block)
+static int Defragment(block_t *block)
 {
 	block_t *next = NULL;
 	assert(NULL != block);
 	
+	if(block->size <= 0)
+	{
+		return 0;
+	}
 	
-	if(block >= 0)
-	{
+	next = Next(block);
+	while(next->size > 0)
+	{	
+		block->size += SIZE_STR + next->size;
 		next = Next(block);
-		while(next->size > 0)
-		{	
-			block->size += SIZE_STR + next->size;
-			next = Next(block);
-		}
 	}
-	else
-	{
-		break;
-	}
+	return 0;
 }
 
 vsa_t *VSAInit(void *memory, size_t mem_size)
@@ -77,8 +75,7 @@ vsa_t *VSAInit(void *memory, size_t mem_size)
 	
 	block = (block_t *)((char *)memory + SIZE_STR + freespace);
 	block->size = 0;
-	/*
-*/
+
 	printf("freespace: %ld\n", freespace);
 	return vsa;
 }
@@ -96,8 +93,11 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 	
 	block_size = ResizeBlock(block_size);
 	
+	Defragment(b);
+	
 	while(0 != b->size )
 	{
+		
 		if((long)block_size <= b->size)
 		{	
 			if((long)block_size == b->size)
@@ -109,8 +109,10 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 				
 			}
 			memory = (char *)b + SIZE_STR;
+			
 			old_size = b->size;
 			b->size = block_size * -1;
+			
 			b = Next(b);
 		
 			b->size = old_size - block_size - SIZE_STR;
@@ -119,7 +121,8 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 		}
 		else
 		{	
-			b = Next(b);	
+			b = Next(b);
+			Defragment(b);	
 		}
 	}
 	printf("END\n");
@@ -129,12 +132,37 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 void VSAFree(void *block_to_free)
 {	
 	block_t *block = NULL;
+	
 	assert(NULL != block_to_free);
 	
 	block = (block_t *)((char *)block_to_free - SIZE_STR);
-		
-	printf("%d\n", block->size);
+	block->size *= -1;
 
+}
+
+size_t VSACheckLargestBlock(vsa_t *vsa)
+{	
+	block_t *block = NULL;
+	long big_block = 0;
+	
+	assert(NULL != vsa);
+	
+	block = vsa;
+	big_block = block->size;
+	while(block->size != 0)
+	{
+		Defragment(block);
+		if(block->size > big_block)
+		{
+			big_block = block->size;
+			block = Next(block);
+		}
+		else
+		{
+			block = Next(block);
+		}	
+	}
+	return big_block;
 }
 
 
