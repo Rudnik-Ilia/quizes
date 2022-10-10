@@ -33,6 +33,7 @@ static size_t ResizeBlock(size_t block_size)
 block_t *Next(block_t *block)
 {
 	long step = 0;
+	
 	assert(NULL != block);
 	
 	step = block->size < 0 ? block->size * -1 : block->size; 
@@ -44,25 +45,26 @@ static void Defragment(block_t *block)
 	block_t *next = NULL;
 	assert(NULL != block);
 	
-	next = Next(block);
-	for(; next->size != 0 ; next = Next(block))
+	
+	if(block >= 0)
 	{
-		if(next->size > 0)
-		{
-			block->size += next->size;
-		}
-		else
-		{
-			continue;
+		next = Next(block);
+		while(next->size > 0)
+		{	
+			block->size += SIZE_STR + next->size;
+			next = Next(block);
 		}
 	}
-	
+	else
+	{
+		break;
+	}
 }
 
 vsa_t *VSAInit(void *memory, size_t mem_size)
 {	
 	vsa_t *vsa = memory;
-	block_t * block = NULL;
+	block_t *block = NULL;
 	size_t freespace = 0;
 	assert(NULL != memory);
 	
@@ -129,7 +131,8 @@ void VSAFree(void *block_to_free)
 	block_t *block = NULL;
 	assert(NULL != block_to_free);
 	
-	block = (block_t *)((char *)block_to_free - SIZE_STR);	
+	block = (block_t *)((char *)block_to_free - SIZE_STR);
+		
 	printf("%d\n", block->size);
 
 }
