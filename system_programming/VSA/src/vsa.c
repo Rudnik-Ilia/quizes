@@ -34,13 +34,19 @@ static size_t ResizeBlock(size_t block_size)
 	return !(block_size % CHAR_BIT) ? block_size : (block_size - block_size % CHAR_BIT + CHAR_BIT);
 }
 
-block_t *Next(block_t *block)
+static long Abs(long value)
+{
+	return value < 0 ? value * -1 : value;
+}
+
+
+static block_t *Next(block_t *block)
 {
 	long step = 0;
 	
 	assert(NULL != block);
 	
-	step = block->size < 0 ? block->size * -1 : block->size; 
+	step = Abs(block->size);
 	return (block_t *)((char *)block + SIZE_STR + step);
 }
 
@@ -152,7 +158,7 @@ void VSAFree(void *block_to_free)
 	
 	block = (block_t *)((char *)block_to_free - SIZE_STR);
 	
-	block->size = block->size < 0 ? block->size * -1 : block->size;;
+	block->size = Abs(block->size);
 
 	#ifndef NDEBUG
 	block->is_free = CAFE;
