@@ -55,7 +55,7 @@ void Special_Two()
 	TEST("CheckLargestBlock after the same action", VSACheckLargestBlock(vsa), 80);
 	
 	
-	
+	free(memory);
 	
 }
 void Special_One()
@@ -124,7 +124,7 @@ void Basic_Test()
 	
 	TEST("CheckLargestBlock alloc 16, 24", VSACheckLargestBlock(vsa), 144);
 	/*
-	arr[4] = VSAAlloc(vsa,24);
+	arr[4] = VSAAlloc(vsa,37);
 	assert(arr[4] != NULL && "555");
 	
 	TEST("CheckLargestBlock strange behavior ", VSACheckLargestBlock(vsa), 0);

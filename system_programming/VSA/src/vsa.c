@@ -16,7 +16,7 @@
 #define SIZE_STR sizeof(block_t)
 
 #define CAFE (void *)0xCAFEBABE
-#define DEAD (void *)0xDEADBEEF
+
 
 
 typedef struct block_header{
@@ -92,7 +92,7 @@ vsa_t *VSAInit(void *memory, size_t mem_size)
 	block = (block_t *)((char *)memory + SIZE_STR + freespace);
 	
 	#ifndef NDEBUG
-	block->is_free = DEAD;
+	block->is_free = NULL;
 	#endif  
 	
 	block->size = 0;
@@ -133,7 +133,7 @@ void *VSAAlloc(vsa_t *vsa, size_t block_size)
 			b->size = old_size - block_size - SIZE_STR;
 			
 			#ifndef NDEBUG
-			b->is_free = DEAD;
+			b->is_free = NULL;
 			#endif
 
 			return memory;
