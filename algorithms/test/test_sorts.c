@@ -59,31 +59,7 @@ int main()
 	FillArray(arr, size);
 	
 	MesureTime(arr, size, BubbleSort);
-	
 	MesureTime(arr, size, InsertionSort);
-	
-	
-	
-	/*
-   	double total_t;
-	clock_t start_t;
-	clock_t end_t;
-	
-	
-	
-   	start_t = clock();
-    
-    
-	BubbleSort(arr, size);
-	
-	end_t = clock();
-	   
-	total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
-	printf("Total time taken by CPU: %f\n", total_t  );
-	
-	TEST("Test for Insert" , isSorted(arr, size), 1);
-	*/
-	
 	
 
 	PASS;
