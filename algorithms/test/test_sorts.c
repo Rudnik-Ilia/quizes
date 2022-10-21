@@ -79,8 +79,9 @@ int main()
 	TEST("Test for Qsort" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	
-	FillArray(arr, SIZE_ARRAY, 100);
-	CountingSort(arr, SIZE_ARRAY);
+	FillArray(arr, SIZE_ARRAY, 101);
+	MesureTime(arr, SIZE_ARRAY, CountingSort);
+	TEST("Test for Countsort" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	PASS;
 return 0;

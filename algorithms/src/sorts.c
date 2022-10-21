@@ -80,11 +80,9 @@ void CountingSort(int *arr, size_t size)
 	int max = size; 
 	int *tmp_arr = NULL; 
 	int *res_arr = NULL;
-	int xn; 
 	
 	assert(NULL != arr);
  
-
 	min = max = arr[0];
 	
 	for(i = 1; i < size ; ++i) 
@@ -104,27 +102,24 @@ void CountingSort(int *arr, size_t size)
 	tmp_arr = (int*)malloc(size_of_tmp * sizeof(int));
 	res_arr = (int*)malloc(size * sizeof(int));
 	
-	memset(tmp_arr, 0, size_of_tmp);
-	memset(res_arr, 0, size);
-	
+	memset(tmp_arr, 0, size_of_tmp * sizeof(int));
+	memset(res_arr, 0, size * sizeof(int));
 	
 
-	
-	
-	for(i = 0; i < size; i++)
+	for(i = 0; i < size; ++i)
 	{
-		tmp_arr[arr[i] - min]++;
+		++tmp_arr[arr[i] - min];
 	}
 	
 	
-/*	
 
-	for(i = 1; i < size_of_temp; ++i)
+	for(i = 1; i < size_of_tmp; ++i)
 	{
 		tmp_arr[i] = tmp_arr[i] + tmp_arr[i-1];
 	}
+	
 
-	for(i = 0; i < n; i++)
+	for(i = 0; i < size; ++i)
 	{
 		res_arr[tmp_arr[arr[i] - min] - 1] = arr[i];
 		tmp_arr[arr[i] - min]--;
@@ -132,12 +127,12 @@ void CountingSort(int *arr, size_t size)
 
 
 	
-	for(i = 0; i < size; i++)
+	for(i = 0; i < size; ++i)
 	{ 
 		arr[i] = res_arr[i];
 	}
 
-*/
+
 	free(tmp_arr);
 	free(res_arr);
 
