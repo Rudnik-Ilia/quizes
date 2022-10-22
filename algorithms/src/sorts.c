@@ -114,6 +114,7 @@ void CountingSort(int *arr, size_t size)
 	if(tmp_arr == NULL)
 	{
 		perror("NO MEMORY!");
+		return;
 	}
 	
 	res_arr = (int*)calloc(size, sizeof(int));
@@ -122,6 +123,7 @@ void CountingSort(int *arr, size_t size)
 	{
 		free(tmp_arr);
 		perror("NO MEMORY!");
+		return;
 	}
 
 	for(i = 0; i < size; ++i)
@@ -166,6 +168,7 @@ static void Count(int *arr, int size, int place) {
 	if(output == NULL)
 	{
 		perror("NO MEMORY!");
+		return;
 	}
 	
 	for (i = 0; i < size; i++)
