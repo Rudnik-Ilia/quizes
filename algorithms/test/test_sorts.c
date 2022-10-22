@@ -41,9 +41,8 @@ void FillArray(int *arr, size_t size, size_t range)
 	}
 }
 
-void MesureTime(int *arr, size_t size, void (*func)(int *arr, size_t size))
+float MesureTime(int *arr, size_t size, void (*func)(int *arr, size_t size))
 {
-	double total_t = 0;
 	clock_t end_t = 0;
 	clock_t start_t = clock();
 	
@@ -53,15 +52,12 @@ void MesureTime(int *arr, size_t size, void (*func)(int *arr, size_t size))
 	  
 	end_t = clock();  
 	
-	total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
-	
-	printf("Total time taken by CPU: %f\n", total_t);
+	return (double)(end_t - start_t) / CLOCKS_PER_SEC;
 	
 }
 
 float Time_qsort(int *arr, size_t size, int (*compar)(const void *, const void*))
 {
-	double total_t = 0;
 	clock_t end_t = 0;
 	clock_t start_t = clock();
 	
@@ -71,9 +67,7 @@ float Time_qsort(int *arr, size_t size, int (*compar)(const void *, const void*)
 	  
 	end_t = clock();  
 	
-	total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
-	
-	return total_t;
+	return (double)(end_t - start_t) / CLOCKS_PER_SEC;;
 }
 
 int main()
@@ -85,19 +79,19 @@ int main()
 	TEST("Test for Qsort" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	FillArray(arr, SIZE_ARRAY, 3000);
-	MesureTime(arr, SIZE_ARRAY, BubbleSort);
+	printf("Total time taken by BubbleSort: %f\n", MesureTime(arr, SIZE_ARRAY, BubbleSort));
 	TEST("Test for Bubble" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	FillArray(arr, SIZE_ARRAY, 3000);
-	MesureTime(arr, SIZE_ARRAY, InsertionSort);
+	printf("Total time taken by InsertionSort: %f\n", MesureTime(arr, SIZE_ARRAY, InsertionSort));
 	TEST("Test for Insert" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	FillArray(arr, SIZE_ARRAY, 3000);
-	MesureTime(arr, SIZE_ARRAY, SelectionSort);
+	printf("Total time taken by SelectionSort: %f\n", MesureTime(arr, SIZE_ARRAY, SelectionSort));
 	TEST("Test for Select" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	FillArray(arr, SIZE_ARRAY, 101);
-	MesureTime(arr, SIZE_ARRAY, CountingSort);
+	printf("Total time taken by CountingSort: %f\n", MesureTime(arr, SIZE_ARRAY, CountingSort));
 	TEST("Test for Countsort" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	PASS;
