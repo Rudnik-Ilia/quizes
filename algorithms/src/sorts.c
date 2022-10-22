@@ -7,26 +7,14 @@
 *****************************************************/
 
 #include <stddef.h> /*size_t*/
+#include <stdio.h>
 #include <assert.h> 
-#include <string.h> /*memset*/
 #include <stdlib.h> /*malloc*/
 #include <limits.h>
 
 #include "sorts.h"
 
 
-
-int maximum(int *arr, int length)
-{
-    int max=INT_MIN;
-    int i = 0;
-    for(i=0 ; i<length ; i++ )
-    {
-        if(arr[i]>max)
-            max=arr[i];
-    }
-    return max;
-}
 int minimum(int *arr, int length)
 {
     int min=INT_MAX;
@@ -85,7 +73,6 @@ void BubbleSort(int *arr, size_t size)
 	}
 }
 
-
 void SelectionSort(int *arr, size_t size)
 {
 	size_t i = 0;
@@ -132,12 +119,20 @@ void CountingSort(int *arr, size_t size)
 
 	size_of_tmp  = max - min + 1;
 
-	tmp_arr = (int*)malloc(size_of_tmp * sizeof(int));
-	res_arr = (int*)malloc(size * sizeof(int));
+	tmp_arr = (int*)calloc(size_of_tmp, sizeof(int));
 	
-	memset(tmp_arr, 0, size_of_tmp * sizeof(int));
-	memset(res_arr, 0, size * sizeof(int));
+	if(tmp_arr == NULL)
+	{
+		perror("NO MEMORY!");
+	}
 	
+	res_arr = (int*)calloc(size, sizeof(int));
+	
+	if(res_arr == NULL)
+	{
+		free(tmp_arr);
+		perror("NO MEMORY!");
+	}
 
 	for(i = 0; i < size; ++i)
 	{
@@ -174,9 +169,15 @@ static void Count(int *arr, int size, int place) {
 	int freq[10] = {0};
 	int *output = NULL;
 	
-	output = malloc(sizeof(int) * size);
+	assert(NULL != arr);
 	
-
+	output = (int*)calloc(size, sizeof(int));
+	
+	if(output == NULL)
+	{
+		perror("NO MEMORY!");
+	}
+	
 	for (i = 0; i < size; i++)
 	{
 		freq[(arr[i] / place) % 10]++;
@@ -206,7 +207,11 @@ void RadixSort(int *arr, size_t size)
 {
 	size_t i = 0;
 	size_t place = 0;
-	int max = arr[0];
+	int max = 0;
+	
+	assert(NULL != arr);
+	
+	max = arr[0];
 	for(i = 1; i < size; ++i)
 	{
 		if(max < arr[i])

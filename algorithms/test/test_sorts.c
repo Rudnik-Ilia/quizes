@@ -5,7 +5,7 @@
 
 #include "sorts.h"
 #include "test.h"
-
+#include "utils.h"
 
 #define SIZE_ARRAY 5000
 #define RANGE 100
