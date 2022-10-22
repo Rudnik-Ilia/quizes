@@ -21,8 +21,7 @@ int isSorted(int *arr, size_t size)
         	{
         	    return 0;
         	}
-    	}
- 	
+    	}	
     return 1;
 }
 
@@ -92,7 +91,11 @@ int main()
 	
 	FillArray(arr, SIZE_ARRAY, 101);
 	printf("Total time taken by CountingSort: %f\n", MesureTime(arr, SIZE_ARRAY, CountingSort));
-	TEST("Test for Countsort" , isSorted(arr, SIZE_ARRAY), 1);
+	TEST("Test for CountSort" , isSorted(arr, SIZE_ARRAY), 1);
+	
+	FillArray(arr, SIZE_ARRAY, 100);
+	printf("Total time taken by RadixSort: %f\n", MesureTime(arr, SIZE_ARRAY, RadixSort));
+	TEST("Test for RadixSort" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	PASS;
 return 0;

@@ -10,8 +10,34 @@
 #include <assert.h> 
 #include <string.h> /*memset*/
 #include <stdlib.h> /*malloc*/
+#include <limits.h>
 
 #include "sorts.h"
+
+
+
+int maximum(int *arr, int length)
+{
+    int max=INT_MIN;
+    int i = 0;
+    for(i=0 ; i<length ; i++ )
+    {
+        if(arr[i]>max)
+            max=arr[i];
+    }
+    return max;
+}
+int minimum(int *arr, int length)
+{
+    int min=INT_MAX;
+    int i = 0;
+    for(i=0 ; i<length ; i++ )
+    {
+        if(arr[i]<min)
+            min=arr[i];
+    }
+    return min;
+} 
 
 
 void Swap(int *x, int *y)
@@ -119,7 +145,6 @@ void CountingSort(int *arr, size_t size)
 	}
 	
 	
-
 	for(i = 1; i < size_of_tmp; ++i)
 	{
 		tmp_arr[i] = tmp_arr[i] + tmp_arr[i-1];
@@ -133,7 +158,6 @@ void CountingSort(int *arr, size_t size)
 	}
 
 
-	
 	for(i = 0; i < size; ++i)
 	{ 
 		arr[i] = res_arr[i];
@@ -142,32 +166,60 @@ void CountingSort(int *arr, size_t size)
 
 	free(tmp_arr);
 	free(res_arr);
-
 }
 
+static void Count(int *arr, int size, int place) {
 
+	int i = 0;
+	int freq[10] = {0};
+	int *output = NULL;
+	
+	output = malloc(sizeof(int) * size);
+	
 
+	for (i = 0; i < size; i++)
+	{
+		freq[(arr[i] / place) % 10]++;
+	}
 
-/*
+	for (i = 1; i < 10; i++)
+	{
+		freq[i] += freq[i - 1];
+	}
+	
+	for (i = size - 1; i >= 0; i--) 
+	{
+		output[freq[(arr[i] / place) % 10] - 1] = arr[i];
+
+		freq[(arr[i] / place) % 10]--;
+	}
+
+	for (i = 0; i < size; i++)
+	{
+		arr[i] = output[i];
+	}
+
+	free(output);
+}
 
 void RadixSort(int *arr, size_t size)
 {
-	int Max_of_arr = maximum(arr, size);
-	int Exponent = 1;
-	int count = 0;
-	while(Exponent <= Max_of_arr)
+	size_t i = 0;
+	size_t place = 0;
+	int max = arr[0];
+	for(i = 1; i < size; ++i)
 	{
-	arr = Count_sort(arr, size, Exponent);
-
-	Exponent = Exponent * 10;
-
+		if(max < arr[i])
+		{
+			max = arr[i];
+		}
+	}
+	
+	for(place = 1; max/place > 0; place *= 10)
+	{
+		Count(arr, size, place);
 	}
 }
-
-*/
-
-
-
 
 
 
