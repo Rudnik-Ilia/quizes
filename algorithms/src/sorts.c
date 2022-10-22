@@ -1,3 +1,10 @@
+/*****************************************************
+* Topic: Algorithms                                  *                         *
+* Author: Rudnik Ilia                                *
+* Date: 22.10.2022                                   *
+* Reviewer: Oury & Vadim                                    *
+* Review status: reviewed                            *
+*****************************************************/
 
 #include <stddef.h> /*size_t*/
 #include <assert.h> 
@@ -141,8 +148,23 @@ void CountingSort(int *arr, size_t size)
 
 
 
+/*
 
+void RadixSort(int *arr, size_t size)
+{
+	int Max_of_arr = maximum(arr, size);
+	int Exponent = 1;
+	int count = 0;
+	while(Exponent <= Max_of_arr)
+	{
+	arr = Count_sort(arr, size, Exponent);
 
+	Exponent = Exponent * 10;
+
+	}
+}
+
+*/
 
 
 

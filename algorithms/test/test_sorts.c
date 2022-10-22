@@ -10,6 +10,7 @@
 #define SIZE_ARRAY 5000
 #define RANGE 100
 
+
 int isSorted(int *arr, size_t size)
 {
 	size_t i = 0;
@@ -58,9 +59,30 @@ void MesureTime(int *arr, size_t size, void (*func)(int *arr, size_t size))
 	
 }
 
+float Time_qsort(int *arr, size_t size, int (*compar)(const void *, const void*))
+{
+	double total_t = 0;
+	clock_t end_t = 0;
+	clock_t start_t = clock();
+	
+	start_t = clock();
+	
+	qsort(arr, size, sizeof(int), compar);
+	  
+	end_t = clock();  
+	
+	total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+	
+	return total_t;
+}
+
 int main()
 {
 	int arr[SIZE_ARRAY] = {0};
+	
+	FillArray(arr, SIZE_ARRAY, 3000);
+	printf("Time of qsort = %f\n", Time_qsort(arr, SIZE_ARRAY, Comparator));
+	TEST("Test for Qsort" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	FillArray(arr, SIZE_ARRAY, 3000);
 	MesureTime(arr, SIZE_ARRAY, BubbleSort);
@@ -73,11 +95,6 @@ int main()
 	FillArray(arr, SIZE_ARRAY, 3000);
 	MesureTime(arr, SIZE_ARRAY, SelectionSort);
 	TEST("Test for Select" , isSorted(arr, SIZE_ARRAY), 1);
-	
-	FillArray(arr, SIZE_ARRAY, 3000);
-	qsort(arr, SIZE_ARRAY, 4, Comparator);
-	TEST("Test for Qsort" , isSorted(arr, SIZE_ARRAY), 1);
-	
 	
 	FillArray(arr, SIZE_ARRAY, 101);
 	MesureTime(arr, SIZE_ARRAY, CountingSort);
