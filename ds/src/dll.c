@@ -11,6 +11,8 @@
 #include "dll.h"
 #include "utils.h"
 
+#define DEAD (node_t*) 0xDEADBEEF
+
 typedef struct dll_node node_t;
 
 struct dll_node{

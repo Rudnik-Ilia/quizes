@@ -14,8 +14,8 @@ int main()
 	queue_t *que2= QueueCreate();
 	
 	printf("Test is empty before adding: \n");
-	TEST(QueueIsEmpty(que), 1);
-	TEST(QueueIsEmpty(que2), 1);
+	TEST_EQUAL(QueueIsEmpty(que), 1);
+	TEST_EQUAL(QueueIsEmpty(que2), 1);
 	printf("-----------------------------------------\n");
 	
 	for(i = 0;i < 5; ++i)
@@ -29,32 +29,32 @@ int main()
 	}
 	
 	printf("Test after create: \n");
-	TEST(QueueSize(que), 5);
-	TEST(QueueSize(que2), 3);
+	TEST_EQUAL(QueueSize(que), 5);
+	TEST_EQUAL(QueueSize(que2), 3);
 	printf("-----------------------------------------\n");
 	
 	printf("Test delete: \n");
 	QueueDequeue(que);
 	QueueDequeue(que2);
 	
-	TEST(QueueSize(que), 4);
-	TEST(QueueSize(que2), 2);
+	TEST_EQUAL(QueueSize(que), 4);
+	TEST_EQUAL(QueueSize(que2), 2);
 	printf("-----------------------------------------\n");
 	
 	printf("Test peek: \n");
-	TEST(*(int*)QueuePeek(que), 20);
-	TEST(*(int*)QueuePeek(que2), 70);
+	TEST_EQUAL(*(int*)QueuePeek(que), 20);
+	TEST_EQUAL(*(int*)QueuePeek(que2), 70);
 	printf("-----------------------------------------\n");
 	
 	printf("Test is empty: \n");
-	TEST(QueueIsEmpty(que), 0);
-	TEST(QueueIsEmpty(que2), 0);
+	TEST_EQUAL(QueueIsEmpty(que), 0);
+	TEST_EQUAL(QueueIsEmpty(que2), 0);
 	printf("-----------------------------------------\n");
 	
 	printf("Test for append: \n");
 	QueueAppend(que, que2);
-	TEST(QueueIsEmpty(que2), 1);
-	TEST(QueueSize(que), 6);
+	TEST_EQUAL(QueueIsEmpty(que2), 1);
+	TEST_EQUAL(QueueSize(que), 6);
 	
 	QueueDestroy(que2);
 	QueueDestroy(que);

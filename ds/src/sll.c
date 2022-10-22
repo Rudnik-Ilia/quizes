@@ -13,7 +13,7 @@
 #include "SLL.h"
 #include "utils.h"
 
-
+#define DEAD (node_t*) 0xDEADBE
 
 typedef struct node node_t;
 
@@ -39,15 +39,15 @@ static int PlusOne(void *data, void *param)
 
 sll_t *SllCreate(void)
 {
-    sll_t *myList = (sll_t *)malloc(sizeof(sll_t));
+    	sll_t *myList = (sll_t *)malloc(sizeof(sll_t));
 	node_t *dummy_node = (node_t *)malloc(sizeof(node_t));
 	
-    if(NULL == myList)
-    {
-    	LOGERROR("SORRY, NO MEMORY FOR YOU");
-		return NULL;
-    }
-    if(NULL == dummy_node)
+	    if(NULL == myList)
+	    {
+	    	LOGERROR("SORRY, NO MEMORY FOR YOU");
+			return NULL;
+	    }
+	    if(NULL == dummy_node)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		free(dummy_node);
@@ -56,34 +56,32 @@ sll_t *SllCreate(void)
 	
 	dummy_node->data = myList;
 	dummy_node->next = DEAD;
-    myList->head = dummy_node;
-    myList->tail = dummy_node; 
+    	myList->head = dummy_node;
+    	myList->tail = dummy_node; 
     
     return myList;
 }
 
 iterator_t SllRemove(iterator_t iter)
 {
-	node_t *tmp = iter->next;
-	assert(NULL != iter);
-	
-	
-	iter->data = (iter->next)->data;
-	iter->next = (iter->next)->next;
-	
-	
-	if(iter->next == DUMMY)
+	iterator_t temp = iter -> next;
+	assert(iter);
+	if(iter-> next == DEAD)
 	{
-		((dllist_t *)(iter->data))->tail = iter;
-	}
-	else
-	{
-		(iter->next)->prev = iter;
-	}
-
+		return iter;
+	}	
 	
-	free(tmp);
+	iter -> data = (iter -> next)-> data;
+	iter -> next = (iter -> next) -> next;
+	
+	if(iter -> next  == DEAD)
+	{
+		((sll_t *)(iter -> data))-> tail = iter;
+	}
+	
+	free(temp);
 	return iter;
+
 
 }
 

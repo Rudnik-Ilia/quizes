@@ -9,7 +9,7 @@
 
 #include <string.h> /* memcpy*/
 #include <assert.h> /* assert */
-
+#include <stdlib.h>
 #include "../include/vector.h"
 
 #define FACTOR 2

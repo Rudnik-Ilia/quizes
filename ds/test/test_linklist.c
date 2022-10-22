@@ -53,11 +53,11 @@ void Test_Main()
 	iterator_t temp2 = SllBegin(Mylist);
 	
 	printf("Main test: \n");
-	TEST(SllBegin(Mylist), SllEnd(Mylist));
+	TEST_EQUAL(SllBegin(Mylist), SllEnd(Mylist));
 	
 	printf("%p\n", (void*)SllBegin(Mylist));
 	printf("%p\n", (void*)SllEnd(Mylist)); 
-	TEST(SllCount(Mylist), 0);
+	TEST_EQUAL(SllCount(Mylist), 0);
 	
 	printf("Adding 3 item: \n");
 	SllInsert(iterator, &arr[0]);
@@ -66,44 +66,44 @@ void Test_Main()
 
 	printf("%p\n", (void*)SllBegin(Mylist));
 	printf("%p\n", (void*)SllEnd(Mylist)); 
-	TEST(SllCount(Mylist), 3);
+	TEST_EQUAL(SllCount(Mylist), 3);
 	printf("---------------------------------------------\n");
 
-	TEST(*(int*)(SllGetData(SllFind(SllBegin(Mylist), SllEnd(Mylist), is_match, &arr[1]))), 2);
+	TEST_EQUAL(*(int*)(SllGetData(SllFind(SllBegin(Mylist), SllEnd(Mylist), is_match, &arr[1]))), 2);
 	
 	SllForEach(SllBegin(Mylist), SllEnd(Mylist), func, &x);
 	
-	TEST(*(int*)(SllGetData(iterator)), 300);
+	TEST_EQUAL(*(int*)(SllGetData(iterator)), 300);
 	
 	SllInsert(iterator, &ins);
-	TEST(*(int*)(SllGetData(iterator)), 888);
+	TEST_EQUAL(*(int*)(SllGetData(iterator)), 888);
 	printf("---------------------------------------------\n");
 	printf("Removing 1 item: \n");
 	SllRemove(iterator);
 	printf("%p\n", (void*)SllBegin(Mylist));
 	printf("%p\n", (void*)SllEnd(Mylist)); 
-	TEST(SllCount(Mylist), 3);
-	printf("---------------------------------------------\n");
-	
-	printf("Removing 1 item: \n");
-	SllRemove(iterator);
-	printf("%p\n", (void*)SllBegin(Mylist));
-	printf("%p\n", (void*)SllEnd(Mylist)); 
-	TEST(SllCount(Mylist), 2);
+	TEST_EQUAL(SllCount(Mylist), 3);
 	printf("---------------------------------------------\n");
 	
 	printf("Removing 1 item: \n");
 	SllRemove(iterator);
 	printf("%p\n", (void*)SllBegin(Mylist));
 	printf("%p\n", (void*)SllEnd(Mylist)); 
-	TEST(SllCount(Mylist), 1);
+	TEST_EQUAL(SllCount(Mylist), 2);
 	printf("---------------------------------------------\n");
 	
 	printf("Removing 1 item: \n");
 	SllRemove(iterator);
 	printf("%p\n", (void*)SllBegin(Mylist));
 	printf("%p\n", (void*)SllEnd(Mylist)); 
-	TEST(SllCount(Mylist), 0);
+	TEST_EQUAL(SllCount(Mylist), 1);
+	printf("---------------------------------------------\n");
+	
+	printf("Removing 1 item: \n");
+	SllRemove(iterator);
+	printf("%p\n", (void*)SllBegin(Mylist));
+	printf("%p\n", (void*)SllEnd(Mylist)); 
+	TEST_EQUAL(SllCount(Mylist), 0);
 	printf("---------------------------------------------\n");
 	
 	
@@ -134,13 +134,13 @@ void Test_Append()
 	SllInsert(iterator_2, &arr[1]); 
 	SllInsert(iterator_2, &arr[2]);
 	
-	TEST(SllCount(Mylist),3);
-	TEST(SllCount(list_2),3);
+	TEST_EQUAL(SllCount(Mylist),3);
+	TEST_EQUAL(SllCount(list_2),3);
 	
 	SllAppend(Mylist, list_2); 
 	
-	TEST(SllCount(Mylist), 6);
-	TEST(SllCount(list_2), 0);
+	TEST_EQUAL(SllCount(Mylist), 6);
+	TEST_EQUAL(SllCount(list_2), 0);
 	
 	SllDestroy(Mylist);
 	SllDestroy(list_2);
