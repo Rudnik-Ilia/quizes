@@ -1,8 +1,8 @@
 /*****************************************************
-* Topic: Algorithms                                  *                         *
+* Topic: Algorithms                                  *                 
 * Author: Rudnik Ilia                                *
 * Date: 22.10.2022                                   *
-* Reviewer: Oury & Vadim                                    *
+* Reviewer: Oury & Vadim                             *
 * Review status: reviewed                            *
 *****************************************************/
 
