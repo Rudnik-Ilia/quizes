@@ -15,7 +15,7 @@
 #include "sorts.h"
 
 
-void Swap(int *x, int *y)
+static void Swap(int *x, int *y)
 {
     int tmp = 0;
     
@@ -64,18 +64,21 @@ void SelectionSort(int *arr, size_t size)
 {
 	size_t i = 0;
 	size_t j = 0;
+	size_t min = 0;
 	
 	assert(NULL != arr);
 	
-	for(i = 0; i < size; ++i)
+	for(i = 0; i < size - 1; ++i)
 	{
+		min = i;
 		for(j = i + 1; j < size; ++j)
 		{
-			if(arr[i] > arr[j])
+			if(arr[min] > arr[j])
 			{
-				Swap(&arr[j], &arr[i]);
+				min = j;
 			}
 		}
+		Swap(&arr[i], &arr[min]);
 	}
 }
 
