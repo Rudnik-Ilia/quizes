@@ -166,7 +166,7 @@ static void Count(int *arr, int size, int place) {
 	
 	assert(NULL != arr);
 	
-	output = (int*)calloc(size, sizeof(int));
+	output = (int*)malloc(size * sizeof(int));
 	
 	if(output == NULL)
 	{
