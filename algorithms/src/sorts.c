@@ -87,7 +87,7 @@ void CountingSort(int *arr, size_t size)
 	size_t i = 0; 
 	size_t size_of_tmp = 0;
 	int min = 0;
-	int max = size; 
+	int max = 0; 
 	int *tmp_arr = NULL; 
 	int *res_arr = NULL;
 	
@@ -117,7 +117,7 @@ void CountingSort(int *arr, size_t size)
 		return;
 	}
 	
-	res_arr = (int*)calloc(size, sizeof(int));
+	res_arr = (int*)malloc(size * sizeof(int));
 	
 	if(res_arr == NULL)
 	{
@@ -141,7 +141,7 @@ void CountingSort(int *arr, size_t size)
 	for(i = 0; i < size; ++i)
 	{
 		res_arr[tmp_arr[arr[i] - min] - 1] = arr[i];
-		tmp_arr[arr[i] - min]--;
+		--tmp_arr[arr[i] - min];
 	}
 
 
@@ -153,6 +153,9 @@ void CountingSort(int *arr, size_t size)
 
 	free(tmp_arr);
 	free(res_arr);
+	
+	tmp_arr = NULL; 
+	res_arr = NULL;
 }
 
 static void Count(int *arr, int size, int place) {
@@ -194,6 +197,7 @@ static void Count(int *arr, int size, int place) {
 	}
 
 	free(output);
+	output = NULL;
 }
 
 void RadixSort(int *arr, size_t size)
