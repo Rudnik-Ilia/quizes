@@ -46,11 +46,11 @@ void Test_for_MultiFind()
 	DLLPushFront(list, &arr[2]);
 	DLLPushFront(list, &arr[3]);
 	DLLPushFront(list, &arr[4]);
-	TEST(DLLMultiFind(DLLBegin(list), DLLEnd(list), &MatchParam, &arr[0], output), 3);
+	TEST_EQUAL(DLLMultiFind(DLLBegin(list), DLLEnd(list), &MatchParam, &arr[0], output), 3);
 	
 	while(!DLLIsEqualIter(tmp, DLLEnd(output)))
 	{
-		TEST(*(int*)DLLGetData(tmp), 100);
+		TEST_EQUAL(*(int*)DLLGetData(tmp), 100);
 		tmp = DLLNext(tmp);
 	
 	}
@@ -105,22 +105,22 @@ void Test_Main()
 	dllist_t* list = DLLCreate();
 	
 	printf("Compare two iterator: \n");
-	TEST(DLLBegin(list), DLLEnd(list));
+	TEST_EQUAL(DLLBegin(list), DLLEnd(list));
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
-	TEST(DLLIsEmpty(list), 1); 
+	TEST_EQUAL(DLLIsEmpty(list), 1); 
 	printf("Adding by one: \n");
 
 	DLLInsert(DLLEnd(list), &arr[0]);
-	TEST(DLLIsEmpty(list), 0); 
+	TEST_EQUAL(DLLIsEmpty(list), 0); 
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
 	DLLInsert(DLLEnd(list), &arr[1]);
-	TEST(DLLSize(list), 2);
+	TEST_EQUAL(DLLSize(list), 2);
 	printf("-------------------------------------------\n");
 	printf("Compare two iterator: ");
 	printf("%d\n", DLLIsEqualIter(DLLBegin(list), DLLEnd(list)));
@@ -153,22 +153,22 @@ void Test_Main()
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
-	TEST(DLLSize(list), 5);
+	TEST_EQUAL(DLLSize(list), 5);
 	
 	DLLPushFront(list, &arr[1]);
 	DLLPushFront(list, &arr[1]);
 	DLLPushFront(list, &arr[1]);
-	TEST(DLLSize(list), 8);
+	TEST_EQUAL(DLLSize(list), 8);
 	DLLPopBack(list);
 	DLLPopBack(list);
 	DLLRemove(DLLEnd(list));
-	TEST(DLLSize(list), 5);
+	TEST_EQUAL(DLLSize(list), 5);
 	
 	printf("%p\n", (void*)DLLBegin(list));
 	printf("%p\n", (void*)DLLEnd(list)); 
 	
 	printf("Test for size: \n");
-	TEST(DLLSize(list),5);
+	TEST_EQUAL(DLLSize(list),5);
 	
 	
 	printf("Removing by one: \n");
@@ -181,16 +181,16 @@ void Test_Main()
 	
 	printf("Test for PopFront: ");
 	DLLSetData(DLLBegin(list), &arr[4]);
-	TEST(*(int*)DLLPopFront(list), 500);
+	TEST_EQUAL(*(int*)DLLPopFront(list), 500);
 	printf("-------------------------------------------\n");
 	
 	printf("Test for size: \n");
-	TEST(DLLSize(list), 2);
+	TEST_EQUAL(DLLSize(list), 2);
 	
 	printf("Test for foreach: \n");
-	TEST(DLLForEach(DLLBegin(list), DLLEnd(list), &PlusOne, &arr[0]), 0);
+	TEST_EQUAL(DLLForEach(DLLBegin(list), DLLEnd(list), &PlusOne, &arr[0]), 0);
 	
-	TEST(*(int*)DLLGetData(DLLBegin(list)), 401);
+	TEST_EQUAL(*(int*)DLLGetData(DLLBegin(list)), 401);
 	
 	DLLRemove(DLLEnd(list));
 	DLLPushFront(list, &arr[1]);

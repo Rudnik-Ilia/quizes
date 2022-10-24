@@ -15,7 +15,7 @@
 #include "utils.h"
 #include "cbuff.h"
 
-
+#define DEAD (void *) 0xDEADBEEF
 
 struct cbuff{
 	
