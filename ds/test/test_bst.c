@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "bst.h"
 
 
@@ -12,10 +13,10 @@ int Compare(const void *data, const void *key_data)
 int main()
 {	
 	
+	
 	bst_t *bst = BSTCreate(Compare);
 	
-	bst->root->childrens[LEFT] = ;
 	
-
+	free(bst);
 return 0;
 }
