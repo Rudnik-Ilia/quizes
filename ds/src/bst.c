@@ -135,6 +135,38 @@ int BSTIsEmpty(const bst_t *tree)
 
 }
 
+bst_iter_t BSTNext(const bst_iter_t iter)
+{
+	bst_iter_t runner = NULL;
+	bst_iter_t parent = NULL;
+	bst_iter_t result = NULL;
+
+	runner = iter;
+	if(runner->childrens[RIGHT] == NULL)
+	{
+		while(BSTIsSameIter(runner, runner->parent->childrens[RIGHT]))
+		{
+			runner = runner->parent;
+		}
+		result = runner->parent;	
+	}
+	else 
+	{
+		if(runner->childrens[RIGHT]->childrens[LEFT] == NULL)
+		{
+			return iter->childrens[RIGHT];
+		}
+		else
+		{
+			while(BSTIsSameIter(runner, runner->childrens[LEFT]->parent))
+			{
+				runner = runner->childrens[LEFT];
+			}
+			result = runner;
+		}
+	}
+	return result;
+}
 
 int BSTIsSameIter(const bst_iter_t iter1, const bst_iter_t iter2)
 {
