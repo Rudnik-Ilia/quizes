@@ -52,7 +52,28 @@ int main()
 	TEST("Test begin", *(int*)BSTGetData(BSTNext(check_4)), 30);
 	TEST("Test begin", *(int*)BSTGetData(BSTNext(check_5)), 70);
 	TEST("Test begin", *(int*)BSTGetData(BSTNext(check_6)), 20);
-	TEST("Test begin", BSTGetData(BSTNext(max)), BSTEnd(bst));
+	
+	TEST("Test begin", BSTNext(max), BSTEnd(bst));
+	
+	TEST("Test begin", *(int*)BSTGetData(BSTPrev(check_1)), 30);
+	TEST("Test begin", *(int*)BSTGetData(BSTPrev(check_2)), 20);
+	TEST("Test begin", *(int*)BSTGetData(BSTPrev(check_3)), 40);
+	TEST("Test begin", *(int*)BSTGetData(BSTPrev(check_4)), 10);
+	TEST("Test begin", *(int*)BSTGetData(BSTPrev(check_5)), 50);
+	
+	TEST("Test begin", *(int*)BSTGetData(BSTPrev(max)), 60);
+	TEST("Test begin", *(int*)BSTGetData(BSTPrev(BSTEnd(bst))), 70);
+	
+	TEST("Test for size", BSTSize(bst), 7);
+	
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[0])), 40);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[1])), 30);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[2])), 50);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[3])), 20);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[4])), 60);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[5])), 70);
+	
+	
 	
 	/*
 	

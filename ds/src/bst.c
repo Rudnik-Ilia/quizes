@@ -28,6 +28,9 @@ struct bst
 	int (*cmp_func)(const void *data, const void *key_data);
 };
 
+static bst_iter_t Next_and_Prev(const bst_iter_t iter, child_node_pos_t stub);
+
+
 bst_node_t *CreateNode(bst_node_t *parent, bst_node_t *left, bst_node_t *right, void *data)
 {
 	bst_node_t *new_node = (bst_node_t *)malloc(sizeof(bst_node_t));
@@ -135,16 +138,83 @@ int BSTIsEmpty(const bst_t *tree)
 
 }
 
+
+int BSTIsSameIter(const bst_iter_t iter1, const bst_iter_t iter2)
+{
+	return iter1 == iter2;	
+}
+
+size_t BSTSize(const bst_t *tree)
+{
+	size_t count = 0;
+	bst_iter_t iter = NULL;
+	
+	assert(NULL != tree);
+	
+	iter = BSTBegin(tree);
+	
+	while(!BSTIsSameIter(BSTEnd(tree), iter))
+	{
+		iter = BSTNext(iter);
+		++count;
+	}
+	return count;
+}
+
+
 bst_iter_t BSTNext(const bst_iter_t iter)
+{	
+	assert(NULL != iter);
+	return Next_and_Prev(iter, RIGHT);	
+}
+
+bst_iter_t BSTPrev(const bst_iter_t iter)
+{	
+	assert(NULL != iter);
+	return Next_and_Prev(iter, LEFT);	
+}
+
+bst_iter_t BSTFind(const bst_t *tree, void *key_data)
+{
+	int res = 0;
+	bst_iter_t iter = NULL;
+	
+	assert(NULL != tree);
+	assert(NULL != key_data);
+	
+	
+	iter = tree->root.childrens[0];
+	
+	while((res = tree->cmp_func(BSTGetData(iter), key_data)))
+	{
+		iter = res > 0 ? BSTPrev(iter) : BSTNext(iter);
+	}
+	return iter;
+}
+
+int BSTForEach(bst_iter_t from, const bst_iter_t to, int (*action_func)(void *data, void *params), void *param)
+{
+	bst_iter_t iter = NULL;
+	
+	int result = 0;
+	
+	for(;!BSTIsSameIter(from, to) & result == 0; result = action_func(BTSGetData(to), param), from = BSTNext(from))
+	{
+		/*EMPTY BODY*/
+	}
+	return result;	
+}
+
+
+static bst_iter_t Next_and_Prev(const bst_iter_t iter, child_node_pos_t stub)
 {
 	bst_iter_t runner = NULL;
-	bst_iter_t parent = NULL;
 	bst_iter_t result = NULL;
 
 	runner = iter;
-	if(runner->childrens[RIGHT] == NULL)
+	if(runner->childrens[stub] == NULL)
 	{
-		while(BSTIsSameIter(runner, runner->parent->childrens[RIGHT]))
+		while(BSTIsSameIter(runner, runner->parent->childrens[stub]))
 		{
 			runner = runner->parent;
 		}
@@ -152,27 +222,17 @@ bst_iter_t BSTNext(const bst_iter_t iter)
 	}
 	else 
 	{
-		if(runner->childrens[RIGHT]->childrens[LEFT] == NULL)
-		{
-			return iter->childrens[RIGHT];
-		}
-		else
-		{
-			while(BSTIsSameIter(runner, runner->childrens[LEFT]->parent))
-			{
-				runner = runner->childrens[LEFT];
-			}
-			result = runner;
-		}
+		runner = runner->childrens[stub];
+		
+        	while (NULL != runner->childrens[!stub])
+        	{
+            		runner = runner->childrens[!stub];
+        	}
+        	result = runner;
+
 	}
 	return result;
 }
-
-int BSTIsSameIter(const bst_iter_t iter1, const bst_iter_t iter2)
-{
-	return iter1 == iter2;	
-}
-
 
 
 
