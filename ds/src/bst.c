@@ -1,6 +1,8 @@
 
 #include <stdlib.h> /*malloc*/
 #include <assert.h> /**/
+#include <stdio.h>
+
 
 #include "bst.h"
 
@@ -15,8 +17,8 @@ typedef enum child_node_pos
 
 struct bst_node
 {
-	bst_iter_t *parent;
-	bst_iter_t *childrens[NUM_CHILD_NODES];
+	bst_node_t *parent;
+	bst_node_t *childrens[NUM_CHILD_NODES];
 	void *data;
 };
 
@@ -26,7 +28,7 @@ struct bst
 	int (*cmp_func)(const void *data, const void *key_data);
 };
 
-bst_node_t CreateNode(bst_node_t *parent, bst_node_t *left, bst_node_t *right, void *data)
+bst_node_t *CreateNode(bst_node_t *parent, bst_node_t *left, bst_node_t *right, void *data)
 {
 	bst_node_t *new_node = (bst_node_t *)malloc(sizeof(bst_node_t));
 	
@@ -42,58 +44,77 @@ bst_node_t CreateNode(bst_node_t *parent, bst_node_t *left, bst_node_t *right, v
 
 bst_t *BSTCreate(int (*cmp_func)(const void *data, const void *key_data))
 {		
-	bst_node_t dummy = NULL;
+	
 	bst_t * bst = (bst_t*)malloc(sizeof(bst_t));
 	
 	bst->cmp_func = cmp_func;
-	/*
+	
 	bst->root.parent = NULL;
 	bst->root.childrens[LEFT] = NULL;
 	bst->root.childrens[RIGHT] = NULL;
 	bst->root.data = NULL;
-	*/
-	bst->root = dummy;
+	
 	
 	return bst;	
 }
 
-/*
 bst_iter_t BSTInsert(bst_t *tree, void *data)
 {	
+	bst_iter_t iter = NULL;
+	bst_iter_t new_node = NULL;
+	bst_iter_t roots = NULL;
+	child_node_pos_t side = LEFT;
+	
 	assert(NULL != tree);
-	  
-	bst_iter_t iter = tree -> root;
 	
-	bst_iter_t new_node = CreateNode(iter, NULL, NULL, data);
-
-	if (iter->childrens[LEFT] == NULL)
-	{
-		iter->childrens[LEFT] = new_node;
-	}
-
-	else 
-	{
-		iter = Next(iter);
-	}
-
-	while (iter != NULL)
-	{
-		cmp(iter->data, key_data) > 0 - > iter = iter -> right 
-		cmp(iter->data, key_data) < 0 - > iter = iter -> left
-	}
+	new_node = CreateNode(NULL, NULL, NULL, data);
 	
+	iter = tree->root.childrens[LEFT];
+	roots = &tree->root;
 
+	
+	for(;iter != NULL; iter = iter->childrens[side])
+	{
+		
+		roots = iter;
+		
+		if(tree->cmp_func(BSTGetData(iter), data) >0)
+		{
+			side = LEFT;
+		}
+		if(tree->cmp_func(BSTGetData(iter), data) < 0)
+		{
+			side = RIGHT;
+		}
+	}
+	new_node->parent = roots;
+	roots->childrens[side] = new_node;
+	
+	return new_node;
+	
+}	
 
-*/
-
-bst_iter_t BSTNext(const bst_iter_t iter)
+bst_iter_t BSTBegin(const bst_t *tree)
 {
-	return *iter->childrens[RIGHT];
+	bst_iter_t iter = NULL;
+	
+	assert(NULL != tree);
+	
+	iter = (bst_iter_t)&tree->root;
+	
+	while(iter->childrens[LEFT] != NULL)
+	{
+		iter = iter->childrens[LEFT];
+	}
+	return iter;
 }
 
-bst_iter_t BSTPrev(const bst_iter_t iter)
+bst_iter_t BSTEnd(const bst_t *tree)
 {
-	return *iter->childrens[LEFT];
+	
+	assert(NULL != tree);
+	
+	return (bst_iter_t)&tree->root;;
 }
 
 void *BSTGetData(const bst_iter_t iter)
@@ -103,12 +124,22 @@ void *BSTGetData(const bst_iter_t iter)
 
 void BSTDestroy(bst_t *tree)
 {
-	free(tree->root);
+	free(tree->root.childrens[LEFT]);
 	free(tree);
 }
 
+int BSTIsEmpty(const bst_t *tree)
+{
+	assert(NULL != tree);
+	return (NULL == tree->root.childrens[0]);
+
+}
 
 
+int BSTIsSameIter(const bst_iter_t iter1, const bst_iter_t iter2)
+{
+	return iter1 == iter2;	
+}
 
 
 

@@ -5,6 +5,7 @@
 
 typedef struct bst bst_t;
 typedef struct bst_node *bst_iter_t;
+
 /*
 typedef struct bst_node *bst_node_t;
 */
@@ -117,7 +118,7 @@ int BSTIsEmpty(const bst_t *tree);
 bst_iter_t BSTBegin(const bst_t *tree);
 
 /*
-* Description: The function returns an iterator to the last element of the tree (one after 
+* Description: The function returns an iterator to the last element of the tree (one aftter
 * the element with the largest of the user's data).
 * Parameters: 
 *  @tree is a binary search tree.
