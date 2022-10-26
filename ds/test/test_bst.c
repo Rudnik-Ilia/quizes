@@ -1,11 +1,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "test.h"
 #include "bst.h"
 
-
+int Act(void *data, void *params)
+{
+	assert(NULL != data);
+	assert(NULL != params);
+	
+	*(int*)data *= *(int*)params;
+	return 0;
+}
 
 int Compare(const void *data, const void *key_data)
 {
@@ -14,6 +22,7 @@ int Compare(const void *data, const void *key_data)
 
 int main()
 {	
+	
 	bst_iter_t check_1 = NULL;	
 	bst_iter_t check_2 = NULL;
 	bst_iter_t check_3 = NULL;
@@ -23,6 +32,7 @@ int main()
 	
 	bst_iter_t max = NULL;
 	
+	int factor = 2;
 	int arr[] = {40, 30, 50, 20, 60, 70, 10};
 	
 	
@@ -72,6 +82,18 @@ int main()
 	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[3])), 20);
 	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[4])), 60);
 	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[5])), 70);
+	
+	
+	BSTForEach(BSTBegin(bst), BSTEnd(bst), Act, &factor);
+	
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[0])), 80);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[1])), 60);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[2])), 100);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[3])), 40);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[4])), 120);
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[5])), 140);
+	
+	
 	
 	
 	

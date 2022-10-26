@@ -194,11 +194,10 @@ bst_iter_t BSTFind(const bst_t *tree, void *key_data)
 
 int BSTForEach(bst_iter_t from, const bst_iter_t to, int (*action_func)(void *data, void *params), void *param)
 {
-	bst_iter_t iter = NULL;
 	
 	int result = 0;
 	
-	for(;!BSTIsSameIter(from, to) & result == 0; result = action_func(BTSGetData(to), param), from = BSTNext(from))
+	for(;!BSTIsSameIter(from, to) & (result == 0); result = action_func(BSTGetData(from), param), from = BSTNext(from))
 	{
 		/*EMPTY BODY*/
 	}
@@ -232,6 +231,19 @@ static bst_iter_t Next_and_Prev(const bst_iter_t iter, child_node_pos_t stub)
 
 	}
 	return result;
+}
+
+bst_iter_t BSTRemove(bst_iter_t iter)
+{
+	bst_iter_t runner = BSTNext(iter);
+	
+	
+	if(NULL == runner->childrens[LEFT] && NULL == runner->childrens[RIGHT])
+	{
+		runner.parent == NULL;
+	}
+
+
 }
 
 
