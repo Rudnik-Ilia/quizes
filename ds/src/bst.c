@@ -29,7 +29,8 @@ struct bst
 };
 
 static bst_iter_t Next_and_Prev(const bst_iter_t iter, child_node_pos_t stub);
-
+static child_node_pos_t WhoYou(bst_iter_t iter);
+static child_node_pos_t WhereMyBaby(bst_iter_t iter);
 
 bst_node_t *CreateNode(bst_node_t *parent, bst_node_t *left, bst_node_t *right, void *data)
 {
@@ -233,18 +234,78 @@ static bst_iter_t Next_and_Prev(const bst_iter_t iter, child_node_pos_t stub)
 	return result;
 }
 
-bst_iter_t BSTRemove(bst_iter_t iter)
+static child_node_pos_t WhoYou(bst_iter_t iter)
 {
-	bst_iter_t runner = BSTNext(iter);
-	
-	
-	if(NULL == runner->childrens[LEFT] && NULL == runner->childrens[RIGHT])
-	{
-		runner.parent == NULL;
-	}
+	return iter->parent->childrens[LEFT] == iter ? LEFT : RIGHT;
+}
 
+static child_node_pos_t WhereMyBaby(bst_iter_t iter)
+{
+	return (NULL != iter->childrens[LEFT]) ? LEFT : RIGHT;
 
 }
+
+bst_iter_t BSTRemove(bst_iter_t iter)
+{
+	bst_iter_t left_child = NULL;
+	bst_iter_t right_child = NULL;
+	bst_iter_t parent = NULL;
+	bst_iter_t next = NULL;
+	child_node_pos_t side = 0;
+	
+	printf("!");
+	
+	parent = iter->parent;
+	next = BSTNext(iter);
+	
+	side = WhoYou(iter);
+	
+	if(NULL == iter->childrens[LEFT] && NULL == iter->childrens[RIGHT])
+	{
+		printf("0 ch");
+		iter->parent->childrens[side] = NULL;
+
+	}
+	
+	/* One child */
+	else if(NULL == iter->childrens[LEFT] || NULL == iter->childrens[RIGHT])
+	{
+	
+		side =  WhereMyBaby(iter);
+		
+		parent->childrens[side] = iter->childrens[side];
+		
+		iter->childrens[side]->parent = parent;
+		
+		free(iter);
+
+	}
+	
+	/* Two child */
+	else
+	{	
+		left_child = iter->childrens[LEFT];
+		right_child = iter->childrens[RIGHT];
+		
+		
+		iter->parent->childrens[WhereMyBaby(iter)] = BSTNext(iter);
+		next->parent = parent;
+		next->childrens[LEFT] = left_child;
+		left_child->parent = next;
+		
+		printf("2 ch");
+		for(;next != NULL; next = next->childrens[RIGHT])
+		{
+		
+		}
+		next->childrens[RIGHT] = right_child;
+		
+		right_child->parent = iter;
+		free(iter);	
+	}
+	return parent;
+}
+
 
 
 
