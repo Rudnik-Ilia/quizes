@@ -29,7 +29,7 @@ struct bst
 };
 
 static bst_iter_t Next_and_Prev(const bst_iter_t iter, child_node_pos_t stub);
-static child_node_pos_t WhoYou(bst_iter_t iter);
+static child_node_pos_t WhoAmI(bst_iter_t iter);
 static child_node_pos_t WhereMyBaby(bst_iter_t iter);
 
 bst_node_t *CreateNode(bst_node_t *parent, bst_node_t *left, bst_node_t *right, void *data)
@@ -126,11 +126,6 @@ void *BSTGetData(const bst_iter_t iter)
 	return iter->data;
 }
 
-void BSTDestroy(bst_t *tree)
-{
-	free(tree->root.childrens[LEFT]);
-	free(tree);
-}
 
 int BSTIsEmpty(const bst_t *tree)
 {
@@ -190,6 +185,11 @@ bst_iter_t BSTFind(const bst_t *tree, void *key_data)
 	{
 		iter = res > 0 ? BSTPrev(iter) : BSTNext(iter);
 	}
+	if(NULL == iter)
+	{
+		iter = BSTEnd(tree);
+	}
+
 	return iter;
 }
 
@@ -234,7 +234,7 @@ static bst_iter_t Next_and_Prev(const bst_iter_t iter, child_node_pos_t stub)
 	return result;
 }
 
-static child_node_pos_t WhoYou(bst_iter_t iter)
+static child_node_pos_t WhoAmI(bst_iter_t iter)
 {
 	return iter->parent->childrens[LEFT] == iter ? LEFT : RIGHT;
 }
@@ -247,8 +247,7 @@ static child_node_pos_t WhereMyBaby(bst_iter_t iter)
 
 bst_iter_t BSTRemove(bst_iter_t iter)
 {
-	bst_iter_t left_child = NULL;
-	bst_iter_t right_child = NULL;
+	bst_iter_t tmp = NULL;
 	bst_iter_t parent = NULL;
 	bst_iter_t next = NULL;
 	child_node_pos_t side = 0;
@@ -258,7 +257,7 @@ bst_iter_t BSTRemove(bst_iter_t iter)
 	parent = iter->parent;
 	next = BSTNext(iter);
 	
-	side = WhoYou(iter);
+	side = WhoAmI(iter);
 	
 	if(NULL == iter->childrens[LEFT] && NULL == iter->childrens[RIGHT])
 	{
@@ -266,8 +265,6 @@ bst_iter_t BSTRemove(bst_iter_t iter)
 		iter->parent->childrens[side] = NULL;
 
 	}
-	
-	/* One child */
 	else if(NULL == iter->childrens[LEFT] || NULL == iter->childrens[RIGHT])
 	{
 	
@@ -276,38 +273,59 @@ bst_iter_t BSTRemove(bst_iter_t iter)
 		parent->childrens[side] = iter->childrens[side];
 		
 		iter->childrens[side]->parent = parent;
-		
-		free(iter);
+
 
 	}
-	
-	/* Two child */
 	else
-	{	
-		left_child = iter->childrens[LEFT];
-		right_child = iter->childrens[RIGHT];
+	{
 		
-		
-		iter->parent->childrens[WhereMyBaby(iter)] = BSTNext(iter);
+		parent->childrens[side] = next;
 		next->parent = parent;
-		next->childrens[LEFT] = left_child;
-		left_child->parent = next;
 		
-		printf("2 ch");
-		for(;next != NULL; next = next->childrens[RIGHT])
+		if(iter->childrens[RIGHT] == next)
 		{
-		
+			next->childrens[LEFT] = iter->childrens[LEFT];
+			iter->childrens[LEFT]->parent = next;
 		}
-		next->childrens[RIGHT] = right_child;
-		
-		right_child->parent = iter;
-		free(iter);	
+		else
+		{
+			next->childrens[LEFT] = iter->childrens[LEFT];
+			iter->childrens[LEFT]->parent = next;
+			
+			for(tmp = next; NULL != tmp->childrens[RIGHT]; tmp = tmp->childrens[RIGHT])
+			{
+				/* empty body */
+			}
+			iter->childrens[RIGHT]->parent = tmp;
+			tmp->childrens[RIGHT] = iter->childrens[RIGHT];
+		}
+
+
 	}
+	free(iter);	
 	return parent;
 }
 
 
+void BSTDestroy(bst_t *tree)
+{
+	bst_iter_t iter = NULL;
+	bst_iter_t tmp = NULL;
 
+	assert(NULL != tree);
+
+	iter = BSTBegin(tree);
+
+	while(!BSTIsSameIter(iter, BSTEnd(tree)))
+	{
+		tmp = iter;
+		iter = BSTNext(iter);
+		BSTRemove(tmp);
+	}
+
+	free(tree);
+
+}
 
 
 

@@ -86,14 +86,10 @@ int main()
 	BSTForEach(BSTBegin(bst), BSTEnd(bst), Act, &factor);
 	
 	
-	BSTRemove(check_1);
 	
-	/*
-	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[0])), 80);
 	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[1])), 60);
-	*/
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[0])), 80);
 	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[5])), 140);
-	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[2])), 100);
 	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[3])), 40);
 	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[4])), 120);
 	
@@ -102,15 +98,17 @@ int main()
 	
 	
 	/*
+	BSTRemove(check_3);
 	
+	TEST("Test for find", *(int*)BSTGetData(BSTFind(bst, &arr[2])), 100);
 	
 	*/
 	
+	BSTDestroy(bst);
 
 
 	
 	
-	free(bst);
 	PASS;
 return 0;
 }
