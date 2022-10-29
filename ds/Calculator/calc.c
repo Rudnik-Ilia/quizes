@@ -102,7 +102,7 @@ int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator, void *
   
   StackPush(stack_operator, dat);
 
-  printf(" push to stack\n");
+  printf("PushOperatorToStack\n");
   return 1;
 }
 
@@ -161,7 +161,7 @@ int PushNumers(stack_t *stack_number, stack_t *stack_operator, void *data, char 
   
   dat = ptr;
   
-  StackPush(stack_number, dat);
+  StackPush(stack_number, ptr);
   
   printf("PushNumbers\n");
   return 1;
@@ -201,22 +201,23 @@ int InfixToPost(char *str, double *out, size_t size)
 	StackPush(operators, &start_sym);
 	
 	
-	for(i = 0; i < 3; i++)
+	for(i = 0; i < 5; i++)
 	{
 		x = *(char*)StackPeek(operators) - SHIFTASCII;
-		ch = *(str + step);
+		
+		ch = *(str + i);
 		
 		printf("%d - %d\n", x, ch - SHIFTASCII);
 		
 		printf("%d\n", ACT_LUT[x][ch - SHIFTASCII]);
 		
-		step = ARR[ACT_LUT[x][ch - SHIFTASCII]](numbers, operators, data, str);
+		step += ARR[ACT_LUT[x][ch - SHIFTASCII]](numbers, operators, data, str+step);
 		
 	
 	}
 	
 	printf("LAST OPER: %c\n", *(char*)StackPeek(operators));
-	printf("LAST NUM: %c\n", *(char*)StackPeek(operators));
+	printf("LAST NUM: %c\n", *(char*)StackPeek(numbers));
 	return 0;
 }
 
