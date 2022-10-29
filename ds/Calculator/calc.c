@@ -12,6 +12,8 @@
 
 static int ACT_LUT[][64] =
     {
+    
+     /* 0 1 2 3 4 5 6 7 8 9 101112                                  */    
 	{4,0,0,0,0,0,0,0,1,5,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -29,22 +31,22 @@ static int ACT_LUT[][64] =
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{2,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -84,100 +86,123 @@ static int ACT_LUT[][64] =
          
 int Nothing(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
 {
-  (void)stack_number;
-  (void)stack_operator;
-  (void)data;
-  (void)ptr;
-  printf("im nothing\n");
-  return 1;
+	(void)stack_number;
+	(void)stack_operator;
+	(void)data;
+	(void)ptr;
+	printf("im nothing\n");
+	return 1;
 }    
 
 int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
 {
-  void *dat = NULL;
-  (void)stack_number;
-  (void)data;
+	void *dat = NULL;
+	(void)stack_number;
+	(void)data;
 
-  dat = ptr;
-  
-  StackPush(stack_operator, dat);
+	dat = ptr;
 
-  printf("PushOperatorToStack\n");
-  return 1;
+	StackPush(stack_operator, dat);
+
+	printf("PushOperatorToStack\n");
+	return 1;
 }
 
 int PushOperatorToNumberStack(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
 {
-  void *dat = NULL;
-  (void)data;
+	void *dat = NULL;
+	(void)data;
 
-  dat = ptr;
-  
-  StackPush(stack_number, StackPeek(stack_operator));
-  StackPop(stack_operator);
+	dat = ptr;
 
-  printf("Push from stack operator to stack of number \n");
-  
-  return 0;
-}
+	StackPush(stack_number, StackPeek(stack_operator));
+	StackPop(stack_operator);
+
+	printf("Push from stack operator to stack of number \n");
+
+	return 0;
+	}
 
 int KillOperator(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
 {
-  (void)stack_number;
-  (void)data;
+	(void)stack_number;
+	(void)data;
 
-  StackPop(stack_operator);
-  printf("KillOperator(\n");
-  
-  return 1;
+	StackPop(stack_operator);
+	printf("KillOperator(\n");
+
+	return 1;
 }
 
 int Stub(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
 {
-  (void)stack_number;
-  (void)stack_operator;
-  (void)data;
-  (void)ptr;
+	(void)stack_number;
+	(void)stack_operator;
+	(void)data;
+	(void)ptr;
 
-  printf("Stub\n");
-  return 0;
+	printf("Stub\n");
+	return 0;
 }
 
 int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
 {
-  (void)stack_number;
-  (void)stack_operator;
-  (void)data;
-  
-  printf("Stop error start syntax\n"); /* error on start, when we get wrong operand */
-  return 0;
+	(void)stack_number;
+	(void)stack_operator;
+	(void)data;
+
+	printf("Stop error start syntax\n"); /* error on start, when we get wrong operand */
+	return 0;
 }
 
 int PushNumers(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
 {
-  void *dat = NULL;
-  (void)stack_operator;
-  (void)data;
-  
-  dat = ptr;
-  
-  StackPush(stack_number, ptr);
-  
-  printf("PushNumbers\n");
-  return 1;
+	void *dat = NULL;
+	(void)stack_operator;
+	(void)data;
+
+	dat = ptr;
+
+	StackPush(stack_number, ptr);
+
+	printf("PushNumbers\n");
+	return 1;
 }
 
 int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
 {
-  (void)stack_number;
-  (void)stack_operator;
-  (void)data;
-  (void)ptr;  
-  printf("Wrong symbol\n");
-  return 1;
+	(void)stack_number;
+	(void)stack_operator;
+	(void)data;
+	(void)ptr;
+
+	printf("Wrong symbol\n");
+	return 1;
 }
-  
-static func ARR[] = {Nothing, PushOperatorToStack, PushOperatorToNumberStack, KillOperator, Stub, StopErrorStart,  WrongSymbol, PushNumers};
+
+int Addition(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
+{
+	int a = 0; 
+	(void)stack_number;
+	(void)stack_operator;
+	(void)data;
+	(void)ptr;
+        printf("B: %d\n", *(int*)StackPeek(stack_number));
+	
+
+	a = StackPeek(stack_number);
+
+	StackPop(stack_number);
+
+	printf("addition\n");
+	
+	printf("A: %d\n", a);
+	printf("B: %d\n", *(int*)StackPeek(stack_number));
+
+	return a + *(int*)StackPeek(stack_number);
+}
+ 
+static func ARR[] = {Nothing, PushOperatorToStack, PushOperatorToNumberStack, KillOperator, Stub, StopErrorStart,  WrongSymbol, PushNumers, Addition};
 
 
 int InfixToPost(char *str, double *out, size_t size)
@@ -201,7 +226,7 @@ int InfixToPost(char *str, double *out, size_t size)
 	StackPush(operators, &start_sym);
 	
 	
-	for(i = 0; i < 5; i++)
+	for(i = 0; i < 4; i++)
 	{
 		x = *(char*)StackPeek(operators) - SHIFTASCII;
 		
@@ -213,11 +238,19 @@ int InfixToPost(char *str, double *out, size_t size)
 		
 		step += ARR[ACT_LUT[x][ch - SHIFTASCII]](numbers, operators, data, str+step);
 		
-	
 	}
 	
 	printf("LAST OPER: %c\n", *(char*)StackPeek(operators));
 	printf("LAST NUM: %c\n", *(char*)StackPeek(numbers));
+	printf("LAST SIZE: %ld\n", StackSize(numbers));
+	for(i = 0; i < StackSize(numbers); i++)
+	{
+		x = *(char*)StackPeek(numbers) - SHIFTASCII;
+		StackPop(numbers);
+		
+		step = ARR[ACT_LUT[16][x]](numbers, operators, data, str);
+	}
+	printf("SUMM: %d\n", step);
 	return 0;
 }
 
