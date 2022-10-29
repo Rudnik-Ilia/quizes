@@ -8,7 +8,7 @@
 #include "../include/stack.h"
 #include "calc.h"
 
-
+#define SHIFTASCII 32
 
 static char ACT_LUT[][9] =
     {
@@ -84,58 +84,102 @@ static char ACT_LUT[][9] =
 	
 };
     
-int Zero(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+int Nothing(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
 {
-	(void)op_d;
-	(void)op_or;
-	(void)data;
-	printf("im zero\n");
+  (void)op_d;
+  (void)op_or;
+  (void)data;
+  (void)ptr;
+  printf("im nothing\n");
+  return 1;
 }    
-int First(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
-{
-	(void)op_d;
-	(void)op_or;
-	(void)data;
 
-	printf("im first\n");
+int PushToStack(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+{
+  (void)op_d;
+  (void)data;
+
+  void dat = NULL;
+  dat = ptr;
+
+
+  StackPush(op_or, dat);
+
+  printf(" push to stack\n");
+  return 1;
 }
 
-int Second(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+int PushOperatorToNumberStack(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
 {
-	(void)op_d;
-	(void)op_or;
-	(void)data;
-	
-	printf("im second\n");
+  (void)data;
+
+  void dat = NULL;
+  dat = ptr;
+  
+  StackPush(op_d, StackPeek(op_or));
+  StackPop(op_or);
+
+  printf("Push from stack operator to stack of number \n");
+  return 0;
 }
-int Third(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+int KillOperand(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
 {
-	(void)op_d;
-	(void)op_or;
-	(void)data;
-	
-	printf("im third\n");
+  (void)op_d;
+  (void)op_or;
+  (void)data;
+
+  StackPop(op_d);
+  printf("KillOperand(\n");
+  
+  return 1;
 }
 
-int Four(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+int Stub(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
 {
-	(void)op_d;
-	(void)op_or;
-	(void)data;
-	
-	printf("im four\n");
+  (void)op_d;
+  (void)op_or;
+  (void)data;
+  (void)ptr;
+
+  printf("Stub\n");
+  return 0;
 }
 
-int Five(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+int StopErrorStart(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
 {
-	(void)op_d;
-	(void)op_or;
-	(void)data;
-	
-	printf("im five\n");
+  (void)op_d;
+  (void)op_or;
+  (void)data;
+  
+  printf("Stop error start syntax\n"); /* error on start, when we get wrong operand */
+}
+
+int PushNumers(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+{
+  (void)op_d;
+  (void)op_or;
+  (void)data;
+  
+  void dat = NULL;
+  dat = ptr;
+  
+  StackPush(op_d, dat);
+  
+  printf("PushNumbers\n");
+  return 1;
+}
+
+int WrongSymbol(stack_t * op_d, stack_t * op_or, void *data, char *ptr)
+{
+  (void)op_d;
+  (void)op_or;
+  (void)data;
+  (void)ptr;  
+  printf("Wrong symbol\n");
+  return 1;
 }
   
-static func ARR[] = {Zero, First, Second, Third, Four, Five};
+static func ARR[] = {Nothing, PushToStack, PushOperatorToNumberStack, KillOperand, Stub, StopErrorStart, PushNumers, WrongSymbol};
 
 
 int InfixToPost(char *str, double *out, size_t size)
@@ -158,9 +202,9 @@ int InfixToPost(char *str, double *out, size_t size)
 		x = 4;
 		ch = *(str + i);
 		
-		printf("%d - %d\n", x, ch - 39);
-		printf("%d\n", ACT_LUT[x][ch - 39]);
-		ARR[ACT_LUT[x][ch - 39]](operand, operator, data, str);
+		printf("%d - %d\n", x, ch - SHIFTASCII);
+		printf("%d\n", ACT_LUT[x][ch - SHIFTASCII]);
+		ARR[ACT_LUT[x][ch - SHIFTASCII]](operand, operator, data, str);
 	
 	}
 	
