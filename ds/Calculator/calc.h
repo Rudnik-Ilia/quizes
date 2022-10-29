@@ -4,7 +4,7 @@
 #include "../include/stack.h"
 
 
-typedef void (*func)(stack_t * op_d, stack_t * op_or, void *data, char *ptr);
+typedef int (*func)(stack_t * op_d, stack_t * op_or, void *data, char *ptr);
 /*
 typedef enum status status_t
 
