@@ -7,7 +7,8 @@ int main()
 {	
 	double *res = NULL;
 
-	InfixToPost("(4+5)*2",res , 7);
+	InfixToPost("3*3",res , 3);
+	
 
 
 

@@ -36,6 +36,6 @@ typedef enum status {
 int Calculate(const char *exp, double *out);
 
 
-int InfixToPost( char *str, double *out, size_t size);
+int InfixToPost(char *str, double *out, size_t size);
 
 #endif /* __CALC_H__ */
