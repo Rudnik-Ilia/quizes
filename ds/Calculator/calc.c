@@ -106,10 +106,14 @@ int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *p
 	return 1;
 }
 
-int PushOperatorToNumberStack(stack_t * stack_number, stack_t * stack_operator, char *ptr)
+int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	(void)ptr;
+	
+	/*
 	StackPush(stack_number, StackPeek(stack_operator));
+	*/
+	
+	Addition(stack_number,stack_operator,ptr);
 	StackPop(stack_operator);
 
 	printf("Push from stack operator to stack of number \n");
@@ -172,22 +176,16 @@ int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
 	int a = 0; 
-	(void)stack_number;
+	
 	(void)stack_operator;
 	(void)ptr;
-        printf("B: %d\n", *(int*)StackPeek(stack_number));
-	
-
-	a = *(int*)StackPeek(stack_number);
+	a = *(double*)StackPeek(stack_number);
 
 	StackPop(stack_number);
 
-	printf("addition\n");
-	
-	printf("A: %d\n", a);
-	printf("B: %d\n", *(int*)StackPeek(stack_number));
+	printf("RESULT: %f\n", a + *(double*)StackPeek(stack_number));
 
-	return a + *(int*)StackPeek(stack_number);
+	return 0;
 }
  
 static func ARR[] = {Nothing, PushOperatorToStack, PushOperatorToNumberStack, KillOperator, Stub, StopErrorStart,  WrongSymbol, PushNumers, Addition};
@@ -224,6 +222,7 @@ int InfixToPost(char *str, double *out, size_t size)
 		step += ARR[ACT_LUT[x][ch - SHIFTASCII]](numbers, operators, str+step);
 		
 	}
+	/*
 	printf("SIZE OPER: %ld\n", StackSize(operators));
 	printf("LAST OPER: %c\n", *(char*)StackPeek(operators));
 	StackPop(operators);
@@ -249,7 +248,6 @@ int InfixToPost(char *str, double *out, size_t size)
 	
 	
 	printf("SIZE NUM: %ld\n", StackSize(numbers));
-	/*
 	for(i = 0; i < StackSize(numbers); i++)
 	{
 		x = *(char*)StackPeek(numbers) - SHIFTASCII;
