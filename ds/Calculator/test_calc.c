@@ -9,6 +9,7 @@ int main()
 	InfixToPost("2+1 ",res ,4);
 	InfixToPost("2-1 ",res ,4);
 	InfixToPost("9*8 ",res ,4);
+	InfixToPost("9/8 ",res ,4);
 	
 
 	

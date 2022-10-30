@@ -12,7 +12,6 @@
 
 static int ACT_LUT[][64] =
     {
-    
      /* 0 1 2 3 4 5 6 7 8 9 101112                                  */    
 	{4,0,0,0,0,0,0,0,1,5,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -33,7 +32,7 @@ static int ACT_LUT[][64] =
 	
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,10,8,0,9,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -108,39 +107,31 @@ static func ARR[] = {	Nothing,
 			PushNumers, 
 			Addition, 
 			Subtraction, 
-			Multiplication};
-
+			Multiplication,
+			Division
+			};
 
 int InfixToPost(char *str, double *out, size_t size)
 {
 	stack_t *numbers = NULL;
 	stack_t *operators = NULL;
 	int step = 0;
-	
 	char start_sym = ' ';
-	
 	size_t i = 0;
-	
 	int ch = 0;
 	char x = 0;
 
 	numbers =  StackCreate(sizeof(double), size);
-	
 	operators = StackCreate(sizeof(char), size);
 	
 	StackPush(operators, &start_sym);
 	
-	
 	for(i = 0; i < size; i++)
 	{
 		x = *(char*)StackPeek(operators) - SHIFTASCII;
-		
 		ch = *(str + i);
-		
 		printf("%d - %d\n", x, ch - SHIFTASCII);
-		
 		step += ARR[ACT_LUT[x][ch - SHIFTASCII]](numbers, operators, str+step);
-		
 	}
 	/*
 	printf("SIZE OPER: %ld\n", StackSize(operators));
@@ -197,15 +188,10 @@ int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, ch
 {
 	
 	int index = *(char*)(StackPeek(stack_operator));
-	/*
-	StackPush(stack_number, StackPeek(stack_operator));
-	Addition(stack_number,stack_operator,ptr);
-	*/
-	
+
 	printf("INDEX %d\n", index - SHIFTASCII);
 	
 	ARR[ACT_LUT[(int)((StackSize(stack_number)+48) - 32)][index - SHIFTASCII]](stack_number, stack_operator, ptr);
-	
 	
 	StackPop(stack_operator);
 
