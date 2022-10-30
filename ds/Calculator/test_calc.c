@@ -9,9 +9,5 @@ int main()
 
 	InfixToPost("5+5 ",res , 4);
 	
-
-
-
-
 return 0;
 }

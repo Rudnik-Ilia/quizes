@@ -23,7 +23,7 @@ static int ACT_LUT[][64] =
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{5,0,0,0,0,0,0,0,1,3,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,1,3,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{2,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{2,0,0,0,0,0,0,0,1,2,1,2,0,2,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -84,21 +84,19 @@ static int ACT_LUT[][64] =
 		
 };
          
-int Nothing(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
+int Nothing(stack_t * stack_number, stack_t * stack_operator,char *ptr)
 {
 	(void)stack_number;
 	(void)stack_operator;
-	(void)data;
 	(void)ptr;
 	printf("im nothing\n");
 	return 1;
 }    
 
-int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
+int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *ptr)
 {
 	void *dat = NULL;
 	(void)stack_number;
-	(void)data;
 
 	dat = ptr;
 
@@ -108,13 +106,9 @@ int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator, void *
 	return 1;
 }
 
-int PushOperatorToNumberStack(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
+int PushOperatorToNumberStack(stack_t * stack_number, stack_t * stack_operator, char *ptr)
 {
-	void *dat = NULL;
-	(void)data;
-
-	dat = ptr;
-
+	(void)ptr;
 	StackPush(stack_number, StackPeek(stack_operator));
 	StackPop(stack_operator);
 
@@ -123,74 +117,68 @@ int PushOperatorToNumberStack(stack_t * stack_number, stack_t * stack_operator, 
 	return 0;
 	}
 
-int KillOperator(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
+int KillOperator(stack_t * stack_number, stack_t * stack_operator, char *ptr)
 {
 	(void)stack_number;
-	(void)data;
-
+	(void)ptr;
 	StackPop(stack_operator);
 	printf("KillOperator(\n");
 
 	return 1;
 }
 
-int Stub(stack_t * stack_number, stack_t * stack_operator, void *data, char *ptr)
+int Stub(stack_t * stack_number, stack_t * stack_operator, char *ptr)
 {
 	(void)stack_number;
 	(void)stack_operator;
-	(void)data;
 	(void)ptr;
 
 	printf("Stub\n");
 	return 0;
 }
 
-int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
+int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
 	(void)stack_number;
 	(void)stack_operator;
-	(void)data;
-
+	(void)ptr;
 	printf("Stop error start syntax\n"); /* error on start, when we get wrong operand */
 	return 0;
 }
 
-int PushNumers(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
+int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	void *dat = NULL;
+	char *empty = NULL;
+	double res = strtod(ptr, &empty);
 	(void)stack_operator;
-	(void)data;
-
-	dat = ptr;
-
-	StackPush(stack_number, ptr);
+	
+	
+	StackPush(stack_number, &res);
 
 	printf("PushNumbers\n");
 	return 1;
 }
 
-int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
+int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
 	(void)stack_number;
 	(void)stack_operator;
-	(void)data;
 	(void)ptr;
 
 	printf("Wrong symbol\n");
 	return 1;
 }
 
-int Addition(stack_t *stack_number, stack_t *stack_operator, void *data, char *ptr)
+int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
 	int a = 0; 
 	(void)stack_number;
 	(void)stack_operator;
-	(void)data;
 	(void)ptr;
         printf("B: %d\n", *(int*)StackPeek(stack_number));
 	
 
-	a = StackPeek(stack_number);
+	a = *(int*)StackPeek(stack_number);
 
 	StackPop(stack_number);
 
@@ -209,7 +197,6 @@ int InfixToPost(char *str, double *out, size_t size)
 {
 	stack_t *numbers = NULL;
 	stack_t *operators = NULL;
-	void *data = NULL;
 	int step = 0;
 	
 	char start_sym = ' ';
@@ -219,14 +206,14 @@ int InfixToPost(char *str, double *out, size_t size)
 	int ch = 0;
 	char x = 0;
 
-	numbers =  StackCreate(sizeof(char), size);
+	numbers =  StackCreate(sizeof(double), size);
 	
 	operators = StackCreate(sizeof(char), size);
 	
 	StackPush(operators, &start_sym);
 	
 	
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < size; i++)
 	{
 		x = *(char*)StackPeek(operators) - SHIFTASCII;
 		
@@ -234,40 +221,47 @@ int InfixToPost(char *str, double *out, size_t size)
 		
 		printf("%d - %d\n", x, ch - SHIFTASCII);
 		
-		printf("%d\n", ACT_LUT[x][ch - SHIFTASCII]);
-		
-		step += ARR[ACT_LUT[x][ch - SHIFTASCII]](numbers, operators, data, str+step);
+		step += ARR[ACT_LUT[x][ch - SHIFTASCII]](numbers, operators, str+step);
 		
 	}
-	
+	printf("SIZE OPER: %ld\n", StackSize(operators));
 	printf("LAST OPER: %c\n", *(char*)StackPeek(operators));
-	printf("LAST NUM: %c\n", *(char*)StackPeek(numbers));
-	printf("LAST SIZE: %ld\n", StackSize(numbers));
+	StackPop(operators);
+	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
+	StackPop(operators);
+	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
+	StackPop(operators);
+	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
+	StackPop(operators);
+	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
+	StackPop(operators);
+	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
+	printf("---------------------------------------------------------------------------");
+	printf("SIZE NUM: %ld\n", StackSize(numbers));
+	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
+	StackPop(numbers);
+	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
+	StackPop(numbers);
+	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
+	StackPop(numbers);
+	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
+	StackPop(numbers);
+	
+	
+	printf("SIZE NUM: %ld\n", StackSize(numbers));
+	/*
 	for(i = 0; i < StackSize(numbers); i++)
 	{
 		x = *(char*)StackPeek(numbers) - SHIFTASCII;
 		StackPop(numbers);
 		
-		step = ARR[ACT_LUT[16][x]](numbers, operators, data, str);
+		step = ARR[ACT_LUT[16][x]](numbers, operators, str);
 	}
 	printf("SUMM: %d\n", step);
+	*/
 	return 0;
 }
 
-
-/*
-static int IsOperator(char symbol)
-{
-	return (symbol == '^' || symbol == '*' || symbol == '/' || symbol == '+' || symbol =='-');
-	
-}	
-
-static int isOperand(char symbol)
-{
-    return (symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z');
-}  
-    
-  */  
     
     
     
