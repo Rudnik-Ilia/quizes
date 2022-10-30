@@ -33,7 +33,7 @@ static int ACT_LUT[][64] =
 	
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,10,8,0,9,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -83,112 +83,32 @@ static int ACT_LUT[][64] =
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 		
 };
-         
-int Nothing(stack_t * stack_number, stack_t * stack_operator,char *ptr)
-{
-	(void)stack_number;
-	(void)stack_operator;
-	(void)ptr;
-	printf("im nothing\n");
-	return 1;
-}    
 
-int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *ptr)
-{
-	void *dat = NULL;
-	(void)stack_number;
+int Nothing(stack_t * stack_number, stack_t * stack_operator,char *ptr);
+int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *ptr);
+int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int KillOperator(stack_t * stack_number, stack_t * stack_operator, char *ptr);
+int Stub(stack_t * stack_number, stack_t * stack_operator, char *ptr);
+int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 
-	dat = ptr;
-
-	StackPush(stack_operator, dat);
-
-	printf("PushOperatorToStack\n");
-	return 1;
-}
-
-int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, char *ptr)
-{
-	
-	/*
-	StackPush(stack_number, StackPeek(stack_operator));
-	*/
-	
-	Addition(stack_number,stack_operator,ptr);
-	StackPop(stack_operator);
-
-	printf("Push from stack operator to stack of number \n");
-
-	return 0;
-	}
-
-int KillOperator(stack_t * stack_number, stack_t * stack_operator, char *ptr)
-{
-	(void)stack_number;
-	(void)ptr;
-	StackPop(stack_operator);
-	printf("KillOperator(\n");
-
-	return 1;
-}
-
-int Stub(stack_t * stack_number, stack_t * stack_operator, char *ptr)
-{
-	(void)stack_number;
-	(void)stack_operator;
-	(void)ptr;
-
-	printf("Stub\n");
-	return 0;
-}
-
-int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, char *ptr)
-{
-	(void)stack_number;
-	(void)stack_operator;
-	(void)ptr;
-	printf("Stop error start syntax\n"); /* error on start, when we get wrong operand */
-	return 0;
-}
-
-int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
-{
-	char *empty = NULL;
-	double res = strtod(ptr, &empty);
-	(void)stack_operator;
-	
-	
-	StackPush(stack_number, &res);
-
-	printf("PushNumbers\n");
-	return 1;
-}
-
-int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
-{
-	(void)stack_number;
-	(void)stack_operator;
-	(void)ptr;
-
-	printf("Wrong symbol\n");
-	return 1;
-}
-
-int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
-{
-	int a = 0; 
-	
-	(void)stack_operator;
-	(void)ptr;
-	a = *(double*)StackPeek(stack_number);
-
-	StackPop(stack_number);
-
-	printf("RESULT: %f\n", a + *(double*)StackPeek(stack_number));
-
-	return 0;
-}
+int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int Subtraction(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr);
  
-static func ARR[] = {Nothing, PushOperatorToStack, PushOperatorToNumberStack, KillOperator, Stub, StopErrorStart,  WrongSymbol, PushNumers, Addition};
+static func ARR[] = {	Nothing, 
+			PushOperatorToStack, 
+			PushOperatorToNumberStack, 
+			KillOperator, 
+			Stub, 
+			StopErrorStart,  
+			WrongSymbol, 
+			PushNumers, 
+			Addition, 
+			Subtraction, 
+			Multiplication};
 
 
 int InfixToPost(char *str, double *out, size_t size)
@@ -245,23 +165,169 @@ int InfixToPost(char *str, double *out, size_t size)
 	StackPop(numbers);
 	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
 	StackPop(numbers);
-	
-	
-	printf("SIZE NUM: %ld\n", StackSize(numbers));
-	for(i = 0; i < StackSize(numbers); i++)
-	{
-		x = *(char*)StackPeek(numbers) - SHIFTASCII;
-		StackPop(numbers);
-		
-		step = ARR[ACT_LUT[16][x]](numbers, operators, str);
-	}
-	printf("SUMM: %d\n", step);
+
 	*/
 	return 0;
 }
 
     
-    
+int Nothing(stack_t * stack_number, stack_t * stack_operator,char *ptr)
+{
+	(void)stack_number;
+	(void)stack_operator;
+	(void)ptr;
+	printf("im nothing\n");
+	return 1;
+}    
+
+int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *ptr)
+{
+	void *dat = NULL;
+	(void)stack_number;
+
+	dat = ptr;
+
+	StackPush(stack_operator, dat);
+
+	printf("PushOperatorToStack\n");
+	return 1;
+}
+
+int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+	
+	int index = *(char*)(StackPeek(stack_operator));
+	/*
+	StackPush(stack_number, StackPeek(stack_operator));
+	Addition(stack_number,stack_operator,ptr);
+	*/
+	
+	printf("INDEX %d\n", index - SHIFTASCII);
+	
+	ARR[ACT_LUT[(int)((StackSize(stack_number)+48) - 32)][index - SHIFTASCII]](stack_number, stack_operator, ptr);
+	
+	
+	StackPop(stack_operator);
+
+	printf("Push from stack operator to stack of number \n");
+
+	return 0;
+}
+
+int KillOperator(stack_t * stack_number, stack_t * stack_operator, char *ptr)
+{
+	(void)stack_number;
+	(void)ptr;
+	StackPop(stack_operator);
+	printf("KillOperator(\n");
+
+	return 1;
+}
+
+int Stub(stack_t * stack_number, stack_t * stack_operator, char *ptr)
+{
+	(void)stack_number;
+	(void)stack_operator;
+	(void)ptr;
+
+	printf("Stub\n");
+	return 1;
+}
+
+int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+	(void)stack_number;
+	(void)stack_operator;
+	(void)ptr;
+	printf("Stop error start syntax\n"); /* error on start, when we get wrong operand */
+	return 0;
+}
+
+int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+	char *empty = NULL;
+	double res = strtod(ptr, &empty);
+	(void)stack_operator;
+	
+	
+	StackPush(stack_number, &res);
+
+	printf("PushNumbers\n");
+	return 1;
+}
+
+int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+	(void)stack_number;
+	(void)stack_operator;
+	(void)ptr;
+
+	printf("Wrong symbol\n");
+	return 1;
+}
+
+int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+	int a = 0; 
+	
+	(void)stack_operator;
+	(void)ptr;
+	a = *(double*)StackPeek(stack_number);
+
+	StackPop(stack_number);
+
+	printf("RESULT: %f\n", a + *(double*)StackPeek(stack_number));
+
+	return 0;
+}
+
+int Subtraction(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+    int a = 0; 
+
+    (void)stack_operator;
+    (void)ptr;
+
+    a = *(double*)StackPeek(stack_number);
+
+    StackPop(stack_number);
+
+    printf("RESULT: %f\n", *(double*)StackPeek(stack_number) - a);
+
+    return 0;
+}
+   
+int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+    int a = 0; 
+
+    (void)stack_operator;
+    (void)ptr;
+
+    a = *(double*)StackPeek(stack_number);
+
+    StackPop(stack_number);
+
+    printf("RESULT: %f\n", a * (*(double*)StackPeek(stack_number)));
+
+    return 0;
+}
+
+int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+    int a = 0; 
+
+    (void)stack_operator;
+    (void)ptr;
+
+    a = *(double*)StackPeek(stack_number);
+
+    StackPop(stack_number);
+
+    printf("RESULT: %f\n", (*(double*)StackPeek(stack_number))/a);
+
+    return 0;
+} 
     
     
     
