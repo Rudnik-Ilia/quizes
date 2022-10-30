@@ -11,6 +11,8 @@ int main()
 	InfixToPost("9*8 ",res ,4);
 	InfixToPost("9/8 ",res ,4);
 	
+	InfixToPost("3^3 ",res , 4);
+	
 
 	
 return 0;

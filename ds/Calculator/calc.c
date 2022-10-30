@@ -21,18 +21,18 @@ static int ACT_LUT[][64] =
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
- /* ( */{5,0,0,0,0,0,0,0,1,3,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
- /* ) */{0,0,0,0,0,0,0,0,1,3,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
- /* * */{2,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
- /* + */{2,0,0,0,0,0,0,0,1,2,1,2,0,2,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+ /* ( */{5,0,0,0,0,0,0,0,1,3,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+ /* ) */{0,0,0,0,0,0,0,0,1,3,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+ /* * */{2,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+ /* + */{2,0,0,0,0,0,0,0,1,2,1,2,0,2,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
- /* - */{2,0,0,0,0,0,0,0,1,2,1,2,0,2,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+ /* - */{2,0,0,0,0,0,0,0,1,2,1,2,0,2,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
- /* / */{2,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+ /* / */{2,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
 	
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -96,8 +96,12 @@ int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 int Subtraction(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+
+int Power(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+static double PowerCalculate(double num1, double num2); 
  
-static func ARR[] = {	Nothing, 
+static func ARR[] = {	
+			Nothing, 
 			PushOperatorToStack, 
 			PushOperatorToNumberStack, 
 			KillOperator, 
@@ -108,7 +112,8 @@ static func ARR[] = {	Nothing,
 			Addition, 
 			Subtraction, 
 			Multiplication,
-			Division
+			Division,
+			Power
 			};
 
 int InfixToPost(char *str, double *out, size_t size)
@@ -269,51 +274,83 @@ int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 
 int Subtraction(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-    int a = 0; 
+	int a = 0; 
 
-    (void)stack_operator;
-    (void)ptr;
+	(void)stack_operator;
+	(void)ptr;
 
-    a = *(double*)StackPeek(stack_number);
+	a = *(double*)StackPeek(stack_number);
 
-    StackPop(stack_number);
+	StackPop(stack_number);
 
-    printf("RESULT: %f\n", *(double*)StackPeek(stack_number) - a);
+	printf("RESULT: %f\n", *(double*)StackPeek(stack_number) - a);
 
-    return 0;
+	return 0;
 }
    
 int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-    int a = 0; 
+	int a = 0; 
 
-    (void)stack_operator;
-    (void)ptr;
+	(void)stack_operator;
+	(void)ptr;
 
-    a = *(double*)StackPeek(stack_number);
+	a = *(double*)StackPeek(stack_number);
 
-    StackPop(stack_number);
+	StackPop(stack_number);
 
-    printf("RESULT: %f\n", a * (*(double*)StackPeek(stack_number)));
+	printf("RESULT: %f\n", a * (*(double*)StackPeek(stack_number)));
 
-    return 0;
+	return 0;
 }
 
 int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-    int a = 0; 
+	int a = 0; 
 
-    (void)stack_operator;
-    (void)ptr;
+	(void)stack_operator;
+	(void)ptr;
 
-    a = *(double*)StackPeek(stack_number);
+	a = *(double*)StackPeek(stack_number);
 
-    StackPop(stack_number);
+	StackPop(stack_number);
 
-    printf("RESULT: %f\n", (*(double*)StackPeek(stack_number))/a);
+	printf("RESULT: %f\n", (*(double*)StackPeek(stack_number))/a);
 
-    return 0;
+	return 0;
 } 
+
+int Power(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+	int a = 0; 
+	int b = 0; 
+
+	(void)stack_operator;
+	(void)ptr;
+
+	a = *(double*)StackPeek(stack_number);
+	StackPop(stack_number);
+
+	b = *(double*)StackPeek(stack_number);
+
+	printf("RESULT: %f\n", PowerCalculate(b, a));
+
+	return 0;
+}
+
+
+static double PowerCalculate(double num1, double num2)
+{
+	double res = 1;
+	double i;
+
+	for (i = 0; i < num2; ++i)
+	{
+		res = res * num1;
+	}
+
+	return res;
+}
     
     
     
