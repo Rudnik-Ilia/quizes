@@ -12,7 +12,7 @@
 
 static int ACT_LUT[][64] =
     {
-     /* 0 1 2 3 4 5 6 7 8 9 101112                                  */    
+     /* 0 1 2 3 4 5 6 7 8 9 101112                                  =    */    
 	{4,0,0,0,0,0,0,0,1,5,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -132,14 +132,16 @@ int InfixToPost(char *str, double *out, size_t size)
 	
 	StackPush(operators, &start_sym);
 	
-	for(i = 0; i < size; i++)
+	while(*(str+step))
 	{
 		x = *(char*)StackPeek(operators) - SHIFTASCII;
-		ch = *(str + i);
+		ch = *(str+step);
 		printf("%d - %d\n", x, ch - SHIFTASCII);
 		step += ARR[ACT_LUT[(int)x][ch - SHIFTASCII]](numbers, operators, str+step);
 	}
+	
 	/*
+	PushOperatorToNumberStack(numbers, operators, str+step);
 	printf("SIZE OPER: %ld\n", StackSize(operators));
 	printf("LAST OPER: %c\n", *(char*)StackPeek(operators));
 	StackPop(operators);
@@ -199,8 +201,6 @@ int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, ch
 
 	printf("INDEX %d\n", index - SHIFTASCII);
 	
-	printf("INDEX+ %d - %d\n", (int)((StackSize(stack_number)+48) - 32), index - SHIFTASCII);
-	
 	ARR[ACT_LUT[(int)((StackSize(stack_number)+48) - 32)][index - SHIFTASCII]](stack_number, stack_operator, ptr);
 	
 	StackPop(stack_operator);
@@ -215,7 +215,7 @@ int KillOperator(stack_t * stack_number, stack_t * stack_operator, char *ptr)
 	(void)stack_number;
 	(void)ptr;
 	StackPop(stack_operator);
-	printf("KillOperator(\n");
+	printf("KillOperator\n");
 
 	return 1;
 }
@@ -263,20 +263,23 @@ int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 
 int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	int a = 0; 
+	double a = 0; 
 	double res = 0;
 	(void)stack_operator;
 	(void)ptr;
+	
 	a = *(double*)StackPeek(stack_number);
 	
-	res = a + *(double*)StackPeek(stack_number);
 	
 	StackPop(stack_number);
-	
+	res = a + *(double*)StackPeek(stack_number);
+	StackPop(stack_number);
 	printf("RESULT: %f\n", res);
 	
 	StackPush(stack_number, &res);
-
+	
+	printf("PEEK AND SIZE: %f - %d\n", *(double*)StackPeek(stack_number), StackSize(stack_number));
+	
 	return 0;
 }
 

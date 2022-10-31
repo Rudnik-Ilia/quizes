@@ -13,7 +13,7 @@ int main()
 	InfixToPost("2-1=",res ,4);
 	InfixToPost("2^6=",res ,4);
 	*/
-	InfixToPost(" 2 + 2 =",res ,8);
+	InfixToPost("2+6+3+7+6+8+5+3+7+8+9+6+9+2=",res ,25);
 	
 
 	
