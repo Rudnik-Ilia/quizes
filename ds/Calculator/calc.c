@@ -13,7 +13,7 @@
 static int ACT_LUT[][64] =
     {
      /* 0 1 2 3 4 5 6 7 8 9 101112                                  =    */    
-	{4,0,0,0,0,0,0,0,1,5,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{4,0,0,0,0,0,0,0,1,5,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,0,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -33,10 +33,10 @@ static int ACT_LUT[][64] =
 	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0},
-	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{4,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0},
+	{4,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0},
+	{4,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0},
+	{4,0,0,0,0,0,0,0,0,0,10,8,0,9,0,11, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0},
 	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -99,6 +99,7 @@ int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 
 int Power(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 static double PowerCalculate(double num1, double num2); 
+size_t Reminder(int n);
  
 static func ARR[] = {	
 			Nothing, 
@@ -199,7 +200,7 @@ int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, ch
 	
 	int index = *(char*)(StackPeek(stack_operator));
 
-	printf("INDEX %d\n", index - SHIFTASCII);
+	printf("INDEX_1: %d INDEX_2: %d\n",(int)((StackSize(stack_number)+48) - 32), index - SHIFTASCII);
 	
 	ARR[ACT_LUT[(int)((StackSize(stack_number)+48) - 32)][index - SHIFTASCII]](stack_number, stack_operator, ptr);
 	
@@ -243,12 +244,14 @@ int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
 	char *empty = NULL;
 	double res = strtod(ptr, &empty);
+	
 	(void)stack_operator;
 	
 	StackPush(stack_number, &res);
 
 	printf("PushNumbers\n");
-	return 1;
+	
+	return Reminder(res);
 }
 
 int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
@@ -270,7 +273,6 @@ int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	
 	a = *(double*)StackPeek(stack_number);
 	
-	
 	StackPop(stack_number);
 	res = a + *(double*)StackPeek(stack_number);
 	StackPop(stack_number);
@@ -285,66 +287,83 @@ int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 
 int Subtraction(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	int a = 0; 
+	 double a = 0;  
+	 double res = 0; 
+	 (void)stack_operator; 
+	 (void)ptr; 
 
-	(void)stack_operator;
-	(void)ptr;
-
-	a = *(double*)StackPeek(stack_number);
-
-	StackPop(stack_number);
-
-	printf("RESULT: %f\n", *(double*)StackPeek(stack_number) - a);
-
-	return 0;
+	 a = *(double*)StackPeek(stack_number);
+	 StackPop(stack_number);
+	 res = *(double*)StackPeek(stack_number) - a;
+	 StackPop(stack_number);
+	 StackPush(stack_number, &res); 
+	 printf("RESULT: %f\n", *(double*)StackPeek(stack_number)); 
+	 return 0;
 }
+
    
 int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	int a = 0; 
-
+	double a = 0; 
+	double res = 0;
 	(void)stack_operator;
 	(void)ptr;
-
+	
 	a = *(double*)StackPeek(stack_number);
-
+	
 	StackPop(stack_number);
-
-	printf("RESULT: %f\n", a * (*(double*)StackPeek(stack_number)));
-
+	
+	res = a * *(double*)StackPeek(stack_number);
+	
+	StackPop(stack_number);
+	
+	printf("RESULT: %f\n", res);
+	
+	StackPush(stack_number, &res);
+	
+	printf("PEEK AND SIZE: %f - %d\n", *(double*)StackPeek(stack_number), StackSize(stack_number));
+	
 	return 0;
 }
 
 int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	int a = 0; 
-
-	(void)stack_operator;
-	(void)ptr;
+	double a = 0;  
+	double res = 0; 
+	(void)stack_operator; 
+	(void)ptr; 
 
 	a = *(double*)StackPeek(stack_number);
-
 	StackPop(stack_number);
 
-	printf("RESULT: %f\n", (*(double*)StackPeek(stack_number))/a);
+	res = (*(double*)StackPeek(stack_number))/a;
+	StackPop(stack_number);
+
+	StackPush(stack_number, &res); 
+	printf("RESULT: %f\n", *(double*)StackPeek(stack_number)); 
 
 	return 0;
 } 
 
 int Power(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	int a = 0; 
-	int b = 0; 
+	double a = 0;  
+	double b = 0;  
+	double res = 0; 
+	(void)stack_operator; 
+	(void)ptr; 
 
-	(void)stack_operator;
-	(void)ptr;
 
 	a = *(double*)StackPeek(stack_number);
 	StackPop(stack_number);
 
 	b = *(double*)StackPeek(stack_number);
+	StackPop(stack_number);
 
-	printf("RESULT: %f\n", PowerCalculate(b, a));
+	res = PowerCalculate(b, a);
+
+	StackPush(stack_number, &res); 
+	printf("RESULT: %f\n", *(double*)StackPeek(stack_number)); 
 
 	return 0;
 }
@@ -362,7 +381,15 @@ static double PowerCalculate(double num1, double num2)
 
 	return res;
 }
+
+size_t Reminder(int n)
+{
+    size_t i = 0;
     
+    for (; n ; n /= 10)
+        ++i;
+    return i;
+} 
     
     
     
