@@ -13,6 +13,7 @@
 double RESULT = 0;
 
 int STATUS = 0;
+int MINUS = 0;
 
 static int ACT_LUT[][64] =
     {
@@ -121,7 +122,7 @@ static func ARR[] = {
 			Division,
 			Power,
 			DivByZero
-			};
+};
 
 int InfixToPost(char *str, double *out, size_t size)
 {
@@ -140,10 +141,18 @@ int InfixToPost(char *str, double *out, size_t size)
 	
 	while(*(str+step) && STATUS == 0)
 	{
-		x = *(char*)StackPeek(operators) - SHIFTASCII;
-		ch = *(str+step);
-		printf("%d - %d\n", x, ch - SHIFTASCII);
-		step += ARR[ACT_LUT[(int)x][ch - SHIFTASCII]](numbers, operators, str+step);
+		if(*(str+step) == '-' && *(str+step-1)== '(')
+		{
+			MINUS = 1;
+			step+=1;
+		}
+		else 
+		{
+			x = *(char*)StackPeek(operators) - SHIFTASCII;
+			ch = *(str+step);
+			printf("%d - %d\n", x, ch - SHIFTASCII);
+			step += ARR[ACT_LUT[(int)x][ch - SHIFTASCII]](numbers, operators, str+step);
+		}
 	}
 	
 	printf("FINAL: %f\n", RESULT);
@@ -253,7 +262,12 @@ int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	double res = strtod(ptr, &empty);
 	
 	(void)stack_operator;
-	
+	if(MINUS)
+	{
+		printf("We have minys!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+		res *= -1;
+		MINUS = 0;
+	}
 	StackPush(stack_number, &res);
 
 	printf("Size Stack: %ld\n", StackSize(stack_number));
@@ -419,9 +433,4 @@ size_t Reminder(int n)
     }    
     return i;
 } 
-    
-    
-    
-    
-    
 

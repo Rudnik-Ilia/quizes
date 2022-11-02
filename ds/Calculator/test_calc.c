@@ -8,6 +8,7 @@
 int main()
 {	
 	double *res = NULL;
+	
 	/*
 	InfixToPost("9*8=",res ,4);
 	InfixToPost("9/8=",res ,4);
@@ -16,8 +17,11 @@ int main()
 	InfixToPost("((5*2)*2+(2+2)*2+3*(9-2))/2 =",res ,30);
 	InfixToPost("(4+4)*(2-5)*2=",res ,20);
 	InfixToPost("((2-5)*2)/3=",res ,20);
+	InfixToPost("((4+3)*(2+4))*3=",res ,16);
+	InfixToPost("2^6=",res ,10);
 	*/
-	InfixToPost("((4+3)+(2+4))*3=",res ,20);
+	InfixToPost("(-2)+(-5)=",res ,10);
+	
 	
 	
 	
