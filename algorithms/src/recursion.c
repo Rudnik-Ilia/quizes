@@ -69,6 +69,13 @@ node_t *ListFlip(node_t *head)
 	return head;
 }
 
+size_t StrLen(const char *str)
+{
+	
+	return *str ? 1 + StrLen(str+1) : 0;
+
+}
+
 /*
 
 int GetElem(stack_t *first)

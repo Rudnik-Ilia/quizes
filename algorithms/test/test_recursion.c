@@ -61,7 +61,7 @@ void Test_Flip()
 
 int main()
 {	
-	
+	printf("%ld\n",StrLen("ilia"));
 /*
 	head = item_5;
 	head = item_5;
