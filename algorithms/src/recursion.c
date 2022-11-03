@@ -22,7 +22,6 @@ int FibRec(int idx)
 {
 	if(1 == idx|| 0 == idx)
 	{	
-		
 		return idx;
 	}
 	else
@@ -71,9 +70,19 @@ node_t *ListFlip(node_t *head)
 
 size_t StrLen(const char *str)
 {
-	
 	return *str ? 1 + StrLen(str+1) : 0;
+}
 
+int StrCmp(const char *s1, const char *s2)
+{
+	if (*s1 != '\0' && *s1 == *s2) 
+	{
+		return StrCmp(s1 + 1, s2 + 1);
+	} 
+	else 
+	{
+		return *s1 - *s2;
+	}
 }
 
 /*

@@ -61,7 +61,22 @@ void Test_Flip()
 
 int main()
 {	
-	printf("%ld\n",StrLen("ilia"));
+	TEST("Strlen" ,StrLen("ilia"), 4);
+	TEST("Strlen" ,StrLen("rudnik"), 6);
+	TEST("Strlen" ,StrLen("infinity"), 8);
+	TEST("Strlen" ,StrLen("a"), 1);
+	TEST("Strlen" ,StrLen("calculatorcalculator"), 20);
+	
+	TEST("Strcmp",StrCmp("ilia", "ilia"), 0);
+	TEST("Strcmp",StrCmp("ilia", "ili"), 97);
+	TEST("Strcmp",StrCmp("ilia", "lia"), -3);
+	TEST("Strcmp",StrCmp("ilia", "iliaaaaa"), -97);
+	TEST("Strcmp",StrCmp("ilia", " "), 73);
+	
+	
+	
+	
+	
 /*
 	head = item_5;
 	head = item_5;
