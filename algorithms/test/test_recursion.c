@@ -61,6 +61,8 @@ void Test_Flip()
 
 int main()
 {	
+	char dest[20] = {0};
+	
 	TEST("Strlen" ,StrLen("ilia"), 4);
 	TEST("Strlen" ,StrLen("rudnik"), 6);
 	TEST("Strlen" ,StrLen("infinity"), 8);
@@ -73,6 +75,16 @@ int main()
 	TEST("Strcmp",StrCmp("ilia", "iliaaaaa"), -97);
 	TEST("Strcmp",StrCmp("ilia", " "), 73);
 	
+	StrCpy(dest, "ilia");
+	TEST("Strcpy",StrCmp("ilia", dest), 0);
+	StrCpy(dest, "rudnik");
+	TEST("Strcpy",StrCmp("rudnik", dest), 0);
+	StrCpy(dest, "a");
+	TEST("Strcpy",StrCmp("b", dest), 1);
+	StrCpy(dest, "ilia");
+	TEST("Strcpy",StrCmp("ilia", dest), 0);
+	StrCpy(dest, "xxxxxxxxxx");
+	TEST("Strcpy",StrCmp("sssssssss", dest), -5);
 	
 	
 	

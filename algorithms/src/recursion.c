@@ -85,6 +85,18 @@ int StrCmp(const char *s1, const char *s2)
 	}
 }
 
+char *StrCpy(char *dest, const char *src) 
+{
+	if ((*dest = *src) != '\0') 
+	{
+		return StrCpy(dest + 1, src + 1);
+	} 
+	else 
+	{
+		return dest;
+	}
+}
+
 /*
 
 int GetElem(stack_t *first)
