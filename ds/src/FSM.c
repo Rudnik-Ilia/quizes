@@ -60,7 +60,7 @@ void ShowResult(int st)
 
 int main()
 {
-	ShowResult(GetString("11000"));
+	ShowResult(GetString("naste"));
 	
 return 0;
 }
