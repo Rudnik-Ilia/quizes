@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
-
+#include <string.h>
 #include <stdio.h>
 
 #include "../include/recursion.h"
@@ -59,9 +59,11 @@ void Test_Flip()
 	}
 }
 
-int main()
-{	
+void Test_String()
+{
+
 	char dest[20] = {0};
+	char FIO[13] = {0};
 	
 	TEST("Strlen" ,StrLen("ilia"), 4);
 	TEST("Strlen" ,StrLen("rudnik"), 6);
@@ -85,6 +87,24 @@ int main()
 	TEST("Strcpy",StrCmp("ilia", dest), 0);
 	StrCpy(dest, "xxxxxxxxxx");
 	TEST("Strcpy",StrCmp("sssssssss", dest), -5);
+	
+	
+	TEST("Strstr: ",StrCmp(StrStr("i live in Bat-Yam", "B"), "Bat-Yam"), 0);
+	TEST("Strstr: ",StrCmp(StrStr("i live in Bat-Yam", "l"), "live in Bat-Yam"), 0);
+	TEST("Strstr: ",StrCmp(StrStr("i live in Bat-Yam", "m"), "m"), 0);
+	TEST("Strstr: ",StrCmp(StrStr("i live in Bat-Yam", "i"), "i live in Bat-Yam"), 0);
+	
+	StrCpy(FIO, "qwerty");
+	StrCat(FIO, "qwerty");
+
+	TEST("Testing StrCat", StrCmp(FIO, "qwertyqwerty"), 0);
+}
+
+int main()
+{	
+	
+	
+	
 	
 	
 	
@@ -112,6 +132,7 @@ int main()
 	printf("Size of stack: %ld\n",  StackSize(first)); 
 
 	SortStack(first);
+	Test_String();
 	Test_Flip();
 	Test_Fibonachi();
 	*/

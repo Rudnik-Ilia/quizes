@@ -8,6 +8,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 #include <stdio.h>
 
@@ -96,6 +97,31 @@ char *StrCpy(char *dest, const char *src)
 		return dest;
 	}
 }
+
+char *StrCat(char *dest, const char *src)
+{
+	StrCpy(dest + StrLen(dest), src);
+	return dest;
+}	
+
+
+char *StrStr(const char *haystack, const char *needle)
+{
+
+	if ('\0' == *haystack)
+	{
+		return NULL;
+	}
+
+	if (0 == strncmp(haystack, needle, StrLen(needle)))
+	{
+		return (char*)haystack;
+	}
+
+	return StrStr(haystack + 1, needle);
+}
+
+
 
 /*
 
