@@ -9,7 +9,6 @@
 #include "../include/test.h"
 
 
-
 void Test_Fibonachi()
 {
 	size_t i = 0;
@@ -57,6 +56,11 @@ void Test_Flip()
 		TEST("Test Flip", runner->data, (int)i);
 		runner = runner->next;
 	}
+	free(item_1);
+	free(item_2);
+	free(item_3);
+	free(item_4);
+	free(item_5);
 }
 
 void Test_String()
@@ -100,42 +104,49 @@ void Test_String()
 	TEST("Testing StrCat", StrCmp(FIO, "qwertyqwerty"), 0);
 }
 
-int main()
+int CheckGetElem(stack_t *stack)
+{
+	int res = *(int*)StackPeek(stack);
+	StackPop(stack);
+	return res;
+}
+
+void Test_Sort()
 {	
-	
-	
-	
-	
-	
-	
-	
-/*
-	head = item_5;
-	head = item_5;
-	
-	printf("%d\n", item_5 - head);
-	
-	head = ListFlip(item_5);
-	
-	printf("%d\n", item_5 - head);
-	TestListFlip();
 	size_t i = 0;
-	int arr[] = {4,1,3,2,5};
+	int arr[] = {4,1,18,2,-9};
+	int res[] = {18,4,2,1,-9};
 	
-	stack_t * first = StackCreate(4, 5);
+	
+	stack_t * stack = StackCreate(sizeof(int), 5);
 	
 	for(i = 0; i < 5; ++i)
 	{
-		StackPush(first, &arr[i]);
+		StackPush(stack, &arr[i]);
 	}
 	
-	printf("Size of stack: %ld\n",  StackSize(first)); 
+	TEST("Size of stack: ",  StackSize(stack), 5); 
+	
+	
+	StackSort(stack);
+	TEST("Size of stack: ",  StackSize(stack), 5); 
+	for(i = 0; i < 5; ++i)
+	{
+		TEST("loop",  CheckGetElem(stack), res[i]); 
+	}
+	TEST("Size of stack: ",  StackSize(stack), 0);
+	
+	StackDestroy(stack); 
+}
 
-	SortStack(first);
+int main()
+{
+
 	Test_String();
 	Test_Flip();
 	Test_Fibonachi();
-	*/
+	Test_Sort();
+	
 	PASS;
 return 0;
 }

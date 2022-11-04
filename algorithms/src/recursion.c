@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-
 #include <stdio.h>
+#include "../../ds/include/stack.h"
 
 typedef struct node
 {
@@ -108,12 +108,12 @@ char *StrCat(char *dest, const char *src)
 char *StrStr(const char *haystack, const char *needle)
 {
 
-	if ('\0' == *haystack)
+	if (*haystack == '\0')
 	{
 		return NULL;
 	}
 
-	if (0 == strncmp(haystack, needle, StrLen(needle)))
+	if (strncmp(haystack, needle, StrLen(needle)) == 0)
 	{
 		return (char*)haystack;
 	}
@@ -121,29 +121,39 @@ char *StrStr(const char *haystack, const char *needle)
 	return StrStr(haystack + 1, needle);
 }
 
-
-
-/*
-
-int GetElem(stack_t *first)
+static int GetElem(stack_t *stack)
 {
-	int res = *(int*)StackPeek(first);
-	StackPop(first);
+	int res = *(int*)StackPeek(stack);
+	StackPop(stack);
 	return res;
 }
 
-
-void SortStack(stack_t *first)
+void RecurseCompare(stack_t *stack, int curr)
 {
-	int tmp = 0;
-	int res = 0;
-	
-	stack_t *second = StackCreate(4, 5);
-	stack_t *third = StackCreate(4, 5);
-	
-	tmp = GetElem(first);	
+	int head = 0;
+	if (StackIsEmpty(stack) || curr >= *(int *)StackPeek(stack))
+	{
+		StackPush(stack, &curr);
+		return;
+	}
+	head = GetElem(stack);
+	RecurseCompare(stack, curr);
+	StackPush(stack, &head);
 }
-*/
+
+void StackSort(stack_t *stack)
+{
+	int curr = 0;
+	if (StackIsEmpty(stack))
+	{
+		return;
+	}
+	curr = GetElem(stack);
+	StackSort(stack);
+	RecurseCompare(stack, curr);
+		
+}
+
 
 
 
