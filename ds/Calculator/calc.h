@@ -5,8 +5,7 @@
 
 
 typedef int (*func)(stack_t * op_d, stack_t * op_or, char *ptr);
-/*
-typedef enum status status_t
+
 
 typedef enum status {
 	SUCCESS,
@@ -17,7 +16,7 @@ typedef enum status {
 	DOUBLE_OVERFLOW,
 	DOUBLE_UNDERFLOW
 }status_t;
-*/
+
 
 
 

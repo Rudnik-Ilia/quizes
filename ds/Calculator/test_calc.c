@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
- #include <alloca.h>
-#include "calc.h"
+#include <alloca.h>
+#include "tests.h"
 
+#include "calc.h"
 
 
 
 int main()
 {	
-	double *res = NULL;
-	
-	
+
+  
+
 	/*
 	MainFunc("9*8=",res ,4);
 	MainFunc("9/8=",res ,4);
@@ -28,15 +29,26 @@ int main()
 	
 
 	MainFunc("(((2000 + -300)-100/3)^2)/33=", res, 10);
-	*/
+	Calculate("2^(2^3)=", res);
 	Calculate("((2000 + (-300)-100/3)^2)/33=",res);
+	Calculate("4/0=", res);
+	Calculate("144+2-24=", res);
+	Calculate("  2 ^ (2 ^ 3) + 2=", res);
+	Calculate("1+1*2*3+256*4/2^(3^2)+4/2^2=", res);	
 	
-
+	
+	Calculate("4 +2 * (2^(2^(9/2)+1))=", res);
+	printf("%d\n",Calculate(")4+4=", &arr[0]));
+	*/
+	
+	
+	
+	
 	
 
 	
 	
   
-	
+	PASS;
 return 0;
 }

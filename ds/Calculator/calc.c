@@ -11,7 +11,12 @@
 
 #define SHIFTASCII 32
 
+
+#define STATE(a, b) ((a) == (b) ? 0 : 1)
+
 double RESULT = 0;
+double FINAL_RESULT = 0;
+
 int STATUS = 0;
 int MINUS = 0;
 
@@ -83,7 +88,7 @@ static int ACT_LUT[][64] =
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{2,0,0,0,0,0,0,0,1,2,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,2,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0},
+	{2,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,2,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 		
 };
@@ -133,14 +138,10 @@ int Calculate(const char *exp, double *out)
 	char *str = alloca(size);
 	
 	DeleteSpace(exp, str);
-	printf("%s\n", str);
-	printf("%d\n", size);
-	
-	MainFunc(str, out, size);
-	
-	
 
-	return 1;
+	MainFunc(str, out, size);
+	*out = FINAL_RESULT;
+	return MainFunc(str, out, size);
 }
 
 
@@ -154,8 +155,9 @@ int MainFunc(char *str, double *out, size_t size)
 	char start_sym = ' ';
 	int ch = 0;
 	char x = 0;
-	(void)out;
-
+	
+	STATUS=0;
+	
 	numbers =  StackCreate(sizeof(double), size);
 	operators = StackCreate(sizeof(char), size);
 	
@@ -175,41 +177,16 @@ int MainFunc(char *str, double *out, size_t size)
 			printf("%d - %d\n", x, ch - SHIFTASCII);
 			step += ARR[ACT_LUT[(int)x][ch - SHIFTASCII]](numbers, operators, str+step);
 		}
+		FINAL_RESULT = RESULT;
 	}
 	
-	printf("FINAL: %f\n", RESULT);
-	/*
-	PushOperatorToNumberStack(numbers, operators, str+step);
-	printf("SIZE OPER: %ld\n", StackSize(operators));
-	printf("LAST OPER: %c\n", *(char*)StackPeek(operators));
-	StackPop(operators);
-	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
-	StackPop(operators);
-	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
-	StackPop(operators);
-	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
-	StackPop(operators);
-	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
-	StackPop(operators);
-	printf("LAST OPER: %c\n", *(char*)StackPeek(numbers));
-	printf("---------------------------------------------------------------------------");
-	printf("SIZE NUM: %ld\n", StackSize(numbers));
-	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
-	StackPop(numbers);
-	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
-	StackPop(numbers);
-	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
-	StackPop(numbers);
-	printf("LAST NUM: %f\n", *(double*)StackPeek(numbers));
-	StackPop(numbers);
-
-	StackDestroy(numbers);
-	StackDestroy(operators);
-	*/
+	printf("FINAL: %f\n", FINAL_RESULT);
+	
 	
 	StackDestroy(numbers);
 	StackDestroy(operators);
-	return 0;
+	
+	return STATE(FINAL_RESULT, *out);
 }
 
     
@@ -224,12 +201,9 @@ int Nothing(stack_t * stack_number, stack_t * stack_operator,char *ptr)
 
 int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *ptr)
 {
-	void *dat = NULL;
 	(void)stack_number;
 
-	dat = ptr;
-
-	StackPush(stack_operator, dat);
+	StackPush(stack_operator, ptr);
 
 	printf("PushOperatorToStack\n");
 	return 1;
@@ -319,16 +293,7 @@ int Finish(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	printf("I am finish\n");
 	return 1;
 }
-/*
-void DeleteSpace(char *str)
-{
-	char *p = str;
-	while ((p = strchr(p,' ')))
-	{
-		memmove(p, p + 1, strlen(p));
-	}
-}
-*/
+
 /********************************************************************************************************************/
 
 int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
@@ -402,15 +367,10 @@ int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_operator; 
 	(void)ptr; 
 	a = *(double*)StackPeek(stack_number);
-	/*
-	printf("ZERO %d - %d\n", (int)((a+48)-32), *(char*)StackPeek(stack_operator)-SHIFTASCII);
-	ARR[ACT_LUT[(int)((a+48)-32)][*(char*)StackPeek(stack_operator)-SHIFTASCII]](stack_number, stack_operator, ptr);
-	*/
+	
 	StackPop(stack_number);
 	
 	res = (*(double*)StackPeek(stack_number))/a;
-	
-	
 	
 	StackPop(stack_number);
 
@@ -450,7 +410,7 @@ int DivByZero(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_operator; 
 	(void)ptr; 
 	(void)stack_number; 
-	STATUS = 1;
+	STATUS = 2;
 	printf("DIVISION BY ZERO! BYYYY\n");
 	
 	return 0;
