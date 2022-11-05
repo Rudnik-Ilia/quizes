@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <alloca.h>
-#include "tests.h"
-
+#include "test.h"
 #include "calc.h"
 
 
@@ -11,9 +10,18 @@
 int main()
 {	
 
-  
+	double arr[] = {122.0};
+	
+	
+	
 
+	Calculate("-(2-7)-2=", &arr[0]);
+	
 	/*
+	Calculate("(-1)*2^2=", &arr[0]);
+	Calculate("(-1*2)^2=", &arr[0]);
+	
+	Calculate("(-3)+5/(0^0)+6*23=", &arr[0]);
 	MainFunc("9*8=",res ,4);
 	MainFunc("9/8=",res ,4);
 	MainFunc("20*3+(12+71)*2+45+1=",res ,5);
@@ -41,13 +49,7 @@ int main()
 	printf("%d\n",Calculate(")4+4=", &arr[0]));
 	*/
 	
-	
-	
-	
-	
 
-	
-	
   
 	PASS;
 return 0;

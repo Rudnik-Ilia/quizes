@@ -12,13 +12,12 @@
 #define SHIFTASCII 32
 
 
-#define STATE(a, b) ((a) == (b) ? 0 : 1)
+int MINUS = 0;
 
 double RESULT = 0;
 double FINAL_RESULT = 0;
 
 int STATUS = 0;
-int MINUS = 0;
 
 static int ACT_LUT[][64] =
     {
@@ -113,6 +112,7 @@ int Power(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 static double PowerCalculate(double num1, double num2); 
 size_t Reminder(int n);
 int DivByZero(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int FirstMinus(stack_t *stack_number, stack_t *stack_operator, char *ptr);
  
 static func ARR[] = {	
 			Nothing, 
@@ -129,7 +129,8 @@ static func ARR[] = {
 			Division,
 			Power,
 			DivByZero,
-			Finish
+			Finish,
+			FirstMinus
 };
 
 int Calculate(const char *exp, double *out)
@@ -137,11 +138,14 @@ int Calculate(const char *exp, double *out)
 	size_t size = strlen(exp);
 	char *str = alloca(size);
 	
+	
 	DeleteSpace(exp, str);
 
 	MainFunc(str, out, size);
+	
 	*out = FINAL_RESULT;
-	return MainFunc(str, out, size);
+	
+	return STATUS;
 }
 
 
@@ -163,30 +167,44 @@ int MainFunc(char *str, double *out, size_t size)
 	
 	StackPush(operators, &start_sym);
 	
+	
 	while(*(str+step) && STATUS == 0)
 	{
-		if(*(str+step) == '-' && (*(str+step-1) == '(' || *(str+step-1) == ' '))
+	
+		if(*(str) == '-' && (StackIsEmpty(numbers) == 1 && *(int*)StackPeek(operators) == 32))
+		{
+		 	FirstMinus(numbers, operators, str);
+		 	step+=1;
+		 	printf(" SSSSSSSSSSSSSSS: %d - %d\n", *(char*)StackPeek(operators), *(int*)StackPeek(numbers));
+		}
+		
+		else if(*(str+step) == '-' && (*(str+step-1) == '('))
 		{
 			MINUS = 1;
 			step+=1;
 		}
+		
+		
 		else 
 		{
+			printf(" SSSSSSSSSSSSSSS: %d - %d\n", *(char*)StackPeek(operators), *(int*)StackPeek(numbers));
+			
 			x = *(char*)StackPeek(operators) - SHIFTASCII;
 			ch = *(str+step);
 			printf("%d - %d\n", x, ch - SHIFTASCII);
 			step += ARR[ACT_LUT[(int)x][ch - SHIFTASCII]](numbers, operators, str+step);
 		}
+		
 		FINAL_RESULT = RESULT;
 	}
 	
-	printf("FINAL: %f\n", FINAL_RESULT);
 	
+	printf("FINAL================================: %f\n", FINAL_RESULT);
 	
 	StackDestroy(numbers);
 	StackDestroy(operators);
 	
-	return STATE(FINAL_RESULT, *out);
+	return 0;
 }
 
     
@@ -252,7 +270,7 @@ int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)ptr;
 	printf("Stop error start syntax\n");
 	STATUS = 1;
-	return 0;
+	return 1;
 }
 
 int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
@@ -267,9 +285,11 @@ int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 		res *= -1;
 		MINUS = 0;
 	}
+	printf("What happens here: %d -  %ld\n", *(int*)StackPeek(stack_number), StackSize(stack_number));
 	StackPush(stack_number, &res);
 
 	printf("Size Stack: %ld\n", StackSize(stack_number));
+	printf("Push numbers");
 	
 	return res ? Reminder(res) : 1;
 }
@@ -293,6 +313,19 @@ int Finish(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	printf("I am finish\n");
 	return 1;
 }
+
+int FirstMinus(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{	
+	double one = -1;
+	char c = '*';
+	StackPush(stack_number, &one);
+	StackPush(stack_operator, &c);
+	printf("Size Stack: _______________%ld\n", StackSize(stack_operator));
+	printf("First minys_______________________________\n");
+	return 0;
+}
+
+
 
 /********************************************************************************************************************/
 
@@ -342,10 +375,11 @@ int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_operator;
 	(void)ptr;
 	
+	printf("PEEK AND SIZE: %f - %ld\n", *(double*)StackPeek(stack_number), StackSize(stack_number));
 	a = *(double*)StackPeek(stack_number);
 	
 	StackPop(stack_number);
-	
+	printf("What happens here: %f - %f - %ld\n", *(double*)StackPeek(stack_number), a, StackSize(stack_number));
 	res = a * *(double*)StackPeek(stack_number);
 	
 	StackPop(stack_number);
@@ -354,7 +388,6 @@ int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	
 	StackPush(stack_number, &res);
 	
-	printf("PEEK AND SIZE: %f - %ld\n", *(double*)StackPeek(stack_number), StackSize(stack_number));
 	RESULT = res;
 	return 0;
 }
@@ -411,6 +444,7 @@ int DivByZero(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)ptr; 
 	(void)stack_number; 
 	STATUS = 2;
+	FINAL_RESULT = 0;
 	printf("DIVISION BY ZERO! BYYYY\n");
 	
 	return 0;
@@ -421,6 +455,12 @@ static double PowerCalculate(double num1, double num2)
 {
 	double res = 1;
 	double i;
+
+	if (num2 < 0)
+	{
+		num2 = num2 * (-1);
+		num1 = 1/num1;
+	}    
 
 	for (i = 0; i < num2; ++i)
 	{

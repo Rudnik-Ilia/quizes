@@ -22,7 +22,7 @@ int main()
 
   
 
-    status = Calculate("-5-(-2)=", &output);
+    status = Calculate("(-5)-(-2)=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, -3.0);
 
@@ -50,41 +50,42 @@ int main()
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 1.0);
 
-    output = 0;
-    status = Calculate("3+5/0=", &output);
-    TEST("TESTING Calculate", status, ILLEGAL_OPERATION);
-    TEST_DOUBLE("TESTING Calculate", output, 0.0);
+   
 
     output = 0;
     status = Calculate("(-3)+5/0+6*23/0/0/0/10=", &output);
     TEST("TESTING Calculate", status, ILLEGAL_OPERATION);
+    
     TEST_DOUBLE("TESTING Calculate", output, 0.0);
-
+    /*
+*/
     output = 0;
-    status = Calculate("(-3)+5/0^0+6*23=", &output);
+    status = Calculate("(-3)+5/(0^0)+6*23=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 140.0);
 
     status = Calculate("(3+2)*1=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 5.0);
-
-    status = Calculate("-(-8/2 - 1)=", &output);
+/*
+    status = Calculate("-1*((-8)/2 - 1)=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 5.0);
-
-    status = Calculate("(-3+2)*(5-3*-(4/2 - 1))=", &output);
+    
+    
+    status = Calculate("((-3)+2)*(5-3*-(4/2 - 1))=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, -8.0);
+*/
 
     status = Calculate("1+5-2*2^2+6/2=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 1.0);
-/*
-    status = Calculate("-2^(-6/2)=", &output);
+
+    status = Calculate("(-2)^(-6/2)=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, -0.125);
-*/
+
  
 
     status = Calculate("2^(2^3)=", &output);
@@ -94,15 +95,17 @@ int main()
     status = Calculate("(2^2)^3=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 64.0);
-/*
+    
     status = Calculate("(2^2)^3)=", &output);
     TEST("TESTING Calculate", status, SYNTAX_ERR);
+    
     status = Calculate("1)*3=", &output);
     TEST("TESTING Calculate", status, SYNTAX_ERR);
 
+
     status = Calculate(")))))))", &output);
     TEST("TESTING Calculate", status, SYNTAX_ERR);
-*/
+
 
     PASS;
     puts("\033[33m");
