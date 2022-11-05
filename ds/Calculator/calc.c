@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
-
+#include <string.h>
+#include <alloca.h> 
 #include "../include/stack.h"
 #include "calc.h"
 
@@ -17,7 +18,7 @@ int MINUS = 0;
 static int ACT_LUT[][64] =
     {
      /* 0 1 2 3 4 5 6 7 8 9 101112                                  =    */    
-	{4,0,0,0,0,0,0,0,1,5,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+	{4,0,0,0,0,0,0,0,1,5,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,0,0,14,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -25,7 +26,7 @@ static int ACT_LUT[][64] =
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
- /* ( */{4,0,0,0,0,0,0,0,1,3,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+ /* ( */{4,0,0,0,0,0,0,0,1,3,1,1,0,1,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,6,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
  /* ) */{4,0,0,0,0,0,0,0,1,3,0,0,0,0,0,0, 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
  /* * */{4,0,0,0,0,0,0,0,1,2,2,2,0,2,0,2, 7,7,7,7,7,7,7,7,7,7,7,7,7,2,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
  /* + */{4,0,0,0,0,0,0,0,1,2,1,2,0,2,0,1, 7,7,7,7,7,7,7,7,7,7,7,7,7,2,7,7, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
@@ -95,6 +96,8 @@ int Stub(stack_t * stack_number, stack_t * stack_operator, char *ptr);
 int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+int Finish(stack_t *stack_number, stack_t *stack_operator, char *ptr);
+char *DeleteSpace(const char *str, char *dest); 
 
 int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 int Subtraction(stack_t *stack_number, stack_t *stack_operator, char *ptr);
@@ -120,10 +123,30 @@ static func ARR[] = {
 			Multiplication,
 			Division,
 			Power,
-			DivByZero
+			DivByZero,
+			Finish
 };
 
-int InfixToPost(char *str, double *out, size_t size)
+int Calculate(const char *exp, double *out)
+{
+	size_t size = strlen(exp);
+	char *str = alloca(size);
+	
+	DeleteSpace(exp, str);
+	printf("%s\n", str);
+	printf("%d\n", size);
+	
+	MainFunc(str, out, size);
+	
+	
+
+	return 1;
+}
+
+
+
+
+int MainFunc(char *str, double *out, size_t size)
 {
 	stack_t *numbers = NULL;
 	stack_t *operators = NULL;
@@ -140,7 +163,7 @@ int InfixToPost(char *str, double *out, size_t size)
 	
 	while(*(str+step) && STATUS == 0)
 	{
-		if(*(str+step) == '-' && *(str+step-1)== '(')
+		if(*(str+step) == '-' && (*(str+step-1) == '(' || *(str+step-1) == ' '))
 		{
 			MINUS = 1;
 			step+=1;
@@ -183,6 +206,9 @@ int InfixToPost(char *str, double *out, size_t size)
 	StackDestroy(numbers);
 	StackDestroy(operators);
 	*/
+	
+	StackDestroy(numbers);
+	StackDestroy(operators);
 	return 0;
 }
 
@@ -281,8 +307,29 @@ int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)ptr;
 
 	printf("Wrong symbol\n");
+	STATUS = 1;
 	return 1;
 }
+
+int Finish(stack_t *stack_number, stack_t *stack_operator, char *ptr)
+{
+	(void)stack_number;
+	(void)stack_operator;
+	(void)ptr;
+	printf("I am finish\n");
+	return 1;
+}
+/*
+void DeleteSpace(char *str)
+{
+	char *p = str;
+	while ((p = strchr(p,' ')))
+	{
+		memmove(p, p + 1, strlen(p));
+	}
+}
+*/
+/********************************************************************************************************************/
 
 int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
@@ -421,6 +468,22 @@ static double PowerCalculate(double num1, double num2)
 	}
 
 	return res;
+}
+
+char *DeleteSpace(const char *str, char *dest) 
+{
+	int i,j;
+	
+	for(i = j = 0; str[i] != '\0'; ++i)
+	{
+		if(str[i] != ' ')
+		{
+		    dest[j++] = str[i];
+		 }
+	}	    
+	dest[j] = '\0';
+		
+	return (dest);
 }
 
 size_t Reminder(int n)
