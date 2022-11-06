@@ -56,8 +56,8 @@ int main()
     status = Calculate("(-3)+5/0+6*23/0/0/0/10=", &output);
     TEST("TESTING Calculate", status, ILLEGAL_OPERATION);
     
-    TEST_DOUBLE("TESTING Calculate", output, 0.0);
     /*
+    TEST_DOUBLE("TESTING Calculate", output, 0.0);
 */
     output = 0;
     status = Calculate("(-3)+5/(0^0)+6*23=", &output);
@@ -67,8 +67,8 @@ int main()
     status = Calculate("(3+2)*1=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 5.0);
-/*
-    status = Calculate("-1*((-8)/2 - 1)=", &output);
+    
+    status = Calculate("(-1)*((-8)/2 - 1)=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, 5.0);
     
@@ -76,6 +76,7 @@ int main()
     status = Calculate("((-3)+2)*(5-3*-(4/2 - 1))=", &output);
     TEST("TESTING Calculate", status, SUCCESS);
     TEST_DOUBLE("TESTING Calculate", output, -8.0);
+/*
 */
 
     status = Calculate("1+5-2*2^2+6/2=", &output);

@@ -15,7 +15,7 @@ int main()
 	
 	
 
-	Calculate("-(2-7)-2=", &arr[0]);
+	Calculate("-(2+4)=", &arr[0]);
 	
 	/*
 	Calculate("(-1)*2^2=", &arr[0]);

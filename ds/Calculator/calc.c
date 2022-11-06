@@ -171,29 +171,26 @@ int MainFunc(char *str, double *out, size_t size)
 	while(*(str+step) && STATUS == 0)
 	{
 	
-		if(*(str) == '-' && (StackIsEmpty(numbers) == 1 && *(int*)StackPeek(operators) == 32))
+		while(*(str) == '-' && (StackIsEmpty(numbers) == 1 && *(int*)StackPeek(operators) == 32))
 		{
 		 	FirstMinus(numbers, operators, str);
 		 	step+=1;
 		 	printf(" SSSSSSSSSSSSSSS: %d - %d\n", *(char*)StackPeek(operators), *(int*)StackPeek(numbers));
 		}
 		
-		else if(*(str+step) == '-' && (*(str+step-1) == '('))
+		while(*(str+step) == '-' && (*(str+step-1) == '('))
 		{
 			MINUS = 1;
 			step+=1;
 		}
 		
+		printf(" SSSSSSSSSSSSSSS: %d - %d\n", *(char*)StackPeek(operators), *(int*)StackPeek(numbers));
 		
-		else 
-		{
-			printf(" SSSSSSSSSSSSSSS: %d - %d\n", *(char*)StackPeek(operators), *(int*)StackPeek(numbers));
-			
-			x = *(char*)StackPeek(operators) - SHIFTASCII;
-			ch = *(str+step);
-			printf("%d - %d\n", x, ch - SHIFTASCII);
-			step += ARR[ACT_LUT[(int)x][ch - SHIFTASCII]](numbers, operators, str+step);
-		}
+		x = *(char*)StackPeek(operators) - SHIFTASCII;
+		ch = *(str+step);
+		printf("%d - %d\n", x, ch - SHIFTASCII);
+		step += ARR[ACT_LUT[(int)x][ch - SHIFTASCII]](numbers, operators, str+step);
+		
 		
 		FINAL_RESULT = RESULT;
 	}
@@ -279,7 +276,7 @@ int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	double res = strtod(ptr, &empty);
 	
 	(void)stack_operator;
-	if(MINUS)
+	while(MINUS)
 	{
 		printf("We have minys!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 		res *= -1;
