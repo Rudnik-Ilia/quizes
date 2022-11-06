@@ -115,7 +115,8 @@ int main()
     status = Calculate("(2 0 0 + 3 0 0) / 10=", &output);
     TEST_DOUBLE("TESTING Calculate", output, 50.0);
     
-    
+    status = Calculate("2^2^3=", &output);
+    TEST_DOUBLE("TESTING Calculate", output, 256.0);
 
 
     PASS;
