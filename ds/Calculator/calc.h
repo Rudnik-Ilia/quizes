@@ -35,6 +35,4 @@ typedef enum status {
 int Calculate(const char *exp, double *out);
 
 
-int MainFunc(char *str, double *out, size_t size);
-
 #endif /* __CALC_H__ */
