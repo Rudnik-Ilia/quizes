@@ -17,37 +17,30 @@
 /* need to delete printf*/
 struct stack
 {
-	size_t max_item; 
+	size_t element_size;
+	size_t nmemb;
 	size_t size;
-	size_t item_size;
-	void  *p_item;
 };
 
-
-
-stack_t *StackCreate(size_t element_size, size_t num_of_elements)
+stack_t *StackCreate(size_t element_size, size_t num_of_element)
 {
-	stack_t *MyStack = (stack_t*)malloc(sizeof(stack_t));
+	void *MyStack = malloc(sizeof(stack_t) + element_size * num_of_element);
+	
 	if(NULL == MyStack)
-	{
-		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
-	}
-	MyStack -> p_item = malloc(element_size * num_of_elements);
-	if(NULL == MyStack->p_item)
 	{
 		printf("SORRY, NO MEMORY FOR YOU. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);              
 	}
-	MyStack -> size = 0;
-	MyStack -> item_size = sizeof(element_size);
-	MyStack -> max_item = num_of_elements;
+
+	((stack_t*)MyStack)->element_size = element_size;
+	((stack_t*)MyStack)->nmemb = num_of_element;
+	((stack_t*)MyStack)->size = 0;
+
 	return MyStack;
 }
 
-
 void StackDestroy(stack_t *stack)
 {
-	assert(stack);
-	free(stack-> p_item);
+	assert(NULL != stack);
 	free(stack);
 }
 
@@ -55,74 +48,46 @@ void StackPush(stack_t *stack, const void *data)
 {
 	assert(stack);
 	assert(data);
-	if(stack->size == stack->max_item)
+	if(stack->size == stack->nmemb)
 	{
 		printf("SORRY, SIZE OF STACK WAS EXEEDED. ERROR AT LINE: %d IN FILE: %s\n ",__LINE__, __FILE__);
 	}
-	memcpy((char*)(stack -> p_item) + stack->size * stack->item_size, data, stack->item_size);
+
+	memcpy((char*)stack + sizeof(stack_t) + stack->size * stack->element_size,
+			data, stack->element_size);
 	++stack->size;
 }
 
-
 void StackPop(stack_t *stack)
-{	
-	assert(stack);
-	--stack->size;	
+{
+	assert(NULL != stack);
+	assert(stack->size != 0);
+	--stack->size;
 }
 
 void *StackPeek(const stack_t *stack)
 {
-	assert(stack);
-	return (char*)(stack -> p_item) + stack->item_size*(stack->size-1);
+	assert(NULL != stack);
+	return (char*)stack + sizeof(stack_t) + (stack->size - 1) * stack->element_size;
+}
+
+int StackIsEmpty(const stack_t *stack)
+{
+	assert(NULL != stack);
+	return !stack->size;
 }
 
 size_t StackSize(const stack_t *stack)
 {
-	assert(stack);
+	assert(NULL != stack);
 	return stack->size;
-}
-
-int StackIsEmpty(const stack_t *stack)
-{	
-	assert(stack);
-	return stack->size ? 0 : 1;
 }
 
 size_t StackCapacity(const stack_t *stack)
 {
-	if(NULL == stack)
-	{
-		return 0;
-	}
-	return stack->max_item;
+	assert(NULL != stack);
+	return stack->nmemb;
 }
-
- /*
-for one allocation
-void StackPush(stack_t *stack, const void *data)
-{
-	memcpy((char*)(stack -> p_item) + stack->size * stack->item_size, data, stack->item_size);
-	++stack->size;
-}
-
-
-stack_t *StackCreate(size_t element_size, size_t num_of_elements)
-{
-	void *place = (void*)malloc(sizeof(stack_t) + sizeof(element_size) * sizeof(num_of_elements));
-	stack_t* MyStack = (stack_t*)((char*)place);
-	MyStack -> p_item = (void*)((char*)MyStack + sizeof(MyStack));
-	MyStack -> size = 0;
-	MyStack -> item_size = sizeof(element_size);
-	MyStack -> max_item = num_of_elements;
-	return MyStack;
-}
-*/
-
-
-
-
-
-
 
 
 /*
