@@ -11,6 +11,9 @@
 #include <assert.h> 
 #include <stdlib.h> /*malloc*/
 #include <limits.h>
+#include <string.h> /*memcpy*/
+#include <alloca.h> 
+
 
 #include "sorts.h"
 
@@ -224,7 +227,112 @@ void RadixSort(int *arr, size_t size)
 }
 
 
+int MergeSort(int *arr_to_sort, size_t num_elements)
+{
+	size_t i = 0;
+	size_t li = 0;
+	size_t ri = 0;
 
+	int *left = NULL;
+	int *right = NULL;
+	
+	size_t sizeleft = num_elements / 2;
+	size_t sizeright = num_elements - sizeleft;
+	
+	left = (int*)alloca(sizeleft * sizeof(int));
+	right= (int*)alloca(sizeright * sizeof(int));
+
+	memset(left,0, sizeleft * sizeof(int));
+	memset(right,0, sizeright * sizeof(int));	
+	
+	if(num_elements == 1)
+	{
+		return 0;
+	}
+
+	for(i = 0; i < num_elements; ++i)
+	{
+		if(i < sizeleft)
+		{
+			left[li] = arr_to_sort[i];
+			li++;
+		}
+		else
+		{
+			right[ri] = arr_to_sort[i];
+			ri++;
+		}
+	}
+
+	MergeSort(left, sizeleft);
+	MergeSort(right, sizeright);
+	
+	li = 0;
+	ri = 0;
+	for(i = 0; i < num_elements; ++i)
+	{
+		if((left[li] <= right[ri] && li < sizeleft) || ri == sizeright)
+		{
+			arr_to_sort[i] = left[li];
+			li++;
+		}
+		else
+		{
+			arr_to_sort[i] = right[ri];
+			ri++;
+		}
+	}
+	return 0;
+}
+
+static void SwapVoid(void *a, void *b, size_t size)
+{	
+	void *tmp = NULL;
+	tmp = alloca(sizeof(void*));
+	memcpy(tmp, a, size);
+	memcpy(a, b, size);
+	memcpy(b, tmp, size);
+}
+
+void _quicksort(void *arr, size_t elems, size_t size_elem, int low, int high, int (*is_before)(const void *elem1, const void *elem2))
+{
+	void *pivot = NULL;
+	int i = 0;
+	int j = 0;
+	
+	if(low < high)
+	{
+		pivot = (char*)arr + (elems)*size_elem;
+		i = low;
+		j = high;
+		
+		while(i < j) 
+		{
+			while((is_before((char*)arr + i, pivot) == 1) && i <= high)
+			{
+				i+=size_elem;
+			}
+			while((is_before((char*)arr + j, pivot) == 2) && j >= low)
+			{
+				j-=size_elem;
+			}
+			if(i < j) 
+			{
+				SwapVoid((char*)arr + i, (char*)arr + j, size_elem);
+			}
+		}
+
+		SwapVoid((char*)arr + j, pivot, size_elem);
+	
+		_quicksort(arr, elems-1, size_elem, low, j-size_elem, is_before);
+		_quicksort(arr, elems-1, size_elem, j+size_elem, high, is_before);
+	}
+}
+int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*is_before)(const void *elem1, const void *elem2))
+{
+	_quicksort(arr_to_sort, num_elements-1, elem_size, 0, num_elements*elem_size - elem_size, is_before);
+	return 0;
+}
 
 
 
