@@ -1,7 +1,7 @@
 /**********************
 * Title : CULCULATR!
 * Author: Ilia Rudnik
-* Reviewer: MARINA
+* Reviewer: MARIIA
 * Date : 10/11/2022
 * Status : approved
 ***********************/
@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
-#include <string.h>
+#include <string.h> /* strlen */
 #include <alloca.h> /*just for experiment*/
 
 #include "../include/stack.h"
@@ -146,6 +146,9 @@ int Calculate(const char *exp, double *out)
 	size_t size = strlen(exp);
 	char *str = alloca(size);
 	
+	assert(NULL != exp);
+	assert(NULL != out);
+	
 	DeleteSpace(exp, str);
 	MainFunc(str, out, size);
 	*out = FINAL_RESULT;
@@ -160,6 +163,9 @@ int MainFunc(char *str, double *out, size_t size)
 	int step = 0;
 	char start_sym = ' ';
 	(void)out;
+	
+	assert(NULL != str);
+	assert(NULL != out);
 	
 	STATUS=0;
 	
@@ -196,12 +202,21 @@ int Nothing(stack_t * stack_number, stack_t * stack_operator,char *ptr)
 	(void)stack_number;
 	(void)stack_operator;
 	(void)ptr;
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
+	
 	return 1;
 }    
 
 int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *ptr)
 {
 	(void)stack_number;
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
 
 	StackPush(stack_operator, ptr);
 
@@ -212,6 +227,10 @@ int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, ch
 {
 	
 	int index = *(char*)(StackPeek(stack_operator));
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
 	
 	ARR[ACT_LUT[(int)((StackSize(stack_number)+48) - 32)][index - SHIFTASCII]](stack_number, stack_operator, ptr);
 	
@@ -224,6 +243,11 @@ int KillOperator(stack_t * stack_number, stack_t * stack_operator, char *ptr)
 {
 	(void)stack_number;
 	(void)ptr;
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
+	
 	StackPop(stack_operator);
 
 	return 1;
@@ -234,6 +258,10 @@ int Stub(stack_t * stack_number, stack_t * stack_operator, char *ptr)
 	(void)stack_number;
 	(void)stack_operator;
 	(void)ptr;
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
 
 	return 1;
 }
@@ -243,6 +271,11 @@ int StopErrorStart(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_number;
 	(void)stack_operator;
 	(void)ptr;
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
+	
 	STATUS = 1;
 	return 1;
 }
@@ -252,6 +285,10 @@ int PushNumers(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	char *empty = NULL;
 	double res = strtod(ptr, &empty);
 	(void)stack_operator;
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
 	
 	while(MINUS)
 	{
@@ -267,7 +304,11 @@ int WrongSymbol(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_number;
 	(void)stack_operator;
 	(void)ptr;
-
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
+	
 	STATUS = 1;
 	return 1;
 }
@@ -277,6 +318,11 @@ int Finish(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_number;
 	(void)stack_operator;
 	(void)ptr;
+	
+	assert(NULL != stack_number);
+	assert(NULL != stack_operator);
+	assert(NULL != ptr);
+	
 	return 1;
 }
 

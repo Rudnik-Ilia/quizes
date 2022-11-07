@@ -32,7 +32,7 @@ typedef enum status {
 *    AVR: O(n)
 *    Space: O(n)
 */
-int Calculate(const char *exp, double *out);
+status_t Calculate(const char *exp, double *out);
 
 
 #endif /* __CALC_H__ */
