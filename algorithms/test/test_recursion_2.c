@@ -1,81 +1,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #include "recursion.h"
 #include "sorts.h"
 #include "test.h"
 
-
-/*
-int Mergesort(int array[], int length)
+int Cmp_I(const void *data,const void *sata)
 {
-	int i = 0;
-	int li = 0;
-	int ri = 0;
-
-	int sizeleft = length / 2;
-	int sizeright = length - sizeleft;
-	
-	int *left = malloc(sizeleft * sizeof(int));
-	int *right= malloc(sizeright * sizeof(int));
-
-	if(length == 1)
+	if(*(int*)data <= *(int*)sata)
+	{
+		return 1;
+	}
+	else if(*(int*)data > *(int*)sata)
+	{
+		return 2;
+	}
+	else
 	{
 		return 0;
-	}
-
-	li = 0;
-	ri = 0;
-	for(i = 0; i < length; ++i)
-	{
-		if(i < sizeleft)
-		{
-			left[li] = array[i];
-			li++;
-		}
-		else
-		{
-			right[ri] = array[i];
-			ri++;
-		}
-	}
-
-
-	Mergesort(left, sizeleft);
-	
-	Mergesort(right, sizeright);
-
-
-	li = 0;
-	ri = 0;
-	
-	for(i = 0;i<length;i++)
-	{
-		if((left[li] <= right[ri] && li < sizeleft) || ri == sizeright)
-		{
-			array[i] = left[li];
-			li++;
-		}
-		else
-		{
-			array[i] = right[ri];
-			ri++;
-		}
-	}
-	return 0;
-
+	}	
 }
 
-
-*/
+int Cmp_D(const void *data,const void *sata)
+{
+	if(*(double*)data <= *(double*)sata)
+	{
+		return 1;
+	}
+	else if(*(double*)data > *(double*)sata)
+	{
+		return 2;
+	}
+	else
+	{
+		return 0;
+	}	
+}
 
 
 int main()
 {	
 	int arr[] = {1,3,5,7,9,10,26,37,47,58,68,90,100, 104, 300, 333};
+	
 	int ar[] = {1,3,52,7,999,10,26,370,4,58,6,93,1, 10, 6, 33};
+	int ar_sort[] = {1 ,1 ,3 ,4 ,6 ,6 ,7 ,10 ,10 ,26 ,33 ,52 ,58 ,93 ,370 ,999};
+	
+	double d_arr[] = {50.0, 2.0, 3.0, 100.0, 4.0, 99.0};
+	
 	size_t i = 0;
-	size_t size = sizeof(arr)/sizeof(int);
+	
+	size_t size = sizeof(ar)/sizeof(int);
+	
+	size_t d_size = sizeof(d_arr)/sizeof(double);
 	
 	TEST("Iter", BinarySearchIter(arr,size, 68), 10);
 	TEST("Iter", BinarySearchIter(arr,size, 1), 0);
@@ -94,16 +71,24 @@ int main()
 	TEST("Recur", BinarySearchRec(arr, size, 11111), -1);
 	TEST("Recur", BinarySearchRec(arr, size, 2), -1);
 	
-	MergeSort(ar, 16);
+	
+
+	QuickSort(ar, size , sizeof(int), Cmp_I);
 	
 	for(i = 0; i < size; ++i)
 	{
-		printf("%d ", ar[i]);
+		TEST("Merge test", ar[i], ar_sort[i]);
 	}
 	
 	
-	/*
-*/
+	QuickSort(d_arr, d_size , sizeof(double), Cmp_D);
+	
+	
+	for(i = 0; i < d_size; ++i)
+	{
+		printf("%f\n", d_arr[i]);
+	}
+
 PASS;
 return 0;
 }

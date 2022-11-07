@@ -91,10 +91,7 @@ void RadixSort(int *arr, size_t size);
  * Space complexity: O(1)
  */
  
-int QuickSort(void *arr_to_sort, 
-			  size_t num_elements, 
-			  size_t elem_size,  
-			  int (*is_before)(const void *elem1, const void *elem2));
+int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*is_before)(const void *elem1, const void *elem2));
 
 /*
  * Description: The function sorts a given array.
