@@ -76,6 +76,42 @@ void CountingSort(int *arr, size_t size);
  */
 void RadixSort(int *arr, size_t size);
 
+/*
+ * Description: The function sorts a given array.
+ * Parameters:
+ * 	@arr_to_sort is an array 
+ *	@num_elements is a size of the array
+ *	@elem_size is a size of one element in array
+ *	@is_before function, that returns 1 if @elem1 should be placed before @elem2
+ * Return: 0 on success, non-zero on fail
+ * Time complexity: 
+ *	@Best:    O(n*log(n))
+ *	@Average: O(n*log(n))
+ * 	@Worst:   O(n*log(n))
+ * Space complexity: O(1)
+ */
+ 
+int QuickSort(void *arr_to_sort, 
+			  size_t num_elements, 
+			  size_t elem_size,  
+			  int (*is_before)(const void *elem1, const void *elem2));
+
+/*
+ * Description: The function sorts a given array.
+ * Parameters:
+ * 	@arr_to_sort is an array 
+ *	@num_elements is a size of the array
+ *	@elem_size is a size of one element in array
+ *	@is_before function, that returns 1 if @elem1 should be placed before @elem2
+ * Return: 0 on success, non-zero on fail
+ * Time complexity: 
+ *	@Best:    O(n*log(n))
+ *	@Average: O(n*log(n))
+ * 	@Worst:   O(n*log(n))
+ * Space complexity: O(n)
+ */
+int MergeSort(int *arr_to_sort, size_t num_elements);
+
 
 
 #endif
