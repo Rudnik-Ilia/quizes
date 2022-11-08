@@ -1,7 +1,7 @@
 
 #include <stdlib.h> /*malloc*/
 #include <assert.h> /**/
-
+#include "utils.h"
 #include "bst.h"
 
 typedef struct bst_node bst_node_t;
@@ -37,7 +37,11 @@ bst_t *BSTCreate(int (*cmp_func)(const void *data, const void *key_data))
 {		
 	
 	bst_t * bst = (bst_t*)malloc(sizeof(bst_t));
-	
+	if(NULL == bst)
+	{
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+	}
 	bst->cmp_func = cmp_func;
 	
 	bst->root.parent = NULL;
@@ -323,7 +327,11 @@ static child_node_pos_t CheckChild(bst_iter_t iter)
 bst_node_t *CreateNode(bst_node_t *parent, bst_node_t *left, bst_node_t *right, void *data)
 {
 	bst_node_t *new_node = (bst_node_t *)malloc(sizeof(bst_node_t));
-	
+	if(NULL == new_node)
+	{
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+	}
 	new_node->parent = parent;
 	new_node->childrens[LEFT] = left; 
 	new_node->childrens[RIGHT] = right;
