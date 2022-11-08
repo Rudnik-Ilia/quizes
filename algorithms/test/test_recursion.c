@@ -145,11 +145,7 @@ void Test_Binary_Iter_Rec()
 	
 	int ar[] = {1,3,52,7,999,10,26,370,4,58,6,93,1, 10, 6, 33};
 	
-	double d_arr[] = {50.0, 2.0, 3.0, 100.0, 4.0, 99.0};
-	
 	size_t size = sizeof(ar)/sizeof(int);
-	
-	size_t d_size = sizeof(d_arr)/sizeof(double);
 	
 	TEST("Iter", BinarySearchIter(arr,size, 68), 10);
 	TEST("Iter", BinarySearchIter(arr,size, 1), 0);
@@ -158,7 +154,6 @@ void Test_Binary_Iter_Rec()
 	TEST("Iter", BinarySearchIter(arr,size, 90), 11);
 	TEST("Iter", BinarySearchIter(arr,size, 11111), -1);
 	TEST("Iter", BinarySearchIter(arr,size, 2), -1);
-	
 	
 	TEST("Recur", BinarySearchRec(arr, size, 68), 10);
 	TEST("Recur", BinarySearchRec(arr, size, 1), 0);

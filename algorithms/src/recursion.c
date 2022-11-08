@@ -1,7 +1,7 @@
 /**********************
 * Title : Worksheet Recursion
 * Author: Ilia Rudnik
-* Reviewer: Victor
+* Reviewer: 
 * Date : 4/11/2022
 * Status : approved
 ***********************/
@@ -12,14 +12,9 @@
 #include <stdio.h>
 #include <stddef.h> /* size_t */
 #include <sys/types.h> /* ssize_t */
-#include "../../ds/include/stack.h"
 
-typedef struct node
-{
-	int data;
-	struct node *next;
-	
-} node_t;
+#include "../include/recursion.h"
+#include "../../ds/include/stack.h"
 
 int FibRec(int idx)
 {
