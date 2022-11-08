@@ -18,6 +18,18 @@
 #include "sorts.h"
 
 
+#include "utils.h"
+
+#define MIN(a, b) ((a) < (b)) ? (a) : (b)
+
+#define MAX(a, b) ((a) > (b)) ? (a) : (b)
+
+#define VOID_ARR_GET_ELEM(arr, idx, elem_size) \
+	(void*)((size_t)(arr) + (elem_size) * (idx))
+
+#define VOID_ARR_GET_ELEM_INDEX(arr, elem, elem_size) \
+	((size_t)(elem) - (size_t)(arr)) / elem_size
+
 static void Swap(int *x, int *y)
 {
 	int tmp = 0;
@@ -226,7 +238,6 @@ void RadixSort(int *arr, size_t size)
 	}
 }
 
-
 int MergeSort(int *arr_to_sort, size_t num_elements)
 {
 	size_t i = 0;
@@ -345,52 +356,8 @@ int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*i
 	return 0;
 }
 
-/****SINGLE FUNC DOEST WORK ON BIG ARRAYS.....FOR NO REASON******/
-
-/*
-
-static int Partition(void *arr, int low, int high, size_t elem_size, int(*is_before)(const void *elem1, const void *elem2))
-{
-	void *pivot = (char*)arr + high;
-	int i = low;
-	int j = low;
-	while(j < high) 
-	{
-		if(is_before((char*)arr + j, pivot) < 0)
-		{	
-			SwapVoid((char*)arr + i, (char*)arr + j, elem_size);
-			i+=elem_size;
-		}
-		j+=elem_size;	
-	}
-	SwapVoid((char*)arr + i, (char*)arr + high*elem_size, elem_size);
-
-	return i;
-}
 
 
-void _quicksort(void *arr, size_t elems, size_t elem_size, int low, int high, int (*is_before)(const void *elem1, const void *elem2))
-{
-	
-	if(low < high)
-	{
-		int pi = Partition(arr, low, high, elem_size, is_before);
-		
-		_quicksort(arr, elems-1, elem_size, low, pi-elem_size, is_before);
-		_quicksort(arr, elems-1, elem_size, pi+elem_size, high, is_before);
-	}
-}
-int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*is_before)(const void *elem1, const void *elem2))
-{	
-	assert(NULL != arr_to_sort);
-	assert(NULL != is_before);
-	
-	_quicksort(arr_to_sort, num_elements-1, elem_size, 0, num_elements*elem_size - elem_size, is_before);
-	return 0;
-}
-
-
-*/
 
 
 

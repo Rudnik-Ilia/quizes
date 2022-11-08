@@ -145,11 +145,7 @@ void Test_Binary_Iter_Rec()
 	
 	int ar[] = {1,3,52,7,999,10,26,370,4,58,6,93,1, 10, 6, 33};
 	
-	int ar_sort[] = {1 ,1 ,3 ,4 ,6 ,6 ,7 ,10 ,10 ,26 ,33 ,52 ,58 ,93 ,370 ,999};
-	
 	double d_arr[] = {50.0, 2.0, 3.0, 100.0, 4.0, 99.0};
-	
-	size_t i = 0;
 	
 	size_t size = sizeof(ar)/sizeof(int);
 	
@@ -175,10 +171,12 @@ void Test_Binary_Iter_Rec()
 
 int main()
 {
+/*
 	Test_String();
 	Test_Flip();
 	Test_Fibonachi();
 	Test_Sort();
+*/
 	Test_Binary_Iter_Rec();
 	
 	PASS;

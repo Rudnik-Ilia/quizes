@@ -10,6 +10,8 @@
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
+#include <stddef.h> /* size_t */
+#include <sys/types.h> /* ssize_t */
 #include "../../ds/include/stack.h"
 
 typedef struct node

@@ -10,8 +10,6 @@
 #define SIZE_ARRAY 5000
 #define RANGE 100
 
-
-
 int isSorted(int *arr, size_t size);
 int Comparator(const void * p1, const void * p2);
 void FillArray(int *arr, size_t size, size_t range);
@@ -19,6 +17,11 @@ float MesureTime(int *arr, size_t size, void (*func)(int *arr, size_t size));
 float Time_qsort(int *arr, size_t size, int (*compar)(const void *, const void*));
 float Time_MyQuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*is_before)(const void *elem1, const void *elem2));
 
+int IsBeforeInt(const void *a, const void *b)
+{
+	
+	return *((const int*)a) < *((const int*)b);
+}
 
 int main()
 {
@@ -46,18 +49,21 @@ int main()
 	TEST("Test for CountSort" , isSorted(arr, SIZE_ARRAY), 1);
 	
 	FillArray(arr, SIZE_ARRAY, 100);
-	printf("Total time taken by RadixSort: %f\n", MesureTime(arr, SIZE_ARRAY, RadixSort));
 	TEST("Test for RadixSort" , isSorted(arr, SIZE_ARRAY), 1);
-	*/
+	printf("Total time taken by RadixSort: %f\n", MesureTime(arr, SIZE_ARRAY, RadixSort));
+	*/ 
 
 	FillArray(arr, SIZE_ARRAY, 100);
-	printf("Total time taken by RecurseQuickSort: %f\n", Time_MyQuickSort(arr, SIZE_ARRAY, sizeof(int), Comparator));
-	TEST("Test Quicksort" , isSorted(arr, SIZE_ARRAY), 1);
-
+	printf("Total time taken by My quick: %f\n", Time_MyQuickSort(arr, SIZE_ARRAY, sizeof(int), Comparator));
+	TEST("Test Mergesort" , isSorted(arr, SIZE_ARRAY), 1);
+	
 	FillArray(arr, SIZE_ARRAY, 3000);
 	MergeSort(arr, SIZE_ARRAY);
 	TEST("Test Mergesort" , isSorted(arr, SIZE_ARRAY), 1);
-	
+/*
+	TEST("Test RecurseQuickSort:" , isSorted(arr, SIZE_ARRAY), 1);
+	printf("Total time taken by RecurseQuickSort: %f\n", Time_MyQuickSort(arr, SIZE_ARRAY, sizeof(int), Comparator));
+*/	
 	PASS;
 return 0;
 }
@@ -70,9 +76,11 @@ int isSorted(int *arr, size_t size)
     	{
         	if (arr[i] > arr[i + 1]) 
         	{
+        		
         	    return 0;
         	}
-    	}	
+    	}
+    	puts("");	
     return 1;
 }
 
