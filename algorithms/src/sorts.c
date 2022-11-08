@@ -2,7 +2,7 @@
 * Topic: Algorithms                                  *                 
 * Author: Rudnik Ilia                                *
 * Date: 22.10.2022                                   *
-* Reviewer: Oury & Vadim                             *
+* Reviewer: Oury & Vadim & Walter                           *
 * Review status: reviewed                            *
 *****************************************************/
 
@@ -20,14 +20,14 @@
 
 static void Swap(int *x, int *y)
 {
-    int tmp = 0;
-    
-    assert(NULL != x);
-    assert(NULL != y);
-    
-    tmp = *x;
-    *x = *y;
-    *y = tmp;
+	int tmp = 0;
+
+	assert(NULL != x);
+	assert(NULL != y);
+
+	tmp = *x;
+	*x = *y;
+	*y = tmp;
 }
 
 void InsertionSort(int *arr, size_t size)
@@ -239,8 +239,15 @@ int MergeSort(int *arr_to_sort, size_t num_elements)
 	size_t sizeleft = num_elements / 2;
 	size_t sizeright = num_elements - sizeleft;
 	
+	assert(NULL != arr_to_sort);
+	
 	left = (int*)alloca(sizeleft * sizeof(int));
 	right= (int*)alloca(sizeright * sizeof(int));
+	
+	if(NULL == left || NULL == right)
+	{
+		return 1;
+	}
 
 	memset(left,0, sizeleft * sizeof(int));
 	memset(right,0, sizeright * sizeof(int));	
@@ -294,48 +301,96 @@ static void SwapVoid(void *a, void *b, size_t size)
 	memcpy(b, tmp, size);
 }
 
-void _quicksort(void *arr, size_t elems, size_t size_elem, int low, int high, int (*is_before)(const void *elem1, const void *elem2))
+static int Partition(void *arr_to_sort, int low, int high, size_t elem_size, int(*is_before)(const void *elem1, const void *elem2))
 {
-	void *pivot = NULL;
-	int i = 0;
-	int j = 0;
+	int i = low;
+	int j = low;
+	void *pivot = (char *)arr_to_sort + high*elem_size;
+
+	while(j < high)
+	{
+		if((is_before(((char *)arr_to_sort + j*elem_size), pivot)) < 0)
+		{
+			SwapVoid(((char *)arr_to_sort + i*elem_size),((char *)arr_to_sort + j*elem_size), elem_size);
+			++i;
+		}
+		++j;
+	}
+
+	SwapVoid(((char *)arr_to_sort + i*elem_size),((char *)arr_to_sort + high*elem_size), elem_size);
+
+	return i;
+}
+
+
+static void _quicksort(void *arr_to_sort, int low, int high, size_t elem_size, int(*is_before)(const void *elem1, const void *elem2))
+{	
+	int pivor = 0;
 	
 	if(low < high)
 	{
-		pivot = (char*)arr + (elems)*size_elem;
-		i = low;
-		j = high;
-		
-		while(i < j) 
-		{
-			while((is_before((char*)arr + i, pivot) == 1) && i <= high)
-			{
-				i+=size_elem;
-			}
-			while((is_before((char*)arr + j, pivot) == 2) && j >= low)
-			{
-				j-=size_elem;
-			}
-			if(i < j) 
-			{
-				SwapVoid((char*)arr + i, (char*)arr + j, size_elem);
-			}
-		}
+		pivor = Partition(arr_to_sort, low, high, elem_size, is_before);
+		_quicksort(arr_to_sort, low, pivor - 1, elem_size, is_before);
+		_quicksort(arr_to_sort, pivor + 1, high, elem_size, is_before);
+	}
+}
 
-		SwapVoid((char*)arr + j, pivot, size_elem);
+
+int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*is_before)(const void *elem1, const void *elem2))
+{	
+	assert(NULL != arr_to_sort);
+	assert(NULL != is_before);
 	
-		_quicksort(arr, elems-1, size_elem, low, j-size_elem, is_before);
-		_quicksort(arr, elems-1, size_elem, j+size_elem, high, is_before);
+	_quicksort(arr_to_sort, 0, num_elements-1, elem_size, is_before);
+	return 0;
+}
+
+/****SINGLE FUNC DOEST WORK ON BIG ARRAYS.....FOR NO REASON******/
+
+/*
+
+static int Partition(void *arr, int low, int high, size_t elem_size, int(*is_before)(const void *elem1, const void *elem2))
+{
+	void *pivot = (char*)arr + high;
+	int i = low;
+	int j = low;
+	while(j < high) 
+	{
+		if(is_before((char*)arr + j, pivot) < 0)
+		{	
+			SwapVoid((char*)arr + i, (char*)arr + j, elem_size);
+			i+=elem_size;
+		}
+		j+=elem_size;	
+	}
+	SwapVoid((char*)arr + i, (char*)arr + high*elem_size, elem_size);
+
+	return i;
+}
+
+
+void _quicksort(void *arr, size_t elems, size_t elem_size, int low, int high, int (*is_before)(const void *elem1, const void *elem2))
+{
+	
+	if(low < high)
+	{
+		int pi = Partition(arr, low, high, elem_size, is_before);
+		
+		_quicksort(arr, elems-1, elem_size, low, pi-elem_size, is_before);
+		_quicksort(arr, elems-1, elem_size, pi+elem_size, high, is_before);
 	}
 }
 int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*is_before)(const void *elem1, const void *elem2))
-{
+{	
+	assert(NULL != arr_to_sort);
+	assert(NULL != is_before);
+	
 	_quicksort(arr_to_sort, num_elements-1, elem_size, 0, num_elements*elem_size - elem_size, is_before);
 	return 0;
 }
 
 
-
+*/
 
 
 
