@@ -26,6 +26,13 @@ struct avl
 };
 
 
+
+size_t Max(size_t  a, size_t b)
+{
+    return (a > b) ? a : b;
+}
+
+
 void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new);
 void *GetData(avl_node_t *node);
 void Destroy_Ax(avl_node_t *node);
@@ -38,6 +45,10 @@ void PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), vo
 void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
 
 static void Print2D(avl_node_t *root, int space);
+
+avl_node_t *LeftRotate(avl_node_t *x);
+int GetBalance(avl_node_t *node);
+avl_node_t *RightRotate(avl_node_t *y); 
 
 avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data);
 
@@ -191,6 +202,7 @@ avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 {
  	
  	avl_node_t  *temp = NULL;
+ 	int balance = 0;
  	
 	if (node == NULL)
 	{
@@ -246,10 +258,40 @@ avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 	{
 		return node;
 	}
-	return node;
 /*	
 	root->height = 1 + max(height(root->left), height(root->right));
 	*/
+	balance = GetBalance(node);
+	
+	printf("BALANCE: %d\n", GetBalance(node));
+	
+	if (balance > 1 && GetBalance(node->children[LEFT]) >= 0)
+	{
+        	return RightRotate(node);
+ 	}
+
+	if (balance > 1 && GetBalance(node->children[LEFT]) < 0)
+	{
+		node->children[LEFT] =  LeftRotate(node->children[LEFT]);
+		return RightRotate(node);
+	}
+	
+	
+	
+	if (balance < -1 && GetBalance(node->children[RIGHT]) <= 0)
+	{
+		printf("LEFT TURN!");
+		return LeftRotate(node);
+	}
+	
+	if (balance < -1 && GetBalance(node->children[RIGHT]) > 0)
+	{
+		printf("LEFT TURN2!");
+		node->children[RIGHT] = RightRotate(node->children[RIGHT]);
+		return LeftRotate(node);
+	}
+	
+	return node;
 }
 /*******************************************************************************/
 
@@ -392,7 +434,48 @@ static void Print2D(avl_node_t *root, int space)
 	Print2D(root->children[LEFT], space);
 }
 
+int GetBalance(avl_node_t *node)
+{
+	if (node == NULL)
+	{
+		return 0;
+	} 
+	return GetHeight(node->children[LEFT]) - GetHeight(node->children[RIGHT]);
+}
 
+
+avl_node_t *LeftRotate(avl_node_t *x)
+{
+    avl_node_t *y = x->children[RIGHT];
+    avl_node_t *T2 = y->children[LEFT];
+ 
+  
+    y->children[LEFT] = x;
+    x->children[RIGHT] = T2;
+ 
+  
+    x->height = Max(GetHeight(x->children[LEFT]), GetHeight(x->children[RIGHT]))+1;
+    y->height = Max(GetHeight(y->children[LEFT]), GetHeight(y->children[RIGHT]))+1;
+ 
+
+    return y;
+}
+
+avl_node_t *RightRotate(avl_node_t *y) 
+{ 
+    avl_node_t *x = y->children[LEFT]; 
+    avl_node_t *T2 = x->children[RIGHT]; 
+   
+    x->children[RIGHT] = y; 
+    y->children[LEFT]= T2; 
+   
+     
+    y->height = Max(GetHeight(y->children[LEFT]), GetHeight(y->children[RIGHT])) + 1; 
+    x->height = Max(GetHeight(x->children[LEFT]), GetHeight(x->children[RIGHT])) + 1; 
+   
+   
+    return x; 
+}
 
 /*
 void SetHeight(avl_node_t *node, size_t height)

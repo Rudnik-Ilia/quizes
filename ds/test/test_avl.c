@@ -56,14 +56,14 @@ int main()
 	TEST("IsEmpty", AVLIsEmpty(avl), 0);
 	TEST("FIND ", *(int*)AVLFind(avl, &arr[2]),arr[2]) ;
 	
-	AVLRemove(avl, &arr[3]);
-	AVLRemove(avl, &arr[4]);
-	AVLRemove(avl, &arr[0]);
-	AVLRemove(avl, &arr[2]);
 	AVLRemove(avl, &arr[7]);
-	AVLRemove(avl, &arr[5]);
 	PrintTree(avl);
 	/*
+	AVLRemove(avl, &arr[8]);
+	AVLRemove(avl, &arr[1]);
+	AVLRemove(avl, &arr[6]);
+	AVLRemove(avl, &arr[3]);
+	AVLRemove(avl, &arr[5]);
 	AVLForEach(avl, Act, &factor, POST_ORDER);
 	printf("\n");
 
