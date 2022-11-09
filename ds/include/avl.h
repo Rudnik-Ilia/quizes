@@ -149,6 +149,8 @@ void *AVLFind(const avl_t *tree, const void *key_data);
  */
 int AVLForEach(avl_t *tree, int (*action_func)(void *data, void *params),
               void *param, bst_traversal_type_t order);
+              
+void PrintTree(avl_t *tree);
 
 #endif /* __AVL_H__ */
 
