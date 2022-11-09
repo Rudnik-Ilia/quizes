@@ -25,6 +25,7 @@ struct avl
     int (*cmp_func)(const void *data, const void *key_data);
 };
 
+
 void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new);
 void *GetData(avl_node_t *node);
 void Destroy_Ax(avl_node_t *node);
@@ -32,8 +33,19 @@ size_t GetHeight(avl_node_t *node);
 avl_node_t *CreateNode(void *data);
 void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data);
 
+void inOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
+void PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
+void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
 
 static void Print2D(avl_node_t *root, int space);
+
+size_t Count(void *data, void *params)
+{
+	(void)data;
+	++*(size_t*)params;
+	
+	return (size_t)params;
+}
 
 avl_node_t *CreateNode(void *data)
 {
@@ -51,9 +63,6 @@ avl_node_t *CreateNode(void *data)
 	
 	return node;
 }
-
-
-
 
 int AVLInsert(avl_t *tree, void *data)
 {
@@ -95,6 +104,69 @@ void *AVLFind(const avl_t *tree, const void *key_data)
 	return Find_Ax(tree, tree->root.children[LEFT], key_data);
 }
 
+void InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+{
+    if(node){
+        InOrder(node->children[LEFT], action_func, param);
+        action_func(node->data, param);
+        InOrder(node->children[RIGHT], action_func, param);
+    }
+    return;
+}
+
+void PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+{
+    if(node)
+    {
+        action_func(node->data, param);
+        PreOrder(node->children[LEFT], action_func, param);
+        PreOrder(node->children[RIGHT], action_func, param);
+    }
+    return;
+}
+
+void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+{
+    if(node)
+    {
+        PostOrder(node->children[LEFT], action_func, param);
+        PostOrder(node->children[RIGHT], action_func, param);
+        action_func(node->data, param);
+    }
+    return;
+}
+
+
+int AVLForEach(avl_t *tree, int (*action_func)(void *data, void *params), void *param, bst_traversal_type_t order)
+{	
+	
+	switch (order){
+	
+		case IN_ORDER :
+		
+			InOrder(tree->root.children[LEFT], action_func, param);
+			break;
+		case PRE_ORDER:
+		
+			PreOrder(tree->root.children[LEFT], action_func, param);
+			break;
+			
+		case POST_ORDER:
+		
+			PostOrder(tree->root.children[LEFT], action_func, param);
+			break;	
+	}
+		
+	return 0;
+}
+
+size_t AVLSize(const avl_t *tree)
+{
+    size_t count = 0;
+    InOrder(tree->root.children[LEFT], Count, &count, PRE_ORDER);
+    return count;
+}			
+
 /*******************************************************************************/
 
 void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data)
@@ -108,12 +180,12 @@ void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data)
 	
 	if(tree->cmp_func(key_data, GetData(node)) < 0)
 	{
-		child = RIGHT;	
+		child = LEFT;	
 	}
 	
 	else if(tree->cmp_func(key_data, GetData(node)) > 0)
 	{
-		child = LEFT;	
+		child = RIGHT;	
 	}
 	else
 	{
@@ -168,12 +240,12 @@ void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new)
 	
 	if(tree->cmp_func(data, GetData(node)) < 0)
 	{
-		child = RIGHT;	
+		child = LEFT;	
 	}
 	
 	else if(tree->cmp_func(data, GetData(node)) > 0)
 	{
-		child = LEFT;	
+		child = RIGHT;	
 	}
 	else
 	{
@@ -224,14 +296,15 @@ static void Print2D(avl_node_t *root, int space)
 	{
 		return;
 	}
-	space += COUNT;
+	space += 15;
 	Print2D(root->children[RIGHT], space);
 	
-	for(i = COUNT; i < space; ++i)
+	for(i = 15; i < space; ++i)
 	{
 		printf(" ");
 	}
 	printf("%d (%lu)\n", *(int*)(root->data), root->height );
+	printf("\n");
 	Print2D(root->children[LEFT], space);
 }
 
