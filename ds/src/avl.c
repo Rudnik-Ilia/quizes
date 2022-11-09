@@ -39,12 +39,16 @@ void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), v
 
 static void Print2D(avl_node_t *root, int space);
 
-size_t Count(void *data, void *params)
+avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data);
+
+
+
+static int Count(void *data, void *count)
 {
-	(void)data;
-	++*(size_t*)params;
-	
-	return (size_t)params;
+    (void)data;
+    ++*(size_t*)count;
+
+    return 0;
 }
 
 avl_node_t *CreateNode(void *data)
@@ -163,10 +167,90 @@ int AVLForEach(avl_t *tree, int (*action_func)(void *data, void *params), void *
 size_t AVLSize(const avl_t *tree)
 {
     size_t count = 0;
-    InOrder(tree->root.children[LEFT], Count, &count, PRE_ORDER);
+    AVLForEach((avl_t*)tree, Count, &count, PRE_ORDER);
     return count;
 }			
+void AVLRemove(avl_t *tree, const void *data)
+{
+	Delete(tree, tree->root.children[LEFT], data);
+}
 
+avl_node_t * minValueNode(avl_node_t * node)
+{
+    avl_node_t *current = node;
+ 
+    
+	while (current->children[LEFT] != NULL)
+	{
+		current = current->children[LEFT];
+	}
+	return current;
+}
+
+avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
+{
+ 	
+ 	avl_node_t  *temp = NULL;
+ 	
+	if (node == NULL)
+	{
+		return node;
+	}
+ 
+    
+	if(tree->cmp_func(data, GetData(node)) < 0)
+	{
+		
+        	node->children[LEFT] = Delete(tree, node->children[LEFT], data);
+
+	}
+	
+	else if(tree->cmp_func(data, GetData(node)) > 0)
+	{
+		node->children[RIGHT] = Delete(tree, node->children[RIGHT], data);
+	}
+	
+	else
+	{
+		if( node->children[LEFT] == NULL || node->children[RIGHT] == NULL)
+		{
+			temp = node->children[LEFT] ? node->children[LEFT] : node->children[RIGHT];
+
+
+			if (temp == NULL)
+			{
+				temp = node;
+				node = NULL;
+				free(temp);
+			}
+			else 
+			{
+				*node = *temp; 
+				free(temp);
+			}
+
+		}
+		else
+		{
+
+			temp = minValueNode(node->children[RIGHT]);
+
+			node->data= temp->data;
+
+			node->children[RIGHT] = Delete(tree, node->children[RIGHT], temp->data);
+		}
+	}
+ 
+   
+	if (node== NULL)
+	{
+		return node;
+	}
+	return node;
+/*	
+	root->height = 1 + max(height(root->left), height(root->right));
+	*/
+}
 /*******************************************************************************/
 
 void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data)
@@ -254,7 +338,7 @@ void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new)
 	
 	node->children[child] = AVLInsert_Ax(tree, data, node->children[child], new);
 	
-
+	
 	if (GetHeight(node) <= GetHeight(node->children[child]))
 	{
 		node->height = node->children[child]->height + 1;
