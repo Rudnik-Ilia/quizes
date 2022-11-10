@@ -25,11 +25,8 @@ struct avl
     int (*cmp_func)(const void *data, const void *key_data);
 };
 
-size_t Max(size_t  a, size_t b)
-{
-    return (a > b) ? a : b;
-}
 
+avl_node_t *CreateNode(void *data);
 void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new);
 void *GetData(avl_node_t *node);
 void Destroy_Ax(avl_node_t *node);
@@ -37,57 +34,61 @@ size_t GetHeight(avl_node_t *node);
 avl_node_t *CreateNode(void *data);
 void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data);
 
-void inOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
-void PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
-void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
+int InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
+int PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
+int PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
 
 static void Print2D(avl_node_t *root, int space);
 
-avl_node_t *LeftRotate(avl_node_t *x);
 int GetBalance(avl_node_t *node);
+avl_node_t * MinValueNode(avl_node_t * node);
+
+avl_node_t *LeftRotate(avl_node_t *x);
 avl_node_t *RightRotate(avl_node_t *y); 
 
 avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data);
 
+static int Count(void *data, void *count);
 
 
-static int Count(void *data, void *count)
+
+avl_t *AVLCreate(int (*cmp_func)(const void *lhs, const void *rhs))
 {
-    (void)data;
-    ++*(size_t*)count;
+	avl_t *avl = NULL;
 
-    return 0;
-}
+	assert(NULL != cmp_func);
 
-avl_node_t *CreateNode(void *data)
-{
-	avl_node_t *node = malloc(sizeof(avl_node_t));
-	
-	if(NULL == node)
+	avl = malloc(sizeof(avl_t));
+	if(NULL == avl)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return NULL;
 	}
-	node->data = data;
-	node->children[LEFT] = NULL; 
-	node->children[RIGHT] = NULL;
-	node->height = 1;
-	
-	return node;
-}
+	avl->cmp_func = cmp_func;
+	avl->root.children[LEFT] = NULL;
+	avl->root.children[RIGHT] = NULL;
+	avl->root.data = avl;
+	avl->root.height = 0;
 
+	return avl;
+}
 
 void AVLDestroy(avl_t *tree)
 {
 	assert(NULL != tree);
+	
 	Destroy_Ax(tree->root.children[LEFT]);
 	free(tree);
 }
 
 size_t AVLHeight(const avl_t *tree)
 {
+	avl_node_t *node = NULL;
+	
 	assert(NULL != tree);
-	return tree->root.height;
+	
+	node = tree->root.children[LEFT];
+	return NULL == node ? 0: node->height;
 }
 
 int AVLIsEmpty(const avl_t *tree)
@@ -103,60 +104,24 @@ void *AVLFind(const avl_t *tree, const void *key_data)
 	return Find_Ax(tree, tree->root.children[LEFT], key_data);
 }
 
-void InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
-{
-    if(node){
-        InOrder(node->children[LEFT], action_func, param);
-        action_func(node->data, param);
-        InOrder(node->children[RIGHT], action_func, param);
-    }
-    return;
-}
-
-void PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
-{
-    if(node)
-    {
-        action_func(node->data, param);
-        PreOrder(node->children[LEFT], action_func, param);
-        PreOrder(node->children[RIGHT], action_func, param);
-    }
-    return;
-}
-
-void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
-{
-    if(node)
-    {
-        PostOrder(node->children[LEFT], action_func, param);
-        PostOrder(node->children[RIGHT], action_func, param);
-        action_func(node->data, param);
-    }
-    return;
-}
-
-
 int AVLForEach(avl_t *tree, int (*action_func)(void *data, void *params), void *param, bst_traversal_type_t order)
 {	
-	
+	int st = 0;
 	switch (order){
 	
 		case IN_ORDER :
 		
-			InOrder(tree->root.children[LEFT], action_func, param);
+			st = InOrder(tree->root.children[LEFT], action_func, param);
 			break;
 		case PRE_ORDER:
-		
-			PreOrder(tree->root.children[LEFT], action_func, param);
-			break;
-			
+			st = PreOrder(tree->root.children[LEFT], action_func, param);
+			break;	
 		case POST_ORDER:
-		
-			PostOrder(tree->root.children[LEFT], action_func, param);
+			st = PostOrder(tree->root.children[LEFT], action_func, param);
 			break;	
 	}
 		
-	return 0;
+	return st;
 }
 
 size_t AVLSize(const avl_t *tree)
@@ -164,22 +129,13 @@ size_t AVLSize(const avl_t *tree)
     size_t count = 0;
     AVLForEach((avl_t*)tree, Count, &count, PRE_ORDER);
     return count;
-}			
+}
+			
 void AVLRemove(avl_t *tree, const void *data)
 {
 	Delete(tree, tree->root.children[LEFT], data);
 }
 
-avl_node_t * minValueNode(avl_node_t * node)
-{
-	avl_node_t *current = node;
- 
-	while (current->children[LEFT] != NULL)
-	{
-		current = current->children[LEFT];
-	}
-	return current;
-}
 
 avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 {
@@ -224,7 +180,7 @@ avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 		else
 		{
 
-			temp = minValueNode(node->children[RIGHT]);
+			temp = MinValueNode(node->children[RIGHT]);
 			node->data= temp->data;
 			node->children[RIGHT] = Delete(tree, node->children[RIGHT], temp->data);
 		}
@@ -251,12 +207,10 @@ avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 	}
 	if (balance < -1 && GetBalance(node->children[RIGHT]) <= 0)
 	{
-		printf("LEFT TURN!");
 		return LeftRotate(node);
 	}
 	if (balance < -1 && GetBalance(node->children[RIGHT]) > 0)
 	{
-		printf("LEFT TURN2!");
 		node->children[RIGHT] = RightRotate(node->children[RIGHT]);
 		return LeftRotate(node);
 	}
@@ -274,11 +228,27 @@ int AVLInsert(avl_t *tree, void *data)
 	
 	tree->root.children[LEFT] = AVLInsert_Ax(tree, data, tree->root.children[LEFT], node);
 	tree->root.height = tree->root.children[LEFT]->height + 1;
-/*
-	*/ 
-	return 1;
+
+	return 0;
 }
 /************************************************************************************************************************/
+
+avl_node_t *CreateNode(void *data)
+{
+	avl_node_t *node = malloc(sizeof(avl_node_t));
+	
+	if(NULL == node)
+	{
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		return NULL;
+	}
+	node->data = data;
+	node->children[LEFT] = NULL; 
+	node->children[RIGHT] = NULL;
+	node->height = 1;
+	
+	return node;
+}
 
 void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data)
 {	
@@ -307,42 +277,19 @@ void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data)
 }
 
 
-
-avl_t *AVLCreate(int (*cmp_func)(const void *lhs, const void *rhs))
-{
-	avl_t *avl = NULL;
-
-	assert(NULL != cmp_func);
-
-	avl = malloc(sizeof(avl_t));
-	if(NULL == avl)
-	{
-		LOGERROR("SORRY, NO MEMORY FOR YOU");
-		return NULL;
-	}
-	avl->cmp_func = cmp_func;
-	avl->root.children[LEFT] = NULL;
-	avl->root.children[RIGHT] = NULL;
-	avl->root.data = avl;
-	avl->root.height = 1;
-
-	return avl;
-}
-
 void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new)
 {
 	child_t child = 0;
 	int balance = 0;
+	
 	if(NULL == node)
 	{
 		return new;
 	}
-	
 	if(tree->cmp_func(data, GetData(node)) < 0)
 	{
 		child = LEFT;	
 	}
-	
 	else if(tree->cmp_func(data, GetData(node)) > 0)
 	{
 		child = RIGHT;	
@@ -351,11 +298,7 @@ void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new)
 	{
 		return GetData(node);
 	}
-	
 	node->children[child] = AVLInsert_Ax(tree, data, node->children[child], new);
-
-	
-	
 	/*
 	if (GetHeight(node) <= GetHeight(node->children[child]))
 	{
@@ -363,39 +306,34 @@ void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new)
 	}
 	
 	node->children[child] = AVLInsert_Ax(tree, data, node->children[child], new);
-	
-*/
-	node->height = 1 + Max(GetHeight(node->children[LEFT]),GetHeight(node->children[RIGHT]));
-    
-    
 	printf("BALANCE: %d\n", GetBalance(node));
-	
+*/
+	node->height = 1 + MAX(GetHeight(node->children[LEFT]),GetHeight(node->children[RIGHT]));
+    
 	balance = GetBalance(node);
 
 	if (balance > 1 && *(int*)data < *(int*)(node->children[LEFT]->data))
 	{
 		return RightRotate(node);
 	}
-
 	if (balance < -1 && *(int*)data > *(int*)(node->children[RIGHT]->data))
 	{
 		return LeftRotate(node);
 	}
-
 	if (balance > 1 && *(int*)data > *(int*)(node->children[LEFT]->data))
-	{
+	{                             ;
 		node->children[LEFT] =  LeftRotate(node->children[LEFT]);
 		return RightRotate(node);
 	}
-
 	if (balance < -1 && *(int*)data < *(int*)(node->children[RIGHT]->data))
-	{printf("444\n");
+	{
 		node->children[RIGHT] = RightRotate(node->children[RIGHT]);
 		return LeftRotate(node);
 	}
 	return node;
 
 }
+
 void Destroy_Ax(avl_node_t *node)
 {	
 	if(node)
@@ -406,7 +344,59 @@ void Destroy_Ax(avl_node_t *node)
 	free(node);
 }
 
+avl_node_t * MinValueNode(avl_node_t * node)
+{
+	avl_node_t *current = node;
+ 
+	while (current->children[LEFT] != NULL)
+	{
+		current = current->children[LEFT];
+	}
+	return current;
+}
 
+static int Count(void *data, void *count)
+{
+    (void)data;
+    ++*(size_t*)count;
+
+    return 0;
+}
+
+int InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+{	
+	int st = 0;
+	if(node){
+		InOrder(node->children[LEFT], action_func, param);
+		st = action_func(node->data, param);
+		InOrder(node->children[RIGHT], action_func, param);
+	}
+	return st;
+}
+
+int PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+{
+	int st = 0;
+	if(node)
+	{
+		st = action_func(node->data, param);
+		PreOrder(node->children[LEFT], action_func, param);
+		PreOrder(node->children[RIGHT], action_func, param);
+	}
+	return st;
+}
+
+int PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+{	
+	int st = 0;
+	if(node)
+	{
+		PostOrder(node->children[LEFT], action_func, param);
+		PostOrder(node->children[RIGHT], action_func, param);
+		st = action_func(node->data, param);
+	}
+	return st;
+}
 
 void *GetData(avl_node_t *node)
 {
@@ -417,7 +407,6 @@ void *GetData(avl_node_t *node)
 	return node->data;
 }
 
-
 size_t GetHeight(avl_node_t *node)
 {
 	if (node == NULL)
@@ -427,10 +416,48 @@ size_t GetHeight(avl_node_t *node)
 	return node->height;
 }
 
+int GetBalance(avl_node_t *node)
+{
+	if (node == NULL)
+	{
+		return 0;
+	} 
+	return GetHeight(node->children[LEFT]) - GetHeight(node->children[RIGHT]);
+}
+
+avl_node_t *LeftRotate(avl_node_t *x)
+{
+    avl_node_t *y = x->children[RIGHT];
+    avl_node_t *T2 = y->children[LEFT];
+ 
+    y->children[LEFT] = x;
+    x->children[RIGHT] = T2;
+ 
+    x->height = MAX(GetHeight(x->children[LEFT]), GetHeight(x->children[RIGHT])) + 1;
+    y->height = MAX(GetHeight(y->children[LEFT]), GetHeight(y->children[RIGHT])) + 1;
+ 
+    return y;
+}
+
+avl_node_t *RightRotate(avl_node_t *y) 
+{ 
+    avl_node_t *x = y->children[LEFT]; 
+    avl_node_t *T2 = x->children[RIGHT]; 
+   
+    x->children[RIGHT] = y; 
+    y->children[LEFT]= T2; 
+    
+    y->height = MAX(GetHeight(y->children[LEFT]), GetHeight(y->children[RIGHT])) + 1; 
+    x->height = MAX(GetHeight(x->children[LEFT]), GetHeight(x->children[RIGHT])) + 1; 
+   
+    return x; 
+}
+
+/********************************************************************************************************/
+
 void PrintTree(avl_t *tree)
 {
 	avl_node_t *root = tree->root.children[LEFT];
-	
 	Print2D(root, 0);
 }
 
@@ -452,50 +479,6 @@ static void Print2D(avl_node_t *root, int space)
 	printf("\n");
 	Print2D(root->children[LEFT], space);
 }
-
-int GetBalance(avl_node_t *node)
-{
-	if (node == NULL)
-	{
-		return 0;
-	} 
-	return GetHeight(node->children[LEFT]) - GetHeight(node->children[RIGHT]);
-}
-
-
-avl_node_t *LeftRotate(avl_node_t *x)
-{
-    avl_node_t *y = x->children[RIGHT];
-    avl_node_t *T2 = y->children[LEFT];
- 
-  
-    y->children[LEFT] = x;
-    x->children[RIGHT] = T2;
- 
-  
-    x->height = Max(GetHeight(x->children[LEFT]), GetHeight(x->children[RIGHT]))+1;
-    y->height = Max(GetHeight(y->children[LEFT]), GetHeight(y->children[RIGHT]))+1;
- 
-
-    return y;
-}
-
-avl_node_t *RightRotate(avl_node_t *y) 
-{ 
-    avl_node_t *x = y->children[LEFT]; 
-    avl_node_t *T2 = x->children[RIGHT]; 
-   
-    x->children[RIGHT] = y; 
-    y->children[LEFT]= T2; 
-   
-     
-    y->height = Max(GetHeight(y->children[LEFT]), GetHeight(y->children[RIGHT])) + 1; 
-    x->height = Max(GetHeight(x->children[LEFT]), GetHeight(x->children[RIGHT])) + 1; 
-   
-   
-    return x; 
-}
-
 
 
 
