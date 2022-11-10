@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <assert.h>
+
 #include "utils.h"
 #include "avl.h"
 
 #define COUNT 10
-
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
@@ -25,13 +25,10 @@ struct avl
     int (*cmp_func)(const void *data, const void *key_data);
 };
 
-
-
 size_t Max(size_t  a, size_t b)
 {
     return (a > b) ? a : b;
 }
-
 
 void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new);
 void *GetData(avl_node_t *node);
@@ -188,9 +185,8 @@ void AVLRemove(avl_t *tree, const void *data)
 
 avl_node_t * minValueNode(avl_node_t * node)
 {
-    avl_node_t *current = node;
+	avl_node_t *current = node;
  
-    
 	while (current->children[LEFT] != NULL)
 	{
 		current = current->children[LEFT];
@@ -200,28 +196,24 @@ avl_node_t * minValueNode(avl_node_t * node)
 
 avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 {
- 	
  	avl_node_t  *temp = NULL;
+ 	
  	int balance = 0;
  	
 	if (node == NULL)
 	{
 		return node;
 	}
- 
-    
 	if(tree->cmp_func(data, GetData(node)) < 0)
 	{
 		
         	node->children[LEFT] = Delete(tree, node->children[LEFT], data);
 
 	}
-	
 	else if(tree->cmp_func(data, GetData(node)) > 0)
 	{
 		node->children[RIGHT] = Delete(tree, node->children[RIGHT], data);
 	}
-	
 	else
 	{
 		if( node->children[LEFT] == NULL || node->children[RIGHT] == NULL)
@@ -246,21 +238,17 @@ avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 		{
 
 			temp = minValueNode(node->children[RIGHT]);
-
 			node->data= temp->data;
-
 			node->children[RIGHT] = Delete(tree, node->children[RIGHT], temp->data);
 		}
 	}
- 
-   
 	if (node== NULL)
 	{
 		return node;
 	}
-/*	
-	root->height = 1 + max(height(root->left), height(root->right));
-	*/
+	
+	node->height = 1 + MAX(GetHeight(node->children[LEFT]), GetHeight(node->children[RIGHT]));
+	
 	balance = GetBalance(node);
 	
 	printf("BALANCE: %d\n", GetBalance(node));
@@ -269,31 +257,25 @@ avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 	{
         	return RightRotate(node);
  	}
-
 	if (balance > 1 && GetBalance(node->children[LEFT]) < 0)
 	{
 		node->children[LEFT] =  LeftRotate(node->children[LEFT]);
 		return RightRotate(node);
 	}
-	
-	
-	
 	if (balance < -1 && GetBalance(node->children[RIGHT]) <= 0)
 	{
 		printf("LEFT TURN!");
 		return LeftRotate(node);
 	}
-	
 	if (balance < -1 && GetBalance(node->children[RIGHT]) > 0)
 	{
 		printf("LEFT TURN2!");
 		node->children[RIGHT] = RightRotate(node->children[RIGHT]);
 		return LeftRotate(node);
 	}
-	
 	return node;
 }
-/*******************************************************************************/
+/************************************************************************************************************************/
 
 void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data)
 {	
@@ -358,7 +340,7 @@ void Destroy_Ax(avl_node_t *node)
 void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new)
 {
 	child_t child = 0;
-	
+	int balance = 0;
 	if(NULL == node)
 	{
 		return new;
@@ -385,6 +367,37 @@ void *AVLInsert_Ax(avl_t *tree, void *data, avl_node_t *node, avl_node_t *new)
 	{
 		node->height = node->children[child]->height + 1;
 	}
+	/*
+	
+	
+	node->height = 1 + Max(GetHeight(node->children[LEFT]),GetHeight(node->children[RIGHT]));
+    
+    
+	printf("BALANCE: %d\n", GetBalance(node));
+	balance = GetBalance(node);
+
+	if (balance > 1 && data < node->children[LEFT]->data)
+	{
+		return RightRotate(node);
+	}
+
+	if (balance < -1 && data > node->children[RIGHT]->data)
+	{
+		return LeftRotate(node);
+	}
+
+	if (balance > 1 && data > node->children[LEFT]->data)
+	{
+		node->children[LEFT] =  LeftRotate(node->children[LEFT]);
+		return RightRotate(node);
+	}
+
+	if (balance < -1 && data < node->children[RIGHT]->data)
+	{
+		node->children[RIGHT] = RightRotate(node->children[RIGHT]);
+		return LeftRotate(node);
+	}
+*/
 	return node;
 
 }

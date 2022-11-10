@@ -50,16 +50,16 @@ int main()
 	printf("\n");
 	AVLForEach(avl, Act, &arr[1], POST_ORDER);
 	printf("\n");
-*/	
 	printf("SIZE: %ld\n",AVLSize(avl));
 	printf("%ld\n", AVLHeight(avl));
 	TEST("IsEmpty", AVLIsEmpty(avl), 0);
 	TEST("FIND ", *(int*)AVLFind(avl, &arr[2]),arr[2]) ;
+*/	
 	
-	AVLRemove(avl, &arr[7]);
+	AVLRemove(avl, &arr[8]);
 	PrintTree(avl);
 	/*
-	AVLRemove(avl, &arr[8]);
+	AVLRemove(avl, &arr[7]);
 	AVLRemove(avl, &arr[1]);
 	AVLRemove(avl, &arr[6]);
 	AVLRemove(avl, &arr[3]);
