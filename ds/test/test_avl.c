@@ -18,7 +18,7 @@ int Act(void *data, void *params)
 
 int main()
 {
-	int arr[] = {40, 30, 50, 20, 60, 70, 10,55, 25};
+	int arr[] = {40, 30, 50, 20, 60, 70, 10, 9, 8, 5, 4};
 	size_t size_arr = sizeof(arr)/sizeof(int);
 	int factor = 2;
 	size_t i = 0;
@@ -28,15 +28,15 @@ int main()
 	
 	AVLInsert(avl, &arr[0]);
 	AVLInsert(avl, &arr[1]);
-	AVLInsert(avl, &arr[2]);
-	AVLInsert(avl, &arr[3]);
 	AVLInsert(avl, &arr[4]);
 	AVLInsert(avl, &arr[5]);
+	AVLInsert(avl, &arr[3]);
+	AVLInsert(avl, &arr[2]);
 	AVLInsert(avl, &arr[6]);
 	AVLInsert(avl, &arr[7]);
 	AVLInsert(avl, &arr[8]);
-/*	
 	AVLInsert(avl, &arr[9]);
+/*	
 	AVLInsert(avl, &arr[10]);
 	AVLInsert(avl, &arr[11]);
 	AVLInsert(avl, &arr[12]);
@@ -56,14 +56,14 @@ int main()
 	TEST("FIND ", *(int*)AVLFind(avl, &arr[2]),arr[2]) ;
 */	
 	
-	AVLRemove(avl, &arr[8]);
 	PrintTree(avl);
 	/*
-	AVLRemove(avl, &arr[7]);
-	AVLRemove(avl, &arr[1]);
-	AVLRemove(avl, &arr[6]);
-	AVLRemove(avl, &arr[3]);
 	AVLRemove(avl, &arr[5]);
+	AVLRemove(avl, &arr[1]);
+	AVLRemove(avl, &arr[9]);
+	AVLRemove(avl, &arr[7]);
+	AVLRemove(avl, &arr[3]);
+	AVLRemove(avl, &arr[6]);
 	AVLForEach(avl, Act, &factor, POST_ORDER);
 	printf("\n");
 
