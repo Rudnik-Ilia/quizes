@@ -24,7 +24,7 @@ double RESULT = 0;
 double FINAL_RESULT = 0;
 int STATUS = 0;
 
-/**********************************************DON'T CHANGE MATRIX!!!!!!!NEVER!!!*************************************************************************************************/
+/***********************************IT'S THE MATRIX.DON'T CHANGE MATRIX!!!NEVER!!!ONLY NEO CAN CHANGE THE MATRIX******************************/
 
 static int ACT_LUT[][64] =
     {
