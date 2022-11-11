@@ -122,7 +122,8 @@ static double PowerCalculate(double num1, double num2);
 size_t Reminder(int n);
 int DivByZero(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 void FirstMinus(stack_t *stack_number, stack_t *stack_operator);
- 
+double GetFromStack(stack_t *stack);
+
 static func ARR[] = {	
 			Nothing, 
 			PushOperatorToStack, 
@@ -344,12 +345,8 @@ int Addition(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_operator;
 	(void)ptr;
 	
-	a = *(double*)StackPeek(stack_number);
-	
-	StackPop(stack_number);
-	res = a + *(double*)StackPeek(stack_number);
-	StackPop(stack_number);
-	
+	a = GetFromStack(stack_number);
+	res = a + GetFromStack(stack_number);
 	StackPush(stack_number, &res);
 	
 	RESULT = res;
@@ -363,11 +360,8 @@ int Subtraction(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	 (void)stack_operator; 
 	 (void)ptr; 
 
-	 a = *(double*)StackPeek(stack_number);
-	 StackPop(stack_number);
-	 res = *(double*)StackPeek(stack_number) - a;
-	 
-	 StackPop(stack_number);
+	 a = GetFromStack(stack_number);
+	 res = GetFromStack(stack_number) - a;
 	 StackPush(stack_number, &res); 
 	
 	 RESULT = res;
@@ -382,13 +376,8 @@ int Multiplication(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_operator;
 	(void)ptr;
 	
-	a = *(double*)StackPeek(stack_number);
-	
-	StackPop(stack_number);
-
-	res = a * *(double*)StackPeek(stack_number);
-	
-	StackPop(stack_number);
+	a = GetFromStack(stack_number);
+	res = a * GetFromStack(stack_number);
 	StackPush(stack_number, &res);
 	
 	RESULT = res;
@@ -402,17 +391,12 @@ int Division(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	double res = 0; 
 	(void)stack_operator; 
 	(void)ptr; 
-	a = *(double*)StackPeek(stack_number);
 	
-	StackPop(stack_number);
-	
-	res = (*(double*)StackPeek(stack_number))/a;
-	
-	StackPop(stack_number);
+	a = GetFromStack(stack_number);
+	res = (GetFromStack(stack_number))/a;
 	StackPush(stack_number, &res); 
 	
 	RESULT = res;
-	
 	return 0;
 } 
 
@@ -424,12 +408,8 @@ int Power(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 	(void)stack_operator; 
 	(void)ptr; 
 
-	a = *(double*)StackPeek(stack_number);
-	StackPop(stack_number);
-
-	b = *(double*)StackPeek(stack_number);
-	StackPop(stack_number);
-
+	a = GetFromStack(stack_number);
+	b = GetFromStack(stack_number);
 	res = PowerCalculate(b, a);
 
 	StackPush(stack_number, &res); 
@@ -464,11 +444,16 @@ static double PowerCalculate(double num1, double num2)
 	{
 		res = res * num1;
 	}
-
 	return res;
 }
 
 /*******************HELP FUNC**********************************/
+double GetFromStack(stack_t *stack)
+{
+	double tmp = *(double*)StackPeek(stack);
+	StackPop(stack);
+	return tmp;
+} 
 
 char *DeleteSpace(const char *str, char *dest) 
 {
@@ -477,7 +462,7 @@ char *DeleteSpace(const char *str, char *dest)
 	
 	for(i = j = 0; str[i] != '\0'; ++i)
 	{
-		if(str[i] != ' ')
+		if(str[i] != ' ')                            /*****MY SINGLE IF*******/
 		{
 		    dest[j++] = str[i];
 		 }
