@@ -135,22 +135,42 @@ int AVLForEach(avl_t *tree, int (*action_func)(void *data, void *params), void *
 }
 
 size_t AVLSize(const avl_t *tree)
-{
-    size_t count = 0;
-    AVLForEach((avl_t*)tree, Count, &count, PRE_ORDER);
-    return count;
+{	
+	size_t count = 0;
+	assert(NULL != tree);
+	AVLForEach((avl_t*)tree, Count, &count, PRE_ORDER);
+	return count;
 }
 			
 void AVLRemove(avl_t *tree, const void *data)
-{
+{	
+	assert(NULL != tree);
 	tree->root.children[LEFT] = Delete(tree, tree->root.children[LEFT], data);
 }
+
+
+int AVLInsert(avl_t *tree, void *data)
+{
+	avl_node_t *node = NULL;
+
+	assert(NULL != tree);
+	assert(NULL != data);
+	
+	node = CreateNode(data);
+	
+	tree->root.children[LEFT] = AVLInsert_Ax(tree, data, tree->root.children[LEFT], node);
+	tree->root.children[LEFT]->height = MAX(GetHeight(GetChild(GetChild(&tree->root, LEFT), LEFT)), GetHeight(GetChild(GetChild(&tree->root, LEFT), RIGHT))) + 1;
+
+	return 0;
+}
+/************************************************************************************************************************/
 
 avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 {
  	avl_node_t  *temp = NULL;
  	
  	int balance = 0;
+
  	
 	if (node == NULL)
 	{
@@ -223,22 +243,6 @@ avl_node_t *Delete(avl_t *tree, avl_node_t *node , const void* data)
 	}
 	return node;
 }
-
-int AVLInsert(avl_t *tree, void *data)
-{
-	avl_node_t *node = NULL;
-
-	assert(NULL != tree);
-	assert(NULL != data);
-	
-	node = CreateNode(data);
-	
-	tree->root.children[LEFT] = AVLInsert_Ax(tree, data, tree->root.children[LEFT], node);
-	tree->root.children[LEFT]->height = MAX(GetHeight(GetChild(GetChild(&tree->root, LEFT), LEFT)), GetHeight(GetChild(GetChild(&tree->root, LEFT), RIGHT))) + 1;
-
-	return 0;
-}
-/************************************************************************************************************************/
 
 static avl_node_t *CreateNode(void *data)
 {
