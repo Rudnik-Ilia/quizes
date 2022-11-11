@@ -17,6 +17,7 @@
 #include "../include/stack.h"
 #include "calc.h"
 
+#define ASCII 48
 #define SHIFTASCII 32
 
 int MINUS = 0;
@@ -24,7 +25,7 @@ double RESULT = 0;
 double FINAL_RESULT = 0;
 int STATUS = 0;
 
-/***********************************IT'S THE MATRIX.DON'T CHANGE MATRIX!!!NEVER!!!ONLY NEO CAN CHANGE THE MATRIX******************************/
+/********************************** IT'S THE MATRIX. DON'T CHANGE MATRIX!!! NEVER!!! ONLY NEO CAN CHANGE THE MATRIX! ******************************/
 
 static int ACT_LUT[][64] =
     {
@@ -124,7 +125,7 @@ int DivByZero(stack_t *stack_number, stack_t *stack_operator, char *ptr);
 void FirstMinus(stack_t *stack_number, stack_t *stack_operator);
 double GetFromStack(stack_t *stack);
 
-static func ARR[] = {	
+static func ARR_FUNC[] = {	
 			Nothing, 
 			PushOperatorToStack, 
 			PushOperatorToNumberStack, 
@@ -142,7 +143,7 @@ static func ARR[] = {
 			Finish
 };
 
-int Calculate(const char *exp, double *out)
+status_t Calculate(const char *exp, double *out)
 {
 	size_t size = strlen(exp);
 	char *str = alloca(size);
@@ -177,7 +178,7 @@ int MainFunc(char *str, double *out, size_t size)
 	
 	while(*(str+step) && STATUS == 0)
 	{
-		while(*(str) == '-' && (StackIsEmpty(numbers) == 1 && *(int*)StackPeek(operators) == 32))
+		while(*(str) == '-' && (StackIsEmpty(numbers) == 1 && *(int*)StackPeek(operators) == SHIFTASCII))
 		{
 		 	FirstMinus(numbers, operators);
 		 	step+=1;
@@ -187,7 +188,7 @@ int MainFunc(char *str, double *out, size_t size)
 			MINUS = 1;
 			step+=1;
 		}
-		step += ARR[ACT_LUT[*(char*)StackPeek(operators) - SHIFTASCII][*(str+step) - SHIFTASCII]](numbers, operators, str+step);
+		step += ARR_FUNC[ACT_LUT[*(char*)StackPeek(operators) - SHIFTASCII][*(str+step) - SHIFTASCII]](numbers, operators, str+step);
 		FINAL_RESULT = RESULT;
 	}
 	printf("FINAL: %f\n", FINAL_RESULT);
@@ -233,7 +234,7 @@ int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, ch
 	assert(NULL != stack_operator);
 	assert(NULL != ptr);
 	
-	ARR[ACT_LUT[(int)((StackSize(stack_number)+48) - 32)][index - SHIFTASCII]](stack_number, stack_operator, ptr);
+	ARR_FUNC[ACT_LUT[(int)((StackSize(stack_number) + ASCII) - SHIFTASCII)][index - SHIFTASCII]](stack_number, stack_operator, ptr);
 	
 	StackPop(stack_operator);
 
