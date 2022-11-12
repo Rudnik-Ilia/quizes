@@ -13,7 +13,7 @@
 #include "SLL.h"
 #include "utils.h"
 
-#define DEAD (node_t*) 0xDEADBE
+#define DEAD (node_t*) 0xDEADBEEF
 
 typedef struct node node_t;
 
