@@ -84,7 +84,7 @@ void *HTFind(const ht_t *ht, const void *key);
  * Description: The function returns number of pairs in the hash table.
  * Parameters: @ht is an instance of hash table.
  * Return: @size_t is number of pairs in the hash table.
- * Complexity: O(1)
+ * Complexity: O(n)
  */
 size_t HTSize(const ht_t *ht);
 

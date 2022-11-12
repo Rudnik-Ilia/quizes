@@ -97,6 +97,27 @@ void HTDestroy(ht_t *ht)
 	free(ht);
 }
 
+size_t HTSize(const ht_t *ht)
+{	
+	size_t count = 0;
+	size_t i = 0;
+	
+	assert(NULL != ht);
+	
+	for(i = 0; i < ht->size; ++i)
+	{
+		count += SllCount(ht->ht_items[i]);
+	}
+	return count;
+
+}
+
+int HTIsEmpty(const ht_t *ht)
+{
+	assert(NULL != ht);
+	return !!HTSize(ht);
+}
+
 /*****************************************************************************************************************************/
 
 static pair_t *CreatePair(const void *key, void* value)
