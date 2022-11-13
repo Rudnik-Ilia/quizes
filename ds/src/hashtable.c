@@ -182,18 +182,31 @@ void HTRemove(ht_t *ht, const void *key)
 
 int HTForEach(ht_t *ht, int (*action_func)(void *data, void *params), void *params)
 {	
-
+	size_t i = 0;
+	iterator_t iter = NULL;
+	int st = 0;
+	
 	assert(NULL != action_func);
 	assert(NULL != ht);
 	
 	
-	
-	
+ 	for (i =0 ; i < ht->size && st == 0 ; ++i)
+ 	{
+ 		for(iter = SllBegin(ht->ht_items[i]); iter != SllEnd(ht->ht_items[i]); iter = SllNext(iter))
+		{
+			st = action_func(((pair_t*)SllGetData(iter))->value, params);
+		}
+ 	}
+ 	return st;
+
 }
  
 
 
 /*****************************************************************************************************************************/
+
+
+
 
 static pair_t *CreatePair(const void *key, void* value)
 {

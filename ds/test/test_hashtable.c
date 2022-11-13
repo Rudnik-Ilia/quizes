@@ -1,6 +1,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
+
 
 #include "hash_table.h"
 #include "test.h"
@@ -47,14 +49,67 @@ size_t hash(const void *str) {
    return ret % CAPACITY;
 }
 
+int Action(void *data, void *data1)
+{
+	assert(NULL != data);
+	assert(NULL != data1);
+	
+	*(int*)data += *(int*)data1;
+	
+	return 0;
+}
+
+
+
 int CompareStr(const void *p1, const void *p2);
 int CompareStr(const void *p1, const void *p2);
 void Gemeral();
+void Rewrite();
+void Foreach();
 
 int main()
+{	
+
+	
+
+	Gemeral();
+	Rewrite();
+	Foreach();	
+	PASS;		
+return 0;
+}
+
+void Foreach()
 {
 	ht_t * ht = HTCreate(HashFuncStr, CAPACITY, CompareStr);
-	size_t i = 0;
+	
+	char keys[][CAPACITY] = { "iliaaa", "rudnik", "batyam", "infini", "qwerty", "patric", "catdog", "greeny", "123456", "654321", "010101"};
+	int values[CAPACITY] = { 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000 };
+	int valuesInt[CAPACITY] = { 101, 201, 301, 401, 501, 601, 701, 801, 901, 1001, 2001 };
+	int p = 1;
+	TEST("empty",HTIsEmpty(ht), 0);
+	
+	HTInsert(ht, &keys[0] , &values[0]);
+	HTInsert(ht, &keys[1] , &values[1]);
+	HTInsert(ht, &keys[2] , &values[2]);
+	HTInsert(ht, &keys[3] , &values[3]);
+	HTInsert(ht, &keys[4] , &values[4]);
+	
+	TEST("Size", HTSize(ht), 5);
+	HTForEach(ht, Action, &p);
+	
+	TEST("Find ", *(int*)HTFind(ht, &keys[0]), valuesInt[0]);
+	TEST("Find ", *(int*)HTFind(ht, &keys[1]), valuesInt[1]);
+	TEST("Find ", *(int*)HTFind(ht, &keys[2]), valuesInt[2]);
+	TEST("Find ", *(int*)HTFind(ht, &keys[3]), valuesInt[3]);
+	TEST("Find ", *(int*)HTFind(ht, &keys[4]), valuesInt[4]);
+	HTDestroy(ht);
+	
+}
+
+void Rewrite()
+{
+	ht_t * ht = HTCreate(HashFuncStr, CAPACITY, CompareStr);
 	/********collis              4        4         0          10         2         5        10         1         1        1        5
 	         */
 	                        /*   0        1         2           3         4         5         6         7           8        9      10    */
@@ -88,12 +143,8 @@ int main()
 	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[3]), values[7]), 0);
 	
 	TEST("Size", HTSize(ht), 5);
+	
 	HTDestroy(ht);
-/*
-	Gemeral();
-*/	
-	PASS;		
-return 0;
 }
 
 void Gemeral()

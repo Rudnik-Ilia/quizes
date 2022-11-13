@@ -41,9 +41,9 @@ static size_t GetHeight(avl_node_t *node);
 static avl_node_t *CreateNode(void *data);
 static void *Find_Ax(const avl_t *tree, avl_node_t *node, const void *key_data);
 
-static int InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
-static int PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
-static int PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param);
+static void InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param,int *st);
+static void PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param, int *st);
+static void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param, int *st);
 
 static void Print2D(avl_node_t *root, int space);
 
@@ -114,25 +114,31 @@ void *AVLFind(const avl_t *tree, const void *key_data)
 	return Find_Ax(tree, tree->root.children[LEFT], key_data);
 }
 
+
+
 int AVLForEach(avl_t *tree, int (*action_func)(void *data, void *params), void *param, bst_traversal_type_t order)
 {	
-	int st = 0;
-	switch (order){
+    int status = 0;
+    avl_node_t *root = GetChild(&tree->root, LEFT);
 	
-		case IN_ORDER :
-		
-			st = InOrder(tree->root.children[LEFT], action_func, param);
+	switch (order)
+    {
+		case IN_ORDER:
+			InOrder(root, action_func, param, &status);
 			break;
+
 		case PRE_ORDER:
-			st = PreOrder(tree->root.children[LEFT], action_func, param);
-			break;	
+			PreOrder(root, action_func, param, &status);
+			break;
+			
 		case POST_ORDER:
-			st = PostOrder(tree->root.children[LEFT], action_func, param);
+			PostOrder(root, action_func, param, &status);
 			break;	
 	}
 		
-	return st;
+	return status;
 }
+
 
 size_t AVLSize(const avl_t *tree)
 {	
@@ -367,39 +373,40 @@ static int Count(void *data, void *count)
     return 0;
 }
 
-static int InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+static void InOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param, int *st)
 {	
-	int st = 0;
-	if(node && st != 1){
-		InOrder(node->children[LEFT], action_func, param);
-		st = action_func(node->data, param);
-		InOrder(node->children[RIGHT], action_func, param);
+	
+	if(NULL != node  && !*st)
+	{
+		InOrder(node->children[LEFT], action_func, param, st);
+		*st = action_func(node->data, param);
+		InOrder(node->children[RIGHT], action_func, param, st);
 	}
-	return st;
+	return;
 }
 
-static int PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+static void PreOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param, int *st)
 {
-	int st = 0;
-	if(node && st != 1)
+	
+	if(NULL != node  && !*st)
 	{
-		st = action_func(node->data, param);
-		PreOrder(node->children[LEFT], action_func, param);
-		PreOrder(node->children[RIGHT], action_func, param);
+		*st = action_func(node->data, param);
+		PreOrder(node->children[LEFT], action_func, param, st);
+		PreOrder(node->children[RIGHT], action_func, param, st);
 	}
-	return st;
+	return;
 }
 
-static int PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param)
+static void PostOrder(avl_node_t *node, int (*action_func)(void *data, void *params), void *param, int *st)
 {	
-	int st = 0;
-	if(node && st != 1)
+	
+	if(NULL != node  && !*st)
 	{
-		PostOrder(node->children[LEFT], action_func, param);
-		PostOrder(node->children[RIGHT], action_func, param);
-		st = action_func(node->data, param);
+		PostOrder(node->children[LEFT], action_func, param, st);
+		PostOrder(node->children[RIGHT], action_func, param, st);
+		*st = action_func(node->data, param);
 	}
-	return st;
+	return;
 }
 
 static void *GetData(avl_node_t *node)
