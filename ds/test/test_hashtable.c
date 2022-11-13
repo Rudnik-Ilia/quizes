@@ -47,21 +47,15 @@ size_t hash(const void *str) {
    return ret % CAPACITY;
 }
 
-int CompareStr(const void *p1, const void *p2)
-{
-	return !strcmp((char*)p1, (char*)p2);
-}
-
-int CompareInt(const void * p1, const void * p2)
-{
-	return *(int*)p1 == *(int*)p2;
-}
+int CompareStr(const void *p1, const void *p2);
+int CompareStr(const void *p1, const void *p2);
+void Gemeral();
 
 int main()
 {
 	ht_t * ht = HTCreate(HashFuncStr, CAPACITY, CompareStr);
 	size_t i = 0;
-	/********collis              9        1         2          9           0         5         2         0        2          5       7
+	/********collis              4        4         0          10         2         5        10         1         1        1        5
 	         */
 	                        /*   0        1         2           3         4         5         6         7           8        9      10    */
 	char keys[][CAPACITY] = { "iliaaa", "rudnik", "batyam", "infini", "qwerty", "patric", "catdog", "greeny", "123456", "654321", "010101"};
@@ -77,35 +71,94 @@ int main()
 	
 	TEST("Size", HTSize(ht), 5);
 	
-	for(i = 0; i < CAPACITY; ++i)
-	{
-		printf("%ld ", HashStr(&keys[i])); 
-	}
-			
-	/*
-	
-	
-	
-	for(i = 0; i < CAPACITY; ++i)
-	{
-		printf("%s\n", (char*)HTFind(ht,&keys[i]));
-	}
-	*/
-	printf("%s\n",  (char*)HTFind(ht, &keys[0]));
-	printf("%s\n",  (char*)HTFind(ht, &keys[1]));
-	printf("%s\n",  (char*)HTFind(ht, &keys[2]));
-	printf("%s\n",  (char*)HTFind(ht, &keys[3]));
-	printf("%s\n",  (char*)HTFind(ht, &keys[4]));
-	printf("%s\n",  (char*)HTFind(ht, &keys[4]));
-	
-	
-	printf("%s\n",  (char*)HTFind(ht, &keys[6]));
-	/*
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[0]), values[0]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[1]), values[1]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[2]), values[2]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[3]), values[3]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[4]), values[4]), 0);
 
-	*/
+	HTInsert(ht, &keys[0] , &values[10]);
+	HTInsert(ht, &keys[1] , &values[9]);
+	HTInsert(ht, &keys[2] , &values[8]);
+	HTInsert(ht, &keys[3] , &values[7]);
 	
-	HTDestroy(ht);	
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[0]), values[10]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[1]), values[9]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[2]), values[8]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[3]), values[7]), 0);
 	
+	TEST("Size", HTSize(ht), 5);
+	HTDestroy(ht);
+/*
+	Gemeral();
+*/	
 	PASS;		
 return 0;
 }
+
+void Gemeral()
+{
+	ht_t * ht = HTCreate(HashFuncStr, CAPACITY, CompareStr);
+	size_t i = 0;
+	/********collis              4        4         0          10         2         5        10         1         1        1        5
+	         */
+	                        /*   0        1         2           3         4         5         6         7           8        9      10    */
+	char keys[][CAPACITY] = { "iliaaa", "rudnik", "batyam", "infini", "qwerty", "patric", "catdog", "greeny", "123456", "654321", "010101"};
+	char values[][CAPACITY] = { "aaaaaa", "bbbbbb", "cccccc", "ffffff", "eeeeee", "gggggg", "hhhhhh", "iiiiii", "000000", "777777", "111111"};
+	
+	TEST("empty",HTIsEmpty(ht), 0);
+	
+	HTInsert(ht, &keys[0] , &values[0]);
+	HTInsert(ht, &keys[1] , &values[1]);
+	HTInsert(ht, &keys[2] , &values[2]);
+	HTInsert(ht, &keys[3] , &values[3]);
+	HTInsert(ht, &keys[4] , &values[4]);
+	HTInsert(ht, &keys[5] , &values[5]);
+	HTInsert(ht, &keys[6] , &values[6]);
+	HTInsert(ht, &keys[7] , &values[7]);
+	HTInsert(ht, &keys[8] , &values[8]);
+	HTInsert(ht, &keys[9] , &values[9]);
+	HTInsert(ht, &keys[10] , &values[10]);
+	
+	TEST("Size", HTSize(ht), 11);
+
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[0]), values[0]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[1]), values[1]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[2]), values[2]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[3]), values[3]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[4]), values[4]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[5]), values[5]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[6]), values[6]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[7]), values[7]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[8]), values[8]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[9]), values[9]), 0);
+	TEST("Find ",  strcmp((char*)HTFind(ht, &keys[10]), values[10]), 0);
+	
+	TEST("empty",HTIsEmpty(ht), 1);
+	
+	HTRemove(ht, &keys[0]);
+	TEST("Find after remove", HTFind(ht, &keys[0]),  NULL);
+	TEST("Size", HTSize(ht), 10);
+	
+	for(i = 1; i < CAPACITY; ++i)
+	{
+		HTRemove(ht, &keys[i]);
+		TEST("Size while remove", HTSize(ht), 10 - i);
+		
+	}
+	TEST("empty",HTIsEmpty(ht), 0);
+	TEST("Size", HTSize(ht), 0);
+	
+	HTDestroy(ht);	
+}
+
+int CompareStr(const void *p1, const void *p2)
+{
+	return !strcmp((char*)p1, (char*)p2);
+}
+
+int CompareInt(const void * p1, const void * p2)
+{
+	return *(int*)p1 == *(int*)p2;
+}
+

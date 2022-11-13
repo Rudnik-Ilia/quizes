@@ -14,7 +14,7 @@
 #include "utils.h"
 
 #define SHIFT sizeof(ht_t)
-#define DEAD (void*)0xDEADBEEF
+
 
 typedef struct pair
 {
@@ -67,17 +67,28 @@ ht_t *HTCreate(size_t (*hash_func)(const void *key), size_t size, int (*is_match
 
 int HTInsert(ht_t *ht, const void *key, void *value)
 {
-	iterator_t iter = NULL;
 	pair_t *pair = NULL;
-	
+	iterator_t iter = NULL;
+	size_t hash = 0;
 	assert(NULL != ht);
 	assert(NULL != key);
 	assert(NULL != value);
 	
 	pair = CreatePair(key, value);
 	
+	hash = ht->hash_func(key);
+	
+	for(iter = SllBegin(ht->ht_items[hash]); iter != SllEnd(ht->ht_items[hash]); iter = SllNext(iter))
+		{
+			if(ht->is_match(((pair_t*)SllGetData(iter))->key, key))
+			{
+				FreeData(SllGetData(iter), NULL);
+				SllSetData(iter, pair);
+				return 0;
 
-	SllInsert(SllBegin(ht->ht_items[ht->hash_func(key)]), pair);
+			}
+		}
+	SllInsert(SllEnd(ht->ht_items[ht->hash_func(key)]), pair);
 	
 	return 0;
 }
@@ -120,29 +131,67 @@ int HTIsEmpty(const ht_t *ht)
 }
 
 void *HTFind(const ht_t *ht, const void *key)
-{	
-	size_t hash = 0;
+{
 	iterator_t iter = NULL;
+	
+	size_t hash = ht->hash_func(key);
 	
 	assert(NULL != ht);
 	assert(NULL != key);
-	
-	hash = ht->hash_func(key);
 	
 	if(ht->ht_items[hash] == NULL)
 	{
 		return NULL;
 	}
+	
 	else
 	{
-		
-		for(iter = SllBegin(ht->ht_items[hash]); ht->is_match(key,(((pair_t*)SllGetData(iter))->key)) || SllNext(iter) != DEAD ;iter = SllNext(iter))
+		for(iter = SllBegin(ht->ht_items[hash]); iter != SllEnd(ht->ht_items[hash]); iter = SllNext(iter))
 		{
-			return ((pair_t*)SllGetData(iter))->value;
+			if(ht->is_match(((pair_t*)SllGetData(iter))->key, key))
+			{
+				return ((pair_t*)SllGetData(iter))->value;
+			}
 		}
-		
 	}
+	return NULL;
 }
+
+
+
+
+void HTRemove(ht_t *ht, const void *key)
+{
+	iterator_t iter = NULL;
+	size_t hash = ht->hash_func(key);
+	
+	assert(NULL != ht);
+	assert(NULL != key);
+	
+	for(iter = SllBegin(ht->ht_items[hash]);  iter != SllEnd(ht->ht_items[hash]); iter = SllNext(iter))
+	{
+		if(ht->is_match(key,(((pair_t*)SllGetData(iter))->key)))
+		{
+			  	FreeData(SllGetData(iter), NULL);
+			  	SllRemove(iter);
+			  	break;
+		}
+	}
+	
+}
+
+int HTForEach(ht_t *ht, int (*action_func)(void *data, void *params), void *params)
+{	
+
+	assert(NULL != action_func);
+	assert(NULL != ht);
+	
+	
+	
+	
+}
+ 
+
 
 /*****************************************************************************************************************************/
 
@@ -159,6 +208,7 @@ static pair_t *CreatePair(const void *key, void* value)
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return NULL;
 	}
+	
 	pair->key = key;
 	pair->value = value;
 	
