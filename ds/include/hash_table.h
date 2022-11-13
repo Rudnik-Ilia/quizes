@@ -2,6 +2,7 @@
 #define __HASH_TABLE_H__
 
 #include <stddef.h> /* size_t */
+#include "SLL.h"
 
 typedef struct hash_table ht_t;
 /*
