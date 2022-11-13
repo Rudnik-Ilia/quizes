@@ -8,75 +8,12 @@
 #include "test.h"
 
 #define CAPACITY 11
-
 #define SIZE_DICT 110000
 
-size_t HashFuncStr(const void *key) 
-{	
-	char *str = (char*)key;
-	size_t tmp = 0;
-	size_t i = 0;
 
-	for (i=0; str[i]; ++i)
-	{
-		tmp += str[i];
-	}
-	return tmp % CAPACITY;
-}
-
-size_t HashFuncStrBig(const void *key) 
-{	
-	char *str = (char*)key;
-	size_t tmp = 0;
-	size_t i = 0;
-
-	for (i=0; str[i]; ++i)
-	{
-		tmp += str[i];
-	}
-	return tmp %  SIZE_DICT;
-}
- 
- 
-size_t HashStr(const void *key) 
-{
-	char *str = (char*)key;
-	size_t hash = 513284950;
-	int c = 0;
-
-	while ((c = *str++))
-	{
-		hash = ((hash << 5) + hash) + c; 
-	}
-	return hash % CAPACITY;
-}
-
-size_t hash(const void *str) { 
-
-    const int ret_size = CAPACITY;
-    char *input = (char*)str;
-    size_t ret = 0x555555;
-    const int per_char = 7;
-
-    while (*input) { 
-        ret ^= *input++;
-        ret = (ret << per_char) | (ret >> (ret_size - per_char));
-   }
-   return ret % CAPACITY;
-}
-
-int Action(void *data, void *data1)
-{
-	assert(NULL != data);
-	assert(NULL != data1);
-	
-	*(int*)data += *(int*)data1;
-	
-	return 0;
-}
-
-
-
+size_t HashFuncStr(const void *key); 
+size_t HashFuncStrBig(const void *key); 
+int Action(void *data, void *data1);
 int CompareStr(const void *p1, const void *p2);
 int CompareStr(const void *p1, const void *p2);
 void Gemeral();
@@ -86,13 +23,12 @@ void Dict();
 
 int main()
 {	
-	 Dict();
 	
-/*
 	Gemeral();
 	Rewrite();
 	Foreach();
-*/	
+	Dict();
+	
 	PASS;		
 return 0;
 }
@@ -119,7 +55,7 @@ void Dict()
 	
 	while(strcmp(word, "q"))
 	{
-		printf("Insert thr word: \n");
+		printf("Insert the word: (for exit press 'q' )\n");
 		scanf("%s", word);
 		if(HTFind(ht, word) == NULL)
 		{
@@ -268,3 +204,38 @@ int CompareInt(const void * p1, const void * p2)
 	return *(int*)p1 == *(int*)p2;
 }
 
+size_t HashFuncStr(const void *key) 
+{	
+	char *str = (char*)key;
+	size_t tmp = 0;
+	size_t i = 0;
+
+	for (i=0; str[i]; ++i)
+	{
+		tmp += str[i];
+	}
+	return tmp % CAPACITY;
+}
+
+size_t HashFuncStrBig(const void *key) 
+{	
+	char *str = (char*)key;
+	size_t tmp = 0;
+	size_t i = 0;
+
+	for (i=0; str[i]; ++i)
+	{
+		tmp += str[i];
+	}
+	return tmp %  SIZE_DICT;
+}
+ 
+int Action(void *data, void *data1)
+{
+	assert(NULL != data);
+	assert(NULL != data1);
+	
+	*(int*)data += *(int*)data1;
+	
+	return 0;
+}

@@ -1,8 +1,8 @@
 /**********************
 * Title : Worksheet DLL
 * Author: Ilia Rudnik
-* Reviewer: 
-* Date : 06/09/2022
+* Reviewer: Ronny
+* Date : 15/11/2022
 * Status : approved
 ***********************/
 #include <assert.h>
@@ -14,7 +14,6 @@
 #include "utils.h"
 
 #define SHIFT sizeof(ht_t)
-
 
 typedef struct pair
 {
@@ -70,11 +69,16 @@ int HTInsert(ht_t *ht, const void *key, void *value)
 	pair_t *pair = NULL;
 	iterator_t iter = NULL;
 	size_t hash = 0;
+	
 	assert(NULL != ht);
 	assert(NULL != key);
 	assert(NULL != value);
 	
 	pair = CreatePair(key, value);
+	if(NULL == pair)
+	{
+		return 1;
+	}
 	
 	hash = ht->hash_func(key);
 	
@@ -89,7 +93,6 @@ int HTInsert(ht_t *ht, const void *key, void *value)
 			}
 		}
 	SllInsert(SllEnd(ht->ht_items[ht->hash_func(key)]), pair);
-	
 	return 0;
 }
 
@@ -143,7 +146,6 @@ void *HTFind(const ht_t *ht, const void *key)
 	{
 		return NULL;
 	}
-	
 	else
 	{
 		for(iter = SllBegin(ht->ht_items[hash]); iter != SllEnd(ht->ht_items[hash]); iter = SllNext(iter))
@@ -156,9 +158,6 @@ void *HTFind(const ht_t *ht, const void *key)
 	}
 	return NULL;
 }
-
-
-
 
 void HTRemove(ht_t *ht, const void *key)
 {
@@ -201,12 +200,7 @@ int HTForEach(ht_t *ht, int (*action_func)(void *data, void *params), void *para
 
 }
  
-
-
 /*****************************************************************************************************************************/
-
-
-
 
 static pair_t *CreatePair(const void *key, void* value)
 {
