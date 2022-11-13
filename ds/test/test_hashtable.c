@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-
+#include <string.h>
 
 #include "hash_table.h"
 #include "test.h"
 
 #define CAPACITY 11
+
+#define SIZE_DICT 110000
 
 size_t HashFuncStr(const void *key) 
 {	
@@ -21,6 +23,20 @@ size_t HashFuncStr(const void *key)
 	}
 	return tmp % CAPACITY;
 }
+
+size_t HashFuncStrBig(const void *key) 
+{	
+	char *str = (char*)key;
+	size_t tmp = 0;
+	size_t i = 0;
+
+	for (i=0; str[i]; ++i)
+	{
+		tmp += str[i];
+	}
+	return tmp %  SIZE_DICT;
+}
+ 
  
 size_t HashStr(const void *key) 
 {
@@ -66,18 +82,57 @@ int CompareStr(const void *p1, const void *p2);
 void Gemeral();
 void Rewrite();
 void Foreach();
+void Dict();
 
 int main()
 {	
-
+	 Dict();
 	
-
+/*
 	Gemeral();
 	Rewrite();
-	Foreach();	
+	Foreach();
+*/	
 	PASS;		
 return 0;
 }
+
+void Dict()
+{	
+	char arr[SIZE_DICT][50]; 
+	size_t i = 0;
+	char word[50];
+	
+	ht_t * ht = HTCreate(HashFuncStrBig, SIZE_DICT, CompareStr);
+	
+	FILE * file = fopen("/usr/share/dict/words", "r");
+	if(NULL == file)
+	{
+		return;
+	}
+	while(fscanf(file, "%s", &arr[i][0]) != EOF)
+	{
+		HTInsert(ht, &arr[i], &i);
+		++i;
+	}
+	fclose(file);
+	
+	while(strcmp(word, "q"))
+	{
+		printf("Insert thr word: \n");
+		scanf("%s", word);
+		if(HTFind(ht, word) == NULL)
+		{
+			printf("NO!\n");
+		}
+		else
+		{
+			printf("YES!\n");
+		}
+	}
+        HTDestroy(ht);
+}
+
 
 void Foreach()
 {
