@@ -26,12 +26,13 @@ struct heap
 	vector_t *heap_vector;
 	int (*cmp_func)(const void *left, const void *right);
 };
+
 /*************************************************************************************/
 static void SwapVoid(void *a, void *b, size_t size);
 static int Parent(int i);
-size_t  Left(int i);
-size_t  Right(int i);
-void Heapify(const heap_t *heap, int i);
+static size_t  Left(int i);
+static size_t  Right(int i);
+static void Heapify(const heap_t *heap, int i);
 /*************************************************************************************/
 
 heap_t *HeapCreate(cmp_func_t cmp_func)
@@ -57,14 +58,20 @@ heap_t *HeapCreate(cmp_func_t cmp_func)
 }
 
 void HeapDestroy(heap_t *heap)
-{
+{	
+	assert(NULL != heap);
+	
 	VectorDestroy(heap->heap_vector);
 	free(heap);
 }
 
 int HeapPush(heap_t *heap, const void *data)
-{
+{	
 	size_t i = 0;
+	
+	assert(NULL != heap);
+	assert(NULL != data);
+	
 	VectorPushBack(heap->heap_vector,data);
 	i = HeapSize(heap) - 1;
 	
@@ -91,19 +98,40 @@ int HeapPush(heap_t *heap, const void *data)
 	return 0;
 }
 
+void *HeapRemove(heap_t *heap, is_match_t is_match, void *param)
+{
+	size_t i = 0;
+	size_t index = HeapSize(heap) - 1;
+	
+	assert(NULL != heap);
+	assert(NULL != param);
+	
+	
+	for(i = 0; i < HeapSize(heap); ++i)
+	{
+		SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, index), VOID);
+		if(heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, index), param) == 0)
+		{
+
+			VectorPopBack(heap->heap_vector);
+			break;
+		}
+	}
+	Heapify(heap, 0);
+}
+
 void HeapPop(heap_t *heap)
 {
 	assert(NULL != heap);
 	SwapVoid(VectorGetAccessToElement(heap->heap_vector, 0), VectorGetAccessToElement(heap->heap_vector, HeapSize(heap) - 1 ), VOID);
 	VectorPopBack(heap->heap_vector);
 	Heapify(heap, 0);
-
 }
 
 void *HeapPeek(const heap_t *heap)
 {
+	assert(NULL != heap);
 	return VectorGetAccessToElement(heap->heap_vector, 0);
-
 }
 
 size_t HeapSize(const heap_t *heap)
@@ -139,9 +167,10 @@ static void SwapVoid(void *a, void *b, size_t size)
 	memcpy(b, tmp, size);
 }
 
-void Heapify(const heap_t *heap, int i)
+static void Heapify(const heap_t *heap, int i)
 {
 	int smallest = 0;
+	
 	while (1) 
 	{
 		smallest = i;
@@ -166,18 +195,17 @@ void Heapify(const heap_t *heap, int i)
 	}
 }
 
-
 static int Parent(int i)
 {
 	return (i - 1) / 2;
 }
 
-size_t Left(int i)
+static size_t Left(int i)
 {
 	return 2 * i + 1;
 }
 
-size_t Right(int i)
+static size_t Right(int i)
 {
 	return 2 * i + 2;
 }
