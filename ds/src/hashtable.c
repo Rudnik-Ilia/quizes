@@ -75,6 +75,7 @@ int HTInsert(ht_t *ht, const void *key, void *value)
 	assert(NULL != value);
 	
 	pair = CreatePair(key, value);
+	
 	if(NULL == pair)
 	{
 		return 1;
@@ -130,7 +131,7 @@ size_t HTSize(const ht_t *ht)
 int HTIsEmpty(const ht_t *ht)
 {
 	assert(NULL != ht);
-	return !!HTSize(ht);
+	return !HTSize(ht);
 }
 
 void *HTFind(const ht_t *ht, const void *key)
