@@ -148,7 +148,9 @@ vector_t *VectorShrink(vector_t *vector)
 
 void *VectorGetAccessToElement(const vector_t *vector, size_t index)
 {	
+	/*
 	assert(index < vector->max_item);
+	*/
 	assert(vector);
 	return (char*)(vector->p_item) + vector->item_size*index;
 }

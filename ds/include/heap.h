@@ -18,18 +18,16 @@ typedef int (*is_match_t)(const void *data, const void *param);
 /**
  * @brief: Creates an instance of a heap.
  * @params: cmp_func: defines type of the heap (min/max)
- *          element_size: size of elements in the heap
- *          capacity: initial capacity of a heap
  * @return: Pointer to heap_t struct
  * @complexity: O(1)
  */
-heap_t *HeapCreate(cmp_func_t cmp_func, size_t element_size);
+heap_t *HeapCreate(cmp_func_t cmp_func);
 
 /**
  * @brief: Destroys an instance of a heap
  * @params: Pointer to heap
  * @return: Void
- * @complexity: O(n)
+ * @complexity: O(1)
  */
 void HeapDestroy(heap_t *heap);
 
@@ -61,11 +59,12 @@ void *HeapPeek(const heap_t *heap);
 /**
  * @brief: Removes a specified element within the heap
  * @params: A pointer to the heap, 
- *          A pointer to the data to be removed
+ *          A pointer to is_match function
+ *          A pointer to the params for is_match function
  * @return: Pointer to removed data
  * @complexity: O(log n)
  */
-void *HeapRemove(heap_t *heap, void* data, is_match_t is_match, void *param);
+void *HeapRemove(heap_t *heap, is_match_t is_match, void *param);
 
 /**
  * @brief: Returns the size of the heap.
@@ -87,5 +86,7 @@ int HeapIsEmpty(const heap_t *heap);
  * static void HeapifyUp(heap_t *heap); 
  * static void HeapifyDown(heap_t *heap);
  */
+ 
+void PrintHeap(const heap_t *heap);
 
 #endif
