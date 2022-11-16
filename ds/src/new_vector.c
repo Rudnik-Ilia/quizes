@@ -1,132 +1,162 @@
-/**********************
-* Title : Vector
-* Author: Anastasia Lurye
-* Reviewer: Alena
-* Date : 6.09.22
-***********************/
 
-#include <stddef.h> /* size_t */
-#include <stdlib.h> /* malloc */
-#include <stdio.h>  /* printf */
-#include <string.h> /* memcpy */
-#include <assert.h> /* assert */
-#include "../include/vector.h"
+#include <stdlib.h> /* for malloc / realloc*/
+#include <string.h> /* for memcpy */
+#include <assert.h> /* for assert*/
 
-#define FactorGrowth 2
+#include "vector.h"
+
+static const int growth_factor = 2;
 
 struct vector
 {
+	size_t element_size;
 	size_t capacity;
 	size_t size;
-	size_t amount;
-	void *pt_components;	
+	void *elements;
 };
 
 vector_t *VectorCreate(size_t element_size, size_t capacity)
 {
-	vector_t *vector = (vector_t *)malloc(sizeof(vector_t));
-	vector -> pt_components = malloc(element_size * capacity);
-	vector -> size = element_size;
-	vector -> capacity = capacity;
-	vector -> amount = 0; 
-	return vector;
-}
-
-int VectorPushBack(vector_t *vector, const void *data)
-{
-	int status = 1;
-	assert(vector);
-	assert(data);
+	vector_t *vector = NULL;
 	
-	memcpy((char*)vector -> pt_components + vector -> amount * vector -> size, data, vector -> size);
-	++vector -> amount;
-	if(vector -> amount == vector -> capacity)
+	vector = (vector_t *)malloc(sizeof(vector_t));
+	if(NULL != vector)
 	{
-		void *ptr = NULL;
-		ptr = realloc(vector -> pt_components, vector -> capacity * vector -> size * FactorGrowth);
-		if(ptr == NULL)
-		{
-			return 0;
+		vector->elements = (void *)(malloc(element_size * capacity));
+		if(NULL != vector->elements)
+		{	
+			vector->capacity = capacity;
+			vector->element_size = element_size;
+			vector->size = 0;
 		}
-		vector -> pt_components = ptr;
-		vector -> capacity = vector -> capacity * FactorGrowth;
-	
+		else
+		{
+			free(vector);
+			vector = NULL;
+		}
 	}
-	return status;
-}
 
-void *VectorGetAccessToElement(const vector_t *vector, size_t index)
-{
-	return (char *)vector -> pt_components +  index * vector -> size;
-}
-
-vector_t *VectorShrink(vector_t *vector)
-{
-	void* ptr = NULL;
-	assert(vector);
-	
-	if(vector -> capacity > vector -> size)
-	{
-		ptr = realloc(vector -> pt_components, vector -> amount * vector -> size);
-		vector -> pt_components = ptr;
-		vector -> capacity = vector -> size;
-	}
-	return vector;	
-}
-
-void VectorPopBack(vector_t *vector)
-{
-	assert(vector);
-	--vector -> amount;
-	VectorShrink(vector);
-}
-
-size_t VectorSize(const vector_t *vector)
-{
-	assert(vector);
-	return vector -> amount;
-}
-
-size_t VectorCapacity(const vector_t *vector)
-{
-	assert(vector);
-	return vector -> capacity;
-}
-
-int VectorIsEmpty(const vector_t *vector)
-{
-	assert(vector);
-	return !vector->amount;
-}
-
-void VectorSetElement(vector_t *vector, size_t index, const void *data)
-{
-	assert(vector);
-	assert(data);
-	assert(index < vector -> amount);
-	memcpy((char*)vector -> pt_components + vector -> size * index, data, vector -> size);
-}
-
-vector_t *VectorReserve(vector_t *vector, size_t new_capacity)
-{
-	void *ptr = NULL;
-	
-	if(new_capacity > vector -> capacity)
-	{
-		ptr = realloc(vector -> pt_components, new_capacity * vector -> size);	
-		vector -> pt_components = ptr; 
-	    vector -> capacity = new_capacity;
-	    return vector;
-		
-	}
 	return vector;
 }
 
 void VectorDestroy(vector_t *vector)
 {
-	assert(vector);
-	free(vector-> pt_components);
+	assert(NULL != vector);
+	free(vector->elements);
 	free(vector);
 }
 
+int VectorPushBack(vector_t *vector, const void *data)
+{
+	void *new_pointer = NULL;
+	
+	assert(NULL != vector);
+	assert(NULL != data);
 
+	memcpy((char *)vector->elements + (vector->size * vector->element_size), data, vector->element_size);
+	vector->size += 1;
+
+	if(vector->size == vector->capacity)
+	{
+		new_pointer = (void *)realloc(vector->elements, vector->capacity * growth_factor * vector->element_size);
+		if(NULL != new_pointer)
+		{
+			vector->elements = new_pointer;
+			vector->capacity *= growth_factor;
+		}
+	}
+
+	return vector->size < vector->capacity;
+}
+
+void VectorPopBack(vector_t *vector)
+{
+	void *new_pointer = NULL;
+	
+	assert(NULL != vector);
+	
+	vector->size -= 1;
+	if(vector->size <= vector->capacity / (growth_factor * growth_factor))
+	{
+		new_pointer = (void *)realloc(vector->elements, (vector->capacity / growth_factor) * vector->element_size);
+		if(NULL != new_pointer)
+		{
+			vector->elements = new_pointer;
+			vector->capacity /= growth_factor;
+		}
+	}
+}
+
+size_t VectorSize(const vector_t *vector)
+{
+	assert(NULL != vector);
+	
+	return vector->size;
+}
+
+size_t VectorCapacity(const vector_t *vector)
+{
+	assert(NULL != vector);
+	
+	return vector->capacity;
+}
+
+int VectorIsEmpty(const vector_t *vector)
+{
+	assert(NULL != vector);
+	
+	return vector->size == 0;
+}
+
+void VectorSetElement(vector_t *vector, size_t index, const void *data)
+{
+	assert(NULL != vector);
+	assert(NULL != data);
+	
+	memcpy((char *)vector->elements + (index * vector->element_size), data, vector->element_size);
+}
+
+void *VectorGetAccessToElement(const vector_t *vector, size_t index)
+{
+	return (char *)vector->elements + (index * vector->element_size);
+}
+
+vector_t *VectorReserve(vector_t *vector, size_t new_capacity)
+{
+	void *new_pointer = NULL;
+	
+	assert(NULL != vector);
+	
+	new_pointer = (void *)realloc(vector->elements, new_capacity * vector->element_size);
+	if(NULL != new_pointer)
+	{
+		vector->elements = new_pointer;
+		vector->capacity = new_capacity;
+	}
+	else
+	{
+		return NULL;
+	}
+	
+	return vector;
+}	
+
+vector_t *VectorShrink(vector_t *vector)
+{
+	void *new_pointer = NULL;
+	
+	assert(NULL != vector);
+	
+	new_pointer = (void *)realloc(vector->elements, vector->size * vector->element_size);
+	if(NULL != new_pointer)
+	{
+		vector->elements = new_pointer;
+		vector->capacity = vector->size;
+	}
+	else
+	{
+		return NULL;
+	}
+	
+	return vector;
+}

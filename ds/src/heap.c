@@ -20,9 +20,10 @@
 
 #define less(a, b) a < b
 #define VOID sizeof(void*)
-#define PARENT(i) floor((i - 1) / 2)
+#define PARENT(i) ((i - 1) / 2)
 #define LEFT(i) (2 * i + 1)
 #define RIGHT(i) (2 * i + 2)
+#define TYPE(a) ((void *)*(size_t *)(a))
 
 struct heap
 {
@@ -70,23 +71,18 @@ void HeapDestroy(heap_t *heap)
 
 int HeapPush(heap_t *heap, const void *data)
 {	
-	
+	size_t i = 0;
 	assert(NULL != heap);
 	assert(NULL != data);
 	
-	VectorPushBack(heap->heap_vector,data);
+	VectorPushBack(heap->heap_vector,&data);
 
-	
-	HeapifyUp(heap, HeapSize(heap) - 1);
-	
-	/*
 	i = HeapSize(heap) - 1;
 	
-	for (; i > 0 && heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, PARENT(i)), VectorGetAccessToElement(heap->heap_vector, i)) < 0; i = PARENT(i))
+	for (; i > 0 && heap->cmp_func(TYPE(VectorGetAccessToElement(heap->heap_vector, PARENT(i))), TYPE(VectorGetAccessToElement(heap->heap_vector, i))) < 0; i = PARENT(i))
 	{
 		SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, PARENT(i)));
 	}
-	*/
 	return 0;
 }
 
@@ -100,14 +96,14 @@ void *HeapRemove(heap_t *heap, is_match_t is_match, void *param)
 	assert(NULL != param);
 	
 
-	for(data = GetData(heap->heap_vector, i), flag = is_match(data, param); i < HeapSize(heap) - 1 && !flag; data = GetData(heap->heap_vector, ++i), flag = is_match(data, param));
+	for(data = TYPE(GetData(heap->heap_vector, i)), flag = is_match(data, param); i < HeapSize(heap) - 1 && !flag; data = TYPE(GetData(heap->heap_vector, ++i)), flag = is_match(data, param));
 	
 	if(!flag)
 	{
 		return NULL;
 	}
 
-	data = GetData(heap->heap_vector, HeapSize(heap)-1);
+	data = TYPE(GetData(heap->heap_vector, HeapSize(heap)-1));
 	
 	_remHelp(heap, i);
 
@@ -117,13 +113,12 @@ void *HeapRemove(heap_t *heap, is_match_t is_match, void *param)
 
 
 void HeapPop(heap_t *heap)
-
-{	/*
-	if(!HeapIsEmpty(heap))
+{	
+	if(HeapIsEmpty(heap))
 	{
 		return;
 	}
-	*/
+	
 	assert(NULL != heap);
 	
 	_remHelp(heap, 0);
@@ -132,7 +127,7 @@ void HeapPop(heap_t *heap)
 void *HeapPeek(const heap_t *heap)
 {
 	assert(NULL != heap);
-	return (VectorGetAccessToElement(heap->heap_vector, 0));
+	return TYPE(VectorGetAccessToElement(heap->heap_vector, 0));
 }
 
 size_t HeapSize(const heap_t *heap)
@@ -194,11 +189,11 @@ static void HeapifyDown(const heap_t *heap, int i)
 	{
 		smallest = i;
 		
-		if ((size_t)LEFT(i) < HeapSize(heap) && heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, LEFT(i)), VectorGetAccessToElement(heap->heap_vector, smallest)) > 0 )
+		if ((size_t)LEFT(i) < HeapSize(heap) && heap->cmp_func( TYPE(VectorGetAccessToElement(heap->heap_vector, LEFT(i))), TYPE(VectorGetAccessToElement(heap->heap_vector, smallest))) > 0 )
 		{
 			smallest = LEFT(i);
 		}
-		if ((size_t)RIGHT(i) < HeapSize(heap) && heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, RIGHT(i)), VectorGetAccessToElement(heap->heap_vector, smallest)) > 0 )
+		if ((size_t)RIGHT(i) < HeapSize(heap) && heap->cmp_func(TYPE(VectorGetAccessToElement(heap->heap_vector, RIGHT(i))), TYPE(VectorGetAccessToElement(heap->heap_vector, smallest))) > 0 )
 		{
 			smallest = RIGHT(i);
 		}
@@ -213,6 +208,7 @@ static void HeapifyDown(const heap_t *heap, int i)
 		}
 	}
 }
+/*
 static void HeapifyUp(heap_t *heap, size_t idx)
 {
 	size_t parent = PARENT(idx);
@@ -235,8 +231,7 @@ static void HeapifyUp(heap_t *heap, size_t idx)
 	HeapifyUp(heap, parent);
 }
 
-
-
+*/
 
 
 

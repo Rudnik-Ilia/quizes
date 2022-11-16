@@ -11,7 +11,7 @@
 #include <assert.h> /* assert */
 #include <stdlib.h> /* malloc */
 #include "srtll.h"
-#include "pq_heap.h"
+#include "heap_pq.h"
 #include "utils.h"
 #include "heap.h"
 
@@ -36,8 +36,13 @@ heap_pq_t *HeapPQCreate(int(*priority_cmp_func)(const void *data1, const void *d
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return NULL;
 	} 
-	pq->heap = HeapCreate(priority_cmp_func);;
+	pq->heap = HeapCreate(priority_cmp_func);
 	
+	if(NULL == pq->heap)
+	{
+		free(pq);
+		return NULL;
+	}
 	return pq;
 }
 
@@ -78,7 +83,7 @@ void HeapPQDestroy(heap_pq_t *pqueue)
 int HeapPQIsEmpty(const heap_pq_t *pqueue)
 {
 	assert(NULL != pqueue);
-	return !HeapIsEmpty(pqueue->heap);
+	return HeapIsEmpty(pqueue->heap);
 }
 
 size_t HeapPQSize(const heap_pq_t *pqueue)
