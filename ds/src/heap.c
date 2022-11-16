@@ -34,7 +34,6 @@ struct heap
 /*************************************************************************************/
 static void SwapVoid(void **a, void **b);
 static void HeapifyDown(const heap_t *heap, int i);
-static void HeapifyUp(heap_t *heap, size_t idx);
 static void _remHelp(heap_t *heap, size_t index);
 void* GetData(const vector_t *vector, size_t index);
 /*************************************************************************************/
@@ -95,7 +94,6 @@ void *HeapRemove(heap_t *heap, is_match_t is_match, void *param)
 	assert(NULL != heap);
 	assert(NULL != param);
 	
-
 	for(data = TYPE(GetData(heap->heap_vector, i)), flag = is_match(data, param); i < HeapSize(heap) - 1 && !flag; data = TYPE(GetData(heap->heap_vector, ++i)), flag = is_match(data, param));
 	
 	if(!flag)
@@ -108,7 +106,6 @@ void *HeapRemove(heap_t *heap, is_match_t is_match, void *param)
 	_remHelp(heap, i);
 
 	return data;
-
 }
 
 
@@ -155,7 +152,7 @@ void PrintHeap(const heap_t *heap)
 	size_t i = 0;
 	for(i = 0; i < HeapSize(heap); ++i)
 	{
-		printf("%d ", *(int*)VectorGetAccessToElement(heap->heap_vector, i));
+		printf("%d ", *(int*)TYPE(VectorGetAccessToElement(heap->heap_vector, i)));
 	}
 	printf("\n");
 }
@@ -208,30 +205,7 @@ static void HeapifyDown(const heap_t *heap, int i)
 		}
 	}
 }
-/*
-static void HeapifyUp(heap_t *heap, size_t idx)
-{
-	size_t parent = PARENT(idx);
 
-	assert(NULL != heap);
-
-	if (idx == 0)
-	{
-		return;
-	}
-
-	if (heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, idx), VectorGetAccessToElement(heap->heap_vector, parent)) > 0)
-	{
-		SwapVoid(VectorGetAccessToElement(heap->heap_vector, idx), VectorGetAccessToElement(heap->heap_vector, parent));
-	}
-	else
-	{
-		return;
-	}
-	HeapifyUp(heap, parent);
-}
-
-*/
 
 
 
