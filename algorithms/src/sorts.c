@@ -30,6 +30,8 @@
 #define VOID_ARR_GET_ELEM_INDEX(arr, elem, elem_size) \
 	((size_t)(elem) - (size_t)(arr)) / elem_size
 
+void Heapify(int *a, int n, int i);
+
 static void Swap(int *x, int *y)
 {
 	int tmp = 0;
@@ -356,9 +358,40 @@ int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*i
 	return 0;
 }
 
+void Heapify(int *a, int n, int i)
+{
+	int largest = i;   
+	int l = 2 * i + 1;
+	int r = 2 * i + 2; 
 
+	if (l < n && a[l] > a[largest])
+	{
+		largest = l;
+	}
+	if (r < n && a[r] > a[largest])
+	{
+		largest = r;
+	}
+	if (largest != i)
+	{
+		SwapVoid(&a[i], &a[largest], sizeof(int));
+		Heapify(a, n, largest);
+	}
+}
 
-
+void HeapSort(int *a, size_t n)
+{
+	int i = 0;
+	for (i = (n / 2) - 1; i >= 0; i--)
+	{
+		Heapify(a, n, i);
+	}
+	for (i = n - 1; i >= 0; i--)
+	{
+		Swap(&a[0], &a[i]);
+		Heapify(a, i, 0);
+	}
+}
 
 
 

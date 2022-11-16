@@ -109,6 +109,6 @@ int QuickSort(void *arr_to_sort, size_t num_elements, size_t elem_size,  int (*i
  */
 int MergeSort(int *arr_to_sort, size_t num_elements);
 
-
+void HeapSort(int *a, size_t n);
 
 #endif

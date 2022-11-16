@@ -60,6 +60,11 @@ int main()
 	FillArray(arr, SIZE_ARRAY, 3000);
 	MergeSort(arr, SIZE_ARRAY);
 	TEST("Test Mergesort" , isSorted(arr, SIZE_ARRAY), 1);
+	
+	FillArray(arr, SIZE_ARRAY, 3000);
+	printf("Total time taken by HeapSort: %f\n", MesureTime(arr, SIZE_ARRAY, HeapSort));
+	TEST("Test heapsort" , isSorted(arr, SIZE_ARRAY), 1);
+	
 /*
 	TEST("Test RecurseQuickSort:" , isSorted(arr, SIZE_ARRAY), 1);
 	printf("Total time taken by RecurseQuickSort: %f\n", Time_MyQuickSort(arr, SIZE_ARRAY, sizeof(int), Comparator));
