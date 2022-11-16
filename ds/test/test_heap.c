@@ -21,17 +21,23 @@ void GenPop();
 int main()
 {	
                /*    0   1   2   3   4   5   6   7   8   9   10   11  */
+	/*
 	int arr[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 5 , 1};
 	void *ptr = NULL;
 	heap_t *heap = HeapCreate(Compare);
 	
 	TEST("Size: ", HeapSize(heap), 0);
+	
 	TEST("Size: ", HeapIsEmpty(heap), 0);
+	
+	printf("EMP: %d\n",HeapIsEmpty(heap));
 
 	HeapPush(heap, &arr[9]);
 	HeapPush(heap, &arr[8]);
 	HeapPush(heap, &arr[7]);
 	HeapPush(heap, &arr[6]);
+	
+	printf("EMP: %d\n",HeapIsEmpty(heap));
 	HeapPush(heap, &arr[5]);
 	HeapPush(heap, &arr[4]);
 	HeapPush(heap, &arr[3]);
@@ -43,18 +49,21 @@ int main()
 	
 	PrintHeap(heap);
 	ptr = HeapRemove(heap, Match, &arr[0]);
-	TEST("Remove", *(int*)ptr, 10);
+	
 	
 	
 	PrintHeap(heap);
 	ptr = HeapRemove(heap, Match, &arr[8]);
-	TEST("Remove", *(int*)ptr, 90);
+	
 	PrintHeap(heap);
 	
-	/*
+	ptr = HeapRemove(heap, Match, &arr[11]);
+	
+	PrintHeap(heap);
+	
 	Remove();
-	GenPop();
 	*/
+	GenPop();
 PASS;
 return 0;
 }
@@ -67,6 +76,7 @@ void Remove()
 	heap_t *heap = HeapCreate(Compare);
 	
 	TEST("Size: ", HeapSize(heap), 0);
+	
 	TEST("Size: ", HeapIsEmpty(heap), 0);
 
 	HeapPush(heap, &arr[9]);
@@ -81,6 +91,8 @@ void Remove()
 	HeapPush(heap, &arr[0]);
 	HeapPush(heap, &arr[10]);
 	HeapPush(heap, &arr[11]);
+	
+	TEST("Size: ", HeapIsEmpty(heap), 1);
 
 	PrintHeap(heap);
 	HeapRemove(heap, Match, &arr[5]);
@@ -169,8 +181,7 @@ void GenPop()
 	HeapPop(heap);
 	TEST("Size: ", HeapSize(heap), 1);
 	PrintHeap(heap);
-	HeapPop(heap);
-	HeapPop(heap);
+	
 	
 	TEST("Size: ", HeapSize(heap), 0);
 	TEST("Size: ", HeapIsEmpty(heap), 0);

@@ -11,6 +11,7 @@
 #include <string.h>
 #include <alloca.h>
 
+#include <math.h> 
 #include "heap.h"
 #include "vector.h"
 #include "utils.h"
@@ -21,6 +22,11 @@
 #define VOID sizeof(void*)
 
 
+#define PARENT(i) floor((i - 1) / 2)
+#define LEFT(i) (2 * i + 1)
+#define RIGHT(i) (2 * i + 2)
+
+
 struct heap
 {
 	vector_t *heap_vector;
@@ -28,7 +34,7 @@ struct heap
 };
 
 /*************************************************************************************/
-static void SwapVoid(void *a, void *b, size_t size);
+static void SwapVoid(void **a, void **b);
 static int Parent(int i);
 static size_t  Left(int i);
 static size_t  Right(int i);
@@ -76,9 +82,9 @@ int HeapPush(heap_t *heap, const void *data)
 	VectorPushBack(heap->heap_vector,data);
 	i = HeapSize(heap) - 1;
 	
-	for (; i > 0 && heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, Parent(i)), VectorGetAccessToElement(heap->heap_vector, i)) > 0; i = Parent(i))
+	for (; i > 0 && heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, PARENT(i)), VectorGetAccessToElement(heap->heap_vector, i)) > 0; i = PARENT(i))
 	{
-		SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, Parent(i)), VOID);
+		SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, PARENT(i)));
 	}
 	
 	return 0;
@@ -86,7 +92,7 @@ int HeapPush(heap_t *heap, const void *data)
 
 static void RemHelp(heap_t *heap, size_t index)
 {
-	SwapVoid(VectorGetAccessToElement(heap->heap_vector, index), VectorGetAccessToElement(heap->heap_vector, HeapSize(heap) - 1), VOID);
+	SwapVoid(VectorGetAccessToElement(heap->heap_vector, index), VectorGetAccessToElement(heap->heap_vector, HeapSize(heap) - 1));
 	VectorPopBack(heap->heap_vector);
 	Heapify(heap, index);
 }
@@ -96,52 +102,44 @@ void *HeapRemove(heap_t *heap, is_match_t is_match, void *param)
 {
 	size_t i = 0;
 	void *data = NULL;
-	
-	
+
 	assert(NULL != heap);
 	assert(NULL != param);
 	
-	if(i == HeapSize(heap))
+	if(i >= HeapSize(heap))
 	{
 		return NULL;
 	}
 	
-	
 	data = VectorGetAccessToElement(heap->heap_vector, i);
 	
 	while(i < HeapSize(heap) - 1 && !is_match(data, param))
-	{
-		
+	{	
 		data = VectorGetAccessToElement(heap->heap_vector, ++i);
-		
 	}
-	
-	
-	/*
-	for(data = VectorGetAccessToElement(heap->heap_vector, i), flag = is_match(data, param); i < HeapSize(heap) - 1 && !flag; data = VectorGetAccessToElement(heap->heap_vector, ++i), is_match(data, param));
-	*/
-	
+
 	RemHelp(heap, i);	
 	return data;
 }
 
 
 void HeapPop(heap_t *heap)
-{	
+
+{	/*
 	if(!HeapIsEmpty(heap))
 	{
 		return;
 	}
+	*/
 	assert(NULL != heap);
-	SwapVoid(VectorGetAccessToElement(heap->heap_vector, 0), VectorGetAccessToElement(heap->heap_vector, HeapSize(heap) - 1 ), VOID);
-	VectorPopBack(heap->heap_vector);
-	Heapify(heap, 0);
+	
+	RemHelp(heap, 0);
 }
 
 void *HeapPeek(const heap_t *heap)
 {
 	assert(NULL != heap);
-	return VectorGetAccessToElement(heap->heap_vector, 0);
+	return (VectorGetAccessToElement(heap->heap_vector, 0));
 }
 
 size_t HeapSize(const heap_t *heap)
@@ -166,7 +164,7 @@ void PrintHeap(const heap_t *heap)
 	}
 	printf("\n");
 }
-
+/*
 static void SwapVoid(void *a, void *b, size_t size)
 {	
 	void *tmp = NULL;
@@ -175,7 +173,14 @@ static void SwapVoid(void *a, void *b, size_t size)
 	memcpy(a, b, size);
 	memcpy(b, tmp, size);
 }
+*/
 
+static void SwapVoid(void **a, void **b) 
+{ 
+	void *tmp = *a; 
+	*a = *b; 
+	*b = tmp; 
+}
 static void Heapify(const heap_t *heap, int i)
 {
 	int smallest = 0;
@@ -184,13 +189,13 @@ static void Heapify(const heap_t *heap, int i)
 	{
 		smallest = i;
 		
-		if (Left(i) < HeapSize(heap) && *(int*)(VectorGetAccessToElement(heap->heap_vector, Left(i))) < *(int*)(VectorGetAccessToElement(heap->heap_vector, smallest)))
+		if ((size_t)LEFT(i) < HeapSize(heap) && heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, LEFT(i)), VectorGetAccessToElement(heap->heap_vector, smallest)) < 0 )
 		{
-			smallest = Left(i);
+			smallest = LEFT(i);
 		}
-		if (Right(i) < HeapSize(heap) && *(int*)(VectorGetAccessToElement(heap->heap_vector, Right(i))) < *(int*)(VectorGetAccessToElement(heap->heap_vector, smallest)))
+		if ((size_t)RIGHT(i) < HeapSize(heap) && heap->cmp_func(VectorGetAccessToElement(heap->heap_vector, RIGHT(i)), VectorGetAccessToElement(heap->heap_vector, smallest)) < 0 )
 		{
-			smallest = Right(i);
+			smallest = RIGHT(i);
 		}
 		if (smallest == i) 
 		{
@@ -198,7 +203,7 @@ static void Heapify(const heap_t *heap, int i)
 		} 
 		else 
 		{
-			SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, smallest), VOID);
+			SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, smallest));
 			i = smallest;
 		}
 	}

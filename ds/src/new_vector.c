@@ -71,7 +71,6 @@ vector_t *VectorShrink(vector_t *vector)
 		vector -> pt_components = ptr;
 		vector -> capacity = vector -> size;
 	}
-	
 	return vector;	
 }
 
@@ -97,7 +96,7 @@ size_t VectorCapacity(const vector_t *vector)
 int VectorIsEmpty(const vector_t *vector)
 {
 	assert(vector);
-	return vector -> amount ? 0 : 1;
+	return !vector->amount;
 }
 
 void VectorSetElement(vector_t *vector, size_t index, const void *data)
