@@ -11,33 +11,31 @@ int Compare(const void * p1, const void * p2)
 {
 	return *(int*)p1 - *(int*)p2;
 }
-int Match(const void * p1, const void * p2)
+int Match(const void *data, const void *param)
 {
-	return *(int*)p1 == *(int*)p2;
+	return *(int *)data == *(int *)param;
 }
+
 void Remove();
 void GenPop();
 
 int main()
 {	
                /*    0   1   2   3   4   5   6   7   8   9   10   11  */
-	/*
 	int arr[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 5 , 1};
 	void *ptr = NULL;
+	
 	heap_t *heap = HeapCreate(Compare);
 	
 	TEST("Size: ", HeapSize(heap), 0);
 	
-	TEST("Size: ", HeapIsEmpty(heap), 0);
-	
-	printf("EMP: %d\n",HeapIsEmpty(heap));
+	TEST("Size: ", HeapIsEmpty(heap), 1);
 
 	HeapPush(heap, &arr[9]);
 	HeapPush(heap, &arr[8]);
 	HeapPush(heap, &arr[7]);
 	HeapPush(heap, &arr[6]);
 	
-	printf("EMP: %d\n",HeapIsEmpty(heap));
 	HeapPush(heap, &arr[5]);
 	HeapPush(heap, &arr[4]);
 	HeapPush(heap, &arr[3]);
@@ -49,21 +47,39 @@ int main()
 	
 	PrintHeap(heap);
 	ptr = HeapRemove(heap, Match, &arr[0]);
-	
-	
-	
-	PrintHeap(heap);
-	ptr = HeapRemove(heap, Match, &arr[8]);
+	TEST("Remove value: ", *(int*)ptr,  10);
 	
 	PrintHeap(heap);
+	ptr = HeapRemove(heap, Match, &arr[9]);
+	TEST("Remove value: ", *(int*)ptr,  100);
 	
+	PrintHeap(heap);
 	ptr = HeapRemove(heap, Match, &arr[11]);
+	TEST("Remove value: ", *(int*)ptr,  1);
 	
 	PrintHeap(heap);
+	ptr = HeapRemove(heap, Match, &arr[5]);
+	TEST("Remove value: ", *(int*)ptr,  60);
+	
+	PrintHeap(heap);
+	ptr = HeapRemove(heap, Match, &arr[3]);
+	TEST("Remove value: ", *(int*)ptr,  40);
+	
+	PrintHeap(heap);
+	ptr = HeapRemove(heap, Match, &arr[2]);
+	TEST("Remove value: ", *(int*)ptr,  30);
+	
+	PrintHeap(heap);
+	ptr = HeapRemove(heap, Match, &arr[7]);
+	TEST("Remove value: ", *(int*)ptr,  80);
+	
+	PrintHeap(heap);
+	HeapDestroy(heap);
 	
 	Remove();
-	*/
 	GenPop();
+	/*
+	*/
 PASS;
 return 0;
 }
@@ -77,7 +93,7 @@ void Remove()
 	
 	TEST("Size: ", HeapSize(heap), 0);
 	
-	TEST("Size: ", HeapIsEmpty(heap), 0);
+	TEST("Size: ", HeapIsEmpty(heap), 1);
 
 	HeapPush(heap, &arr[9]);
 	HeapPush(heap, &arr[8]);
@@ -92,7 +108,7 @@ void Remove()
 	HeapPush(heap, &arr[10]);
 	HeapPush(heap, &arr[11]);
 	
-	TEST("Size: ", HeapIsEmpty(heap), 1);
+	TEST("Size: ", HeapIsEmpty(heap), 0);
 
 	PrintHeap(heap);
 	HeapRemove(heap, Match, &arr[5]);
@@ -120,7 +136,7 @@ void Remove()
 	HeapRemove(heap, Match, &arr[3]);
 	PrintHeap(heap);
 	
-	TEST("Size: ", HeapSize(heap), 0);
+	TEST("Size: ", HeapSize(heap), 1);
 	TEST("Size: ", HeapIsEmpty(heap), 0);
 	HeapDestroy(heap);
 }
@@ -132,7 +148,7 @@ void GenPop()
 	heap_t *heap = HeapCreate(Compare);
 	
 	TEST("Size: ", HeapSize(heap), 0);
-	TEST("Size: ", HeapIsEmpty(heap), 0);
+	TEST("Size: ", HeapIsEmpty(heap), 1);
 	
 	HeapPush(heap, &arr[9]);
 	HeapPush(heap, &arr[8]);
@@ -148,18 +164,18 @@ void GenPop()
 	HeapPush(heap, &arr[11]);
 
 	TEST("Size: ", HeapSize(heap), 12);
-	TEST("Size: ", HeapIsEmpty(heap), 1);
-	TEST("Peek: ", *(int*)HeapPeek(heap), 1);
+	TEST("Size: ", HeapIsEmpty(heap), 0);
+	TEST("Peek: ", *(int*)HeapPeek(heap), 100);
 	
 	PrintHeap(heap);
 	HeapPop(heap);
-	TEST("Peek: ", *(int*)HeapPeek(heap), 5);
+	TEST("Peek: ", *(int*)HeapPeek(heap), 90);
 	PrintHeap(heap);
 	HeapPop(heap);
-	TEST("Peek: ", *(int*)HeapPeek(heap), 10);
+	TEST("Peek: ", *(int*)HeapPeek(heap), 80);
 	PrintHeap(heap);
 	HeapPop(heap);
-	TEST("Peek: ", *(int*)HeapPeek(heap), 20);
+	TEST("Peek: ", *(int*)HeapPeek(heap), 70);
 	PrintHeap(heap);
 	TEST("Size: ", HeapSize(heap), 9);
 	HeapPop(heap);
@@ -169,7 +185,7 @@ void GenPop()
 	HeapPop(heap);
 	PrintHeap(heap);
 	HeapPop(heap);
-	TEST("Peek: ", *(int*)HeapPeek(heap), 60);
+	TEST("Peek: ", *(int*)HeapPeek(heap), 30);
 	PrintHeap(heap);
 	HeapPop(heap);
 	PrintHeap(heap);
@@ -183,7 +199,7 @@ void GenPop()
 	PrintHeap(heap);
 	
 	
-	TEST("Size: ", HeapSize(heap), 0);
+	TEST("Size: ", HeapSize(heap), 1);
 	TEST("Size: ", HeapIsEmpty(heap), 0);
 
 	HeapPop(heap);
