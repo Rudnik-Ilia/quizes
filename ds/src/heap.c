@@ -80,7 +80,7 @@ int HeapPush(heap_t *heap, const void *data)
 	
 	for (; i > 0 && heap->cmp_func(TYPE(VectorGetAccessToElement(heap->heap_vector, PARENT(i))), TYPE(VectorGetAccessToElement(heap->heap_vector, i))) < 0; i = PARENT(i))
 	{
-		SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, PARENT(i)));
+		SwapVoid((void**)VectorGetAccessToElement(heap->heap_vector, i), (void**)VectorGetAccessToElement(heap->heap_vector, PARENT(i)));
 	}
 	return 0;
 }
@@ -100,9 +100,9 @@ void *HeapRemove(heap_t *heap, is_match_t is_match, void *param)
 	{
 		return NULL;
 	}
-
+/*
 	data = TYPE(GetData(heap->heap_vector, HeapSize(heap)-1));
-	
+*/	
 	_remHelp(heap, i);
 
 	return data;
@@ -142,7 +142,7 @@ int HeapIsEmpty(const heap_t *heap)
 
 static void _remHelp(heap_t *heap, size_t index)
 {		
-	SwapVoid(VectorGetAccessToElement(heap->heap_vector, index), VectorGetAccessToElement(heap->heap_vector, HeapSize(heap) - 1));
+	SwapVoid((void**)VectorGetAccessToElement(heap->heap_vector, index), (void**)VectorGetAccessToElement(heap->heap_vector, HeapSize(heap) - 1));
 	VectorPopBack(heap->heap_vector);
 	HeapifyDown(heap, index);
 }
@@ -200,7 +200,7 @@ static void HeapifyDown(const heap_t *heap, int i)
 		} 
 		else 
 		{
-			SwapVoid(VectorGetAccessToElement(heap->heap_vector, i), VectorGetAccessToElement(heap->heap_vector, smallest));
+			SwapVoid((void**)VectorGetAccessToElement(heap->heap_vector, i), (void**)VectorGetAccessToElement(heap->heap_vector, smallest));
 			i = smallest;
 		}
 	}
