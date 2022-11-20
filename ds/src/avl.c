@@ -11,7 +11,7 @@
 #include "utils.h"
 #include "avl.h"
 
-#define COUNT 10
+#define COUNT (10)
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define ABS(a) (a < 0 ? -a : a)
