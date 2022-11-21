@@ -61,7 +61,7 @@ struct dhcp
  * @return: status_t enum descriptor
  * @complexity: O(log n)
  */
- status_t AllocateIP(dhcp_t *dhcp, ip_t suggested_ip, ip_t allocated_ip);
+ status_t AllocateIP(dhcp_t *dhcp, const ip_t suggested_ip, ip_t allocated_ip);
 
  
  /**
@@ -73,14 +73,6 @@ struct dhcp
  void FreeIp(dhcp_t *dhcp, const ip_t ip_to_free);
  
  /**
-  * @brief: Counts the number of free IP addresses that are available to be allocated. 
-  * @params: An instance of dhcp,
-  * @return: number of free IP addresses available
-  * @complexity: O(log n)
-  */
- size_t CountFree(dhcp_t *dhcp);
- 
- /**
   * @brief: Calculates the number of free IPs available for
   *         allocation
   * @params: Pointer to DHCP
@@ -89,5 +81,5 @@ struct dhcp
   */
  size_t CountFree(dhcp_t *dhcp);
  
-
+void PrintTrie(dhcp_t *dhcp);
 #endif
