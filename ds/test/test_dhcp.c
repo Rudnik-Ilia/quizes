@@ -14,9 +14,34 @@ void PrintAddr(ip_t addr)
 	printf("\n"); 
 }
 
-void Test_Jo();
+int TheSame(ip_t addr1, ip_t addr2)
+{	
+	size_t i = 0;
+	int count = 0;
+	for(i = 0; i < 4; ++i)
+	{
+		count += (addr1[i] - addr2[i]);
+	};
+	return count;
+	
+
+}
+
+void General();
+void Delete();
 
 int main()
+{
+
+	General();
+	Delete();
+/*
+*/
+PASS;
+return 0;
+}
+
+void General()
 {
 	ip_t submask = {198, 162, 1 , 0}; /*24*/
 	
@@ -43,19 +68,20 @@ int main()
 	
 	AllocateIP(dhcp, add1, tmp);
 	TEST("SIZE", CountFree(dhcp), 28);
-	PrintAddr(tmp);
+	TEST("The same", TheSame(add1, tmp), 0);
+		
 	
 	AllocateIP(dhcp, add2, tmp);
 	TEST("SIZE", CountFree(dhcp), 27);
-	PrintAddr(tmp);
+	TEST("The same", TheSame(add2, tmp), 0);
 	
 	AllocateIP(dhcp, add3, tmp);
 	TEST("SIZE", CountFree(dhcp), 26);
-	PrintAddr(tmp);
+	TEST("The same", TheSame(add3, tmp), 0);
 	
 	AllocateIP(dhcp, add4, tmp);
 	TEST("SIZE", CountFree(dhcp), 25);
-	PrintAddr(tmp);
+	TEST("The same", TheSame(add4, tmp), 0);
 	
 	AllocateIP(dhcp, add0, tmp);
 	TEST("SIZE", CountFree(dhcp), 24);
@@ -63,14 +89,17 @@ int main()
 	
 	AllocateIP(dhcp, add6, tmp);
 	TEST("SIZE", CountFree(dhcp), 23);
+	PrintAddr(add6);
 	PrintAddr(tmp);
 	
 	AllocateIP(dhcp, add0, tmp);
 	TEST("SIZE", CountFree(dhcp), 22);
+	PrintAddr(add0);
 	PrintAddr(tmp);
 	
 	AllocateIP(dhcp, add_broadcast, tmp);
 	TEST("SIZE", CountFree(dhcp), 21);
+	PrintAddr(add_broadcast);
 	PrintAddr(tmp);
 	
 	/*undefined behavior.....should be*/
@@ -88,64 +117,67 @@ int main()
 	
 	AllocateIP(dhcp, add7, tmp);
 	TEST("SIZE", CountFree(dhcp), 17);
-	PrintAddr(tmp);
-	
 
-/*	
-	PrintTrie(dhcp);
-*/	
 	DestroyDHCP(dhcp);
-return 0;
 }
 
-void Test_Jo()
+void Delete()
 {
-    dhcp_t *dhcp = NULL;
-    ip_t alloc_ip;
-    ip_t ip = {192,168,2,48};
-    ip_t ip_1 = {192,168,2,49};
-    ip_t ip_2 = {192,168,2,50};
-    ip_t ip_3 = {192,168,2,51};
-    ip_t ip_4 = {192,168,2,52};
-
-    dhcp = CreateDHCP(ip, 4);
-    
-    printf("Free: %lu\n",CountFree(dhcp));
-
-    AllocateIP(dhcp, ip_1, alloc_ip);
-    printf("Free: %lu\n",CountFree(dhcp));
-    printf("Suggested Ip: ");
-    PrintAddr(ip_1);
-    printf("Allocated Ip: ");
-    PrintAddr(alloc_ip);
-
-    AllocateIP(dhcp, ip_2, alloc_ip);
-    printf("Free: %lu\n",CountFree(dhcp));
-    printf("Suggested Ip: ");
-    PrintAddr(ip_2);
-    printf("Allocated Ip: ");
-    PrintAddr(alloc_ip);
-
-    AllocateIP(dhcp, ip_3, alloc_ip);
-    printf("Free: %lu\n",CountFree(dhcp));
-    printf("Suggested Ip: ");
-    PrintAddr(ip_3);
-    printf("Allocated Ip: ");
-    PrintAddr(alloc_ip);
-
-    AllocateIP(dhcp, ip_3, alloc_ip);
-    printf("Free: %lu\n",CountFree(dhcp));
-    printf("Suggested Ip: ");
-    PrintAddr(ip_3);
-    printf("Allocated Ip: ");
-    PrintAddr(alloc_ip);
-
-
-    DestroyDHCP(dhcp);
-    
+	ip_t submask = {198, 162, 1 , 0}; /*24*/
+	
+	ip_t add0 = {0, 0, 0, 0};
+	ip_t add1 = {198, 162, 1, 1};
+	ip_t add2 = {198, 162, 1, 25};
+	ip_t add3 = {198, 162, 1, 240};
+	ip_t add4 = {198, 162, 1, 248};
+	ip_t add5 = {198, 162, 1, 4};
+	ip_t add6 = {198, 162, 1, 2};
+	ip_t add7 = {198, 162, 1, 3};
+	
+	ip_t tmp = {0, 0, 0, 0};
+	
+	ip_t unreal1 = {130, 200, 20, 1};
+	ip_t unreal2 = {0, 0, 0, 0};
+	ip_t unreal3 = {6462578, 05621216, 736476, 063722}; /*undef behavior*/
+	
+	dhcp_t *dhcp = CreateDHCP(submask, 4);
+	TEST("SIZE", CountFree(dhcp), 13);
+	
+	AllocateIP(dhcp, add1, tmp);
+	AllocateIP(dhcp, add2, tmp);
+	AllocateIP(dhcp, add3, tmp);
+	AllocateIP(dhcp, add4, tmp);
+	AllocateIP(dhcp, add5, tmp);
+	AllocateIP(dhcp, add6, tmp);
+	AllocateIP(dhcp, add7, tmp);
+	
+	TEST("SIZE", CountFree(dhcp), 6);
+	
+	FreeIp(dhcp,  add1);
+	TEST("SIZE", CountFree(dhcp), 7);
+	
+	FreeIp(dhcp,  add2);
+	TEST("SIZE", CountFree(dhcp), 8);
+	
+	FreeIp(dhcp,  add3);
+	TEST("SIZE", CountFree(dhcp), 9);
+	
+	FreeIp(dhcp,  add4);
+	TEST("SIZE", CountFree(dhcp), 10);
+	
+	FreeIp(dhcp,  unreal1);
+	TEST("SIZE", CountFree(dhcp), 10);
+	
+	FreeIp(dhcp,  unreal2);
+	TEST("SIZE", CountFree(dhcp), 10);
+	
+	/*undef behavior
+	FreeIp(dhcp,  unreal3);
+	TEST("SIZE", CountFree(dhcp), 10);
+	*/
+	
+	DestroyDHCP(dhcp);
 }
-
-
 
 
 
