@@ -31,8 +31,27 @@ void General();
 void Delete();
 
 int main()
-{
-
+{	
+	ip_t submask = {198, 162, 1 , 0}; /*24*/
+	ip_t add2 = {198, 162, 1, 25};
+	ip_t add0 = {0, 0, 0, 0};
+	ip_t tmp = {0, 0, 0, 0};
+	
+	status_t status = 0;
+	
+	dhcp_t *dhcp = CreateDHCP(submask, 5);
+	TEST("SIZE", CountFree(dhcp), 29);
+	
+	
+	status = AllocateIP(dhcp, add0, tmp);
+	TEST("Status", status, 1);
+	
+	status = AllocateIP(dhcp, add2, tmp);
+	TEST("Status", status, 0);
+	
+	status = AllocateIP(dhcp, add2, tmp);
+	TEST("Status", status, 1);
+	
 	General();
 	Delete();
 /*

@@ -82,6 +82,7 @@ dhcp_t *CreateDHCP(const ip_t subnet_ip, size_t free_bits)
 status_t AllocateIP(dhcp_t *dhcp, const ip_t suggested_ip, ip_t allocated_ip)
 {
 	status_t status = FAILED_ALLOCATION;
+	status_t status_1 = 0;
 	
 	assert(NULL != dhcp);
 	
@@ -93,18 +94,20 @@ status_t AllocateIP(dhcp_t *dhcp, const ip_t suggested_ip, ip_t allocated_ip)
 	{		
 		memcpy(allocated_ip, dhcp->subnet_ip, IP_SIZE);
 		allocated_ip[IP_SIZE-1]++;
-		status = ANOTHER_IP_ALLOCATED;
+		status_1 = ANOTHER_IP_ALLOCATED;
 	}
 	else
 	{	
 		memcpy(allocated_ip, suggested_ip, IP_SIZE);
 	}
 	while(SUGGESTED_IP_ALLOCATED != (status = IsFreeAddr(dhcp->trie, IpToSizeT(allocated_ip), dhcp->free_bits)))
-	{
+	{	
 		IncrementAddr(allocated_ip, IP_SIZE - 1);
+		status_1 = ANOTHER_IP_ALLOCATED;
 	}
 	status = _allocate(dhcp->trie, IpToSizeT(allocated_ip), dhcp->free_bits);
-	return status;
+	
+	return status_1;
 }
 
 status_t IsFreeAddr(dhcp_node_t *node, size_t address, size_t shift)
