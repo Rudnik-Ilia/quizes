@@ -58,7 +58,7 @@ dhcp_t *CreateDHCP(const ip_t subnet_ip, size_t free_bits)
 	dhcp->free_bits = free_bits;
 	dhcp->trie = CreateNode();
 	
-	if(NULL == dhcp)
+	if(NULL == dhcp->trie)
 	{
 		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		free(dhcp);
