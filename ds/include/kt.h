@@ -1,14 +1,25 @@
 #ifndef __KT_H__
 #define __KT_H__
 
-#ifndef BOARD_MAX
-#define BOARD_MAX 64
-#endif /* BOARD_MAX */
+#include <time.h>
 
+#ifndef BOARD_SIDE
+#define BOARD_SIDE (8)
+#endif /* BOARD_SIDE */
+
+#define BOARD_MAX BOARD_SIDE * BOARD_SIDE
+/*
 typedef struct pos
 {
-	unsigned int x;
-	unsigned int y;
+	int x;
+	int y;
+}pos_t;
+*/
+typedef struct
+{
+    int x;
+    int y;
+    int steps;
 }pos_t;
 
 /*
@@ -16,14 +27,14 @@ typedef struct pos
 * @params:	@pos - Starting position of knight
 		@path - outparam, contains the complete path taken by the knight
 		@heuristic_on - boolean to toggle heuristic approach
+		@timeout - a timeout interval, in seconds, for how long the path may be calculated.
+			   set it to 0 seconds for no timeout.
 * @return: returns a boolean describing the success of the knights tour
 			@TRUE - a knights tour was possible
 			@FALSE - a knights tour was not possible
-* @complexity: O(8^(n²))
+* @complexity: O(8^(nÂ²))
 */
-int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on);
+int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout);
 
-void ShowMat();
-int Step(int x, int y, int step);
 
 #endif /* __KTR_H__*/
