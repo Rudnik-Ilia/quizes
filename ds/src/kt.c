@@ -1,120 +1,257 @@
+
 #include <stdio.h>
+#include <stdlib.h>/*calloc*/
+#include <time.h> /*time*/
 
 #include "kt.h"
+#include "bitarray.h"
+
+#define WORD (64)
+
+/******************************************************************************************************************/
+static int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit);
+static void PrintArr(int *arr);
+static int CmpFunc(const void *data1, const void *data2);
+static size_t IndexInArray(int x, int y);
+static int IsValidOption(int x, int y, unsigned long board);
+static int CountOptions(pos_t pos, unsigned long board);
+static size_t CountOn(unsigned long bit_array);
+static int BitIsOn(unsigned long bit_arr, unsigned int bit_num);
+static unsigned long BitSetOn(unsigned long bit_arr, unsigned int bit_num);
+static int KnightTourNoHer(int x, int y, int *buf, unsigned long board);
+/******************************************************************************************************************/
 
 
-/*
-int ARR[][8] = {
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0}
-};
-*/
-
-int ARR[][SIZE] = {0}; 
-int x_move[] = {2, 1, -1, -2, -2, -1, 1, 2};
-int y_move[] = {1, 2, 2, 1, -1, -2, -2, -1};
-/***************************************************************************************************************/
-int KnightTour(int ARR[][SIZE], int i, int j, int step_count, int x_move[], int y_move[]);
-
-static int IsValid(int i, int j, int ARR[SIZE][SIZE]);
-
-void PrintMatrix();
-
-int StartStep() ;
-/***************************************************************************************************************/
-
-
-static int IsValid(int i, int j, int ARR[][SIZE])
+int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout)
 {
-   return(i >= 1 && i <= SIZE && j >= 1 && j <= SIZE && ARR[i][j] == 0);
-} 
-
-int KnightTour(int ARR[][SIZE], int i, int j, int step_count, int x_move[], int y_move[]) 
-{
-	int k = 0;
-	int next_i = 0;
-	int next_j = 0;
-
-	if (step_count == SIZE * SIZE)
-	{
-		return 1;
-	}
-
-	for(k = 0; k < SIZE; ++k) 
-	{
-		next_i = i + x_move[k];
-		next_j = j + y_move[k];
-
-		if(IsValid(i + x_move[k], j + y_move[k], ARR)) 
-		{
-			ARR[next_i][next_j] = step_count;
-
-		if (KnightTour(ARR, next_i, next_j, step_count + 1, x_move, y_move))
-		{
-			return 1;
-		}
-			ARR[i + x_move[k]][j + y_move[k]] = 0; 
-		}
-	}
-	return 0;
-}  
-
-int StartStep() 
-{
+	int x = pos.x;
+    	int y = pos.y;
+    	int step = 0;
 	int i = 0;
-	int j = 0;
-	int x_move[] = {2, 1, -1, -2, -2, -1, 1, 2};
-	int y_move[] = {1, 2, 2, 1, -1, -2, -2, -1};
-
-	for(i = 1; i <= SIZE; i++) 
+	size_t j = 0;
+	size_t k = 0;
+	int status = 0;
+	
+	int arr[BOARD_SIDE][BOARD_SIDE] = {0};
+	
+    	time_t limit = !!timeout * (time(NULL) + timeout);
+    	
+	int *tmp = (int *)calloc(BOARD_MAX * 2, sizeof(int));
+	
+	if(heuristic_on)
 	{
-		for(j = 1; j <= SIZE; j++) 
-		{
-			ARR[i][j] = 0;
-		}
+		status = KnightTourNoHer(x, y, tmp, 0u);
+	}
+	else
+	{	
+		status = KnightTourHer(x, y, tmp, 0u, limit);
+	}
+	
+	for (i = 0; i < BOARD_MAX * 2; i += 2)
+	{
+		arr[tmp[i]][tmp[i + 1]] = (step += 1);
 	}
 
-	ARR[0][0] = 0; 
-
-	if (KnightTour(ARR, 1, 1, 1, x_move, y_move)) 
+	for(i = 0; i < BOARD_SIDE ; ++i)
 	{
-		for(i = 1; i <= SIZE; i++) 
+		for(j = 0; j < BOARD_SIDE ; ++j, ++k)
 		{
-			for(j = 1; j <= SIZE; j++) 
-			{
-				printf("%d\t",ARR[i][j]);
-			}
-
-			printf("\n");
+			path[k] = arr[i][j];
 		}
+	
+	}
+/* if you want see a beatifull visualization just remove stars....
+*/
+	PrintArr(*arr);
+	free(tmp);
+	
+	return status;
 
+}
+
+int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
+{	
+	if (!IsValidOption(x, y, board))
+	{
 		return 1;
 	}
-	ARR[0][0] = 1;
-	return 0; 
+
+	board = BitSetOn(board, IndexInArray(x, y));
+
+	*buf = x;
+
+	*(buf + 1) = y;
+	
+	if (0 != limit && time(NULL) >= limit)
+	{
+		return 1;
+	}
+
+	if (CountOn(-1lu<<(WORD - BOARD_MAX)) == CountOn(board))
+	{
+		return 0;
+	}
+	
+	if (KnightTourHer(x + 2, y + 1, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	if (KnightTourHer(x + 1, y + 2, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	if (KnightTourHer(x - 1, y + 2, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	if (KnightTourHer(x - 2, y + 1, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	if (KnightTourHer(x - 2, y - 1, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	if (KnightTourHer(x - 1, y - 2, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	if (KnightTourHer(x + 1, y - 2, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	if (KnightTourHer(x + 2, y - 1, buf + 2, board, limit) == 0)
+	{
+		return 0;
+	}
+	return 1;
 }
 
 
 
+int KnightTourNoHer(int x, int y, int *buf, unsigned long board)
+{
+	pos_t steps_arr[8];
+	size_t i = 0;
 
-/******************************************************************************************/
-void ShowMat()
-{	
+	if (!IsValidOption(x, y, board))
+	{
+		return 1;
+	}
+
+	board = BitSetOn(board, IndexInArray(x, y));
+
+	*buf = x;
+
+	*(buf + 1) = y;
+
+	if(CountOn(-1lu<<(WORD - BOARD_MAX)) == CountOn(board))
+	{
+		return 0;
+	}
+	steps_arr[0].x = x - 2;
+	steps_arr[0].y = y + 1;
+	steps_arr[1].x = x - 1;
+	steps_arr[1].y = y + 2;
+	steps_arr[2].x = x + 1;
+	steps_arr[2].y = y + 2;
+	steps_arr[3].x = x + 2;
+	steps_arr[3].y = y + 1;
+	steps_arr[4].x = x + 2;
+	steps_arr[4].y = y - 1;
+	steps_arr[5].x = x + 1;
+	steps_arr[5].y = y - 2;
+	steps_arr[6].x = x - 1;
+	steps_arr[6].y = y - 2;
+	steps_arr[7].x = x - 2;
+	steps_arr[7].y = y - 1;
+
+	for (i = 0; i < 8; ++i)
+	{
+		steps_arr[i].steps = CountOptions(steps_arr[i], board);
+	}
+
+	qsort(steps_arr, 8, sizeof(pos_t), CmpFunc);
+
+	for (i = 0; i < 8; ++i)
+	{
+		if (steps_arr[i].steps > -1)
+		{
+		    if (!KnightTourNoHer(steps_arr[i].x, steps_arr[i].y, buf + 2, board))
+		    {
+			return 0;
+		    }
+		}
+	}
+	return 1;
+}
+
+
+static int CountOptions(pos_t pos, unsigned long board)
+{
+	int x = pos.x;
+	int y = pos.y;
+
+	if (!IsValidOption(x, y, board))
+	{
+		return (-1);
+	}
+
+	return (IsValidOption(x - 2, y + 1, board) + IsValidOption(x - 1, y + 2, board) +
+	    	IsValidOption(x + 1, y + 2, board) + IsValidOption(x + 2, y + 1, board) +
+	    	IsValidOption(x + 2, y - 1, board) + IsValidOption(x + 1, y - 2, board) +
+	    	IsValidOption(x - 1, y - 2, board) + IsValidOption(x - 2, y - 1, board));
+}
+
+void PrintArr(int *arr)
+{
 	size_t i = 0;
 	size_t j = 0;
-	for(i = 0; i < 8; ++i)
+	for( ; i < BOARD_SIDE; ++i)
 	{
-		for(j = 0; j < 8; ++j)
+		for(j = 0 ;j < BOARD_SIDE; ++j)
 		{
-			printf("%d ", ARR[i][j]);
+			printf("%d   ", arr[i * BOARD_SIDE + j]);
 		}
-	printf("\n");
+		puts(" ");
 	}
-	printf("\n");
 }
+
+static size_t IndexInArray(int x, int y)
+{
+    	return (x * BOARD_SIDE + y + 1);
+}
+
+static int IsValidOption(int x, int y, unsigned long board)
+{
+    	return (!((x < 0) || (x > BOARD_SIDE - 1) || (y < 0) || (y > BOARD_SIDE - 1) || (BitIsOn(board, IndexInArray(x, y)))));
+}
+
+static int CmpFunc(const void *data1, const void *data2)
+{
+    	return (((pos_t*)data1)->steps - ((pos_t*)data2)->steps);
+}
+/**************************************************************************/
+static size_t CountOn(unsigned long bit_array)
+{
+	size_t temp = 0;
+	
+	while(bit_array)
+	{
+		temp+=bit_array & 1;
+		bit_array = bit_array >> 1;
+	}
+	return temp;
+}
+static int BitIsOn(unsigned long bit_arr, unsigned int bit_num)
+{
+    	return ((bit_arr >> (bit_num-1)) & 1);
+}
+static unsigned long BitSetOn(unsigned long bit_arr, unsigned int bit_num)
+{
+    	return (bit_arr | (1ul << (bit_num-1)));
+}
+/****************************************************************************/
+
+
+
