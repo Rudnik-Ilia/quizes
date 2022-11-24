@@ -11,7 +11,7 @@ int main ()
 	size_t j = 0;
 	int status = 0;
 	
-	pos_t pos = {6,6};
+	pos_t pos = {0,0,0};
 	
 	
 	int path[BOARD_MAX] = {0};

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>/*calloc*/
 #include <time.h> /*time*/
-
+#include <assert.h>
 #include "kt.h"
 #include "bitarray.h"
 
@@ -32,12 +32,15 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 	size_t j = 0;
 	size_t k = 0;
 	int status = 0;
-	
 	int arr[BOARD_SIDE][BOARD_SIDE] = {0};
+    	time_t limit =  0;
 	
-    	time_t limit = !!timeout * (time(NULL) + timeout);
-    	
 	int *tmp = (int *)calloc(BOARD_MAX * 2, sizeof(int));
+	assert(NULL != path);	
+	
+	
+    	limit = !!timeout * (time(NULL) + timeout);
+    	
 	
 	if(heuristic_on)
 	{
@@ -70,6 +73,8 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 
 int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 {	
+	assert(NULL != buf);	
+	
 	if (0 != limit && time(NULL) >= limit)
 	{
 		return 1;
@@ -85,8 +90,7 @@ int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 
 	*(buf + 1) = y;
 	
-
-	if (CountOn(-1lu<<(WORD - BOARD_MAX)) == CountOn(board))
+	if (BOARD_MAX == CountOn(board))
 	{
 		return 0;
 	}
@@ -129,9 +133,12 @@ int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 
 
 int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit)
-{
+{	
+	
 	pos_t steps_arr[8];
 	size_t i = 0;
+	
+	assert(NULL != buf);
 	
 	if (0 != limit && time(NULL) >= limit)
 	{
@@ -149,7 +156,7 @@ int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit)
 
 	*(buf + 1) = y;
 
-	if(CountOn(-1lu<<(WORD - BOARD_MAX)) == CountOn(board))
+	if(BOARD_MAX == CountOn(board))
 	{
 		return 0;
 	}
@@ -233,6 +240,9 @@ static int IsValidOption(int x, int y, unsigned long board)
 
 static int CmpFunc(const void *data1, const void *data2)
 {
+	assert(NULL != data1);
+	assert(NULL != data2);
+	
     	return (((pos_t*)data1)->steps - ((pos_t*)data2)->steps);
 }
 /**************************************************************************/
