@@ -8,8 +8,10 @@
 
 #define WORD (64)
 
+
 /******************************************************************************************************************/
 static int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit);
+static int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit);
 static void PrintArr(int *arr);
 static int CmpFunc(const void *data1, const void *data2);
 static size_t IndexInArray(int x, int y);
@@ -18,7 +20,6 @@ static int CountOptions(pos_t pos, unsigned long board);
 static size_t CountOn(unsigned long bit_array);
 static int BitIsOn(unsigned long bit_arr, unsigned int bit_num);
 static unsigned long BitSetOn(unsigned long bit_arr, unsigned int bit_num);
-static int KnightTourNoHer(int x, int y, int *buf, unsigned long board);
 /******************************************************************************************************************/
 
 
@@ -40,7 +41,7 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 	
 	if(heuristic_on)
 	{
-		status = KnightTourNoHer(x, y, tmp, 0u);
+		status = KnightTourNoHer(x, y, tmp, 0u, limit);
 	}
 	else
 	{	
@@ -60,9 +61,7 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 		}
 	
 	}
-/* if you want see a beatifull visualization just remove stars....
-*/
-	PrintArr(*arr);
+
 	free(tmp);
 	
 	return status;
@@ -71,6 +70,10 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 
 int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 {	
+	if (0 != limit && time(NULL) >= limit)
+	{
+		return 1;
+	}
 	if (!IsValidOption(x, y, board))
 	{
 		return 1;
@@ -82,10 +85,6 @@ int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 
 	*(buf + 1) = y;
 	
-	if (0 != limit && time(NULL) >= limit)
-	{
-		return 1;
-	}
 
 	if (CountOn(-1lu<<(WORD - BOARD_MAX)) == CountOn(board))
 	{
@@ -129,11 +128,16 @@ int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 
 
 
-int KnightTourNoHer(int x, int y, int *buf, unsigned long board)
+int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit)
 {
 	pos_t steps_arr[8];
 	size_t i = 0;
-
+	
+	if (0 != limit && time(NULL) >= limit)
+	{
+		return 1;
+	}
+	
 	if (!IsValidOption(x, y, board))
 	{
 		return 1;
@@ -177,7 +181,7 @@ int KnightTourNoHer(int x, int y, int *buf, unsigned long board)
 	{
 		if (steps_arr[i].steps > -1)
 		{
-		    if (!KnightTourNoHer(steps_arr[i].x, steps_arr[i].y, buf + 2, board))
+		    if (!KnightTourNoHer(steps_arr[i].x, steps_arr[i].y, buf + 2, board, limit))
 		    {
 			return 0;
 		    }

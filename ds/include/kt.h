@@ -4,7 +4,7 @@
 #include <time.h>
 
 #ifndef BOARD_SIDE
-#define BOARD_SIDE (8)
+#define BOARD_SIDE (5)
 #endif /* BOARD_SIDE */
 
 #define BOARD_MAX BOARD_SIDE * BOARD_SIDE
