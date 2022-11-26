@@ -14,6 +14,10 @@ typedef struct
 	int y;
 	int steps;
 }help_t;
+
+static int X[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+static int Y[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
 /******************************************************************************************************************/
 static int KnightTourHer(int x, int y, int *buf, size_t board, time_t limit);
 static int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit);
@@ -161,22 +165,12 @@ int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit)
 	{
 		return 0;
 	}
-	steps_arr[0].x = x - 2;
-	steps_arr[0].y = y + 1;
-	steps_arr[1].x = x - 1;
-	steps_arr[1].y = y + 2;
-	steps_arr[2].x = x + 1;
-	steps_arr[2].y = y + 2;
-	steps_arr[3].x = x + 2;
-	steps_arr[3].y = y + 1;
-	steps_arr[4].x = x + 2;
-	steps_arr[4].y = y - 1;
-	steps_arr[5].x = x + 1;
-	steps_arr[5].y = y - 2;
-	steps_arr[6].x = x - 1;
-	steps_arr[6].y = y - 2;
-	steps_arr[7].x = x - 2;
-	steps_arr[7].y = y - 1;
+	
+	for(i = 0; i < 8; ++i)
+	{
+		steps_arr[i].x = x - X[i];
+		steps_arr[i].y = y + Y[i];
+	}
 
 	for (i = 0; i < 8; ++i)
 	{
