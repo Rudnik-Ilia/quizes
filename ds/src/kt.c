@@ -43,10 +43,8 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
  	int *tmp = (int *)calloc(BOARD_MAX * 2, sizeof(int));
 	assert(NULL != path);	
 	
-	
     	limit = !!timeout * (time(NULL) + timeout);
     	
-	
 	if(heuristic_on)
 	{
 		status = KnightTourNoHer(x, y, tmp, 0, limit);
@@ -71,13 +69,13 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 	}
 
 	free(tmp);
-	
 	return status;
 
 }
 
 int KnightTourHer(int x, int y, int *buf, size_t board, time_t limit)
 {	
+	size_t i = 0;
 	assert(NULL != buf);	
 	
 	if (0 != limit && time(NULL) >= limit)
@@ -92,7 +90,6 @@ int KnightTourHer(int x, int y, int *buf, size_t board, time_t limit)
 	board = BitArraySetOn(board, IndexInArray(x, y));
 
 	*buf = x;
-
 	*(buf + 1) = y;
 	
 	if (BOARD_MAX == BitArrayCountOn(board))
@@ -100,37 +97,12 @@ int KnightTourHer(int x, int y, int *buf, size_t board, time_t limit)
 		return 0;
 	}
 	
-	if (KnightTourHer(x + 2, y + 1, buf + 2, board, limit) == 0)
+	for(i = 0; i < 8; ++i)
 	{
-		return 0;
-	}
-	if (KnightTourHer(x + 1, y + 2, buf + 2, board, limit) == 0)
-	{
-		return 0;
-	}
-	if (KnightTourHer(x - 1, y + 2, buf + 2, board, limit) == 0)
-	{
-		return 0;
-	}
-	if (KnightTourHer(x - 2, y + 1, buf + 2, board, limit) == 0)
-	{
-		return 0;
-	}
-	if (KnightTourHer(x - 2, y - 1, buf + 2, board, limit) == 0)
-	{
-		return 0;
-	}
-	if (KnightTourHer(x - 1, y - 2, buf + 2, board, limit) == 0)
-	{
-		return 0;
-	}
-	if (KnightTourHer(x + 1, y - 2, buf + 2, board, limit) == 0)
-	{
-		return 0;
-	}
-	if (KnightTourHer(x + 2, y - 1, buf + 2, board, limit) == 0)
-	{
-		return 0;
+		if (KnightTourHer(x + X[i], y + Y[i], buf + 2, board, limit) == 0)
+		{
+			return 0;
+		}
 	}
 	return 1;
 }
@@ -139,7 +111,6 @@ int KnightTourHer(int x, int y, int *buf, size_t board, time_t limit)
 
 int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit)
 {	
-	
 	help_t steps_arr[8];
 	size_t i = 0;
 	
@@ -158,7 +129,6 @@ int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit)
 	board = BitArraySetOn(board, IndexInArray(x, y));
 
 	*buf = x;
-
 	*(buf + 1) = y;
 
 	if(BOARD_MAX == BitArrayCountOn(board))
@@ -176,7 +146,7 @@ int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit)
 	{
 		steps_arr[i].steps = CountOptions(steps_arr[i], board);
 	}
-
+	
 	qsort(steps_arr, 8, sizeof(help_t), CmpFunc);
 
 	for (i = 0; i < 8; ++i)
@@ -192,21 +162,24 @@ int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit)
 	return 1;
 }
 
-
 static int CountOptions(help_t pos, size_t board)
 {
 	int x = pos.x;
 	int y = pos.y;
+	size_t i = 0;
+	int degree = 0;
 
 	if (!IsValidOption(x, y, board))
 	{
-		return (-1);
+		return -1;
 	}
 
-	return (IsValidOption(x - 2, y + 1, board) + IsValidOption(x - 1, y + 2, board) +
-	    	IsValidOption(x + 1, y + 2, board) + IsValidOption(x + 2, y + 1, board) +
-	    	IsValidOption(x + 2, y - 1, board) + IsValidOption(x + 1, y - 2, board) +
-	    	IsValidOption(x - 1, y - 2, board) + IsValidOption(x - 2, y - 1, board));
+	for(i = 0; i < 8; ++i)
+	{
+		degree += IsValidOption(x - X[i], y + Y[i], board);
+	}
+	return degree;
+	
 }
 static size_t IndexInArray(int x, int y)
 {
