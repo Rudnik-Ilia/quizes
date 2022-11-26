@@ -38,7 +38,7 @@ static unsigned int lut[256] =
 bit_array_t BitArraySetOn(bit_array_t bit_array, size_t index)
 {
 	assert (index <= CHAR_BIT * sizeof(bit_array_t));
-	return bit_array | 1lu << index;
+	return bit_array | 1lu << (index-1);
 }
 
 

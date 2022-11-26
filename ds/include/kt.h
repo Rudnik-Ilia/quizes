@@ -8,20 +8,21 @@
 #endif /* BOARD_SIDE */
 
 #define BOARD_MAX BOARD_SIDE * BOARD_SIDE
-
 /*
+typedef struct
+{
+	int x;
+	int y;
+	int steps;
+}pos_t;
+*/
 typedef struct pos
 {
 	int x;
 	int y;
 }pos_t;
-*/
-typedef struct
-{
-    int x;
-    int y;
-    int steps;
-}pos_t;
+
+
 
 /*
 * @brief: Tries to run a knights tour on a nxn board, from a given position. 

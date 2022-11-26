@@ -11,12 +11,12 @@ int main ()
 	size_t j = 0;
 	int status = 0;
 	
-	pos_t pos = {0,0,0};
+	pos_t pos = {2,3};
 	
 	
 	int path[BOARD_MAX] = {0};
 	
-	status = KnightsTour(pos, path, 0, 200);
+	status = KnightsTour(pos, path, 1, 200);
 	
 	if(status)
 	{

@@ -8,20 +8,21 @@
 
 #define WORD (64)
 
-
+typedef struct
+{
+	int x;
+	int y;
+	int steps;
+}help_t;
 /******************************************************************************************************************/
-static int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit);
-static int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit);
-static void PrintArr(int *arr);
+static int KnightTourHer(int x, int y, int *buf, size_t board, time_t limit);
+static int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit);
 static int CmpFunc(const void *data1, const void *data2);
 static size_t IndexInArray(int x, int y);
-static int IsValidOption(int x, int y, unsigned long board);
-static int CountOptions(pos_t pos, unsigned long board);
-static size_t CountOn(unsigned long bit_array);
-static int BitIsOn(unsigned long bit_arr, unsigned int bit_num);
-static unsigned long BitSetOn(unsigned long bit_arr, unsigned int bit_num);
+static int IsValidOption(int x, int y, size_t board);
+static int CountOptions(help_t pos, size_t board);
+static int BitIsOn(size_t bit_arr, unsigned int bit_num);
 /******************************************************************************************************************/
-
 
 int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout)
 {
@@ -35,7 +36,7 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 	int arr[BOARD_SIDE][BOARD_SIDE] = {0};
     	time_t limit =  0;
 	
-	int *tmp = (int *)calloc(BOARD_MAX * 2, sizeof(int));
+ 	int *tmp = (int *)calloc(BOARD_MAX * 2, sizeof(int));
 	assert(NULL != path);	
 	
 	
@@ -44,11 +45,11 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 	
 	if(heuristic_on)
 	{
-		status = KnightTourNoHer(x, y, tmp, 0u, limit);
+		status = KnightTourNoHer(x, y, tmp, 0, limit);
 	}
 	else
 	{	
-		status = KnightTourHer(x, y, tmp, 0u, limit);
+		status = KnightTourHer(x, y, tmp, 0, limit);
 	}
 	
 	for (i = 0; i < BOARD_MAX * 2; i += 2)
@@ -71,7 +72,7 @@ int KnightsTour(pos_t pos, int path[BOARD_MAX], int heuristic_on, time_t timeout
 
 }
 
-int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
+int KnightTourHer(int x, int y, int *buf, size_t board, time_t limit)
 {	
 	assert(NULL != buf);	
 	
@@ -84,13 +85,13 @@ int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 		return 1;
 	}
 
-	board = BitSetOn(board, IndexInArray(x, y));
+	board = BitArraySetOn(board, IndexInArray(x, y));
 
 	*buf = x;
 
 	*(buf + 1) = y;
 	
-	if (BOARD_MAX == CountOn(board))
+	if (BOARD_MAX == BitArrayCountOn(board))
 	{
 		return 0;
 	}
@@ -132,10 +133,10 @@ int KnightTourHer(int x, int y, int *buf, unsigned long board, time_t limit)
 
 
 
-int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit)
+int KnightTourNoHer(int x, int y, int *buf, size_t board, time_t limit)
 {	
 	
-	pos_t steps_arr[8];
+	help_t steps_arr[8];
 	size_t i = 0;
 	
 	assert(NULL != buf);
@@ -150,13 +151,13 @@ int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit)
 		return 1;
 	}
 
-	board = BitSetOn(board, IndexInArray(x, y));
+	board = BitArraySetOn(board, IndexInArray(x, y));
 
 	*buf = x;
 
 	*(buf + 1) = y;
 
-	if(BOARD_MAX == CountOn(board))
+	if(BOARD_MAX == BitArrayCountOn(board))
 	{
 		return 0;
 	}
@@ -182,7 +183,7 @@ int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit)
 		steps_arr[i].steps = CountOptions(steps_arr[i], board);
 	}
 
-	qsort(steps_arr, 8, sizeof(pos_t), CmpFunc);
+	qsort(steps_arr, 8, sizeof(help_t), CmpFunc);
 
 	for (i = 0; i < 8; ++i)
 	{
@@ -198,7 +199,7 @@ int KnightTourNoHer(int x, int y, int *buf, unsigned long board, time_t limit)
 }
 
 
-static int CountOptions(pos_t pos, unsigned long board)
+static int CountOptions(help_t pos, size_t board)
 {
 	int x = pos.x;
 	int y = pos.y;
@@ -213,7 +214,30 @@ static int CountOptions(pos_t pos, unsigned long board)
 	    	IsValidOption(x + 2, y - 1, board) + IsValidOption(x + 1, y - 2, board) +
 	    	IsValidOption(x - 1, y - 2, board) + IsValidOption(x - 2, y - 1, board));
 }
+static size_t IndexInArray(int x, int y)
+{
+    	return (x * BOARD_SIDE + y + 1);
+}
 
+static int IsValidOption(int x, int y, size_t board)
+{
+    	return (!((x < 0) || (x > BOARD_SIDE - 1) || (y < 0) || (y > BOARD_SIDE - 1) || (BitIsOn(board, IndexInArray(x, y)))));
+}
+
+static int CmpFunc(const void *data1, const void *data2)
+{
+	assert(NULL != data1);
+	assert(NULL != data2);
+	
+    	return (((help_t*)data1)->steps - ((help_t*)data2)->steps);
+}
+/**************************************************************************/
+static int BitIsOn(size_t bit_arr, unsigned int bit_num)
+{
+    	return ((bit_arr >> (bit_num-1)) & 1);
+}
+/****************************************************************************/
+/*
 void PrintArr(int *arr)
 {
 	size_t i = 0;
@@ -227,45 +251,7 @@ void PrintArr(int *arr)
 		puts(" ");
 	}
 }
-
-static size_t IndexInArray(int x, int y)
-{
-    	return (x * BOARD_SIDE + y + 1);
-}
-
-static int IsValidOption(int x, int y, unsigned long board)
-{
-    	return (!((x < 0) || (x > BOARD_SIDE - 1) || (y < 0) || (y > BOARD_SIDE - 1) || (BitIsOn(board, IndexInArray(x, y)))));
-}
-
-static int CmpFunc(const void *data1, const void *data2)
-{
-	assert(NULL != data1);
-	assert(NULL != data2);
-	
-    	return (((pos_t*)data1)->steps - ((pos_t*)data2)->steps);
-}
-/**************************************************************************/
-static size_t CountOn(unsigned long bit_array)
-{
-	size_t temp = 0;
-	
-	while(bit_array)
-	{
-		temp+=bit_array & 1;
-		bit_array = bit_array >> 1;
-	}
-	return temp;
-}
-static int BitIsOn(unsigned long bit_arr, unsigned int bit_num)
-{
-    	return ((bit_arr >> (bit_num-1)) & 1);
-}
-static unsigned long BitSetOn(unsigned long bit_arr, unsigned int bit_num)
-{
-    	return (bit_arr | (1ul << (bit_num-1)));
-}
-/****************************************************************************/
+*/
 
 
 
