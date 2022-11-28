@@ -5,62 +5,88 @@
 #include <string.h>
 #include <sys/wait.h>
 
-int main(int argc, char *argv[])
+int main()
 {
-
-	char input[20];
-	char *command[] = {"", NULL};
-	int id = 0;
-	int len = 0;
-
-
+	char command[50];
+	pid_t pid = 0; 
 	while(1)
 	{
-		printf("Insert: ");
-		fgets(input, sizeof(input), stdin);
+		printf("Choose mode: system or fork: ");
+		fgets(command, sizeof(command), stdin);
 
-		if(strncmp(input, "exit", (strlen(input)-1)) == 0)
+		if(strncmp(command, "exit", (strlen(command)-1)) == 0)
 		{
 			break;
 		}
-		if(strncmp(input, "fork", (strlen(input)-1)) == 0)
+		if(strncmp(command, "fork", (strlen(command)-1)) == 0)
 		{	
-			printf("Insert command: ");
-			getline(&command[0], &len, stdin);
-			id = fork();
-			if(0 == id)
-			{
-				if(execvp(command[0], command) == -1)
-				{	
-					printf("%s\n", command[0]);
-					puts("Erorr");
-				}
-			}
-			else
-			{
-				wait(NULL);
-			}
-		}
-		if(strncmp(input, "system", (strlen(input)-1)) == 0)
-		{
-			while(1)
-			{
-				printf("Insert command: ");
-				fgets(input, sizeof(input), stdin);
+			while (1)
+			{	
+				fputs("$ ", stdout);
+				fgets(command, sizeof(command), stdin);
 				
-				if(strncmp(input, "back", (strlen(input)-1)) == 0)
+				if(strncmp(command, "back", (strlen(command) - 1)) == 0)
 				{
 					break;
 				}
-				system(input);
+				pid = fork();
+
+				if (pid == 0)
+				{
+					size_t len = strlen(command);
+					size_t i = 0;
+					size_t count = 1;
+					char **argv;
+
+					for (i = 0; i < len; ++i)
+					{
+						count += (command[i] == ' ');
+					}
+					++count;
+
+					argv = (char **) malloc(count * sizeof(char *));
+
+					i = 0;
+					argv[i] = strtok(command, " \n");
+
+					while (argv[i] != NULL)
+					{
+						++i;
+						argv[i] = strtok(NULL, " \n");
+					}
+
+					if (execvp(argv[0], argv) == -1)
+					{ 
+						return 1;
+					}
+
+					free(argv);
+					return 0;
+
+				}
+				else
+				{
+					wait(NULL);
+
+				}
+				
+			}			
+		}
+		if(strncmp(command, "system", (strlen(command) - 1)) == 0)
+		{
+			while(1)
+			{
+				fputs("$ ", stdout);
+				fgets(command, sizeof(command), stdin);
+				
+				if(strncmp(command, "back", (strlen(command)-1)) == 0)
+				{
+					break;
+				}
+				system(command);
 			}
 		}
-	
-		
-
 
 	}
-
-	
 	return 0;
 }
