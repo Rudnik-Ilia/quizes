@@ -23,7 +23,8 @@ int main()
 		}
 		if(strncmp(command, "fork", (strlen(command)-1)) == 0)
 		{	
-			while (1)
+		
+		while (1) 
 			{	
 				fputs("$ ", stdout);
 				fgets(command, sizeof(command), stdin);
@@ -64,7 +65,7 @@ int main()
 						return 1;
 					}
 
-				free();
+				free(argv);
 				return 0;
 
 				}
