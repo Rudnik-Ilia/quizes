@@ -3,14 +3,14 @@
 
 
 
-int main()
+int main(int argc, char *argv[])
 {
 	time_t begin = time(NULL) + 5;
+	(void)argc;
 	
 	while(begin > time(NULL))
 	{
-		puts("INFINITY");
-		puts("--------");
+		printf("%s\n", argv[1]);
 	}
 	
 

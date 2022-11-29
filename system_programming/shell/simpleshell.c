@@ -1,17 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <stdio.h>/*fgets*/
+#include <stdlib.h>/*system*/
+#include <unistd.h>/*fork*/
 #include <sys/types.h>
-#include <string.h>
-#include <sys/wait.h>
+#include <string.h>/*strlen*/
+#include <sys/wait.h> /*wait*/
+#include <alloca.h>
+
+#define LINE (50)
 
 int main()
 {
-	char command[50];
+	char command[LINE];
 	pid_t pid = 0; 
 	while(1)
 	{
-		printf("Choose mode: system or fork: ");
+		printf("Choose mode(system/fork): ");
 		fgets(command, sizeof(command), stdin);
 
 		if(strncmp(command, "exit", (strlen(command)-1)) == 0)
@@ -44,7 +47,8 @@ int main()
 					}
 					++count;
 
-					argv = (char **) malloc(count * sizeof(char *));
+					argv = (char **)malloc(count * sizeof(char *));
+					
 
 					i = 0;
 					argv[i] = strtok(command, " \n");
@@ -60,8 +64,8 @@ int main()
 						return 1;
 					}
 
-					free(argv);
-					return 0;
+				free();
+				return 0;
 
 				}
 				else
