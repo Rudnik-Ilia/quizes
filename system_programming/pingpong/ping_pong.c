@@ -1,26 +1,22 @@
 
 #define _POSIX_C_SOURCE 1
 
-#include <errno.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
-
 #include <sys/wait.h>
 #include <sys/types.h>
 
 void Handler_User1();
 void Handler_User2();
 
-int count = 4;
-
 int main ()
 {
 	struct sigaction user1;
 	struct sigaction user2;
 
-	pid_t child_pid;
-	pid_t parent_pid;
+	pid_t child_pid = 0;
+	pid_t parent_pid = 0;
 
 	user1.sa_handler = Handler_User1;
 	user1.sa_flags = 0;
@@ -35,42 +31,41 @@ int main ()
 
 	child_pid = fork();
 
-	while (count)
+	while (1)
 	{
 		if (child_pid == 0)      
-		{
-		    parent_pid = getppid();
-		    kill(parent_pid, SIGUSR2);
+		{	
+			parent_pid = getppid();
+			if(kill(parent_pid, SIGUSR2) != 0)
+			{
+				return 1;
+			}
 			pause();
-		    sleep(1);
+			sleep(2);
 		}
 		
 		if (child_pid > 0)       
 		{
-		    kill(child_pid, SIGUSR1);
+			
+		    if(kill(child_pid, SIGUSR1) != 0)
+			{
+				return 1;
+			}
 			pause();
-		    sleep(1);
+		    	sleep(2);
 		}
 
 	}
-
 	return 0;
 }
 
 void Handler_User1()
 {
-	if (count)
-	{
-		puts("PING\n");
-		count--;
-	}
+	puts("PING\n");
+	
 }
 
 void Handler_User2()
-{
-	if (count)
-	{
-		puts("PONG\n");
-		count--;
-	}
+{	
+	puts("PONG\n");
 }
