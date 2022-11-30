@@ -44,7 +44,8 @@ int main(int argc, char const *argv[])
 }
 
 void Handler_Pong()
-{
-    puts("PONG\n");
-    state = 1;
+{	
+	sleep(1);
+	write(1, "PONG\n", 5);
+	state = 1;
 }

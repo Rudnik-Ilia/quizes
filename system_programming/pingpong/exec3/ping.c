@@ -32,7 +32,7 @@ void Handler_Ping(int sig, siginfo_t *sa , void *param)
 	(void)sig;
 	(void)param;
 	sleep(1);
-	puts("PING\n");
+	write(1, "PING\n", 5);
 	if(kill(sa->si_pid, SIGUSR2) != 0)
 	{
 		return;
