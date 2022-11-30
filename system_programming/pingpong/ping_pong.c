@@ -52,7 +52,7 @@ int main ()
 				return 1;
 			}
 			pause();
-		    	sleep(2);
+		    	sleep(1);
 		}
 
 	}
@@ -60,12 +60,14 @@ int main ()
 }
 
 void Handler_User1()
-{
-	puts("PING\n");
+{	
+	sleep(1);
+	write(1, "PING\n", 5);
 	
 }
 
 void Handler_User2()
 {	
-	puts("PONG\n");
+	sleep(1);
+	write(1, "PONG\n", 5);
 }
