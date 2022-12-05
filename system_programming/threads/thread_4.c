@@ -34,7 +34,7 @@ int main()
     size_t sum = 0;
     void *data = NULL;
 
-    for (i= 0; i < NUMBEROFTHREADS; ++i)
+    for (i = 0; i < NUMBEROFTHREADS; ++i)
     {
         pthread_create(arr_of_threads + i, NULL, SumDivisors, (void *)((i * RANGE) + 1));
     }
