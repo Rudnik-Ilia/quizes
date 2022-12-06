@@ -39,24 +39,21 @@ int main(int args, char *argv[])
         return 1;
     }
     
-    
     while (1)
     {
         fputs("$ ", stdout);
         fgets(command, LINE, stdin);
-    
         number = atoi(command + 1);
-        number = (number) ? number : 1;
+        number = number ? number : 1;
         flag = IsFlag(command + 1) ? 1 : 0;
-
+ 
         if('d' == *command)
         {
             counter = flag ? counter - number: 0;
             for (i = 0; (int)i < number; ++i)
             {
                 sem_wait(sem);
-            }
-            
+            } 
         }
 
         if('i' == *command)
@@ -65,9 +62,7 @@ int main(int args, char *argv[])
             for (i = 0; (int)i < number; ++i)
             {
                 sem_post(sem);
-            }
-    
-           
+            } 
         }
 
         if('v' == *command)
