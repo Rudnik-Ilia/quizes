@@ -7,6 +7,7 @@
 #define NUMBEROFTHREADS (2)
 #define SIZE (10)
 
+int flag = 0;
 
 int STORAGE = 3;
 pthread_spinlock_t lock;
@@ -40,10 +41,14 @@ void* Producer()
         pthread_spin_lock(&lock);
         while(STORAGE < SIZE)
         {
-            ++STORAGE;
-            sleep(1);
-            printf("PUSH STORE: %d\n", STORAGE);
+            if(flag == 0)
+            {
+                ++STORAGE;
+                sleep(1);
+                printf("PUSH STORE: %d\n", STORAGE);
+            }
         }
+        flag = 1;
         pthread_spin_unlock(&lock);
         
     }
@@ -58,11 +63,14 @@ void* Consumer()
         pthread_spin_lock(&lock);
         while (STORAGE > 0)
         {
-            --STORAGE;
-            --STORAGE;
-            sleep(1);
-            printf("TAKE STORE: %d\n", STORAGE); 
+            if(flag != 0)
+            {
+                --STORAGE;
+                sleep(1);
+                printf("TAKE STORE: %d\n", STORAGE); 
+            }
         }
+        flag = 0;
         pthread_spin_unlock(&lock);
         
     }
