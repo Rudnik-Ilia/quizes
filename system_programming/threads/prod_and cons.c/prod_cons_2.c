@@ -1,12 +1,12 @@
+#define _XOPEN_SOURCE  600
 #define _POSIX_C_SOURCE 200112L
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <SLL.h>
-#include <alloca.h>
+#include <unistd.h>
 
 #define SIZE (10)
 #define NUMBEROFTHREADS (5)
@@ -29,12 +29,10 @@ int main()
 
     for(i = 0; i < NUMBEROFTHREADS; ++i)
     {
-        pthread_create(&consumer_threads[i], NULL, Consumer, NULL);
         pthread_create(&producer_threads[i], NULL, Producer, NULL);
+        pthread_create(&consumer_threads[i], NULL, Consumer, NULL);
     }
   
-    
-
     sleep(1);
 
     for(i = 0; i < NUMBEROFTHREADS; ++i)
@@ -65,6 +63,7 @@ void* Producer()
             data = __sync_add_and_fetch(&data, 1);
             
             SllInsert(SllBegin(list), *(void **)&data);
+            usleep(5000);
             printf("PUT: %d\n", data);
         }
         pthread_mutex_unlock(&mutex);
@@ -83,6 +82,7 @@ void* Consumer()
         {
             data = SllGetData(SllBegin(list));
             SllRemove(SllBegin(list));
+            usleep(5000);
             printf("TAKE: %d\n", *(int *)&data);
         }
         pthread_mutex_unlock(&mutex);
