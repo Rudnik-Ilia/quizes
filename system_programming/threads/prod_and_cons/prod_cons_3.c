@@ -1,13 +1,14 @@
 
+/* gd -pthread prod_cons_3.c ../../../ds/src/sll.c  -I ../../../ds/include  */
+
 #define _XOPEN_SOURCE  600 /*usleep*/
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 #include <pthread.h>
 #include <sys/stat.h> 
 #include <unistd.h>
-#include <signal.h>
+#include <signal.h> /*SIGTERM*/
 #include <semaphore.h>
 #include <fcntl.h> 
 #include "SLL.h"
@@ -57,7 +58,7 @@ int main()
         pthread_create(&consumer_threads[j], NULL, Consumer, NULL);
     }
   
-    usleep(10000);
+    usleep(1000000);
 
     for(i = 0; i < PRODUCER; ++i)
     {
@@ -79,20 +80,19 @@ int main()
 void *Producer()
 {
     static volatile int data = 0;
-    int FLAG = 0;
     while (1)
     {
-        data = (FLAG == 1) ? data: __sync_add_and_fetch(&data, 1);
+        data = __sync_add_and_fetch(&data, 1);
         pthread_mutex_lock(&mutex);
 
-        FLAG = (SllEnd(list) == SllInsert(SllBegin(list), *(void **)&data));
+        usleep(10000);
+        SllInsert(SllBegin(list), *(void **)&data);
         
         pthread_mutex_unlock(&mutex);
-        if (0 == FLAG)
-        {
-            sem_post(sem);
-            printf("PUT: %d\n", data);
-        }
+      
+        sem_post(sem);
+        printf("PUT: %d\n", data);
+        
     }
 
     return NULL;
@@ -108,10 +108,12 @@ void *Consumer()
     {
         sem_wait(sem);
         pthread_mutex_lock(&mutex);
+
         begin = SllBegin(list);
         data = SllGetData(begin);
         SllRemove(begin);
         pthread_mutex_unlock(&mutex);
+        usleep(100);
         printf("TAKE: %d\n", *(int *)&data);
     }
 

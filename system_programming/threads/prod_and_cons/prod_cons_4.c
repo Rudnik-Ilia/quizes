@@ -1,7 +1,7 @@
 
 /* gd -pthread prod_cons_4.c ../../../ds/src/sll.c ../../../ds/src/queue.c -I ../../../ds/include */
 
-#define _XOPEN_SOURCE  600
+#define _XOPEN_SOURCE  600  /*usleep*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -92,7 +92,7 @@ void *Producer()
     {
             sem_wait(sem_free_cells);
             pthread_mutex_lock(&mutex);
-            
+
             data = __sync_add_and_fetch(&data, 1);
             QueueEnqueue(queue, *(void **)&data);
             sem_post(sem_filled_cells);
