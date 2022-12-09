@@ -1,4 +1,6 @@
 
+/* gd -pthread prod_cons_5.c ../../../ds/src/sll.c ../../../ds/src/queue.c -I ../../../ds/include */
+
 #define _XOPEN_SOURCE  600  /*usleep*/
 
 #include <stdlib.h>
@@ -84,7 +86,7 @@ int main()
     
     QueueDestroy(queue);
 
-    return (0);
+    return 0;
 }
 
 

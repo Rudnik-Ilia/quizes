@@ -81,6 +81,7 @@ int main()
     sem_unlink("sem_full");
     sem_unlink("sem_empty");
     QueueDestroy(queue);
+    
     return 0;
 }
 
