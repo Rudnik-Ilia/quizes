@@ -24,7 +24,8 @@ pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
 
 sem_t *sem;
 
-volatile unsigned int letter = 0;
+volatile unsigned int LETTER = 0;
+volatile unsigned int STAFF = CONSUMER;
 
 void *Producer();
 void *Consumer();
@@ -43,14 +44,13 @@ int main()
         fprintf(stderr, "Sem creation failed. errno: %d\n", errno);
         return 1;
     }    
-
-    for(i = 0; i < PRODUCER; ++i)
+   
+    if(pthread_create(&producer_threads[i], NULL, Producer, NULL) != 0)
     {
-        if(pthread_create(&producer_threads[i], NULL, Producer, NULL) != 0)
-        {
-            return 1;
-        }
+        return 1;
     }
+    
+
     for(j = 0; j < CONSUMER; ++j)
     {
         if(pthread_create(&consumer_threads[j], NULL, Consumer, NULL) != 0)
@@ -59,7 +59,7 @@ int main()
         }
     }
 
-    usleep(10000000);
+    usleep(1000000);
 
     for(i = 0; i < PRODUCER; ++i)
     {
@@ -80,15 +80,14 @@ int main()
 
 void *Producer()
 {
-    int data = 0;
     size_t i = 0;
 
     while (1)
     {
-        ++data;
+        STAFF = CONSUMER;
         pthread_mutex_lock(&mutex);
-        letter = data;
-        printf(COLOR"PUT: %d\n"OFFCOLOR, data);
+        LETTER = STAFF;
+        printf(COLOR"PUT: %d\n"OFFCOLOR, STAFF);
         pthread_mutex_unlock(&mutex);
 
         for (i = 0; i < CONSUMER; ++i)
@@ -104,15 +103,13 @@ void *Producer()
 
 void *Consumer()
 {
-    unsigned int data = 0;
-
     while (1)
     {
         sem_wait(sem);
         pthread_mutex_lock(&mutex);
 
-        data = letter;
-        printf("TAKE: %u I AM THREAD: %ld\n", data, pthread_self());
+        printf("TAKE: %u I AM THREAD: %ld\n", STAFF, pthread_self());
+        STAFF--;
         pthread_cond_wait(&condition, &mutex);
 
         pthread_mutex_unlock(&mutex);
