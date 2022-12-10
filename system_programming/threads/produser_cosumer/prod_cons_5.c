@@ -14,8 +14,6 @@
 #include <errno.h>
 
 
-
-
 #define SIZE (10)
 #define CONSUMER (3)
 #define PRODUCER (3)
@@ -48,7 +46,7 @@ int main()
     }
 
     sem_filled_cells = sem_open("/sem_full" , O_CREAT, 0644, 0);
-    sem_free_cells = sem_open("/sem_empty", O_CREAT, 0644, 1);
+    sem_free_cells = sem_open("/sem_empty", O_CREAT, 0644, 15);
 
     if (sem_filled_cells  == SEM_FAILED || sem_free_cells == SEM_FAILED) 
     {
@@ -56,18 +54,24 @@ int main()
         return 1;
     } 
 
-    sem_wait(sem_free_cells);
+    
         
     for(i = 0; i < PRODUCER; ++i)
     {
-        pthread_create(&producer_threads[i], NULL, Producer, NULL);
+        if(pthread_create(&producer_threads[i], NULL, Producer, NULL) != 0)
+        {
+            return 1;
+        }
     }
     for(j = 0; j < CONSUMER; ++j)
     {
-        pthread_create(&consumer_threads[j], NULL, Consumer, NULL);
+        if(pthread_create(&consumer_threads[j], NULL, Consumer, NULL) != 0)
+        {
+            return 1;
+        }
     }
 
-    usleep(50000000);
+    usleep(50000);
     
     /* for(i = 0; i < PRODUCER; ++i)
     {
@@ -94,20 +98,18 @@ void *Producer()
 {
     static volatile int data = 0;
 
-
-
     while (1) 
     {
-         usleep(500);
-        sem_wait(sem_free_cells);
+        sem_wait(sem_filled_cells);
+
         data = __sync_add_and_fetch(&data, 1);
         pthread_mutex_lock(&prod_mutex);
-
+        usleep(100);
         QueueEnqueue(queue, *(void **)&data);
-        
-        sem_post(sem_free_cells);
+        printf("PUT: %d\n", data);
         
         pthread_mutex_unlock(&prod_mutex);
+        sem_post(sem_free_cells);
     }
 
     return NULL;
@@ -120,15 +122,15 @@ void *Consumer()
 
     while (1)
     {
-        sem_wait(sem_filled_cells);
+        sem_wait(sem_free_cells);
         pthread_mutex_lock(&cons_mutex);
-
+        usleep(100);
         data = QueuePeek(queue);
         QueueDequeue(queue);
+        printf("TAKE: %d SIZE: %ld\n", *(int *)&data, QueueSize(queue));
 
         pthread_mutex_unlock(&cons_mutex);
-        printf("cons say %d\n", *(int *)&data);
-        sem_post(sem_free_cells);
+        sem_post(sem_filled_cells);
     }
 
     return NULL;
