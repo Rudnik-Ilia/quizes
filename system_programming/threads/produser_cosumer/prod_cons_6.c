@@ -12,6 +12,9 @@
 #include <signal.h>
 #include <errno.h>
 
+#define COLOR "\033[1;31m" 
+#define RESET "\033[0m" 
+
 #define SIZE (10)
 #define PRODUCER (1)
 #define CONSUMER (5)
@@ -75,7 +78,6 @@ int main()
     return 0;
 }
 
-
 void *Producer()
 {
     int data = 0;
@@ -86,7 +88,7 @@ void *Producer()
         ++data;
         pthread_mutex_lock(&mutex);
         letter = data;
-        printf("PUT: %d\n", data);
+        printf(COLOR"PUT: %d\n"RESET, data);
         pthread_mutex_unlock(&mutex);
 
         for (i = 0; i < CONSUMER; ++i)

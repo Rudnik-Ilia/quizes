@@ -13,6 +13,8 @@
 #include "queue.h"
 #include <errno.h>
 
+#define COLOR "\033[1;31m" 
+#define RESET "\033[0m" 
 
 #define SIZE (10)
 #define CONSUMER (3)
@@ -46,7 +48,7 @@ int main()
     }
 
     sem_filled_cells = sem_open("/sem_full" , O_CREAT, 0644, 0);
-    sem_free_cells = sem_open("/sem_empty", O_CREAT, 0644, 15);
+    sem_free_cells = sem_open("/sem_empty", O_CREAT, 0644, 1);
 
     if (sem_filled_cells  == SEM_FAILED || sem_free_cells == SEM_FAILED) 
     {
@@ -54,8 +56,8 @@ int main()
         return 1;
     } 
 
-    
-        
+  
+
     for(i = 0; i < PRODUCER; ++i)
     {
         if(pthread_create(&producer_threads[i], NULL, Producer, NULL) != 0)
@@ -93,28 +95,26 @@ int main()
     return 0;
 }
 
-
 void *Producer()
 {
     static volatile int data = 0;
 
     while (1) 
     {
-        sem_wait(sem_filled_cells);
+        sem_wait(sem_free_cells);
+
+        pthread_mutex_lock(&prod_mutex);
 
         data = __sync_add_and_fetch(&data, 1);
-        pthread_mutex_lock(&prod_mutex);
-        usleep(100);
         QueueEnqueue(queue, *(void **)&data);
-        printf("PUT: %d\n", data);
+        printf(COLOR"PUT: %d SIZE: %ld\n"RESET, *(int *)&data, QueueSize(queue));
         
+        sem_post(sem_filled_cells);
         pthread_mutex_unlock(&prod_mutex);
-        sem_post(sem_free_cells);
     }
 
     return NULL;
 }
-
 
 void *Consumer()
 {
@@ -122,15 +122,16 @@ void *Consumer()
 
     while (1)
     {
-        sem_wait(sem_free_cells);
+        sem_wait(sem_filled_cells);
+       
         pthread_mutex_lock(&cons_mutex);
-        usleep(100);
+        
         data = QueuePeek(queue);
         QueueDequeue(queue);
         printf("TAKE: %d SIZE: %ld\n", *(int *)&data, QueueSize(queue));
 
+        sem_post(sem_free_cells);
         pthread_mutex_unlock(&cons_mutex);
-        sem_post(sem_filled_cells);
     }
 
     return NULL;
