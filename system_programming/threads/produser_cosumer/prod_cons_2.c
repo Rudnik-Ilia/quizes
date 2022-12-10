@@ -1,3 +1,5 @@
+/* gd -pthread prod_cons_2.c ../../../ds/src/sll.c  -I ../../../ds/include */
+
 #define _XOPEN_SOURCE  600
 #define _POSIX_C_SOURCE 200112L
 
@@ -18,6 +20,8 @@
 #define CONSUMER (5)
 #define PRODUCER (5)
 
+#define COLOR "\033[1;31m" 
+#define OFFCOLOR "\033[0m" 
 
 sll_t *list;
 volatile int count = 0;
@@ -30,6 +34,7 @@ void* Consumer();
 int main()
 {
     size_t i = 0;
+    size_t j = 0;
 
     pthread_t producer_threads[PRODUCER] = {0};
     pthread_t consumer_threads[CONSUMER] = {0};
@@ -43,9 +48,9 @@ int main()
             return 1;
         }
     }
-    for(i = 0; i < CONSUMER; ++i)
+    for(j = 0; j < CONSUMER; ++j)
     {
-        if(pthread_create(&consumer_threads[i], NULL, Consumer, NULL) != 0)
+        if(pthread_create(&consumer_threads[j], NULL, Consumer, NULL) != 0)
         {
             return 1;
         }
@@ -55,12 +60,12 @@ int main()
 
     for(i = 0; i < PRODUCER; ++i)
     {
-        pthread_kill(producer_threads[0], SIGTERM);
+        pthread_kill(producer_threads[i], SIGTERM);
     }
 
-    for(i = 0; i < CONSUMER; ++i)
+    for(j = 0; j < CONSUMER; ++j)
     {
-        pthread_kill(consumer_threads[0], SIGTERM);
+        pthread_kill(consumer_threads[j], SIGTERM);
     }
 
     pthread_mutex_destroy(&mutex);
@@ -81,7 +86,7 @@ void* Producer()
             data = __sync_add_and_fetch(&data, 1);
             SllInsert(SllBegin(list), *(void **)&data);
             usleep(5000);
-            printf("PUT: %d\n", data);
+            printf(COLOR"PUT: %d\n"OFFCOLOR, data);
         }
         pthread_mutex_unlock(&mutex);
         
