@@ -75,14 +75,14 @@ int main()
 
     usleep(50000);
     
-    /* for(i = 0; i < PRODUCER; ++i)
+    for(i = 0; i < PRODUCER; ++i)
     {
         pthread_cancel(producer_threads[i]);
     }
     for(j = 0; j < CONSUMER; ++j)
     {
         pthread_cancel(consumer_threads[j]);
-    }  */
+    }  
 
     pthread_mutex_destroy(&prod_mutex);
     pthread_mutex_destroy(&cons_mutex);
