@@ -51,11 +51,17 @@ int main()
 
     for(i = 0; i < PRODUCER; ++i)
     {
-        pthread_create(&producer_threads[i], NULL, Producer, NULL);
+        if(pthread_create(&producer_threads[i], NULL, Producer, NULL) != 0)
+        {
+            return 1;
+        }
     }
     for(j = 0; j < CONSUMER; ++j)
     {
-        pthread_create(&consumer_threads[j], NULL, Consumer, NULL);
+        if(pthread_create(&consumer_threads[j], NULL, Consumer, NULL) != 0)
+        {
+            return 1;
+        }
     }
   
     usleep(1000000);
@@ -85,7 +91,7 @@ void *Producer()
         data = __sync_add_and_fetch(&data, 1);
         pthread_mutex_lock(&mutex);
 
-        usleep(10000);
+        usleep(1000);
         SllInsert(SllBegin(list), *(void **)&data);
         
         pthread_mutex_unlock(&mutex);
@@ -113,7 +119,7 @@ void *Consumer()
         data = SllGetData(begin);
         SllRemove(begin);
         pthread_mutex_unlock(&mutex);
-        usleep(1000);
+        usleep(100);
         printf("TAKE: %d\n", *(int *)&data);
     }
 
