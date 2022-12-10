@@ -13,7 +13,7 @@
 #include <errno.h>
 
 #define COLOR "\033[1;31m" 
-#define RESET "\033[0m" 
+#define OFFCOLOR "\033[0m" 
 
 #define SIZE (10)
 #define PRODUCER (1)
@@ -88,7 +88,7 @@ void *Producer()
         ++data;
         pthread_mutex_lock(&mutex);
         letter = data;
-        printf(COLOR"PUT: %d\n"RESET, data);
+        printf(COLOR"PUT: %d\n"OFFCOLOR, data);
         pthread_mutex_unlock(&mutex);
 
         for (i = 0; i < CONSUMER; ++i)
@@ -101,8 +101,6 @@ void *Producer()
 
     return NULL;
 }
-
-
 
 void *Consumer()
 {

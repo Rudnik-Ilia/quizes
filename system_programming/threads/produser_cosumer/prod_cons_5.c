@@ -14,7 +14,7 @@
 #include <errno.h>
 
 #define COLOR "\033[1;31m" 
-#define RESET "\033[0m" 
+#define OFFCOLOR "\033[0m" 
 
 #define SIZE (10)
 #define CONSUMER (3)
@@ -107,7 +107,7 @@ void *Producer()
 
         data = __sync_add_and_fetch(&data, 1);
         QueueEnqueue(queue, *(void **)&data);
-        printf(COLOR"PUT: %d SIZE: %ld\n"RESET, *(int *)&data, QueueSize(queue));
+        printf(COLOR"PUT: %d SIZE: %ld\n"OFFCOLOR, *(int *)&data, QueueSize(queue));
         
         sem_post(sem_filled_cells);
         pthread_mutex_unlock(&prod_mutex);

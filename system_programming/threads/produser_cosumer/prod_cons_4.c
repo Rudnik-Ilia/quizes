@@ -20,6 +20,9 @@
 #define CONSUMER (5)
 #define PRODUCER (5)
 
+#define COLOR "\033[1;31m" 
+#define OFFCOLOR "\033[0m" 
+
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 queue_t *queue = NULL;
@@ -96,7 +99,7 @@ void *Producer()
             data = __sync_add_and_fetch(&data, 1);
             QueueEnqueue(queue, *(void **)&data);
             sem_post(sem_filled_cells);
-            printf("PUT %d\n", data);
+            printf(COLOR"PUT %d\n"OFFCOLOR, data);
     
             pthread_mutex_unlock(&mutex);
         
