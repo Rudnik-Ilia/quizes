@@ -17,7 +17,7 @@
 
 #define SIZE (10)
 #define PRODUCER (1)
-#define CONSUMER (3)
+#define CONSUMER (5)
 #define BIGPART (1450080000000L)
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
@@ -81,6 +81,7 @@ int main()
 void *Producer()
 {
     size_t i = 0;
+    int val = 0;
 
     while (1)
     {
@@ -95,7 +96,13 @@ void *Producer()
             usleep(30000);                             /*small ajusment))*/
             sem_post(sem);
         }
+        sem_getvalue(sem, &val); 
+        
+        /* if(val == CONSUMER)
+        {
+        } */
         pthread_cond_broadcast(&condition);
+        
     }
 
     return NULL;
@@ -107,7 +114,10 @@ void *Consumer()
     {
         sem_wait(sem);
         pthread_mutex_lock(&mutex);
-
+        if(STAFF == 0)
+        {
+            usleep(1000);
+        }
         printf("TAKE: %u I AM THREAD: %ld\n", STAFF, pthread_self());
         STAFF--;
         pthread_cond_wait(&condition, &mutex);
