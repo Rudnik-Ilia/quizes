@@ -85,7 +85,6 @@ void* Producer()
         {
             data = __sync_add_and_fetch(&data, 1);
             SllInsert(SllBegin(list), *(void **)&data);
-            usleep(5000);
             printf(COLOR"PUT: %d\n"OFFCOLOR, data);
         }
         pthread_mutex_unlock(&mutex);
@@ -104,7 +103,6 @@ void* Consumer()
         {
             data = SllGetData(SllBegin(list));
             SllRemove(SllBegin(list));
-            usleep(500);
             printf("TAKE: %d\n", *(int *)&data);
         }
         pthread_mutex_unlock(&mutex);
