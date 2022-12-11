@@ -14,10 +14,12 @@
 #include "SLL.h"
 #include <errno.h>
 
-
 #define SIZE (10)
 #define CONSUMER (5)
 #define PRODUCER (5)
+
+#define COLOR "\033[1;31m" 
+#define OFFCOLOR "\033[0m" 
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -97,7 +99,7 @@ void *Producer()
         pthread_mutex_unlock(&mutex);
       
         sem_post(sem);
-        printf("PUT: %d\n", data);
+        printf(COLOR"PUT: %d\n"OFFCOLOR, data);
         
     }
 

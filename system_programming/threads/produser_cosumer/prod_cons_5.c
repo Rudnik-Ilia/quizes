@@ -23,13 +23,20 @@
 pthread_mutex_t prod_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t cons_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-queue_t *queue = NULL;
+/* queue_t *queue = NULL; */
 
 sem_t *sem_filled_cells;
 sem_t *sem_free_cells;
 
 void* Producer();
 void* Consumer();
+
+
+#define FSQ_SIZE (10)
+int queue[FSQ_SIZE] = {0};
+int read_index = 0;
+int write_index = 0;
+
 
 int main()
 {
@@ -39,7 +46,7 @@ int main()
     pthread_t producer_threads[PRODUCER] = {0};
     pthread_t consumer_threads[CONSUMER] = {0};
     
-    queue = QueueCreate();
+  /*   queue = QueueCreate(); */
 
     if(NULL == queue)
     {
@@ -48,7 +55,7 @@ int main()
     }
 
     sem_filled_cells = sem_open("/sem_full" , O_CREAT, 0644, 0);
-    sem_free_cells = sem_open("/sem_empty", O_CREAT, 0644, 1);
+    sem_free_cells = sem_open("/sem_empty", O_CREAT, 0644, 10);
 
     if (sem_filled_cells  == SEM_FAILED || sem_free_cells == SEM_FAILED) 
     {
@@ -73,7 +80,7 @@ int main()
         }
     }
 
-    usleep(50000);
+    usleep(50000000);
     
     for(i = 0; i < PRODUCER; ++i)
     {
@@ -90,12 +97,12 @@ int main()
     sem_unlink("sem_full");
     sem_unlink("sem_empty");
     
-    QueueDestroy(queue);
+   /*  QueueDestroy(queue); */
 
     return 0;
 }
 
-void *Producer()
+/* void *Producer()
 {
     static volatile int data = 0;
 
@@ -133,6 +140,54 @@ void *Consumer()
         sem_post(sem_free_cells);
         pthread_mutex_unlock(&cons_mutex);
     }
+
+    return NULL;
+} */
+
+void *Producer()
+{
+    static volatile int data = 0;
+
+       if (0 == sem_wait(sem_free_cells)) 
+        {  
+            pthread_mutex_lock(&prod_mutex);
+            if (0 == sem_post(sem_filled_cells)) 
+            {
+                queue[write_index] = 1;
+                write_index = (write_index + 1) % FSQ_SIZE;
+                
+                printf("Producing! (now at index %d)\n", write_index);
+            
+            }
+
+            pthread_mutex_unlock(&prod_mutex); 
+            usleep(1000);
+        }
+
+
+    return NULL;
+}
+
+void *Consumer()
+{
+    void *data = NULL;
+
+      if(0 == sem_wait(sem_filled_cells)) 
+        {
+            pthread_mutex_lock(&cons_mutex);
+            
+            if (0 == sem_post(sem_free_cells)) 
+            {
+                printf("Consuming! (at index %d)\n\n", read_index);
+
+                queue[read_index] = 0; /* erase */
+                read_index = (read_index + 1) % FSQ_SIZE;
+               
+                usleep(2000);    
+            }
+            pthread_mutex_unlock(&cons_mutex);
+        }
+
 
     return NULL;
 }
