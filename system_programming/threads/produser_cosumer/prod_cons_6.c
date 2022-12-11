@@ -17,7 +17,7 @@
 
 #define SIZE (10)
 #define PRODUCER (1)
-#define CONSUMER (5)
+#define CONSUMER (3)
 #define BIGPART (1450080000000L)
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
@@ -92,7 +92,7 @@ void *Producer()
 
         for (i = 0; i < CONSUMER; ++i)
         {
-            usleep(20000);                             /*small ajusment))*/
+            usleep(30000);                             /*small ajusment))*/
             sem_post(sem);
         }
         pthread_cond_broadcast(&condition);
