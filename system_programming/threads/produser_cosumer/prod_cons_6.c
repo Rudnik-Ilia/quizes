@@ -23,9 +23,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
 
 sem_t *sem;
-
-volatile unsigned int LETTER = 0;
-volatile unsigned int STAFF = CONSUMER;
+volatile unsigned int STAFF = 0;
 
 void *Producer();
 void *Consumer();
@@ -59,7 +57,17 @@ int main()
         }
     }
 
-    usleep(1000000);
+    pthread_join(producer_threads[0], NULL);
+
+    for(i = 0; i < CONSUMER; ++i)
+    {
+        sem_post(sem);
+    }
+    pthread_cond_broadcast(&condition);
+
+    usleep(10000);
+
+
 
     for(i = 0; i < PRODUCER; ++i)
     {
@@ -69,7 +77,7 @@ int main()
     for(j = 0; j < CONSUMER; ++j)
     {
         pthread_kill(consumer_threads[i], SIGTERM);
-    } 
+    }  
 
     pthread_mutex_destroy(&mutex);
     sem_unlink("/sem");
@@ -78,29 +86,78 @@ int main()
     return 0;
 }
 
+
 void *Producer()
+{	
+	int i = 0;
+	int sem_value;
+    int status = 0;
+
+    while(1)
+    {   
+        STAFF = CONSUMER;
+        sem_getvalue(sem, &sem_value);
+        if(sem_value == CONSUMER)
+        {
+            for(i = 0; i < CONSUMER; ++i)
+            {
+                sem_wait(sem);
+            }
+            if(!(status = pthread_mutex_lock(&mutex)))
+            {
+                printf(COLOR"PUT: %d\n"OFFCOLOR, STAFF);
+                pthread_cond_broadcast(&condition);
+                pthread_mutex_unlock(&mutex);
+            }
+        }
+
+    }
+    
+
+	return NULL;
+}
+
+void *Consumer()
+{	 	
+	int status = 0;
+
+    while(1)
+    {
+        if(!(status = pthread_mutex_lock(&mutex)))
+        {
+            sem_post(sem);
+            pthread_cond_wait(&condition, &mutex);
+            --STAFF;
+            printf("TAKE: %d I AM: %ld\n", STAFF, pthread_self());
+            pthread_mutex_unlock(&mutex);
+        }
+    }
+	return NULL;
+}
+
+/* void *Producer()
 {
     size_t i = 0;
     int val = 0;
 
     while (1)
     {
-        STAFF = CONSUMER;
-        pthread_mutex_lock(&mutex);
-        LETTER = STAFF;
-        printf(COLOR"PUT: %d\n"OFFCOLOR, STAFF);
-        pthread_mutex_unlock(&mutex);
-
-        for (i = 0; i < CONSUMER; ++i)
-        {
-            usleep(30000);                             /*small ajusment))*/
-            sem_post(sem);
-        }
         sem_getvalue(sem, &val); 
-        
-        /* if(val == CONSUMER)
+
+        if(val == CONSUMER)
         {
-        } */
+
+            STAFF = CONSUMER;
+            pthread_mutex_lock(&mutex);
+            printf(COLOR"PUT: %d\n"OFFCOLOR, STAFF);
+            pthread_mutex_unlock(&mutex);
+
+            for (i = 0; i < CONSUMER; ++i)
+            {                                               
+                sem_post(sem);
+            }
+        
+        }
         pthread_cond_broadcast(&condition);
         
     }
@@ -114,10 +171,6 @@ void *Consumer()
     {
         sem_wait(sem);
         pthread_mutex_lock(&mutex);
-        if(STAFF == 0)
-        {
-            usleep(1000);
-        }
         printf("TAKE: %u I AM THREAD: %ld\n", STAFF, pthread_self());
         STAFF--;
         pthread_cond_wait(&condition, &mutex);
@@ -126,4 +179,4 @@ void *Consumer()
     }
 
     return NULL;
-}
+} */
