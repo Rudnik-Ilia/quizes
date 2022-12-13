@@ -17,7 +17,7 @@ int STOPFLAG = 1;
 
 wd_status_t KeepMeAlive(int argc, const char *argv[], time_t interval, size_t threshold)
 {
-    struct sigaction sig_user_1 = {0};
+    struct sigaction user1 = {0};
 
     child_pid = fork();
 
@@ -27,7 +27,13 @@ wd_status_t KeepMeAlive(int argc, const char *argv[], time_t interval, size_t th
     }
     if(0 < child_pid)
     {
+        user1.sa_handler = Handler_1;
+        user1.sa_flags = 0;
+        sigemptyset(&user1.sa_mask);
+        sigaction(SIGUSR1, &user1, NULL);
+
         pause();
+        
         pthread_create(thread_of_sched, NULL, InitSched, NULL);
     }
     else
@@ -38,6 +44,11 @@ wd_status_t KeepMeAlive(int argc, const char *argv[], time_t interval, size_t th
 }
 
 void DoNotResuscitate()
+{
+
+}
+
+int Handler_1()
 {
 
 }
@@ -56,8 +67,10 @@ int InitSched()
     return 0;
 }
 
-void Signal()
+int Signal()
 {
+    kill(child_pid, SIGUSR1);
+    return 0;
 
 }
 
@@ -66,7 +79,11 @@ void Check()
 
 }
 
-void Stop()
+int Stop(sched_t *sched)
 {
-
+    if(0 == STOPFLAG)
+    {
+        SchedStop();
+    }
+    return 0;
 }
