@@ -58,7 +58,7 @@ void DoNotResuscitate()
 void Handler_1(int sig)
 {
     write(1, "HANDLER 1 FROM USER\n", 21);
-    
+
     if(sig == SIGUSR1)
     {
         ISLIFE = 1;
@@ -89,7 +89,15 @@ int Signal()
 
 void Check()
 {
-
+    write(1, "I'M CHECK FROM USER\n", 21);
+    
+    if(ISLIFE == 1)
+    {
+        ISLIFE = 0;
+        return 0;
+    }
+    ReviveDog();
+    return 1;
 }
 
 int Stop(sched_t *sched)

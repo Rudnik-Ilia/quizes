@@ -48,9 +48,17 @@ int Signal()
     return 0;
 }
 
-void Check()
+int Check()
 {
+    write(1, "I'M CHECK FROM DOG\n", 21);
     
+    if(ISLIFE == 1)
+    {
+        ISLIFE = 0;
+        return 0;
+    }
+    ReviveUser();
+    return 1;
 }
 
 int Stop(sched_t *sched)
