@@ -11,8 +11,17 @@
 
 #include <wd.h>
 
+char *path1 = "./user";
+
 int volatile STOPFLAG = 1;
 int volatile ISLIFE = 1;
+
+int Signal(void *data);
+int Check(void *data);
+int Stop(void *sched);
+void Handler_1(int sig);
+void Handler_2(int sig);
+void ReviveUser(void *data);
 
 int main(int argc, const char *argv[])
 {
@@ -38,16 +47,18 @@ int main(int argc, const char *argv[])
 
     }
 
-    SchedAddTask(sched);
-    SchedAddTask(sched);
-    SchedAddTask(sched);
+    SchedAddTask(sched, 5, 1, Signal, NULL);
+    SchedAddTask(sched, 15, 1, Check, argv[1]);
+    SchedAddTask(sched, 1, 1, Stop, NULL);
     SchedRun(sched);
 
     SchedDestroy(sched);
 
     return 0;
 }
-/************************************/
+
+/*********************TASKS************************************/
+
 int Signal(void *data)
 {
     kill(child_pid, SIGUSR1);
@@ -75,7 +86,8 @@ int Stop(void *sched)
     }
     return 0;
 }
-/************************************/
+/*******************HANDLERS***************************************/
+
 void Handler_1(int sig)
 {
      write(1, "HANDLER 1 FROM DOG\n", 21);
@@ -96,7 +108,10 @@ void Handler_2(int sig)
     }
 }
 
-void ReviveUser()
+/****************************************************************/
+
+void ReviveUser(void *data)
 {
-    execv("./main.c");
+    write(1, "REVIVING USER\n", 15);
+    execv(path1, argv);
 }

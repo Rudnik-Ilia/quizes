@@ -10,11 +10,20 @@
 #include <pthread.h>
 #include <wd.h>
 
+char *path = "./TheDog";
+
 pid_t child_pid = 0;
 pthread_t thread_of_sched;
 
 int volatile STOPFLAG = 1;
 int volatile ISLIFE = 1;
+
+int InitSched();
+int Signal(void *data);
+int Check(void *data);
+int Stop(void *sched);
+void Handler_1(int sig);
+void RevivedOG(void *data);
 
 wd_status_t KeepMeAlive(int argc, const char *argv[], time_t interval, size_t threshold)
 {
@@ -55,16 +64,6 @@ void DoNotResuscitate()
 
 }
 
-void Handler_1(int sig)
-{
-    write(1, "HANDLER 1 FROM USER\n", 21);
-
-    if(sig == SIGUSR1)
-    {
-        ISLIFE = 1;
-    }
-}
-
 int InitSched()
 {
     write(1, "START INIT SCHED\n", 18);
@@ -77,23 +76,23 @@ int InitSched()
 
     }
 
-    SchedAddTask(sched);
-    SchedAddTask(sched);
-    SchedAddTask(sched);
+    SchedAddTask(sched, 5, 1, Signal, NULL);
+    SchedAddTask(sched, 15, 1, Check, NULL);
+    SchedAddTask(sched, 1, 1, Stop, NULL);
     SchedRun(sched);
 
     SchedDestroy(sched);
 
     return 0;
 }
-
+/*********************TASKS************************************/
 int Signal(void *data)
 {
     kill(child_pid, SIGUSR1);
     return 0;
 }
 
-void Check(void *data)
+int Check(void *data)
 {
     write(1, "I'M CHECK FROM USER\n", 21);
     
@@ -102,7 +101,8 @@ void Check(void *data)
         ISLIFE = 0;
         return 0;
     }
-    ReviveDog();
+
+    ReviveDog(data);
     return 1;
 }
 
@@ -114,21 +114,35 @@ int Stop(void *sched)
     }
     return 0;
 }
+/*******************HANDLERS***************************************/
+void Handler_1(int sig)
+{
+    write(1, "HANDLER 1 FROM USER\n", 21);
 
-void ReviveDog()
+    if(sig == SIGUSR1)
+    {
+        ISLIFE = 1;
+    }
+}
+
+void ReviveDog(void *data)
 {
     pid_t tmp_pid = fork();
 
+    write(1, "REVIVING DOG\n", 15);
+
     if(0 == tmp_pid)
     {
-        execv("/TheDog.c");
+        execvp(path, argv);
     }
+
     if(0 < tmp_pid)
     {
         kill(child_pid, SIGKILL);
         child_pid = temp_pid;
         pause();
     }
+
     else
     {
         return 1;
