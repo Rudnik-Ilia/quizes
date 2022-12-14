@@ -1,19 +1,20 @@
 #include <stdio.h>
+#include <wd.h>
 
 
 
 int main(int argc, char const *argv[])
 {
 
-    /* puts("Start");
+    puts("Start");
 
-    KeepMeAlive(argc, *argv, argv[3], argv[4]);
+    KeepMeAlive(argc, argv[0], argv[1], argv[3]);
 
     sleep(10);
 
-    DoNotResuscitate(); */
+    DoNotResuscitate(); 
 
-    printf("%d\n", 3 == 3);
+
 
     return 0;
 }

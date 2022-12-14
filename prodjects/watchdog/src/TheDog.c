@@ -9,12 +9,12 @@
 #include <sys/wait.h> 
 #include <pthread.h>
 
-#include <watchdog.h>
+#include <wd.h>
 
 int volatile STOPFLAG = 1;
 int volatile ISLIFE = 1;
 
-int main()
+int main(int argc, const char *argv[])
 {
     struct sigaction user1 = {0};
 
@@ -31,6 +31,12 @@ int main()
     sigaction(SIGUSR2, &user2, NULL);
 
     sched_t *sched = SchedCreate();
+    if(NULL == sched)
+    {
+        write(1, "SCHED CRASHED FROM DOG\n", 24);
+        return 1;
+
+    }
 
     SchedAddTask(sched);
     SchedAddTask(sched);
@@ -41,17 +47,17 @@ int main()
 
     return 0;
 }
-
-int Signal()
+/************************************/
+int Signal(void *data)
 {
     kill(child_pid, SIGUSR1);
     return 0;
 }
 
-int Check()
+int Check(void *data)
 {
     write(1, "I'M CHECK FROM DOG\n", 21);
-    
+
     if(ISLIFE == 1)
     {
         ISLIFE = 0;
@@ -61,15 +67,15 @@ int Check()
     return 1;
 }
 
-int Stop(sched_t *sched)
+int Stop(void *sched)
 {
     if(0 == STOPFLAG)
     {
-        SchedStop();
+        SchedStop((sched_t *)sched);
     }
     return 0;
 }
-
+/************************************/
 void Handler_1(int sig)
 {
      write(1, "HANDLER 1 FROM DOG\n", 21);
@@ -83,6 +89,7 @@ void Handler_1(int sig)
 void Handler_2(int sig)
 {
     write(1, "HANDLER 2 FROM DOG\n", 21);
+
     if(sig == SIGUSR2)
     {
         STOPFLAG = 0;
