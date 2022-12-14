@@ -13,7 +13,8 @@
 pid_t child_pid = 0;
 pthread_t thread_of_sched;
 
-int STOPFLAG = 1;
+int volatile STOPFLAG = 1;
+int volatile ISLIFE = 1;
 
 wd_status_t KeepMeAlive(int argc, const char *argv[], time_t interval, size_t threshold)
 {
@@ -23,7 +24,7 @@ wd_status_t KeepMeAlive(int argc, const char *argv[], time_t interval, size_t th
 
     if(0 == child_pid)
     {
-        write(1, "DOG WA\n", 19);
+        write(1, "DOG WAs STARTED\n", 18);
         execv("./TheDog.out");
     }
     if(0 < child_pid)
@@ -54,9 +55,14 @@ void DoNotResuscitate()
 
 }
 
-int Handler_1()
+void Handler_1(int sig)
 {
-
+    write(1, "HANDLER 1 FROM USER\n", 21);
+    
+    if(sig == SIGUSR1)
+    {
+        ISLIFE = 1;
+    }
 }
 
 int InitSched()
@@ -65,12 +71,12 @@ int InitSched()
 
     sched_t *sched = SchedCreate();
 
-    SchedAddTask();
-    SchedAddTask();
-    SchedAddTask();
-    SchedRun();
+    SchedAddTask(sched);
+    SchedAddTask(sched);
+    SchedAddTask(sched);
+    SchedRun(sched);
 
-    SchedDestroy();
+    SchedDestroy(sched);
 
     return 0;
 }

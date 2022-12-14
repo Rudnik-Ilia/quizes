@@ -11,8 +11,8 @@
 
 #include <watchdog.h>
 
-int STOPFLAG = 1;
-int ISLIFE = 1;
+int volatile STOPFLAG = 1;
+int volatile ISLIFE = 1;
 
 int main()
 {
@@ -32,12 +32,12 @@ int main()
 
     sched_t *sched = SchedCreate();
 
-    SchedAddTask();
-    SchedAddTask();
-    SchedAddTask();
-    SchedRun();
+    SchedAddTask(sched);
+    SchedAddTask(sched);
+    SchedAddTask(sched);
+    SchedRun(sched);
 
-    SchedDestroy();
+    SchedDestroy(sched);
 
     return 0;
 }
@@ -50,7 +50,7 @@ int Signal()
 
 void Check()
 {
-
+    
 }
 
 int Stop(sched_t *sched)
@@ -62,14 +62,23 @@ int Stop(sched_t *sched)
     return 0;
 }
 
-void Handler_1()
+void Handler_1(int sig)
 {
+     write(1, "HANDLER 1 FROM DOG\n", 21);
     
+    if(sig == SIGUSR1)
+    {
+        ISLIFE = 1;
+    }
 }
 
-void Handler_2()
+void Handler_2(int sig)
 {
-    STOPFLAG = 0;
+    write(1, "HANDLER 2 FROM DOG\n", 21);
+    if(sig == SIGUSR2)
+    {
+        STOPFLAG = 0;
+    }
 }
 
 void ReviveUser()
