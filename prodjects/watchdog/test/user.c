@@ -2,13 +2,14 @@
 #include <unistd.h>
 
 #include <wd.h>
-
+#define COLOR "\033[1;31m" 
+#define OFFCOLOR "\033[0m"
 
 
 int main(int argc, const char* argv[])
 {
     
-    puts("Start");
+    puts(COLOR"Start"OFFCOLOR);
 
     KeepMeAlive(argc, argv, 3, 3);
 
@@ -16,7 +17,7 @@ int main(int argc, const char* argv[])
 
     DoNotResuscitate(); 
 
-    puts("Stop");
+    puts(COLOR"Stop"OFFCOLOR);
 
 
 

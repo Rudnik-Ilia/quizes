@@ -11,6 +11,8 @@
 #include <scheduler.h>
 #include <wd.h>
 
+
+
 #define NO (void)
 char *path1 = "./user";
 
@@ -36,14 +38,14 @@ int main(int argc, char *argv[])
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
     sigemptyset(&user1.sa_mask);
-    sigaction(SIGINT, &user1, NULL);
+    sigaction(SIGUSR1, &user1, NULL);
 
     user1.sa_handler = Handler_2;
     user1.sa_flags = 0;
     sigemptyset(&user2.sa_mask);
-    sigaction(SIGINT, &user2, NULL);
+    sigaction(SIGUSR2, &user2, NULL);
 
-    signal(SIGINT,Handler_2);
+    
 
     if(NULL == sched)
     {
@@ -71,7 +73,7 @@ int Signal(void *data)
 {
     write(1, "SIGNAL FROM DOG\n", 16);
     NO(data);
-   /*  kill(getppid(), SIGUSR1); */
+    kill(getppid(), SIGUSR1); 
     return 0;
 }
 
@@ -84,7 +86,7 @@ int Check(void *data)
         ISLIFE = 0;
         return 0;
     }
-    ReviveUser(data); 
+    ReviveUser(data);
     return 0;
 }
 
@@ -93,6 +95,7 @@ int Stop(void *sched)
     write(1, "STOP FROM DOG\n", 14);
     if(0 == STOPFLAG)
     {
+        write(1, "TURN OFF DOG\n", 13);
         SchedStop((sched_t *)sched);
     }
     return 0;
@@ -101,9 +104,9 @@ int Stop(void *sched)
 
 void Handler_1(int sig)
 {
-     write(1, "HANDLER 1 FROM DOG\n", 21);
+    write(1, "HANDLER 1 FROM DOG\n", 21);
     
-    if(sig == SIGINT)
+    if(sig == SIGUSR1)
     {
         ISLIFE = 1;
     }
@@ -113,7 +116,7 @@ void Handler_2(int sig)
 {
     write(1, "HANDLER 2 FROM DOG\n", 21);
 
-    if(sig == SIGINT)
+    if(sig == SIGUSR2)
     {
         STOPFLAG = 0;
     }

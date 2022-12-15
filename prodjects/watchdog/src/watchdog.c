@@ -11,6 +11,7 @@
 #include <scheduler.h>
 #include <wd.h>
 
+
 char *path = "./dog";
 
 pid_t child_pid = 0;
@@ -24,7 +25,7 @@ int Signal(void *data);
 int Check(void *data);
 int Stop(void *sched);
 void Handler_1(int sig);
-void RevivedOG(void *data);
+void ReviveDog(void *data);
 
 wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t threshold)
 {
@@ -45,10 +46,12 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
         user1.sa_flags = 0;
         sigemptyset(&user1.sa_mask);
         sigaction(SIGUSR1, &user1, NULL);
-        
-        puts("Im on pause");
+
+        puts("Im user on pause");
 
         pause();
+
+        puts("Im user runnnnnning");
 
         pthread_create(&thread_of_sched, NULL, InitSched, NULL);
     }
@@ -112,15 +115,16 @@ int Check(void *data)
         ISLIFE = 0;
         return 0;
     }
-
-    /* ReviveDog(data); */
-    return 1;
+    ReviveDog(data);
+    return 0; 
 }
 
 int Stop(void *sched)
 {
+    write(1, "STOP FROM USER\n", 15);
     if(0 == STOPFLAG)
     {
+        write(1, "TURN OFF from USER\n", 19);    
         SchedStop((sched_t *)sched);
     }
     return 0;
@@ -157,6 +161,7 @@ void ReviveDog(void *data)
     {
         return 1;
     } */
+    write(1, "REVIVING DOG----------------\n", 31);
 }
 
 
