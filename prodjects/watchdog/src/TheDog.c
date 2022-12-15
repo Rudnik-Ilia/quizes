@@ -57,10 +57,10 @@ int main(int argc, char *argv[])
     SchedAddTask(sched, 1, 1, Stop, sched);
 
     SchedRun(sched);
-    puts("Sched stop!");
+    puts("Sched dog stop!");
 
     SchedDestroy(sched);
-    puts("Sched destroy!");
+    puts("Sched dog destroy!");
 
     return 0;
 }

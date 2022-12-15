@@ -1,17 +1,18 @@
 #include <stdio.h>
+#include <unistd.h>
 
 #include <wd.h>
 
 
 
-int main(int argc, char const *argv[])
+int main(int argc, const char* argv[])
 {
-
+    
     puts("Start");
 
-    KeepMeAlive(argc, argv[0], argv[1], argv[3]);
+    KeepMeAlive(argc, argv, 3, 3);
 
-    sleep(10);
+    sleep(60);
 
     DoNotResuscitate(); 
 
