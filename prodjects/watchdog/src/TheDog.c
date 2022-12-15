@@ -10,11 +10,11 @@
 #include <pthread.h>
 #include <scheduler.h>
 #include <wd.h>
-
-
-
 #define NO (void)
 char *path1 = "./user";
+
+#define COLOR "\033[1;33m" 
+#define OFFCOLOR "\033[0m"
 
 volatile sig_atomic_t STOPFLAG = 1;
 volatile sig_atomic_t ISLIFE = 1;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     if(NULL == sched)
     {
-        write(1, "SCHED CRASHED FROM DOG\n", 24);
+        puts("SCHED CRASHED FROM DOG");
         return 1;
 
     }
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
 int Signal(void *data)
 {
-    write(1, "SIGNAL FROM DOG\n", 16);
+    puts(COLOR"SIGNAL FROM DOG"OFFCOLOR);
     NO(data);
     kill(getppid(), SIGUSR1); 
     return 0;
@@ -79,7 +79,7 @@ int Signal(void *data)
 
 int Check(void *data)
 {
-    write(1, "CHECK FROM DOG\n", 15);
+    puts("CHECK FROM DOG");
 
     if(ISLIFE == 1)
     {
@@ -92,10 +92,10 @@ int Check(void *data)
 
 int Stop(void *sched)
 {   
-    write(1, "STOP FROM DOG\n", 14);
+    puts("STOP FROM DOG");
     if(0 == STOPFLAG)
     {
-        write(1, "TURN OFF DOG\n", 13);
+        puts("TURN OFF DOG\n");
         SchedStop((sched_t *)sched);
     }
     return 0;
@@ -126,6 +126,6 @@ void Handler_2(int sig)
 
 void ReviveUser(void *data)
 {   
-    write(1, "REVIVING USER----------------\n", 30);
+    puts("REVIVING USER----------------");
     /* execvp((char *)(data[1]), data); */
 }

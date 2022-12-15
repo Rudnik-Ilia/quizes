@@ -11,6 +11,8 @@
 #include <scheduler.h>
 #include <wd.h>
 
+#define COLOR "\033[1;31m" 
+#define OFFCOLOR "\033[0m"
 
 char *path = "./dog";
 
@@ -64,18 +66,18 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
 
 void DoNotResuscitate()
 {
+    puts("SCHED WAS STOPPED by DNR");
     STOPFLAG = 0;
     kill(child_pid, SIGUSR2);
     pthread_join(thread_of_sched, NULL);
 
-    write(1, "SCHED WAS STOPPED\n", 18);
 
 }
 
 void *InitSched()
 {
     sched_t *sched = SchedCreate();
-    write(1, "START INIT SCHED\n", 17);
+    write(1, "START INIT SCHED FROM USER\n", 17);
 
     if(NULL == sched)
     {
@@ -101,14 +103,14 @@ void *InitSched()
 
 int Signal(void *data)
 {   
-    write(1, "I'M CHECK FROM DOG\n", 20);
+    puts(COLOR"SIGNAL FROM USER"OFFCOLOR);
     kill(child_pid, SIGUSR1);
     return 0;
 }
 
 int Check(void *data)
 {
-    write(1, "I'M CHECK FROM USER\n", 21);
+    puts("CHECK FROM USER");
     
     if(ISLIFE == 1)
     {
@@ -121,10 +123,10 @@ int Check(void *data)
 
 int Stop(void *sched)
 {
-    write(1, "STOP FROM USER\n", 15);
+    puts("STOP FROM USER");
     if(0 == STOPFLAG)
     {
-        write(1, "TURN OFF from USER\n", 19);    
+        puts("TURN OFF from USER");    
         SchedStop((sched_t *)sched);
     }
     return 0;
@@ -161,7 +163,7 @@ void ReviveDog(void *data)
     {
         return 1;
     } */
-    write(1, "REVIVING DOG----------------\n", 31);
+    puts("REVIVING DOG----------------\n");
 }
 
 
