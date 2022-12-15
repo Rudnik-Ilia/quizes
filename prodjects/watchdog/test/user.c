@@ -15,6 +15,8 @@ int main(int argc, char const *argv[])
 
     DoNotResuscitate(); 
 
+    puts("Stop");
+
 
 
     return 0;

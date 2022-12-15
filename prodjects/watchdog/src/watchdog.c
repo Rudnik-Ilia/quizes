@@ -15,8 +15,8 @@ char *path = "./TheDog";
 pid_t child_pid = 0;
 pthread_t thread_of_sched;
 
-int volatile STOPFLAG = 1;
-int volatile ISLIFE = 1;
+volatile sig_atomic_t STOPFLAG = 1;
+volatile sig_atomic_t ISLIFE = 1;
 
 int InitSched();
 int Signal(void *data);
@@ -34,7 +34,7 @@ wd_status_t KeepMeAlive(int argc, const char *argv[], time_t interval, size_t th
     if(0 == child_pid)
     {
         write(1, "DOG WAS STARTED\n", 18);
-        execv("./TheDog.out");
+        execvp(path, argv);
     }
     if(0 < child_pid)
     {
@@ -85,7 +85,9 @@ int InitSched()
 
     return 0;
 }
+
 /*********************TASKS************************************/
+
 int Signal(void *data)
 {
     kill(child_pid, SIGUSR1);

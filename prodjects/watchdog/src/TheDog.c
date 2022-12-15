@@ -8,13 +8,14 @@
 #include <stdlib.h> 
 #include <sys/wait.h> 
 #include <pthread.h>
-
+#include <scheduler.h>
 #include <wd.h>
 
+#define NO (void)
 char *path1 = "./user";
 
-int volatile STOPFLAG = 1;
-int volatile ISLIFE = 1;
+volatile sig_atomic_t STOPFLAG = 1;
+volatile sig_atomic_t ISLIFE = 1;
 
 int Signal(void *data);
 int Check(void *data);
@@ -23,23 +24,27 @@ void Handler_1(int sig);
 void Handler_2(int sig);
 void ReviveUser(void *data);
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     struct sigaction user1 = {0};
+    struct sigaction user2 = {0};
+    sched_t *sched = SchedCreate();
+
+    NO(argc);
+    
 
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
     sigemptyset(&user1.sa_mask);
-    sigaction(SIGUSR1, &user1, NULL);
-
-    struct sigaction user2 = {0};
+    sigaction(SIGINT, &user1, NULL);
 
     user1.sa_handler = Handler_2;
     user1.sa_flags = 0;
     sigemptyset(&user2.sa_mask);
-    sigaction(SIGUSR2, &user2, NULL);
+    sigaction(SIGINT, &user2, NULL);
 
-    sched_t *sched = SchedCreate();
+    signal(SIGINT,Handler_2);
+
     if(NULL == sched)
     {
         write(1, "SCHED CRASHED FROM DOG\n", 24);
@@ -47,12 +52,15 @@ int main(int argc, const char *argv[])
 
     }
 
-    SchedAddTask(sched, 5, 1, Signal, NULL);
-    SchedAddTask(sched, 15, 1, Check, argv[1]);
-    SchedAddTask(sched, 1, 1, Stop, NULL);
+    SchedAddTask(sched, 3, 1, Signal, argv);
+    SchedAddTask(sched, 9, 1, Check, argv);
+    SchedAddTask(sched, 1, 1, Stop, sched);
+
     SchedRun(sched);
+    puts("Sched stop!");
 
     SchedDestroy(sched);
+    puts("Sched destroy!");
 
     return 0;
 }
@@ -61,25 +69,28 @@ int main(int argc, const char *argv[])
 
 int Signal(void *data)
 {
-    kill(child_pid, SIGUSR1);
+    write(1, "SIGNAL FROM DOG\n", 16);
+    NO(data);
+   /*  kill(getppid(), SIGUSR1); */
     return 0;
 }
 
 int Check(void *data)
 {
-    write(1, "I'M CHECK FROM DOG\n", 21);
+    write(1, "CHECK FROM DOG\n", 15);
 
     if(ISLIFE == 1)
     {
         ISLIFE = 0;
         return 0;
     }
-    ReviveUser();
-    return 1;
+    ReviveUser(data); 
+    return 0;
 }
 
 int Stop(void *sched)
-{
+{   
+    write(1, "STOP FROM DOG\n", 14);
     if(0 == STOPFLAG)
     {
         SchedStop((sched_t *)sched);
@@ -92,7 +103,7 @@ void Handler_1(int sig)
 {
      write(1, "HANDLER 1 FROM DOG\n", 21);
     
-    if(sig == SIGUSR1)
+    if(sig == SIGINT)
     {
         ISLIFE = 1;
     }
@@ -102,7 +113,7 @@ void Handler_2(int sig)
 {
     write(1, "HANDLER 2 FROM DOG\n", 21);
 
-    if(sig == SIGUSR2)
+    if(sig == SIGINT)
     {
         STOPFLAG = 0;
     }
@@ -111,7 +122,7 @@ void Handler_2(int sig)
 /****************************************************************/
 
 void ReviveUser(void *data)
-{
-    write(1, "REVIVING USER\n", 15);
-    execv(path1, argv);
+{   
+    write(1, "REVIVING USER----------------\n", 30);
+    /* execvp((char *)(data[1]), data); */
 }
