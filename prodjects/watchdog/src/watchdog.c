@@ -99,13 +99,23 @@ void DoNotResuscitate()
     STOPFLAG = 0;
     kill(child_pid, SIGUSR2);
     pthread_join(thread_of_sched, NULL);
+    return ;
 }
 
 void *InitSched(void *data_args)
 {
-    sched_t *sched = SchedCreate();
-    write(1, "START INIT SCHED FROM USER\n", 17);
+    sched_t *sched = NULL;
+    data_t *args_struct = NULL;
+    time_t interval = 0;
+    size_t threshold = 0;
 
+    args_struct = (data_t*)data_args;
+    interval = args_struct->interval;
+    threshold = args_struct->threshold;
+
+    puts("START INIT SCHED FROM USER");
+
+    sched = SchedCreate();
     if(NULL == sched)
     {
         write(1, "SCHED CRASHED FROM USER\n", 24);
@@ -113,8 +123,8 @@ void *InitSched(void *data_args)
 
     }
 
-    SchedAddTask(sched, 3, 1, Signal, NULL);
-    SchedAddTask(sched, 9, 1, Check, NULL);
+    SchedAddTask(sched, interval, 1, Signal, NULL);
+    SchedAddTask(sched, (interval*threshold), 1, Check, NULL);
     SchedAddTask(sched, 1, 1, Stop, sched);
 
     SchedRun(sched);
