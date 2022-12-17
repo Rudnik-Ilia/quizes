@@ -27,7 +27,7 @@ int Check(void *data);
 int Stop(void *sched);
 void Handler_1(int sig);
 void Handler_2(int sig);
-void ReviveUser(void *data);
+int ReviveUser(void *data);
 
 int main(int argc, char *argv[])
 {
@@ -38,10 +38,7 @@ int main(int argc, char *argv[])
     
     NO(argc);
 
-    env = getenv("DOGID");
-    printf("@@@@@@@@ %s\n", env);
-
-    printf("                               DOG ID: %d  USER ID: %d\n", getpid(), getppid());
+    printf("                                   DOG ID: %d  USER ID: %d\n", getpid(), getppid());
     
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
@@ -56,9 +53,7 @@ int main(int argc, char *argv[])
     sched = SchedCreate();
     if(NULL == sched)
     {
-        puts("SCHED CRASHED FROM DOG");
         return 1;
-
     }
 
     SchedAddTask(sched, 3, 1, Signal, argv);
@@ -66,8 +61,6 @@ int main(int argc, char *argv[])
     SchedAddTask(sched, 1, 1, Stop, sched);
 
     SchedRun(sched);
-    puts("Sched dog stop!");
-
     SchedDestroy(sched);
     puts("Sched dog destroy!");
 
@@ -87,14 +80,12 @@ int Signal(void *data)
 int Check(void *data)
 {
     puts("CHECK FROM DOG");
-
     if(ISLIFE == 1)
     {
         ISLIFE = 0;
         return 0;
     }
-    ReviveUser(data);
-    return 0;
+    return ReviveUser(data);
 }
 
 int Stop(void *sched)
@@ -111,8 +102,7 @@ int Stop(void *sched)
 
 void Handler_1(int sig)
 {
-    write(1, "HANDLER 1 FROM DOG\n", 21);
-    
+    write(1, "HANDLER_1 FROM DOG\n", 19);
     if(sig == SIGUSR1)
     {
         ISLIFE = 1;
@@ -121,8 +111,7 @@ void Handler_1(int sig)
 
 void Handler_2(int sig)
 {
-    write(1, "HANDLER 2 FROM DOG\n", 21);
-
+    write(1, "HANDLER_2 FROM DOG\n", 19);
     if(sig == SIGUSR2)
     {
         STOPFLAG = 0;
@@ -131,9 +120,11 @@ void Handler_2(int sig)
 
 /****************************************************************/
 
-void ReviveUser(void *data)
+int ReviveUser(void *data)
 {       
     char **argument = {NULL};
-    puts("REVIVING USER----------------");
+    puts("--------------------------------REVIVING USER");
     execvp(path,  argument);
+    puts("---------------------------------CAN'T CREATE");
+    return WD_EXEC_FAILURE;
 }
