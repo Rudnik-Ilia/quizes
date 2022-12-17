@@ -25,8 +25,8 @@ volatile sig_atomic_t ISLIFE = 1;
 int Signal(void *data);
 int Check(void *data);
 int Stop(void *sched);
-void Handler_1(int sig);
-void Handler_2(int sig);
+void Handler_1();
+void Handler_2();
 int ReviveUser(void *data);
 
 int main(int argc, char *argv[])
@@ -100,22 +100,18 @@ int Stop(void *sched)
 }
 /*******************HANDLERS***************************************/
 
-void Handler_1(int sig)
+void Handler_1()
 {
     write(1, "HANDLER_1 FROM DOG\n", 19);
-    if(sig == SIGUSR1)
-    {
-        ISLIFE = 1;
-    }
+    ISLIFE = 1;
+    
 }
 
-void Handler_2(int sig)
+void Handler_2()
 {
     write(1, "HANDLER_2 FROM DOG\n", 19);
-    if(sig == SIGUSR2)
-    {
-        STOPFLAG = 0;
-    }
+    STOPFLAG = 0;
+    
 }
 
 /****************************************************************/

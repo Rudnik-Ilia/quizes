@@ -33,7 +33,7 @@ void *InitSched();
 int Signal(void *data);
 int Check(void *data);
 int Stop(void *sched);
-void Handler_1(int sig);
+void Handler_1();
 int ReviveDog(void *data);
 
 wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t threshold)
@@ -135,14 +135,11 @@ int Stop(void *sched)
 }
 /*******************HANDLERS***************************************/
 
-void Handler_1(int sig)
+void Handler_1()
 {
     write(1, "HANDLER_1 FROM USER\n", 20);
-
-    if(sig == SIGUSR1)
-    {
-        ISLIFE = 1;
-    }
+    ISLIFE = 1;
+    
 }
 
 int ReviveDog(void *data)
