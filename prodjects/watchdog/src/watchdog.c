@@ -35,6 +35,7 @@ int Check(void *data);
 int Stop(void *sched);
 void Handler_1();
 int ReviveDog(void *data);
+void Handler_Exit();
 
 wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t threshold)
 {
@@ -54,6 +55,8 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
         user1.sa_flags = 0;
         sigemptyset(&user1.sa_mask);
         sigaction(SIGUSR1, &user1, NULL);
+
+        signal(SIGINT, Handler_Exit);
 
         puts("Im user on pause");
 
@@ -101,7 +104,12 @@ void *InitSched()
     return NULL;
 
 }
-
+void Handler_Exit()
+{
+    write(1, "\nHANDLER_EXIT FROM USER\n", 23);
+    STOPFLAG == 0;
+    signal(SIGINT, Handler_Exit);
+}
 /*********************TASKS************************************/
 
 int Signal(void *data)
@@ -138,9 +146,10 @@ int Stop(void *sched)
 void Handler_1()
 {
     write(1, "HANDLER_1 FROM USER\n", 20);
-    ISLIFE = 1;
-    
+    ISLIFE = 1; 
 }
+
+/*******************Help*******************************************/
 
 int ReviveDog(void *data)
 {
@@ -166,8 +175,9 @@ int ReviveDog(void *data)
     return 0;
 }
 
-char *ParseArgs(int argc, const char **argv, time_t interval, size_t threshold)
+char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold)
 {
+    char **data = malloc(sizeof(char*) * argc);
 
 }
 
