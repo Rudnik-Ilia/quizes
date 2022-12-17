@@ -1,4 +1,6 @@
 #define _POSIX_SOURCE
+#define _POSIX_C_SOURCE 200112L
+#define  _XOPEN_SOURCE
 
 #include <signal.h>
 #include <unistd.h> 
@@ -10,11 +12,12 @@
 #include <pthread.h>
 #include <scheduler.h>
 #include <wd.h>
-#define NO (void)
-char *path1 = "./user";
+#include "help.h"
 
 #define COLOR "\033[1;33m" 
 #define OFFCOLOR "\033[0m"
+
+char *path = "./user";
 
 volatile sig_atomic_t STOPFLAG = 1;
 volatile sig_atomic_t ISLIFE = 1;
@@ -28,13 +31,18 @@ void ReviveUser(void *data);
 
 int main(int argc, char *argv[])
 {
+    char *env = NULL;
+    sched_t *sched = NULL; 
     struct sigaction user1 = {0};
     struct sigaction user2 = {0};
-    sched_t *sched = SchedCreate();
-
-    NO(argc);
     
+    NO(argc);
 
+    env = getenv("DOGID");
+    printf("@@@@@@@@ %s\n", env);
+
+    printf("                               DOG ID: %d  USER ID: %d\n", getpid(), getppid());
+    
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
     sigemptyset(&user1.sa_mask);
@@ -45,8 +53,7 @@ int main(int argc, char *argv[])
     sigemptyset(&user2.sa_mask);
     sigaction(SIGUSR2, &user2, NULL);
 
-    
-
+    sched = SchedCreate();
     if(NULL == sched)
     {
         puts("SCHED CRASHED FROM DOG");
@@ -125,7 +132,8 @@ void Handler_2(int sig)
 /****************************************************************/
 
 void ReviveUser(void *data)
-{   
+{       
+    char **argument = {NULL};
     puts("REVIVING USER----------------");
-    /* execvp((char *)(data[1]), data); */
+    execvp(path,  argument);
 }

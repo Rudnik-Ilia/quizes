@@ -8,21 +8,18 @@
 
 int main(int argc, const char* argv[])
 {
-    
+    int x = 60;
     puts(COLOR"Start"OFFCOLOR);
 
     KeepMeAlive(argc, argv, 3, 3);
 
-    while(1)
+    while(0 < x)
     {
-
+        x = sleep(x);
     }
 
     DoNotResuscitate(); 
 
     puts(COLOR"Stop"OFFCOLOR);
-
-
-
     return 0;
 }
