@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
 {
     int inter = 0;
     int thres = 0;
-    char **arguments = argv;
 
     sched_t *sched = NULL; 
     struct sigaction user1 = {0};
@@ -42,6 +41,8 @@ int main(int argc, char *argv[])
     NO(argc);
 
     printf("                                   DOG ID: %d  USER ID: %d\n", getpid(), getppid());
+
+    printf("%s\n", argv[0]);
 
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;

@@ -39,15 +39,14 @@ int Stop(void *sched);
 void Handler_1();
 int ReviveDog(void *data);
 void Handler_Exit();
-const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold);
+const char **ParseArgs(int argc, const char **argv);
 
 /****************************************************************************************/
 
 wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t threshold)
 {
     struct sigaction user1 = {0};
-    char **tmp = {NULL};
-    const char **arguments = ParseArgs(argc, argv, interval, threshold);
+    const char **arguments = ParseArgs(argc, argv);
 
     sprintf(INTERVAL, "%ld", interval);
     sprintf(THRESHOLD, "%ld", threshold);
@@ -103,14 +102,11 @@ void *InitSched(void *data)
     int inter = 0;
     int thres = 0;
 
-
     char **arguments = data;
     sched_t *sched = SchedCreate();
 
-    inter = atoi(arguments[1]);
-    thres = atoi(arguments[2]) * inter;
-
-    printf("%d - %d\n", inter, thres);
+    inter = atoi(getenv("INTERVAL"));
+    thres = atoi(getenv("THRESHOLD")) * inter;
 
     puts("START INIT SCHED FROM USER");
     if(NULL == sched)
@@ -178,7 +174,6 @@ void Handler_1()
 int ReviveDog(void *data)
 {
     pid_t tmp_pid = fork();
-    char **argument = {NULL};
     puts("------------------------------REVIVING DOG");
 
     if(0 < tmp_pid)
@@ -199,20 +194,16 @@ int ReviveDog(void *data)
     return 0;
 }
 
-const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold)
+const char **ParseArgs(int argc, const char **argv)
 {
-    const char **data = malloc(sizeof(char *) * argc + 2);
-
-    char *inter = malloc(8);
-    char *thres = malloc(8);
-
-    sprintf(inter, "%ld", interval);
-    sprintf(thres, "%ld", threshold); 
-
-    data[0] = argv[0];
-    data[1] = inter;
-    data[2] = thres;
-    data[3] = NULL;
+    int i = 0;
+    const char **data = malloc(sizeof(char *) * argc);
+					
+    for(i = 0; i < argc; ++i)
+    {
+        data[i] = argv[i];
+    }
+    data[i + 1] = NULL;
 
     return data;
 }
