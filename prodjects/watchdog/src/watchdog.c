@@ -17,11 +17,12 @@
 #define COLOR "\033[1;31m" 
 #define OFFCOLOR "\033[0m"
 
-#define SIZE_ENV (10)
+#define SIZE_ENV (12)
 
 char *PATH_TO_DOG = "./dog";
 
-char PID[SIZE_ENV];
+char INTERVAL[SIZE_ENV];
+char THRESHOLD[SIZE_ENV];
 
 pid_t child_pid = 0;
 pthread_t thread_of_sched;
@@ -29,25 +30,38 @@ pthread_t thread_of_sched;
 volatile sig_atomic_t STOPFLAG = 1;
 volatile sig_atomic_t ISLIFE = 1;
 
-void *InitSched();
+/***************************************************************************************/
+
+void *InitSched(void *data);
 int Signal(void *data);
 int Check(void *data);
 int Stop(void *sched);
 void Handler_1();
 int ReviveDog(void *data);
 void Handler_Exit();
+const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold);
+
+/****************************************************************************************/
 
 wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t threshold)
 {
     struct sigaction user1 = {0};
-    char **argument = {NULL};
+    char **tmp = {NULL};
+    const char **arguments = ParseArgs(argc, argv, interval, threshold);
+
+    sprintf(INTERVAL, "%ld", interval);
+    sprintf(THRESHOLD, "%ld", threshold);
+    putenv("INTERVAL=0");
+    putenv("THRESHOLD=0");
+    setenv("INTERVAL", INTERVAL, 1);
+    setenv("THRESHOLD", THRESHOLD, 1);
 
     child_pid = fork();
 
     if(0 == child_pid)
     {
         puts("DOG WAS STARTED");
-        execv(PATH_TO_DOG, argument);
+        execv(PATH_TO_DOG, (char**)arguments);
     }
     if(0 < child_pid)
     {
@@ -64,7 +78,7 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
 
         puts("Im user runnnnnning");
 
-        if(0 != pthread_create(&thread_of_sched, NULL, InitSched, NULL))
+        if(0 != pthread_create(&thread_of_sched, NULL, InitSched, arguments))
         {
             return WD_PTHREAD_CREATE_FAILURE;
         }
@@ -84,17 +98,28 @@ void DoNotResuscitate()
     pthread_join(thread_of_sched, NULL);
 }
 
-void *InitSched()
-{
+void *InitSched(void *data)
+{   
+    int inter = 0;
+    int thres = 0;
+
+
+    char **arguments = data;
     sched_t *sched = SchedCreate();
+
+    inter = atoi(arguments[1]);
+    thres = atoi(arguments[2]) * inter;
+
+    printf("%d - %d\n", inter, thres);
+
     puts("START INIT SCHED FROM USER");
     if(NULL == sched)
     {
         return NULL;
     }
 
-    SchedAddTask(sched, 3, 1, Signal, NULL);
-    SchedAddTask(sched, 9, 1, Check, NULL);
+    SchedAddTask(sched, inter, 1, Signal, NULL);
+    SchedAddTask(sched, thres, 1, Check, arguments);
     SchedAddTask(sched, 1, 1, Stop, sched);
 
     SchedRun(sched);
@@ -106,8 +131,7 @@ void *InitSched()
 }
 void Handler_Exit()
 {
-    write(1, "\nHANDLER_EXIT FROM USER\n", 23);
-    STOPFLAG == 0;
+    write(1, "\nHANDLER_EXIT FROM USER\n", 24);
     signal(SIGINT, Handler_Exit);
 }
 /*********************TASKS************************************/
@@ -164,7 +188,7 @@ int ReviveDog(void *data)
     }
     if(0 == tmp_pid)
     {
-        execv(PATH_TO_DOG, argument);
+        execv(PATH_TO_DOG, (char**)data);
         puts("--------------------------TROOOOOOBLE!");
         return WD_EXEC_FAILURE;
     }
@@ -175,9 +199,21 @@ int ReviveDog(void *data)
     return 0;
 }
 
-char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold)
+const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold)
 {
-    char **data = malloc(sizeof(char*) * argc);
+    const char **data = malloc(sizeof(char *) * argc + 2);
 
+    char *inter = malloc(8);
+    char *thres = malloc(8);
+
+    sprintf(inter, "%ld", interval);
+    sprintf(thres, "%ld", threshold); 
+
+    data[0] = argv[0];
+    data[1] = inter;
+    data[2] = thres;
+    data[3] = NULL;
+
+    return data;
 }
 

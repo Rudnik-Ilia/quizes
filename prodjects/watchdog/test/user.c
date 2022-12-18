@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <wd.h>
+#include "wd.h"
 #define COLOR "\033[1;36m" 
 #define OFFCOLOR "\033[0m"
 

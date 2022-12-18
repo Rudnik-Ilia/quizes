@@ -31,7 +31,10 @@ int ReviveUser(void *data);
 
 int main(int argc, char *argv[])
 {
-    char *env = NULL;
+    int inter = 0;
+    int thres = 0;
+    char **arguments = argv;
+
     sched_t *sched = NULL; 
     struct sigaction user1 = {0};
     struct sigaction user2 = {0};
@@ -39,7 +42,7 @@ int main(int argc, char *argv[])
     NO(argc);
 
     printf("                                   DOG ID: %d  USER ID: %d\n", getpid(), getppid());
-    
+
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
     sigemptyset(&user1.sa_mask);
@@ -50,14 +53,17 @@ int main(int argc, char *argv[])
     sigemptyset(&user2.sa_mask);
     sigaction(SIGUSR2, &user2, NULL);
 
+    inter = atoi(getenv("INTERVAL"));
+    thres = atoi(getenv("THRESHOLD")) * inter;
+
     sched = SchedCreate();
     if(NULL == sched)
     {
         return 1;
     }
 
-    SchedAddTask(sched, 3, 1, Signal, argv);
-    SchedAddTask(sched, 9, 1, Check, argv);
+    SchedAddTask(sched, inter, 1, Signal, NULL);
+    SchedAddTask(sched, thres, 1, Check, argv);
     SchedAddTask(sched, 1, 1, Stop, sched);
 
     SchedRun(sched);
@@ -103,8 +109,7 @@ int Stop(void *sched)
 void Handler_1()
 {
     write(1, "HANDLER_1 FROM DOG\n", 19);
-    ISLIFE = 1;
-    
+    ISLIFE = 1; 
 }
 
 void Handler_2()
@@ -118,9 +123,12 @@ void Handler_2()
 
 int ReviveUser(void *data)
 {       
-    char **argument = {NULL};
+    char *arg = (char*)data;
+    const char *name =  arg;
+    printf("%s", name);
+
     puts("--------------------------------REVIVING USER");
-    execvp(path,  argument);
+    execv(path,  (char**)data);
     puts("---------------------------------CAN'T CREATE");
     return WD_EXEC_FAILURE;
 }
