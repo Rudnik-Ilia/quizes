@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 {
     int inter = 0;
     int thres = 0;
+    int for_check = 0;
 
     sched_t *sched = NULL; 
     struct sigaction user1 = {0};
@@ -62,9 +63,15 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    SchedAddTask(sched, inter, 1, Signal, NULL);
-    SchedAddTask(sched, thres, 1, Check, argv);
-    SchedAddTask(sched, 1, 1, Stop, sched);
+    for_check = UIDIsSame(BadUID, SchedAddTask(sched, inter, 1, Signal, NULL)) + \
+    UIDIsSame(BadUID, SchedAddTask(sched, thres, 1, Check, argv)) + \
+    UIDIsSame(BadUID, SchedAddTask(sched, 1, 1, Stop, sched));
+
+    if(for_check)
+    {
+        puts("TASK ERROR");
+        return 1;
+    }
 
     SchedRun(sched);
     SchedDestroy(sched);

@@ -50,8 +50,6 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
 
     sprintf(INTERVAL, "%ld", interval);
     sprintf(THRESHOLD, "%ld", threshold);
-    putenv("INTERVAL=0");
-    putenv("THRESHOLD=0");
     setenv("INTERVAL", INTERVAL, 1);
     setenv("THRESHOLD", THRESHOLD, 1);
 
@@ -68,8 +66,6 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
         user1.sa_flags = 0;
         sigemptyset(&user1.sa_mask);
         sigaction(SIGUSR1, &user1, NULL);
-
-        signal(SIGINT, Handler_Exit);
 
         puts("Im user on pause");
 
@@ -101,22 +97,29 @@ void *InitSched(void *data)
 {   
     int inter = 0;
     int thres = 0;
+    int for_check = 0;
 
     char **arguments = data;
     sched_t *sched = SchedCreate();
-
-    inter = atoi(getenv("INTERVAL"));
-    thres = atoi(getenv("THRESHOLD")) * inter;
-
-    puts("START INIT SCHED FROM USER");
     if(NULL == sched)
     {
         return NULL;
     }
+    puts("START INIT SCHED FROM USER");
 
-    SchedAddTask(sched, inter, 1, Signal, NULL);
-    SchedAddTask(sched, thres, 1, Check, arguments);
-    SchedAddTask(sched, 1, 1, Stop, sched);
+    inter = atoi(getenv("INTERVAL"));
+    thres = atoi(getenv("THRESHOLD")) * inter;
+
+    for_check = UIDIsSame(BadUID, SchedAddTask(sched, inter, 1, Signal, NULL)) + \
+    UIDIsSame(BadUID, SchedAddTask(sched, thres, 1, Check, arguments)) + \
+    UIDIsSame(BadUID, SchedAddTask(sched, 1, 1, Stop, sched));
+
+    if(for_check)
+    {
+        puts("TASK ERROR");
+        free(data);
+        return NULL;
+    }
 
     SchedRun(sched);
     SchedDestroy(sched);
@@ -124,13 +127,8 @@ void *InitSched(void *data)
     puts("Sched user destroy!");
 
     return NULL;
+}
 
-}
-void Handler_Exit()
-{
-    write(1, "\nHANDLER_EXIT FROM USER\n", 24);
-    signal(SIGINT, Handler_Exit);
-}
 /*********************TASKS************************************/
 
 int Signal(void *data)
@@ -144,7 +142,6 @@ int Signal(void *data)
 int Check(void *data)
 {
     puts("CHECK FROM USER");
-    
     if(1 == ISLIFE)
     {
         ISLIFE = 0;
@@ -180,6 +177,7 @@ int ReviveDog(void *data)
     if(0 < tmp_pid)
     {
         kill(child_pid, SIGKILL);
+        wait(NULL);
         child_pid = tmp_pid;
     }
     if(0 == tmp_pid)
@@ -198,7 +196,8 @@ int ReviveDog(void *data)
 const char **ParseArgs(int argc, const char **argv)
 {
     int i = 0;
-    const char **data = malloc(sizeof(char *) * (argc + 1));				
+    const char **data = malloc(sizeof(char *) * (argc + 1));	
+
     for(i = 0; i < argc; ++i)
     {
         data[i] = argv[i];
