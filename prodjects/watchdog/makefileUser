@@ -1,0 +1,26 @@
+
+CC = gcc 
+CFLAGS = -ansi -pedantic-errors -Wall -Wextra -g -pthread
+CPPFLAGS = -I 
+FOLDER = -I include 
+FOLDER2 = -I ../../ds/include
+
+SOURSES = test/user.c src/watchdog.c src/scheduler.c src/ilrd_uid.c src/task.c ../../ds/src/pq.c ../../ds/src/srtll.c ../../ds/src/dll.c
+
+EXECUTABLE = user
+
+.PHONY : all, debug, release, clean
+
+all:$(EXECUTABLE)
+
+debug: CFLAGS += -g
+debug: $(EXECUTABLE)
+
+release: CFLAGS += -DNDEBUG -O3
+release: $(EXECUTABLE)
+
+$(EXECUTABLE): $(SOURSES)
+	$(CC) $(CFLAGS) $(SOURSES)  $(FOLDER) $(FOLDER2) -o user
+		
+clean:
+	rm *.out

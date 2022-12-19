@@ -1,0 +1,27 @@
+
+CC = gcc 
+CFLAGS = -ansi -pedantic-errors -Wall -Wextra -g 
+CPPFLAGS = -I 
+FOLDER = -I include 
+FOLDER2 = -I ../../ds/include
+
+SOURSES = src/TheDog.c src/scheduler.c src/ilrd_uid.c src/task.c ../../ds/src/pq.c ../../ds/src/srtll.c ../../ds/src/dll.c
+
+EXECUTABLE = dog
+
+.PHONY : all, debug, release, clean
+
+all:$(EXECUTABLE)
+
+debug: CFLAGS += -g
+debug: $(EXECUTABLE)
+
+release: CFLAGS += -DNDEBUG -O3
+release: $(EXECUTABLE)
+
+$(EXECUTABLE): $(SOURSES)
+	$(CC) $(CFLAGS) $(SOURSES)  $(FOLDER) $(FOLDER2) -o dog
+		
+clean:
+	rm *.out
+
