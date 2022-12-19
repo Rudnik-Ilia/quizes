@@ -38,7 +38,7 @@ int Stop(void *sched);
 void Handler_1();
 int ReviveDog(void *data);
 void Handler_Exit();
-const char **ParseArgs(int argc, const char **argv);
+const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold);
 void CleanAll(void **data);
 
 /****************************************************************************************/
@@ -46,12 +46,7 @@ void CleanAll(void **data);
 wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t threshold)
 {
     struct sigaction user1 = {0};
-    const char **arguments = ParseArgs(argc, argv);
-
-    sprintf(INTERVAL, "%ld", interval);
-    sprintf(THRESHOLD, "%ld", threshold);
-    setenv("INTERVAL", INTERVAL, 1);
-    setenv("THRESHOLD", THRESHOLD, 1);
+    const char **arguments = ParseArgs(argc, argv, interval, threshold);
 
     child_pid = fork();
 
@@ -193,16 +188,21 @@ int ReviveDog(void *data)
     return 0;
 }
 
-const char **ParseArgs(int argc, const char **argv)
+const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold)
 {
     int i = 0;
     const char **data = malloc(sizeof(char *) * (argc + 1));	
-
     for(i = 0; i < argc; ++i)
     {
         data[i] = argv[i];
     }
     data[i] = NULL;
+
+    sprintf(INTERVAL, "%ld", interval);
+    sprintf(THRESHOLD, "%ld", threshold);
+    setenv("INTERVAL", INTERVAL, 1);
+    setenv("THRESHOLD", THRESHOLD, 1);
+
     return data;
 }
 

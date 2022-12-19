@@ -129,7 +129,7 @@ void Handler_2()
 
 int ReviveUser(void *data)
 {       
-    puts("--------------------------------REVIVING USER");
+    printf("%s--------------------------------REVIVING USER", PATH);
     execv(PATH,  (char**)data);
     puts("---------------------------------CAN'T CREATE");
     return WD_EXEC_FAILURE;
