@@ -8,7 +8,7 @@
 
 int main(int argc, const char* argv[])
 {
-    int x = 100;
+    int x = 50;
     puts(COLOR"Start"OFFCOLOR);
 
     KeepMeAlive(argc, argv, 3, 3);

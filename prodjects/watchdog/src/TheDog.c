@@ -17,7 +17,7 @@
 #define COLOR "\033[1;33m" 
 #define OFFCOLOR "\033[0m"
 
-char *path = "./user";
+char *PATH = NULL;
 
 volatile sig_atomic_t STOPFLAG = 1;
 volatile sig_atomic_t ISLIFE = 1;
@@ -41,8 +41,7 @@ int main(int argc, char *argv[])
     NO(argc);
 
     printf("                                   DOG ID: %d  USER ID: %d\n", getpid(), getppid());
-
-    printf("%s\n", argv[0]);
+    PATH = argv[0];
 
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
@@ -116,20 +115,15 @@ void Handler_1()
 void Handler_2()
 {
     write(1, "HANDLER_2 FROM DOG\n", 19);
-    STOPFLAG = 0;
-    
+    STOPFLAG = 0; 
 }
 
 /****************************************************************/
 
 int ReviveUser(void *data)
 {       
-    char *arg = (char*)data;
-    const char *name =  arg;
-    printf("%s", name);
-
     puts("--------------------------------REVIVING USER");
-    execv(path,  (char**)data);
+    execv(PATH,  (char**)data);
     puts("---------------------------------CAN'T CREATE");
     return WD_EXEC_FAILURE;
 }

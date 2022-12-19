@@ -20,7 +20,6 @@
 #define SIZE_ENV (12)
 
 char *PATH_TO_DOG = "./dog";
-
 char INTERVAL[SIZE_ENV];
 char THRESHOLD[SIZE_ENV];
 
@@ -40,6 +39,7 @@ void Handler_1();
 int ReviveDog(void *data);
 void Handler_Exit();
 const char **ParseArgs(int argc, const char **argv);
+void CleanAll(void **data);
 
 /****************************************************************************************/
 
@@ -120,6 +120,7 @@ void *InitSched(void *data)
 
     SchedRun(sched);
     SchedDestroy(sched);
+    free(data);
     puts("Sched user destroy!");
 
     return NULL;
@@ -197,14 +198,13 @@ int ReviveDog(void *data)
 const char **ParseArgs(int argc, const char **argv)
 {
     int i = 0;
-    const char **data = malloc(sizeof(char *) * argc);
-					
+    const char **data = malloc(sizeof(char *) * (argc + 1));				
     for(i = 0; i < argc; ++i)
     {
         data[i] = argv[i];
     }
-    data[i + 1] = NULL;
-
+    data[i] = NULL;
     return data;
 }
+
 
