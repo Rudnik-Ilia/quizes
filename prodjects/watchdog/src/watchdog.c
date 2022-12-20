@@ -181,12 +181,16 @@ int ReviveDog(void *data)
     }
     if(0 == tmp_pid)
     {
-        while(-1 == execv(PATH_TO_DOG, (char**)data) || count < 10)
+        while(-1 == execv(PATH_TO_DOG, (char**)data))
         {
-            puts("TRY TO RESTORE");
+            if(10 == count)
+            {
+                return WD_EXEC_FAILURE;
+            }
+            puts("TRY TO RESTORE DOG");
             ++count;
+            sleep(1);
         }
-        puts("--------------------------TROOOOOOBLE!");
         return WD_EXEC_FAILURE;
     }
     if(0 > tmp_pid)
@@ -199,10 +203,11 @@ int ReviveDog(void *data)
 const char **ParseArgs(int argc, const char **argv)
 {
     int i = 0;
-    const char **data = malloc(sizeof(char *) * (argc + 1));	
-    for(i = 0; i < argc; ++i)
+    const char **data = malloc(sizeof(char *) * (argc + 2));	
+    data[0] = PATH_TO_DOG;
+    for(i = 1; (i - 0) < argc; ++i)
     {
-        data[i] = argv[i];
+        data[i] = argv[i - 1];
     }
     data[i] = NULL;
 

@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
     PARENT = getppid();
 
     printf("                                          DOG ID: %d  USER ID: %d\n", getpid(), getppid());
-    
-    PATH = argv[0];
+
+    PATH = argv[1];
 
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
@@ -133,13 +133,19 @@ void Handler_2()
 
 int ReviveUser(void *data)
 {   
-    size_t count = 0;    
+    size_t count = 0; 
+
     printf("%s ---------------------------------REVIVING USER\n", PATH);
     kill(PARENT, SIGKILL);
-    while(-1 == execv(PATH,  (char**)data) || count < 10)
+    while(-1 == execv(PATH,  (char**)data))
     {
-         puts("TRY TO RESTORE");
-         ++count;
+        if(count == 10)
+        {
+            return WD_EXEC_FAILURE;
+        }
+        puts("TRY TO RESTORE USER");
+        ++count;
+        sleep(1);
     }
     puts("---------------------------------CAN'T CREATE");
     return WD_EXEC_FAILURE;
