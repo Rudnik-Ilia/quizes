@@ -18,8 +18,9 @@
 #define OFFCOLOR "\033[0m"
 
 char *PATH = NULL;
+pid_t PARENT = 0;
 
-volatile sig_atomic_t STOPFLAG = 1;
+volatile sig_atomic_t WORKFLAG = 1;
 volatile sig_atomic_t ISLIFE = 1;
 
 int Signal(void *data);
@@ -41,7 +42,10 @@ int main(int argc, char *argv[])
     
     NO(argc);
 
-    printf("                                   DOG ID: %d  USER ID: %d\n", getpid(), getppid());
+    PARENT = getppid();
+
+    printf("                                          DOG ID: %d  USER ID: %d\n", getpid(), getppid());
+    
     PATH = argv[0];
 
     user1.sa_handler = Handler_1;
@@ -104,7 +108,7 @@ int Check(void *data)
 int Stop(void *sched)
 {   
     puts("STOP FROM DOG");
-    if(0 == STOPFLAG)
+    if(0 == WORKFLAG)
     {
         puts("TURN OFF DOG\n");
         SchedStop((sched_t *)sched);
@@ -122,15 +126,21 @@ void Handler_1()
 void Handler_2()
 {
     write(1, "HANDLER_2 FROM DOG\n", 19);
-    STOPFLAG = 0; 
+    WORKFLAG = 0; 
 }
 
 /****************************************************************/
 
 int ReviveUser(void *data)
-{       
-    printf("%s--------------------------------REVIVING USER", PATH);
-    execv(PATH,  (char**)data);
+{   
+    size_t count = 0;    
+    printf("%s ---------------------------------REVIVING USER\n", PATH);
+    kill(PARENT, SIGKILL);
+    while(-1 == execv(PATH,  (char**)data) || count < 10)
+    {
+         puts("TRY TO RESTORE");
+         ++count;
+    }
     puts("---------------------------------CAN'T CREATE");
     return WD_EXEC_FAILURE;
 }

@@ -26,7 +26,7 @@ char THRESHOLD[SIZE_ENV];
 pid_t child_pid = 0;
 pthread_t thread_of_sched;
 
-volatile sig_atomic_t STOPFLAG = 1;
+volatile sig_atomic_t WORKFLAG = 1;
 volatile sig_atomic_t ISLIFE = 1;
 
 /***************************************************************************************/
@@ -38,15 +38,17 @@ int Stop(void *sched);
 void Handler_1();
 int ReviveDog(void *data);
 void Handler_Exit();
-const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold);
+const char **ParseArgs(int argc, const char **argv);
 void CleanAll(void **data);
+void AddEnvVar(time_t interval, size_t threshold);
 
 /****************************************************************************************/
 
 wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t threshold)
 {
     struct sigaction user1 = {0};
-    const char **arguments = ParseArgs(argc, argv, interval, threshold);
+    const char **arguments = ParseArgs(argc, argv);
+    AddEnvVar(interval, threshold);
 
     child_pid = fork();
 
@@ -57,6 +59,7 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
     }
     if(0 < child_pid)
     {
+        printf("                                     USER ID: %d\n", getpid());
         user1.sa_handler = Handler_1;
         user1.sa_flags = 0;
         sigemptyset(&user1.sa_mask);
@@ -83,7 +86,7 @@ wd_status_t KeepMeAlive(int argc, const char **argv, time_t interval, size_t thr
 void DoNotResuscitate()
 {
     puts("SCHED WAS STOPPED by DNR");
-    STOPFLAG = 0;
+    WORKFLAG = 0;
     kill(child_pid, SIGUSR2);
     pthread_join(thread_of_sched, NULL);
 }
@@ -148,7 +151,7 @@ int Check(void *data)
 int Stop(void *sched)
 {
     puts("STOP from USER");    
-    if(0 == STOPFLAG)
+    if(0 == WORKFLAG)
     {
         SchedStop((sched_t *)sched);
     }
@@ -166,18 +169,23 @@ void Handler_1()
 
 int ReviveDog(void *data)
 {
+    int count = 0;
     pid_t tmp_pid = fork();
     puts("------------------------------REVIVING DOG");
 
     if(0 < tmp_pid)
     {
         kill(child_pid, SIGKILL);
-        wait(NULL);
+        waitpid(child_pid, NULL, 0);
         child_pid = tmp_pid;
     }
     if(0 == tmp_pid)
     {
-        execv(PATH_TO_DOG, (char**)data);
+        while(-1 == execv(PATH_TO_DOG, (char**)data) || count < 10)
+        {
+            puts("TRY TO RESTORE");
+            ++count;
+        }
         puts("--------------------------TROOOOOOBLE!");
         return WD_EXEC_FAILURE;
     }
@@ -188,7 +196,7 @@ int ReviveDog(void *data)
     return 0;
 }
 
-const char **ParseArgs(int argc, const char **argv, time_t interval, size_t threshold)
+const char **ParseArgs(int argc, const char **argv)
 {
     int i = 0;
     const char **data = malloc(sizeof(char *) * (argc + 1));	
@@ -198,12 +206,15 @@ const char **ParseArgs(int argc, const char **argv, time_t interval, size_t thre
     }
     data[i] = NULL;
 
+    return data;
+}
+
+void AddEnvVar(time_t interval, size_t threshold)
+{
     sprintf(INTERVAL, "%ld", interval);
     sprintf(THRESHOLD, "%ld", threshold);
     setenv("INTERVAL", INTERVAL, 1);
     setenv("THRESHOLD", THRESHOLD, 1);
-
-    return data;
 }
 
 
