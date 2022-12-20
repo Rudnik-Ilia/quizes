@@ -203,11 +203,10 @@ int ReviveDog(void *data)
 const char **ParseArgs(int argc, const char **argv)
 {
     int i = 0;
-    const char **data = malloc(sizeof(char *) * (argc + 2));	
-    data[0] = PATH_TO_DOG;
-    for(i = 1; (i - 0) < argc; ++i)
+    const char **data = malloc(sizeof(char *) * (argc + 1));	
+    for(i = 1; (i) < argc; ++i)
     {
-        data[i] = argv[i - 1];
+        data[i] = argv[i];
     }
     data[i] = NULL;
 
