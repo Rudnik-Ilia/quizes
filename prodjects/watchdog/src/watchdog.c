@@ -203,10 +203,11 @@ int ReviveDog(void *data)
 const char **ParseArgs(int argc, const char **argv)
 {
     int i = 0;
-    const char **data = malloc(sizeof(char *) * (argc + 1));	
-    for(i = 1; (i) < argc; ++i)
+    const char **data = malloc(sizeof(char *) * (argc + 2));	
+    data[0] = PATH_TO_DOG;
+    for(i = 1; (i - 1) < argc; ++i)
     {
-        data[i] = argv[i];
+        data[i] = argv[i - 1];
     }
     data[i] = NULL;
 
@@ -215,10 +216,11 @@ const char **ParseArgs(int argc, const char **argv)
 
 void AddEnvVar(time_t interval, size_t threshold)
 {
-    sprintf(INTERVAL, "%ld", interval);
-    sprintf(THRESHOLD, "%ld", threshold);
-    setenv("INTERVAL", INTERVAL, 1);
-    setenv("THRESHOLD", THRESHOLD, 1);
+    char BUFFER[SIZE_ENV];
+    sprintf(BUFFER, "%ld", interval);
+    setenv("INTERVAL", BUFFER, 1);
+    sprintf(BUFFER, "%ld", threshold);
+    setenv("THRESHOLD", BUFFER, 1);
 }
 
 

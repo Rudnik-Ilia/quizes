@@ -41,12 +41,13 @@ int main(int argc, char *argv[])
     struct sigaction user2 = {0};
     
     NO(argc);
-
     PARENT = getppid();
 
     printf("                                          DOG ID: %d  USER ID: %d\n", getpid(), getppid());
+    printf("-------------%d\n", argc);
+    
 
-    PATH = argv[1];
+    PATH = argv[0];
 
     user1.sa_handler = Handler_1;
     user1.sa_flags = 0;
