@@ -30,7 +30,7 @@ sorted_list_t *SortedLLCreate(cmp_func_t func_cmp)
 	sorted_list_t *srtll = (sorted_list_t *)malloc(sizeof(sorted_list_t));
 	if(NULL == srtll)
 	{
-		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		LOGERROR("SORRY, NO MEMORY FOR YOU(sort)");
 		return NULL;
 	} 
 	srtll -> dll = DLLCreate();

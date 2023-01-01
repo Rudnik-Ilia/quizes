@@ -33,7 +33,7 @@ pq_t *PQCreate(priority_cmp_func func_cmp)
 	
 	if(NULL == pq)
 	{
-		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		LOGERROR("SORRY, NO MEMORY FOR YOU(pq)");
 		return NULL;
 	} 
 	pq->list = SortedLLCreate(func_cmp);

@@ -13,17 +13,18 @@
 #include <stdlib.h> /* malloc */
 
 #include <unistd.h> /* getpid */
-#include "scheduler.h"
+#include "heap_scheduler.h"
+#include "heap.h"
 
 
-#include "pqueue.h"
+#include "heap_pq.h"
 #include "task.h"
 #include "utils.h"
 
 
 struct scheduler
 {
-    pq_t *tasks;
+    heap_pq_t *tasks;
     int is_running;
     #ifndef NDEBUG
     ilrd_uid_t error;
@@ -36,28 +37,28 @@ static int CompareTime(const void *tsk1, const void *tsk2)
 {
 	assert(NULL != tsk1);
 	assert(NULL != tsk2);
-	return TaskGetTime((task_t *)tsk1) - TaskGetTime((task_t *)tsk2); 
+	return TaskGetTime((task_t *)tsk2) - TaskGetTime((task_t *)tsk1); 
 }
 
-static int CompareUID(const void *task, void *uid)
+static int CompareUID(const void *task, const void *uid)
 {	
 	assert(NULL != task);	
 	return UIDIsSame(TaskGetUID((task_t*)task), *(ilrd_uid_t*)uid);
 }
 
-sched_t *SchedCreate(void)
+heap_sched_t *HeapSchedCreate(void)
 {
-	sched_t *new_sched = (sched_t*)malloc(sizeof(sched_t));
+	heap_sched_t *new_sched = (heap_sched_t *)malloc(sizeof(heap_sched_t ));
 	if(NULL == new_sched)
 	{
-		LOGERROR("SORRY, NO MEMORY FOR YOU(CREATE)");
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return NULL;
 	}	
 	
-	new_sched -> tasks = PQCreate(CompareTime);
+	new_sched -> tasks = HeapPQCreate(CompareTime);
 	if(NULL == new_sched-> tasks)
 	{
-		LOGERROR("SORRY, NO MEMORY FOR YOU(PQ CREATE)");
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		free(new_sched);
 		return NULL;
 	}
@@ -71,7 +72,7 @@ sched_t *SchedCreate(void)
 }
 
 
-ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating, int (*task_func)(void *params), void *params)
+ilrd_uid_t HeapSchedAddTask(heap_sched_t *sched, time_t interval_in_sec, int is_repeating, int (*task_func)(void *params), void *params)
 {	
 	 
 	ilrd_uid_t new_uid = UIDCreate();
@@ -80,16 +81,16 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 	
 	if(NULL == new_task)
 	{
-		LOGERROR("SORRY, NO MEMORY FOR YOU(TASK)");
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		return BadUID;
 	}
 	
 	assert(NULL != sched);
 	assert(NULL != task_func);
 	
-	if(PQEnqueue(sched->tasks, new_task))
+	if(HeapPQEnqueue(sched->tasks, new_task))
 	{
-		LOGERROR("SORRY, NO MEMORY FOR YOU(PQ)");
+		LOGERROR("SORRY, NO MEMORY FOR YOU");
 		free(new_task);
 		return BadUID;
 	}
@@ -99,7 +100,7 @@ ilrd_uid_t SchedAddTask(sched_t *sched, time_t interval_in_sec, int is_repeating
 
 }
 
-int SchedRun(sched_t *sched)
+int HeapSchedRun(heap_sched_t *sched)
 {	
 	task_t *tmp = NULL;
 	time_t mytime = 0;
@@ -109,9 +110,9 @@ int SchedRun(sched_t *sched)
 	assert(NULL != sched);
 	sched->is_running = 1;
 	
-	while(sched->is_running && !SchedIsEmpty(sched))
+	while(sched->is_running && !HeapSchedIsEmpty(sched))
 	{	
-		tmp = PQPeek(sched->tasks);
+		tmp = HeapPQPeek(sched->tasks);
 		mytime = time(NULL);
 		uid = TaskGetUID(tmp);
 		
@@ -133,14 +134,14 @@ int SchedRun(sched_t *sched)
 		
 		
 		
-		if(!PQIsEmpty(sched->tasks) && UIDIsSame(uid, TaskGetUID(PQPeek(sched->tasks))))
+		if(!HeapPQIsEmpty(sched->tasks) && UIDIsSame(uid, TaskGetUID(HeapPQPeek(sched->tasks))))
 		{
-			PQDequeue(sched->tasks);
+			HeapPQDequeue(sched->tasks);
 			
 			if(TaskIsRepeating(tmp))
 			{	
 				TaskCalculateNewTime(tmp);
-				PQEnqueue(sched->tasks, tmp);
+				HeapPQEnqueue(sched->tasks, tmp);
 				
 				/*
 				TaskSetInterval(tmp, 10);
@@ -156,47 +157,48 @@ int SchedRun(sched_t *sched)
 	return status;
 }
 
-void SchedStop(sched_t *sched)
+void HeapSchedStop(heap_sched_t *sched)
 {
 	assert(NULL != sched);
 	sched->is_running = 0;
 }
 
 
-void SchedRemoveTask(sched_t *sched, ilrd_uid_t uid)
+void HeapSchedRemoveTask(heap_sched_t *sched, ilrd_uid_t uid)
+
 {
 	void * id = &uid;
 	assert(NULL != sched);
-	TaskDestroy((task_t*)PQErase(sched->tasks, CompareUID, id));	
+	TaskDestroy((task_t*)HeapPQErase(sched->tasks, CompareUID, id));	
 }
 
-void SchedDestroy(sched_t *sched)
+void HeapSchedDestroy(heap_sched_t *sched)
 {
 	assert(NULL != sched);
-	SchedClear(sched);	
-	PQDestroy(sched->tasks);
+	HeapSchedClear(sched);	
+	HeapPQDestroy(sched->tasks);
 	free(sched);	
 }
 
 
-size_t SchedSize(const sched_t *sched)
+size_t HeapSchedSize(const heap_sched_t *sched)
 {	
 	assert(NULL != sched);
-	return PQSize(sched->tasks);
+	return HeapPQSize(sched->tasks);
 }
 
-int SchedIsEmpty(const sched_t *sched)
+int HeapSchedIsEmpty(const heap_sched_t *sched)
 {
 	assert(NULL != sched);
-	return PQIsEmpty(sched->tasks);
+	return HeapPQIsEmpty(sched->tasks);
 }
 
-void SchedClear(sched_t *sched)
+void HeapSchedClear(heap_sched_t *sched)
 {
 	assert(NULL != sched);     
-	while (!PQIsEmpty(sched->tasks))
+	while (!HeapPQIsEmpty(sched->tasks))
 	{
-		task_t *task = PQDequeue(sched->tasks);
+		task_t *task = HeapPQDequeue(sched->tasks);
 		TaskDestroy(task);
 	}
 }

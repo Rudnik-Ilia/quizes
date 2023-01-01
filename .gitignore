@@ -7,4 +7,5 @@
 !c/*.c
 !c/ws*/*.c
 !*.h
-
+!makefileUser
+!makefileDog

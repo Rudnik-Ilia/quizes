@@ -12,9 +12,9 @@ const ilrd_uid_t BadUID = {0};
 ilrd_uid_t UIDCreate(void)
 {
 	ilrd_uid_t new_uid;
-	static int i = 0;
+	static volatile int i = 0;
 	
-	new_uid.counter = ++i;
+	new_uid.counter = __sync_add_and_fetch(&i, 1);
 	new_uid.pid = getpid();
 	new_uid.created_time = time(0);
 	

@@ -77,7 +77,6 @@ void TaskCalculateNewTime(task_t *task)
 	task->exec_time = time(NULL) + task->interval;
 
 }
-
 /**********************************************************************************/
 
 time_t TaskGetInterval(task_t *task)

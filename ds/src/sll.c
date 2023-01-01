@@ -87,15 +87,18 @@ iterator_t SllRemove(iterator_t iter)
 
 void SllDestroy(sll_t *list)
 {
-	iterator_t temp = list->head;
+	iterator_t iter = SllBegin(list);
+	iterator_t temp = NULL;
+	
 	assert(NULL != list);
-	while(list->head != list->tail)
+	
+	while(iter != list->tail)
 	{	
-		list->head = list->head->next;
+		temp = iter;
+		iter = SllNext(iter);
 		free(temp);
-		temp = list->head;
 	}
-	free(list->tail);
+	free(iter);
 	free(list);
 }
 

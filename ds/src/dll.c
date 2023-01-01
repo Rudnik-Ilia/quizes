@@ -45,7 +45,7 @@ dllist_t *DLLCreate(void)
 	if(NULL == dll)
 	{
 
-		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		LOGERROR("SORRY, NO MEMORY FOR YOU(dll)");
 		return NULL;
 	}
 
@@ -53,7 +53,7 @@ dllist_t *DLLCreate(void)
 	if(NULL == dll -> head)
 	{
 		free(dll);
-		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		LOGERROR("SORRY, NO MEMORY FOR YOU(dll)");
 		return NULL;
 	}
 
@@ -62,7 +62,7 @@ dllist_t *DLLCreate(void)
 	{
 		free(dll);
 		free(dll -> head);
-		LOGERROR("SORRY, NO MEMORY FOR YOU");
+		LOGERROR("SORRY, NO MEMORY FOR YOU(dll)");
 		return NULL;
 	}
 
