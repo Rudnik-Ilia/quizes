@@ -38,7 +38,6 @@ void Mirror(struct Node* root)
         return;
     }
     
-
     Mirror(root->left);
     Mirror(root->right);
 
