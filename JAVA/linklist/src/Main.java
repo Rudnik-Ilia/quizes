@@ -1,35 +1,35 @@
+import org.opentest4j.AssertionFailedError;
+
 public class Main {
     public static void main(String[] args) {
 
         SLList slList = new SLList();
+        TestClass test = new TestClass();
 
-        System.out.println("ISEMPTY: " + slList.isEmpty());
-        System.out.println("SIZE: " + slList.size());
+        test.testSize(slList.size(), 0);
+        test.testEmpty(slList.isEmpty(), true);
 
         slList.pushFront(1);
-        System.out.println("HasNEXT: " + slList.begin().hasNext());
-        System.out.println("NEXT: " + slList.begin().next());
-
         slList.pushFront(2);
-        System.out.println("NEXT: " + slList.begin().next());
         slList.pushFront(3);
 
-        System.out.println("ISEMPTY: " + slList.isEmpty());
-        System.out.println("SIZE: " + slList.size());
+        test.testSize(slList.size(), 3);
+        test.testEmpty(slList.isEmpty(), false);
 
-//        System.out.println("REMOVED DATA: " + slList.popFront());
-//        System.out.println("REMOVED DATA: " + slList.popFront());
-//        System.out.println("REMOVED DATA: " + slList.popFront());
-//
-//        System.out.println("ISEMPTY: " + slList.isEmpty());
-//        System.out.println("SIZE: " + slList.size());
+        test.testFind(slList.find(3).next(), 2);
+        test.testFind(slList.find(2).next(), 1);
+        test.testFind(slList.find(1).next(), null);
 
-        System.out.println("HasNEXT: " + slList.begin().hasNext());
+        test.testRemove(slList.popFront(), 3);
+        test.testSize(slList.size(), 2);
 
-        slList.popFront();
-        System.out.println(slList.find(3).next());
-        System.out.println(slList.find(2).next());
-        System.out.println(slList.find(1).next());
+        test.testRemove(slList.popFront(), 2);
+        test.testSize(slList.size(), 1);
+
+        test.testRemove(slList.popFront(), 1);
+        test.testSize(slList.size(), 0);
+
+        test.testEmpty(slList.isEmpty(), true);
 
 
     }
