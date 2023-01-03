@@ -22,16 +22,12 @@ public class SLList {
         if(this.isEmpty()){
             return null;
         }
-        Node tmp = this.head;
         Object data = this.head.data;
-        this.head = tmp.next;
-        tmp = null;
-
+        this.head = this.head.next;
         return data;
     }
 
     public int size(){
-
         Node tmp = this.head;
         int count = 0;
 
@@ -44,7 +40,8 @@ public class SLList {
     }
 
     public boolean isEmpty(){
-        return !(this.size() > 0);
+
+        return (this.head == null);
     }
 
     public IterImp find(Object data){
