@@ -16,7 +16,8 @@ public class IterImp implements Iter{
     public Object next() {
 
         if(this.hasNext()){
-            return this.node.next.data;
+            this.node = node.next;
+            return this.node.data;
         }
         return null;
 

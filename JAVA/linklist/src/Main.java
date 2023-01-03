@@ -30,7 +30,5 @@ public class Main {
         test.testSize(slList.size(), 0);
 
         test.testEmpty(slList.isEmpty(), true);
-
-
     }
 }
