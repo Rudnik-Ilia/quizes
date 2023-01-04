@@ -31,7 +31,11 @@ public class TestClass {
     @Test
     public void TestEqual(){
         Assertions.assertEquals(num, numSame);
+    }
 
+    @Test
+    public void TestMath(){
+        System.out.println(sum);
     }
 
 

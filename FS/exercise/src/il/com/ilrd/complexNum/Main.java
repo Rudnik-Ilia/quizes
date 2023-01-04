@@ -1,5 +1,7 @@
 package il.com.ilrd.complexNum;
 
+import org.junit.Before;
+
 public class Main {
     public static void main(String[] args) {
         ComplexNum num1 = new ComplexNum(2.3, 6);
@@ -27,6 +29,24 @@ public class Main {
 
         System.out.println(num8);
 
+        double a = 1.5;
+        double b = 5.5;
+        double c = -7.5;
+
+        ComplexNum num;
+        ComplexNum num_1;
+        ComplexNum numSame;
+        ComplexNum sum;
+        ComplexNum div;
+
+        num = new ComplexNum(a,b);
+        numSame = new ComplexNum(a,b);
+        num_1 = new ComplexNum(b,c);
+
+        sum = num.add(num_1);
+        div = num1.sub(num);
+
+        System.out.println(sum);
 
 
 

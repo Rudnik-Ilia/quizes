@@ -100,14 +100,14 @@ public class ComplexNum implements Comparable{
     {
         Matcher matcher = Pattern.compile("(\\-?\\d+\\.\\d+)?\\s*([+\\-]?)\\s*(\\d+\\.\\d+)i").matcher(str);
 
-        if (!matcher.find()){
-            return null;
+        if (matcher.matches()){
+            String real = matcher.group(1);
+            String oper  = matcher.group(2);
+            String imag = matcher.group(3);
+            return new ComplexNum(real == null ? 0.0 : Double.parseDouble(real), Double.parseDouble(oper + imag));
+        }else {
+            throw new NumberFormatException("WRONG FORMAT STRING");
         }
-        String real = matcher.group(1);
-        String oper  = matcher.group(2);
-        String imag = matcher.group(3);
-
-        return new ComplexNum(real == null ? 0.0 : Double.parseDouble(real), Double.parseDouble(oper + imag));
     }
 
     public boolean isReal(){
