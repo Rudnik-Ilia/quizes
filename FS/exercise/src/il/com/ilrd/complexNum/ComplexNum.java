@@ -1,6 +1,8 @@
 package il.com.ilrd.complexNum;
 
 import com.sun.xml.internal.ws.message.stream.StreamHeader;
+
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -68,43 +70,72 @@ public class ComplexNum implements Comparable{
         }else {
             throw new ClassCastException("BAD IDEA");
         }
-        System.out.println("RESULT:" + res);
         if(res > 0){
             f = 1;
         }
         else if (res < 0){
             f = -1;
-        }else {
-            f = 0;
         }
         return f;
     }
 
     @Override
     public boolean equals(Object other){
+        if(other == this){
+            return true;
+        }
         if(ComplexNum.check(other)){
-                return (this.real == ((ComplexNum) other).real && this.image == ((ComplexNum) other).image);
+                ComplexNum num = (ComplexNum) other;
+                return Double.compare(num.real, this.real) == 0 && Double.compare(num.image, this.image) == 0;
             }
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(real, image);
+    }
+
+//    public static ComplexNum parse(String str)
+//    {
+//        String regex = "^([-+]?\\d*\\.?\\d*)\\s?[+-]([-+]?\\s?\\d*\\.?\\d*)i$";
+//
+//        Pattern pattern = Pattern.compile(regex);
+//        Matcher matcher = pattern.matcher(str);
+//
+//        if (matcher.matches())
+//        {
+//            System.out.println("MATCH"+matcher.group(1));
+//            double x = matcher.group(1) == null ? 0 : Double.parseDouble(matcher.group(1));
+//            double y = Double.parseDouble(matcher.group(2));
+//            return new ComplexNum(x, y);
+//        }
+//        else
+//        {
+//            throw new NumberFormatException("TRY AGAIN WITH YOUR STRING" + str);
+//        }
+//    }
     public static ComplexNum parse(String str)
     {
-        String regex = "^([-+]?\\d*\\.?\\d*)\\s?[+-]([-+]?\\s?\\d*\\.?\\d*)i$";
+        ComplexNum num = new ComplexNum();
 
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile("(\\-?\\d+\\.\\d+)?\\s*([+\\-]?)\\s*(\\d+\\.\\d+)i") ;
         Matcher matcher = pattern.matcher(str);
 
-        if (matcher.matches())
-        {
-            double x = Double.parseDouble(matcher.group(1));
-            double y = Double.parseDouble(matcher.group(2));
-            return new ComplexNum(x, y);
+        if (!matcher.find()){
+            return null;
         }
-        else
-        {
-            throw new NumberFormatException("TRY AGAIN WITH YOUR STRING" + str);
+
+        String real = matcher.group(1);
+        String oper  = matcher.group(2);
+        String imag = matcher.group(3);
+
+        if (real != null){
+            num.real = Double.parseDouble(real);
         }
+        num.image = Double.parseDouble(oper + imag);
+
+        return num;
     }
 
     public boolean isReal(){
@@ -114,8 +145,5 @@ public class ComplexNum implements Comparable{
     public boolean isImaginary(){
         return this.image == 0;
     }
-
-
-
     
 }
