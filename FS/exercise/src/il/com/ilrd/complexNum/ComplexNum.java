@@ -40,7 +40,7 @@ public class ComplexNum implements Comparable{
     @Override
     public String toString() {
         String pos = this.image >= 0 ? "+" : "";
-        return "ComplexNum: "+ String.format("%.1f", this.real)  + pos + String.format("%.1f", this.image) + "i";
+        return "ComplexNum: "+ String.format("%.2f", this.real)  + pos + String.format("%.2f", this.image) + "i";
     }
 
     public ComplexNum add(ComplexNum other){
@@ -60,27 +60,38 @@ public class ComplexNum implements Comparable{
 
     @Override
     public int compareTo(Object other) {
-        int res = 0;
+        double res = 0;
+        int f = 0;
         if(ComplexNum.check(other)){
             ComplexNum tmp = (ComplexNum)other;
-            res = (int)(100*this.magnitude()/100.0f  - Math.floor(100*tmp.magnitude()/100.0f));
+            res = (this.magnitude() - tmp.magnitude());
         }else {
             throw new ClassCastException("BAD IDEA");
         }
-        return res;
+        System.out.println("RESULT:" + res);
+        if(res > 0){
+            f = 1;
+        }
+        else if (res < 0){
+            f = -1;
+        }else {
+            f = 0;
+        }
+        return f;
     }
 
     @Override
     public boolean equals(Object other){
         if(ComplexNum.check(other)){
-                return (this.real == ((ComplexNum) other).real && this.image == ((ComplexNum) other).real);
+                return (this.real == ((ComplexNum) other).real && this.image == ((ComplexNum) other).image);
             }
         return false;
     }
 
     public static ComplexNum parse(String str)
     {
-        String regex = "^([-+]?\\d*\\.?\\d*)[+-]([-+]?\\d*\\.?\\d*)i$";
+        String regex = "^([-+]?\\d*\\.?\\d*)\\s?[+-]([-+]?\\s?\\d*\\.?\\d*)i$";
+
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
 
@@ -92,8 +103,19 @@ public class ComplexNum implements Comparable{
         }
         else
         {
-            throw new NumberFormatException("TRY AGAINI WITH YOUR STRING" + str);
+            throw new NumberFormatException("TRY AGAIN WITH YOUR STRING" + str);
         }
     }
 
+    public boolean isReal(){
+        return this.real == 0;
+    }
+
+    public boolean isImaginary(){
+        return this.image == 0;
+    }
+
+
+
+    
 }

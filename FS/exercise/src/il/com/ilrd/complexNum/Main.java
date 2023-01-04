@@ -7,7 +7,6 @@ public class Main {
         ComplexNum num4 = new ComplexNum(2.3, 6);
         String ex = "ilia";
 
-
         System.out.println(num1);
         System.out.println(num2);
         ComplexNum num3 = num2.add(num1);
@@ -18,7 +17,14 @@ public class Main {
         System.out.println(num2.magnitude());
         System.out.println(num3.magnitude());
         System.out.println(num4.magnitude());
-        System.out.println(num4.compareTo(ex));
+        System.out.println(num4.compareTo(num1));
+        System.out.println(num4.equals(num1));
+
+        ComplexNum num5 = ComplexNum.parse("1.2-9.5i");
+        ComplexNum num6 = ComplexNum.parse("9.2777777+ 7.5i");
+        ComplexNum num7 = ComplexNum.parse("1.2- 3.5777777i");
+
+
 
     }
 }
