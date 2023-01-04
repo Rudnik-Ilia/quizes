@@ -25,7 +25,7 @@ public class Main {
         ComplexNum num5 = ComplexNum.parse("1.2-9.5i");
         ComplexNum num6 = ComplexNum.parse("9.2777777+ 7.5i");
         ComplexNum num7 = ComplexNum.parse("1.2- 3.5777777i");
-        ComplexNum num8 = ComplexNum.parse("-3.5777777i");
+        ComplexNum num8 = ComplexNum.parse("12.0-111113.5777777i");
 
         System.out.println(num8);
 
