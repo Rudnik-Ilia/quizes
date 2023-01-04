@@ -52,7 +52,7 @@ public class ComplexNum implements Comparable{
         return new ComplexNum(this.real - other.real, this.image - other.image);
     }
 
-    private  ComplexNum mul(ComplexNum other) {
+    public   ComplexNum multi(ComplexNum other) {
         return new ComplexNum((this.real * other.real) - (this.image * other.image), (this.image * other.real) + (this.real * other.image));
     }
 
@@ -98,7 +98,7 @@ public class ComplexNum implements Comparable{
 
     public static ComplexNum parse(String str)
     {
-        Matcher matcher = Pattern.compile("(-?\\d+\\.?\\d+)?\\s?([+\\-]?)\\s?(\\d+\\.?\\d+)i").matcher(str);
+        Matcher matcher = Pattern.compile("(-?\\d+\\.\\d+)?\\s?([+\\-]?)\\s?(\\d+\\.\\d+)i").matcher(str);
 
         if (matcher.matches()){
             String real = matcher.group(1);
@@ -111,11 +111,11 @@ public class ComplexNum implements Comparable{
     }
 
     public boolean isReal(){
-        return this.real == 0;
+        return this.real != 0;
     }
 
     public boolean isImaginary(){
-        return this.image == 0;
+        return this.real == 0 && this.image != 0;
     }
     
 }
