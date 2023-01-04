@@ -96,46 +96,18 @@ public class ComplexNum implements Comparable{
         return Objects.hash(real, image);
     }
 
-//    public static ComplexNum parse(String str)
-//    {
-//        String regex = "^([-+]?\\d*\\.?\\d*)\\s?[+-]([-+]?\\s?\\d*\\.?\\d*)i$";
-//
-//        Pattern pattern = Pattern.compile(regex);
-//        Matcher matcher = pattern.matcher(str);
-//
-//        if (matcher.matches())
-//        {
-//            System.out.println("MATCH"+matcher.group(1));
-//            double x = matcher.group(1) == null ? 0 : Double.parseDouble(matcher.group(1));
-//            double y = Double.parseDouble(matcher.group(2));
-//            return new ComplexNum(x, y);
-//        }
-//        else
-//        {
-//            throw new NumberFormatException("TRY AGAIN WITH YOUR STRING" + str);
-//        }
-//    }
     public static ComplexNum parse(String str)
     {
-        ComplexNum num = new ComplexNum();
-
-        Pattern pattern = Pattern.compile("(\\-?\\d+\\.\\d+)?\\s*([+\\-]?)\\s*(\\d+\\.\\d+)i") ;
-        Matcher matcher = pattern.matcher(str);
+        Matcher matcher = Pattern.compile("(\\-?\\d+\\.\\d+)?\\s*([+\\-]?)\\s*(\\d+\\.\\d+)i").matcher(str);
 
         if (!matcher.find()){
             return null;
         }
-
         String real = matcher.group(1);
         String oper  = matcher.group(2);
         String imag = matcher.group(3);
 
-        if (real != null){
-            num.real = Double.parseDouble(real);
-        }
-        num.image = Double.parseDouble(oper + imag);
-
-        return num;
+        return new ComplexNum(real == null ? 0.0 : Double.parseDouble(real), Double.parseDouble(oper + imag));
     }
 
     public boolean isReal(){
