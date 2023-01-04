@@ -25,28 +25,12 @@ public class Main {
         ComplexNum num5 = ComplexNum.parse("1.2-9.5i");
         ComplexNum num6 = ComplexNum.parse("9.2777777+ 7.5i");
         ComplexNum num7 = ComplexNum.parse("1.2- 3.5777777i");
-        ComplexNum num8 = ComplexNum.parse("12.0-111113.5777777i");
+        ComplexNum num8 = ComplexNum.parse("10.0-14i");
 
         System.out.println(num8);
 
-        double a = 1.5;
-        double b = 5.5;
-        double c = -7.5;
-
-        ComplexNum num;
-        ComplexNum num_1;
-        ComplexNum numSame;
-        ComplexNum sum;
-        ComplexNum div;
-
-        num = new ComplexNum(a,b);
-        numSame = new ComplexNum(a,b);
-        num_1 = new ComplexNum(b,c);
-
-        sum = num.add(num_1);
-        div = num1.sub(num);
-
-        System.out.println(sum);
+        System.out.println(num8.getReal());
+        System.out.println(num8.getImage());
 
 
 
