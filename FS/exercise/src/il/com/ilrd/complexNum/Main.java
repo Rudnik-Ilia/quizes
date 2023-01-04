@@ -5,7 +5,7 @@ public class Main {
         ComplexNum num1 = new ComplexNum(2.3, 6);
         ComplexNum num2 = new ComplexNum(-7, -13.3);
         ComplexNum num4 = new ComplexNum(2.3, 6);
-
+        String ex = "ilia";
 
 
         System.out.println(num1);
@@ -17,7 +17,8 @@ public class Main {
         System.out.println(num1.magnitude());
         System.out.println(num2.magnitude());
         System.out.println(num3.magnitude());
-        System.out.println(Math.floor(100*num4.magnitude())/100.0f);
-        System.out.println(Math.floor(100*num4.magnitude())/100.0f == Math.floor(100*num1.magnitude())/100.0f);
+        System.out.println(num4.magnitude());
+        System.out.println(num4.compareTo(ex));
+
     }
 }
