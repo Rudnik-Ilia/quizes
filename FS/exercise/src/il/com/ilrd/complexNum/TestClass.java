@@ -78,7 +78,7 @@ public class TestClass {
         Assert.assertEquals(-5, result.getReal(), DELTA);
         Assert.assertEquals(-1, result.getImage(), DELTA);
 
-        // -> Div
+
     }
 
     @Test
@@ -125,10 +125,16 @@ public class TestClass {
         Assert.assertEquals(0, numParsedImagOnly.getReal(), DELTA);
         Assert.assertEquals(-14, numParsedImagOnly.getImage(), DELTA);
 
-        //Imag Only
+
         ComplexNum numParsedImagOnly2 = ComplexNum.parse("10000.0i");
         Assert.assertEquals(0, numParsedImagOnly2.getReal(), DELTA);
         Assert.assertEquals(10000, numParsedImagOnly2.getImage(), DELTA);
+
+        ComplexNum numParsedImagOnly3 = ComplexNum.parse("-10i");
+
+        Assert.assertEquals(-10, numParsedImagOnly3.getImage(), DELTA);
+
+
     }
 }
 

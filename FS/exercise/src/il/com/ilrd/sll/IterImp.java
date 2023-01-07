@@ -1,16 +1,14 @@
 package il.com.ilrd.sll;
 
 public class IterImp implements Iter{
+    private SLList.Node node;
 
-    private Node node;
-
-    public IterImp(Node node) {
+    public IterImp(SLList.Node node) {
         this.node = node;
     }
 
     @Override
     public boolean hasNext() {
-
         return !(this.node.next == null);
     }
 

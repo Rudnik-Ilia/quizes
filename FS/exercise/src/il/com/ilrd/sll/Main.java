@@ -1,6 +1,11 @@
-package il.com.ilrd.sll;
+/**********************
+ * Title : SLList
+ * Author: Ilia Rudnik
+ * Reviewer: Kate
+ * Date : 3/01/2023
+ ***********************/
 
-import org.opentest4j.AssertionFailedError;
+package il.com.ilrd.sll;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,4 +38,5 @@ public class Main {
 
         test.testEmpty(slList.isEmpty(), true);
     }
+
 }

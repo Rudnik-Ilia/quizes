@@ -1,6 +1,12 @@
-package il.com.ilrd.complexNum;
+/**********************
+ * Title : Complexnum
+ * Author: Ilia Rudnik
+ * Reviewer: Alena
+ * Date : 06/01/2023
+ ***********************/
 
-import com.sun.xml.internal.ws.message.stream.StreamHeader;
+
+package il.com.ilrd.complexNum;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -93,7 +99,7 @@ public class ComplexNum implements Comparable{
 
     @Override
     public int hashCode() {
-        return Objects.hash(real, image);
+        return Objects.hash(this.real, this.image);
     }
 
     public static ComplexNum parse(String str)
@@ -109,13 +115,34 @@ public class ComplexNum implements Comparable{
             throw new NumberFormatException("WRONG FORMAT STRING, USE THIS 0.0");
         }
     }
+//    public static ComplexNum parse(String str) {
+//
+//        double real = 0;
+//        double img = 0;
+//
+//        Pattern img_pat = Pattern.compile("(-?\\s*(\\d+\\.\\d+)|(\\d+))i");
+//        Pattern real_pat = Pattern.compile("(-?(\\d+\\.\\d+)|(\\d+))(?![i.\\d])");
+//        Matcher img_mat = img_pat.matcher(str);
+//        Matcher real_mat = real_pat.matcher(str);
+//
+//        if (img_mat.find()) {
+//            img = Double.parseDouble(img_mat.group(1).replaceAll("\\s+",""));
+//        }
+//
+//        if (real_mat.find()) {
+//            real = Double.parseDouble(real_mat.group(1));
+//        }
+//
+//        return new ComplexNum(real, img);
+//    }
+
 
     public boolean isReal(){
-        return this.real != 0;
+        return this.getReal() != 0;
     }
 
     public boolean isImaginary(){
-        return this.real == 0 && this.image != 0;
+        return this.getReal() == 0 && this.getImage() != 0;
     }
     
 }

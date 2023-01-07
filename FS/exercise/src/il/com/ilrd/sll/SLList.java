@@ -3,25 +3,21 @@ package il.com.ilrd.sll;
 public class SLList {
     private Node head;
 
-    public void pushFront(Object data){
+    static class Node {
+        Object data;
+        Node next;
 
-        Node newNode;
-
-        if(this.head == null){
-            newNode = new Node(data);
-            this.head = newNode;
-        }
-        else{
-            Node tmp = this.head;
-            newNode = new Node(data, tmp);
-            this.head = newNode;
+        public Node(Object data, Node next) {
+            this.data = data;
+            this.next = next;
         }
     }
 
+    public void pushFront(Object data){
+        this.head = new Node(data, this.head);;
+    }
+
     public Object popFront(){
-        if(this.isEmpty()){
-            return null;
-        }
         Object data = this.head.data;
         this.head = this.head.next;
         return data;
@@ -35,12 +31,10 @@ public class SLList {
             ++count;
             tmp = tmp.next;
         }
-
         return count;
     }
 
     public boolean isEmpty(){
-
         return (this.head == null);
     }
 
