@@ -9,7 +9,13 @@ public enum Week {
     SATURDAY,
     SUNDAY;
 
-    int x;
+    public int getInt(){
+        return Week.this.ordinal();
+    }
+
+    public static Week fromValue(int x){
+        return Week.values()[x];
+    }
 
     public static void Show(){
         for (Week x: Week.values()){
