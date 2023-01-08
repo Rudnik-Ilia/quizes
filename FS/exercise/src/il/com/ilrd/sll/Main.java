@@ -1,9 +1,4 @@
-/**********************
- * Title : SLList
- * Author: Ilia Rudnik
- * Reviewer: Kate
- * Date : 3/01/2023
- ***********************/
+
 
 package il.com.ilrd.sll;
 
