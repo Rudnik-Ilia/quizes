@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 public class ComplexNum implements Comparable{
     private double real;
     private double image;
+    private static final Pattern COMPLEX = Pattern.compile("(-?\\d+\\.\\d+)?\\s?([+\\-]?)\\s?(\\d+\\.\\d+)i");
 
     public ComplexNum() {
     }
@@ -104,7 +105,7 @@ public class ComplexNum implements Comparable{
 
     public static ComplexNum parse(String str)
     {
-        Matcher matcher = Pattern.compile("(-?\\d+\\.\\d+)?\\s?([+\\-]?)\\s?(\\d+\\.\\d+)i").matcher(str);
+        Matcher matcher = COMPLEX.matcher(str);
 
         if (matcher.matches()){
             String real = matcher.group(1);
@@ -115,26 +116,7 @@ public class ComplexNum implements Comparable{
             throw new NumberFormatException("WRONG FORMAT STRING, USE THIS 0.0");
         }
     }
-//    public static ComplexNum parse(String str) {
-//
-//        double real = 0;
-//        double img = 0;
-//
-//        Pattern img_pat = Pattern.compile("(-?\\s*(\\d+\\.\\d+)|(\\d+))i");
-//        Pattern real_pat = Pattern.compile("(-?(\\d+\\.\\d+)|(\\d+))(?![i.\\d])");
-//        Matcher img_mat = img_pat.matcher(str);
-//        Matcher real_mat = real_pat.matcher(str);
-//
-//        if (img_mat.find()) {
-//            img = Double.parseDouble(img_mat.group(1).replaceAll("\\s+",""));
-//        }
-//
-//        if (real_mat.find()) {
-//            real = Double.parseDouble(real_mat.group(1));
-//        }
-//
-//        return new ComplexNum(real, img);
-//    }
+
 
 
     public boolean isReal(){

@@ -11,12 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WeekTest {
 
-
     Week one = MONDAY;
     Week two = TUESDAY;
     Week three = WENSDAY;
-
-
 
     @Test
     void getInt() {
@@ -24,6 +21,7 @@ class WeekTest {
         Assert.assertEquals(two.getInt(), 1);
         Assert.assertEquals(three.getInt(), 2);
     }
+
 
     @Test
     void fromValue() {
