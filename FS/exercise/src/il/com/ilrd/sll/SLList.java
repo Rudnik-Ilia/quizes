@@ -22,7 +22,7 @@ public class SLList {
     public void pushFront(Object data){
         this.head = new Node(data, this.head);;
     }
-
+//inintemsional object retension?
     public Object popFront(){
         Object data = this.head.data;
         this.head = this.head.next;

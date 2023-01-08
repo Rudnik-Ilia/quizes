@@ -4,8 +4,6 @@
  * Reviewer: Alena
  * Date : 06/01/2023
  ***********************/
-
-
 package il.com.ilrd.complexNum;
 
 import java.util.Objects;
