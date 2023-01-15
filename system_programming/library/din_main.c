@@ -12,7 +12,7 @@ void invoke_method(char *lib, char *method, int argument)
   int (*func)(int);
   char *error;
 
-  /* Open the shared object */
+  
   dl_handle = dlopen(lib, RTLD_LAZY);
   if (!dl_handle) {
     printf( "1 %s\n", dlerror() );
