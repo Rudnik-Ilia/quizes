@@ -10,3 +10,5 @@
 !makefileUser
 !makefileDog
 !*.java
+!*.cpp
+!*.hpp
