@@ -9,8 +9,8 @@ namespace ilrd
     {
     public:
         explicit String(const char *str = "");        
-        explicit String(const String &);        
-        String &operator=(const String &);       
+        explicit String(const String&);        
+        String &operator=(const String&);       
         
         ~String();                              
     
@@ -20,5 +20,12 @@ namespace ilrd
     private:                        
         char *m_str;                             
     };
-}    
+
+    bool operator==(const String& x, const String& y);
+    bool operator>(const String& one, const String& two);
+    bool operator<(const String& one, const String& two);
+} 
+
+
+
 #endif /* _ILRD_RD132_STRING_HPP_ */

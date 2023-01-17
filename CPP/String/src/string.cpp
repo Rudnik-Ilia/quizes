@@ -10,7 +10,8 @@
 #include <cstring> 
 #include "string.hpp"
 
-using namespace ilrd;
+namespace ilrd
+{
 
 String::String(const char *str): m_str(new char[strlen(str) + 1]) 
 {
@@ -45,7 +46,29 @@ String &String::operator=(const String &other)
     memcpy(m_str, other.m_str, strlen(other.m_str) + 1);
     return *this;
 }
-// SECOND VRIANT---------------------------------------------------------------------------------
+
+bool operator==(const String& x, const String& y)
+{
+    return strcmp(x.Cstr(), y.Cstr()) == 0;
+}
+
+bool operator<(const String& one, const String& two)
+{
+	return (strcmp(one.Cstr(), two.Cstr()) < 0);
+}
+
+bool operator>(const String& one, const String& two)
+{
+	return (strcmp(one.Cstr(), two.Cstr()) > 0);
+}
+}
+// ostream& operator<<(ostream& os_, const ilrd::String& string_)
+// {
+// 	return os_ << string_.Cstr();
+// }
+
+
+// SECOND VARIANT---------------------------------------------------------------------------------
 
 // String::String(const char *str): m_str(strdup(str)) 
 // {
