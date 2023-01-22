@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath> 
+#include <exception> 
 #include "complex.hpp"
 
 
@@ -41,7 +42,21 @@ inline ComplexNum& ComplexNum::operator*=(const ComplexNum& other)
 }
 
 inline ComplexNum& ComplexNum::operator/=(const ComplexNum& other)
-{
+{   
+    double new_real = (this->m_real * other.m_real + this->m_imag * other.m_imag);
+    double r_d =  pow(other.m_real, 2) + pow(other.m_imag, 2);
+
+    double new_imag = (this->m_imag * other.m_real - this->m_real * other.m_imag);
+    double i_d = pow(other.m_real, 2) + pow(other.m_imag, 2);
+
+    if(r_d == 0 || i_d == 0)
+    {
+        throw std::logic_error("ZERO DIVISION, SORRY, TRY IT LATER!");
+    }
+
+    this->m_real = new_real / r_d;
+    this->m_imag = new_imag / i_d;
+
     return *this;
 }
 
@@ -59,7 +74,7 @@ inline ComplexNum operator*(const ComplexNum &lhs_, const ComplexNum &rhs_)
 }
 inline ComplexNum operator/(const ComplexNum &lhs_, const ComplexNum &rhs_)
 {
-
+    return ComplexNum(lhs_) /= rhs_;
 }
 inline bool operator==(const ComplexNum &lhs_, const ComplexNum &rhs_)
 {
@@ -76,7 +91,17 @@ inline std::ostream &operator<<(std::ostream &os_, const ComplexNum &rhs_)
     return os_;
 }
 
+inline std::istream &operator>>(std::istream &is_, ComplexNum &rhs_)
+{
+    double real, imag;
+    is_ >> real; 
+    is_ >> imag; 
 
+    rhs_.SetReal(real);
+    rhs_.SetImag(imag);
+    
+    return is_;
+}
 
 
 }

@@ -44,7 +44,7 @@ namespace ilrd
 
         // // stream
         inline std::ostream &operator<<(std::ostream &os_, const ComplexNum &rhs_);
-        // inline std::istream &operator>>(std::istream &is_, ComplexNum &rhs_);
+        inline std::istream &operator>>(std::istream &is_, ComplexNum &rhs_);
 } // end namespace ilrd
 
 
