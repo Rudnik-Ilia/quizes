@@ -9,6 +9,8 @@ int main()
 {
     ComplexNum x0(0.0, 0.0);
     ComplexNum x1(9.9, 3.14);
+    ComplexNum x1d(9.9, 3.14);
+    ComplexNum x2d(9.9, 3.14);
     ComplexNum x11(9.9, -3.14);
     ComplexNum x3(10.15, 30.20);
     ComplexNum x4 = x1 + x3;
@@ -41,18 +43,35 @@ int main()
     std::cout << x4 << std::endl;
     std::cout << x11 << std::endl;
 
+    ComplexNum x6 = x3;
+
+
     try
     {
         // x1/=x0; by zero
-        x1/=x11;
+        x3/=x11;
+        
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
-    
+    ComplexNum x7 = x6/x11;
 
-    std::cout << x1 << std::endl;
+    TEST("test1",  (x3 == x7) , 1);
+
+
+
+    std::cout << x1d << " * " << x11 << " = " << (x1d*=x11) << std::endl;
+    std::cout << x2d << " * " << x11 << " = " << std::endl;
+    ComplexNum x5 = x2d*x11;
+    std::cout << x5 << std::endl;
+
+    TEST("test1",  (x1d == x5) , 1);
+
+
+
+
 
 
 

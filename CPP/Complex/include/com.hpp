@@ -5,8 +5,6 @@
 #include <exception> 
 #include "complex.hpp"
 
-
-
 namespace ilrd
 {
 
