@@ -5,6 +5,7 @@
 namespace ilrd
 {
 
+
 RCString::RCS* RCString::Init(const char *str_)
 {
     std::size_t size = std::strlen(str_) + 1;
