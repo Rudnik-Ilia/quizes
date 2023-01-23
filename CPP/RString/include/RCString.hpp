@@ -7,7 +7,6 @@
 
 namespace ilrd
 {
-
     class RCString
     {
     private:
@@ -47,17 +46,10 @@ namespace ilrd
             char m_str[1];
         }; 
 
-
-
         RCS * m_struct;
         static RCString s_empty_string;
 
         static RCS *Init(const char *str_);
-
-        static void Show(RCS *ptr)
-        {
-            std::cout << ptr->m_count << ' ' << ptr->m_str << std::endl;
-        }
     }; 
     
     RCString RCString::s_empty_string(" ");
@@ -73,21 +65,20 @@ namespace ilrd
             inline operator char() const;
 
         private:
-        RCString& str;
-
-        std::size_t pos;
+            RCString& str;
+            std::size_t pos;
     };
 
 
 inline RCString::RCString(const char *s_): m_struct(Init(s_))
 { 
-    Show(m_struct);
+    // Show(m_struct);
 }
 
 inline RCString::RCString(const RCString &other_): m_struct(other_.m_struct)
 {
     ++(m_struct->m_count);
-    Show(m_struct);
+    // Show(m_struct);
 }
 
 inline RCString& RCString::operator=(const RCString &other_)
@@ -109,7 +100,7 @@ inline RCString& RCString::operator=(const RCString &other_)
         delete m_struct;
         m_struct = NULL;
     } 
-    Show(m_struct);
+    // Show(m_struct);
     return *this;
 }
 
@@ -132,7 +123,15 @@ inline bool RCString::operator!=(const RCString &rhs_)
     return !(*this == rhs_);
 }
 
+inline bool RCString::operator>(const RCString &rhs_)
+{
+    return strcmp(m_struct->m_str, rhs_.m_struct->m_str) > 0;
+}
 
+inline bool RCString::operator<(const RCString &rhs_)
+{
+    return strcmp(m_struct->m_str, rhs_.m_struct->m_str) < 0;
+}
 
 /*****************************************************************************************/
 inline RCString::RCS* RCString::Init(const char *str_)
@@ -144,10 +143,6 @@ inline RCString::RCS* RCString::Init(const char *str_)
     
     return ptr;
 }
-
-
-
-
 
 } 
 

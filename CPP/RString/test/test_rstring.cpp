@@ -30,9 +30,16 @@ int main()
     str6->ShowAddr();
 
     str1.ShowCount();
+    str2.ShowCount();
 
     std::cout << (str1 == str2) << std::endl;
     std::cout << (str1 != str3) << std::endl;
+
+    RCString str0;
+    RCString str00;
+
+    str0.ShowAddr();
+    str00.ShowAddr();
     
 
     
