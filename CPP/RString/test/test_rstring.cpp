@@ -12,17 +12,12 @@ int main()
 
     RCString str("hello");
 
-    RCString *str6 = new RCString(str);
-   
     RCString str1(str);
     RCString str2(str1);
 
     RCString str3("hi");
     RCString str4(str3);
 
-
-
-    // RCString str5;
     str.ShowAddr();
     str1.ShowAddr();
     str2.ShowAddr();
@@ -30,10 +25,12 @@ int main()
     str3.ShowAddr();
     str4.ShowAddr();
 
-    str6->ShowAddr();
-
+    str.ShowCount();
     str1.ShowCount();
     str2.ShowCount();
+
+    str3.ShowCount();
+    str4.ShowCount();
 
     std::cout << (str1 == str2) << std::endl;
     std::cout << (str1 != str3) << std::endl;
@@ -46,20 +43,22 @@ int main()
     str00.ShowAddr();
     str000.ShowAddr();
 
-    std::cout << str[0] << std::endl;
+    str000.ShowCount();
 
-    // str1[0] = 'z';
+    std::cout << str[1] << std::endl;
+    std::cout << str3[1] << std::endl;
 
-    char s = str1[3];
+    char o = str1[4];
 
-    std::cout << s << std::endl;
+    std::cout << o << std::endl;
 
-    str1[1] = 'k';
-    std::cout << str << std::endl;
+    str3[0] = 'a';
+
+    std::cout << str3 << std::endl;
+
+    str1[0] = 'k';
     
-    // throw 1;
-
-    // free(*(void**)&str);
+    std::cout << str1 << std::endl;
 
     
 
