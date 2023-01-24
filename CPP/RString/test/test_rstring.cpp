@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "RCString.hpp"
 
 
@@ -11,6 +12,7 @@ int main()
 
     RCString str("hello");
     RCString *str6 = new RCString(str);
+   
     RCString str1(str);
     RCString str2(str1);
 
@@ -43,19 +45,27 @@ int main()
     str00.ShowAddr();
     str000.ShowAddr();
 
-    std::cout << str << std::endl;
+    std::cout << str[0] << std::endl;
 
     // str1[0] = 'z';
 
+    char s = str1[3];
+
+    std::cout << s << std::endl;
+
+    str1[1] = 'k';
+    std::cout << str << std::endl;
+    
+    throw 1;
+
+    // free(*(void**)&str);
+
+    
+
     
 
 
-    
-
-    
-
-
-
+   
     
 
     

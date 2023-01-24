@@ -4,6 +4,8 @@
 #include <ostream> // ostream
 #include <cstddef> // size_t
 #include <cstring> // strlen
+#include <exception> // throw
+#include <cstdlib>
 
 namespace ilrd
 {
@@ -18,7 +20,7 @@ namespace ilrd
         inline ~RCString();
 
 
-        // inline CharProxy& operator[](std::size_t index_);
+        inline CharProxy operator[](std::size_t index_);
 
         inline char operator[](std::size_t index_) const;
 
@@ -43,7 +45,7 @@ namespace ilrd
     private:
         struct RCS
         {
-            int m_count;
+            size_t m_count;
             char m_str[1];
         }; 
         RCS * m_struct;
@@ -54,31 +56,29 @@ namespace ilrd
     
     RCString RCString::s_empty_string(" ");
 
-    // class RCString::CharProxy
-    // {
-    //     public:
-    //         inline CharProxy(RCString &str, std::size_t pos);
-    //         inline CharProxy(const CharProxy &other_);
-    //         inline char &operator=(const CharProxy &rhs);
-    //         inline char &operator=(char c);
-    //         inline char *operator&(char c);
-    //         inline operator char() const;
+    class RCString::CharProxy
+    {
+        public:
+            inline CharProxy(RCString &str, std::size_t pos);
+            inline CharProxy(const CharProxy &other_);
+            inline RCString::CharProxy &operator=(const CharProxy &rhs);
+            inline RCString::CharProxy &operator=(char c);
+            inline char *operator&();
+            inline operator char() const;
 
-    //     private:
-    //         RCString& str;
-    //         std::size_t pos;
-    // };
+        private:
+            RCString& m_prox_str;
+            std::size_t m_pos;
+    };
 
 
 inline RCString::RCString(const char *s_): m_struct(Init(s_))
-{ 
-   
+{  
 }
 
 inline RCString::RCString(const RCString &other_): m_struct(other_.m_struct)
 {
     ++(m_struct->m_count);
-    
 }
 
 inline RCString& RCString::operator=(const RCString &other_)
@@ -107,8 +107,11 @@ inline RCString::~RCString()
 {
     if(--m_struct == 0)
     {
-        delete m_struct;
-        m_struct = NULL;
+        // delete[] m_struct->m_str;
+        // delete m_struct->m_count;
+        // delete m_struct;
+        // m_struct = NULL;
+        free(m_struct);
     }
 }
 
@@ -136,7 +139,7 @@ inline char RCString::operator[](std::size_t index_) const
 {
     if(index_ > strlen(m_struct->m_str))
     {
-        throw 1;
+        throw std::logic_error("CHECK THE SIZE!");
     }
     return *((m_struct->m_str)+ index_);
 }
@@ -146,11 +149,45 @@ inline std::ostream& operator<<(std::ostream& os, const RCString& str)
     return (os << str.m_struct->m_str);
 }
 
+inline RCString::CharProxy RCString::operator[](std::size_t index_)
+{
+    return RCString::CharProxy(*this, index_);
+}
+/*****************************************************************************************/
+inline RCString::CharProxy::CharProxy(RCString &str, std::size_t pos): m_prox_str(str), m_pos(pos)
+{ 
+}
+
+inline RCString::CharProxy::CharProxy(const CharProxy &other_): m_prox_str(other_.m_prox_str)
+{  
+}
+
+inline RCString::CharProxy::operator char() const
+{
+    return m_prox_str.m_struct->m_str[m_pos];
+}
+
+inline char *RCString::CharProxy::operator&()
+{
+    return &(m_prox_str.m_struct->m_str[m_pos]);
+}
+
+inline RCString::CharProxy &RCString::CharProxy::operator=(const CharProxy &rhs)
+{
+    return *this = char(rhs);
+}
+inline RCString::CharProxy &RCString::CharProxy::operator=(char c)
+{
+
+    m_prox_str.m_struct->m_str[m_pos] = c;
+    return *this;
+}
+
 /*****************************************************************************************/
 inline RCString::RCS* RCString::Init(const char *str_)
 {
-    std::size_t size = std::strlen(str_) + 1;
-    RCS *ptr = (RCS*)operator new(offsetof(RCS, m_str) + size);
+    size_t size = std::strlen(str_) + 1;
+    RCS *ptr = static_cast<RCS *>(operator new(offsetof(RCS, m_str) + size));
     ptr->m_count = 1;
     memcpy(ptr->m_str, str_, size);
     
