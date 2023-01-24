@@ -18,6 +18,7 @@ int main()
     RCString str3("hi");
     RCString str4(str3);
 
+ #ifndef NDEBUG
     str.ShowAddr();
     str1.ShowAddr();
     str2.ShowAddr();
@@ -32,19 +33,20 @@ int main()
     str3.ShowCount();
     str4.ShowCount();
 
+#endif 
     std::cout << (str1 == str2) << std::endl;
     std::cout << (str1 != str3) << std::endl;
 
     RCString str0;
     RCString str00;
     RCString str000;
-
+#ifndef NDEBUG
     str0.ShowAddr();
     str00.ShowAddr();
     str000.ShowAddr();
 
     str000.ShowCount();
-
+#endif 
     std::cout << str[1] << std::endl;
     std::cout << str3[1] << std::endl;
 
@@ -62,10 +64,10 @@ int main()
     // RCString str5("ilia");
     // str5[0] = str5[3];
     // std::cout << str5 << std::endl;
-
+#ifndef NDEBUG
     str.ShowCount();
     str1.ShowCount();
-
+#endif 
 
     return 0;
 }

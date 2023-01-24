@@ -4,7 +4,7 @@
 #include <ostream> // ostream
 #include <cstddef> // size_t
 #include <cstring> // strlen
-#include <exception> // throw
+#include <cassert>
 #include <cstdlib>
 
 namespace ilrd
@@ -72,9 +72,7 @@ namespace ilrd
     };
 
 
-inline RCString::RCString(const char *s_): m_struct(Init(s_))
-{  
-}
+inline RCString::RCString(const char *s_): m_struct(Init(s_)){}
 
 inline RCString::RCString(const RCString &other_): m_struct(other_.m_struct)
 {
@@ -86,7 +84,6 @@ inline RCString& RCString::operator=(const RCString &other_)
    
     m_struct = other_.m_struct;
     ++m_struct->m_count;
-
     // if (m_struct->m_count)
     // {
     //     --(m_struct->m_count);
@@ -96,7 +93,6 @@ inline RCString& RCString::operator=(const RCString &other_)
     //     delete(m_struct);
     //     m_struct = NULL;
     // } 
-
     Remove(m_struct);
     return *this;
 }
@@ -129,10 +125,8 @@ inline bool RCString::operator<(const RCString &rhs_)
 
 inline char RCString::operator[](std::size_t index_) const
 {
-    if(index_ > strlen(m_struct->m_str))
-    {
-        throw std::logic_error("CHECK THE SIZE!");
-    }
+    assert(index_ < strlen(m_struct->m_str));
+  
     return *((m_struct->m_str)+ index_);
 }
 
