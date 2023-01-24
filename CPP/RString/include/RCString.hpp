@@ -87,21 +87,24 @@ inline RCString& RCString::operator=(const RCString &other_)
     m_struct = other_.m_struct;
     ++m_struct->m_count;
 
-    if (m_struct->m_count)
-    {
-        --(m_struct->m_count);
-    }
-    else
-    {
-        delete(m_struct);
-        m_struct = NULL;
-    } 
+    // if (m_struct->m_count)
+    // {
+    //     --(m_struct->m_count);
+    // }
+    // else
+    // {
+    //     delete(m_struct);
+    //     m_struct = NULL;
+    // } 
+
+    Remove(m_struct);
     return *this;
 }
 
 inline RCString::~RCString()
 {
      Remove(m_struct);
+     m_struct = 0;
 }
 
 inline bool RCString::operator==(const RCString &rhs_)
@@ -143,13 +146,9 @@ inline RCString::CharProxy RCString::operator[](std::size_t index_)
     return RCString::CharProxy(*this, index_);
 }
 /*****************************************************************************************/
-inline RCString::CharProxy::CharProxy(RCString &str, std::size_t pos): m_prox_str(str), m_pos(pos)
-{ 
-}
+inline RCString::CharProxy::CharProxy(RCString &str, std::size_t pos): m_prox_str(str), m_pos(pos){}
 
-inline RCString::CharProxy::CharProxy(const CharProxy &other_): m_prox_str(other_.m_prox_str)
-{  
-}
+inline RCString::CharProxy::CharProxy(const CharProxy &other_): m_prox_str(other_.m_prox_str){}
 
 inline RCString::CharProxy::operator char() const
 {
@@ -167,9 +166,16 @@ inline RCString::CharProxy &RCString::CharProxy::operator=(const CharProxy &rhs)
 }
 inline RCString::CharProxy &RCString::CharProxy::operator=(char c)
 {
-
+    RCS* tmp1 = NULL;
+    if(m_prox_str.m_struct->m_count > 0)
+    {
+        tmp1 = Init(m_prox_str.m_struct->m_str);
+        Remove(m_prox_str.m_struct);
+        m_prox_str.m_struct = tmp1;
+    }
     m_prox_str.m_struct->m_str[m_pos] = c;
     return *this;
+
 }
 
 /*****************************************************************************************/

@@ -53,23 +53,18 @@ int main()
     std::cout << o << std::endl;
 
     str3[0] = 'a';
-
     std::cout << str3 << std::endl;
 
     str1[0] = 'k';
     
     std::cout << str1 << std::endl;
 
-    
+    // RCString str5("ilia");
+    // str5[0] = str5[3];
+    // std::cout << str5 << std::endl;
 
-    
-
-
-   
-    
-
-    
-
+    str.ShowCount();
+    str1.ShowCount();
 
 
     return 0;
