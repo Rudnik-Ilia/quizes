@@ -50,8 +50,8 @@ namespace ilrd
         }; 
         RCS * m_struct;
         static RCString s_empty_string;
-
         static RCS *Init(const char *str_);
+        static void Remove(RCS *staff);
     }; 
     
     RCString RCString::s_empty_string(" ");
@@ -105,14 +105,7 @@ inline RCString& RCString::operator=(const RCString &other_)
 
 inline RCString::~RCString()
 {
-    if(--m_struct == 0)
-    {
-        // delete[] m_struct->m_str;
-        // delete m_struct->m_count;
-        // delete m_struct;
-        // m_struct = NULL;
-        free(m_struct);
-    }
+     Remove(m_struct);
 }
 
 inline bool RCString::operator==(const RCString &rhs_)
@@ -192,6 +185,13 @@ inline RCString::RCS* RCString::Init(const char *str_)
     memcpy(ptr->m_str, str_, size);
     
     return ptr;
+}
+inline void RCString::Remove(RCS *staff)
+{
+    if(--staff->m_count == 0)
+    {
+        delete staff;
+    }
 }
 
 } 

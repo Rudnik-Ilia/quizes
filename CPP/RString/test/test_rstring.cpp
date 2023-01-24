@@ -56,7 +56,7 @@ int main()
     str1[1] = 'k';
     std::cout << str << std::endl;
     
-    throw 1;
+    // throw 1;
 
     // free(*(void**)&str);
 
