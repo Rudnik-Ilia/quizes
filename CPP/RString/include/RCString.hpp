@@ -18,7 +18,8 @@ namespace ilrd
         inline ~RCString();
 
 
-        inline CharProxy &operator[](std::size_t index_);
+        // inline CharProxy& operator[](std::size_t index_);
+
         inline char operator[](std::size_t index_) const;
 
         inline bool operator==(const RCString &rhs_);
@@ -45,7 +46,6 @@ namespace ilrd
             int m_count;
             char m_str[1];
         }; 
-
         RCS * m_struct;
         static RCString s_empty_string;
 
@@ -54,31 +54,31 @@ namespace ilrd
     
     RCString RCString::s_empty_string(" ");
 
-    class CharProxy
-    {
-        public:
-            inline CharProxy(RCString &str, std::size_t pos);
-            inline CharProxy(const CharProxy &other_);
-            inline char &operator=(const CharProxy &rhs);
-            inline char &operator=(char c);
-            inline char *operator&(char c);
-            inline operator char() const;
+    // class RCString::CharProxy
+    // {
+    //     public:
+    //         inline CharProxy(RCString &str, std::size_t pos);
+    //         inline CharProxy(const CharProxy &other_);
+    //         inline char &operator=(const CharProxy &rhs);
+    //         inline char &operator=(char c);
+    //         inline char *operator&(char c);
+    //         inline operator char() const;
 
-        private:
-            RCString& str;
-            std::size_t pos;
-    };
+    //     private:
+    //         RCString& str;
+    //         std::size_t pos;
+    // };
 
 
 inline RCString::RCString(const char *s_): m_struct(Init(s_))
 { 
-    // Show(m_struct);
+   
 }
 
 inline RCString::RCString(const RCString &other_): m_struct(other_.m_struct)
 {
     ++(m_struct->m_count);
-    // Show(m_struct);
+    
 }
 
 inline RCString& RCString::operator=(const RCString &other_)
@@ -100,7 +100,6 @@ inline RCString& RCString::operator=(const RCString &other_)
         delete m_struct;
         m_struct = NULL;
     } 
-    // Show(m_struct);
     return *this;
 }
 
@@ -131,6 +130,20 @@ inline bool RCString::operator>(const RCString &rhs_)
 inline bool RCString::operator<(const RCString &rhs_)
 {
     return strcmp(m_struct->m_str, rhs_.m_struct->m_str) < 0;
+}
+
+inline char RCString::operator[](std::size_t index_) const
+{
+    if(index_ > strlen(m_struct->m_str))
+    {
+        throw 1;
+    }
+    return *((m_struct->m_str)+ index_);
+}
+
+inline std::ostream& operator<<(std::ostream& os, const RCString& str)
+{
+    return (os << str.m_struct->m_str);
 }
 
 /*****************************************************************************************/

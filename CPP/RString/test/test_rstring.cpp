@@ -37,10 +37,18 @@ int main()
 
     RCString str0;
     RCString str00;
+    RCString str000;
 
     str0.ShowAddr();
     str00.ShowAddr();
+    str000.ShowAddr();
+
+    std::cout << str << std::endl;
+
+    // str1[0] = 'z';
+
     
+
 
     
 
