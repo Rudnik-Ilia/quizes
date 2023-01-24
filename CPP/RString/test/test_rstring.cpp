@@ -11,6 +11,7 @@ int main()
 {
 
     RCString str("hello");
+
     RCString *str6 = new RCString(str);
    
     RCString str1(str);

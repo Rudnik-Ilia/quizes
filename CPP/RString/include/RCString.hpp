@@ -84,10 +84,6 @@ inline RCString::RCString(const RCString &other_): m_struct(other_.m_struct)
 inline RCString& RCString::operator=(const RCString &other_)
 {
    
-    if(m_struct == other_.m_struct)
-    {
-        return *this;
-    }
     m_struct = other_.m_struct;
     ++m_struct->m_count;
 
@@ -97,7 +93,7 @@ inline RCString& RCString::operator=(const RCString &other_)
     }
     else
     {
-        delete m_struct;
+        delete(m_struct);
         m_struct = NULL;
     } 
     return *this;
@@ -190,7 +186,7 @@ inline void RCString::Remove(RCS *staff)
 {
     if(--staff->m_count == 0)
     {
-        delete staff;
+       delete(staff);
     }
 }
 
