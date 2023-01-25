@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "RCString.hpp"
+#include "test.h"
 
 
 using namespace ilrd;
@@ -9,7 +10,6 @@ using namespace ilrd;
 
 int main()
 {
-
     RCString str("hello");
 
     RCString str1(str);
@@ -17,6 +17,9 @@ int main()
 
     RCString str3("hi");
     RCString str4(str3);
+
+    TEST("test",(str1 == str2), 1);
+    TEST("test",(str1 != str3), 1);
 
  #ifndef NDEBUG
     str.ShowAddr();
@@ -32,11 +35,7 @@ int main()
 
     str3.ShowCount();
     str4.ShowCount();
-
 #endif 
-    std::cout << (str1 == str2) << std::endl;
-    std::cout << (str1 != str3) << std::endl;
-
     RCString str0;
     RCString str00;
     RCString str000;
@@ -47,19 +46,17 @@ int main()
 
     str000.ShowCount();
 #endif 
-    std::cout << str[1] << std::endl;
-    std::cout << str3[1] << std::endl;
 
-    char o = str1[4];
-
-    std::cout << o << std::endl;
+    TEST("test", str1[1] == 'e', 1);
+    TEST("test", str3[1] == 'i', 1);
+    TEST("test", str1[0] == str3[0], 1);
+    TEST("test", str1[4] == 'o', 1);
 
     str3[0] = 'a';
-    std::cout << str3 << std::endl;
+    TEST("test", str3[0] == 'a', 1);
 
     str1[0] = 'k';
-    
-    std::cout << str1 << std::endl;
+    TEST("test", str1[0] == 'k', 1);
 
     // RCString str5("ilia");
     // str5[0] = str5[3];
