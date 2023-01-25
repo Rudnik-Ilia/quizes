@@ -45,6 +45,10 @@ int main()
     str000.ShowAddr();
 
     str000.ShowCount();
+
+    str0.ShowAddr();
+    str00.ShowAddr();
+    str000.ShowAddr();
 #endif 
 
     TEST("test", str1[1] == 'e', 1);

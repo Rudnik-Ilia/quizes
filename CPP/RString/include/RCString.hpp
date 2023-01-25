@@ -69,6 +69,7 @@ namespace ilrd
         private:
             RCString& m_prox_str;
             std::size_t m_pos;
+            void Check();
     };
 
 
@@ -151,6 +152,7 @@ inline RCString::CharProxy::operator char() const
 
 inline char *RCString::CharProxy::operator&()
 {
+    Check();
     return &(m_prox_str.m_struct->m_str[m_pos]);
 }
 
@@ -160,13 +162,14 @@ inline RCString::CharProxy &RCString::CharProxy::operator=(const CharProxy &rhs)
 }
 inline RCString::CharProxy &RCString::CharProxy::operator=(char c)
 {
-    RCS* tmp1 = NULL;
-    if(m_prox_str.m_struct->m_count > 0)
-    {
-        tmp1 = Init(m_prox_str.m_struct->m_str);
-        Remove(m_prox_str.m_struct);
-        m_prox_str.m_struct = tmp1;
-    }
+    // RCS* tmp1 = NULL;
+    // if(m_prox_str.m_struct->m_count > 1)
+    // {
+    //     tmp1 = Init(m_prox_str.m_struct->m_str);
+    //     Remove(m_prox_str.m_struct);
+    //     m_prox_str.m_struct = tmp1;
+    // }
+    Check();
     m_prox_str.m_struct->m_str[m_pos] = c;
     return *this;
 
@@ -189,6 +192,18 @@ inline void RCString::Remove(RCS *staff)
        delete(staff);
     }
 }
+inline void RCString::CharProxy::Check()
+{
+    RCS* tmp1 = NULL;
+    if(m_prox_str.m_struct->m_count > 1)
+    {
+        tmp1 = Init(m_prox_str.m_struct->m_str);
+        Remove(m_prox_str.m_struct);
+        m_prox_str.m_struct = tmp1;
+    }
+}
+
+
 
 } 
 
