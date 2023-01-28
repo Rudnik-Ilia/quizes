@@ -10,36 +10,18 @@ using namespace std;
 
 int main()
 {
-    int i = 0;
     string str;
     map <string, int> data;
     vector<string> arr; 
     
-    while(str != ".")
+    while(getline(cin, str) && str != ".")
     {
-        cout << "Insert string: ";
-        cin >> str;
-
-        if (data.find(str) == data.end())
+        if (data[str] == 0)
         {
-            data.insert(pair<string, int>(str, 1));
             arr.push_back(str);
         }
-        else
-        {
-           ++data[str];
-        }
-
-        ++i;
+        ++data[str];
     }
-   
-    // map<string, int>:: iterator iter = data.begin();
-    // for(std::size_t k = 0; k < data.size(); ++k)
-    // {
-    //     cout << iter->first << ' ' << iter->second << endl;
-    //     ++iter;
-    // }
-    // cout << "------------------" << endl;
 
     for(std::size_t k = 0; k < arr.size(); ++k)
     {
@@ -53,12 +35,7 @@ int main()
             cout << x << ((x == 1)? " " : " x " ) << arr[k] << endl;
         }
 
-        // cout << ((x == 1)? ' ': x ) << ((x == 1)? " " : " x " ) << arr[k] << endl;
     }
 
-
-    
-
-   
     return 0;
 }
