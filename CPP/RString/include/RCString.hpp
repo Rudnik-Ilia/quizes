@@ -82,7 +82,10 @@ inline RCString::RCString(const RCString &other_): m_struct(other_.m_struct)
 
 inline RCString& RCString::operator=(const RCString &other_)
 {
-   
+    if(*this == other_)
+    {
+        return *this;
+    }
     m_struct = other_.m_struct;
     ++m_struct->m_count;
     // if (m_struct->m_count)
@@ -158,17 +161,14 @@ inline char *RCString::CharProxy::operator&()
 
 inline RCString::CharProxy &RCString::CharProxy::operator=(const CharProxy &rhs)
 {
+    if(*this == rhs)
+    {
+        return *this;
+    }
     return *this = char(rhs);
 }
 inline RCString::CharProxy &RCString::CharProxy::operator=(char c)
 {
-    // RCS* tmp1 = NULL;
-    // if(m_prox_str.m_struct->m_count > 1)
-    // {
-    //     tmp1 = Init(m_prox_str.m_struct->m_str);
-    //     Remove(m_prox_str.m_struct);
-    //     m_prox_str.m_struct = tmp1;
-    // }
     Check();
     m_prox_str.m_struct->m_str[m_pos] = c;
     return *this;
