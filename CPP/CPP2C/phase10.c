@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+typedef struct B B;
 
 struct B
 {
@@ -7,7 +8,7 @@ struct B
 };
 
 
-static void Foo()
+static void Foo(B* b)
 {
     printf("Static");
 }
@@ -18,8 +19,8 @@ int main()
 {
     struct B b = {1};
 
-    
-    Foo(&B);
+
+    Foo(&b);
 
   
 
