@@ -23,16 +23,15 @@ B BCtor(int a, int b)
     return this;
 }
 
-B BCopy(B other_)
-{
-    B this = {.x = other_.x, .y = other_.y};
-    return this;
-}
-
-
 D DCtor(int a, int b, int c)
 {
     D this = {.b = BCtor(a, b), .z = b};
+    return this;
+}
+
+B BCopy(B other_)
+{
+    B this = {.x = other_.x, .y = other_.y};
     return this;
 }
 
