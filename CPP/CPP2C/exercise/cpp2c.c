@@ -69,19 +69,25 @@ int get_id(struct PublicTransport* this)
 
 /*********MINIBUS*************************************************************/
 
-struct MinibusPtr
-{
-    void (*display) (struct PublicTransport* pub_trans); 
-    void (*wash) (int minutes);
-    void (*Dtor) (struct PublicTransport* pub_trans); 
-};
+// struct MinibusPtr
+// {
+//     void (*MinibusDisplay) (struct Minibus* this); 
+//     void (*MinibusWash) (int minutes, struct Minibus* this);
+//     void (*MinibusDtor) (struct Minibus* this); 
+// };
 
-struct Minibus
-{
-    struct PublicTransport publicBase;
-    int m_numSeats;    
-};
+// struct Minibus
+// {
+//     struct PublicTransport publicBase;
+//     int m_numSeats;    
+// };
 
+struct MinibusPtr Minibus_vtable = 
+{
+    &MinibusWash,
+    &MinibusDisplay,
+    &MinibusDtor
+};
 
 struct Minibus MinibusCtor(struct Minibus* this)
 {
@@ -106,7 +112,7 @@ void MinibusDtor(struct Minibus* this)
     printf("Minibus::Dtor()\n");
 }
 
-void MinibusWash(int min)
+void MinibusWash(int min, struct Minibus* this) 
 {
      printf("Minibus::wash(%d) ID: %d \n", min, get_id((struct PublicTransport*)this));
 }
@@ -149,6 +155,12 @@ int main()
    struct PublicTransport p;
    PublicTransportCtor(&p);
    p._vptr->display(&p);
+
+
+   struct Minibus m;
+   MinibusCtor(&m);
+   MinibusDisplay(&m);
+
 
 
 
