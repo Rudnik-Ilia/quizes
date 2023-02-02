@@ -7,19 +7,9 @@ static int s_count;
 
 
 
+
+
 /*********PUBLIC**************************************************************/
-
-// struct PublicTransportPtr
-// {
-//     void (*PublicTransportDtor) (struct PublicTransport* pub_trans);
-//     void (*display) (struct PublicTransport* pub_trans); 
-// };
-
-// struct PublicTransport
-// {
-//     struct PublicTransportPtr* _vptr;
-//     int m_license_plate;
-// };
 
 struct PublicTransportPtr PublicTransport_vtable =
 {
@@ -44,6 +34,7 @@ void PublicTransportDtor(struct PublicTransport* this)
     this->_vptr = &PublicTransport_vtable;
     --s_count;
     printf("PublicTransport::Dtor()%d\n", this->m_license_plate);
+    
 }
 
 
@@ -72,24 +63,11 @@ int get_id(struct PublicTransport* this)
 
 /*********MINIBUS*************************************************************/
 
-// struct MinibusPtr
-// {
-//     void (*MinibusDisplay) (struct Minibus* this); 
-//     void (*MinibusWash) (int minutes, struct Minibus* this);
-//     void (*MinibusDtor) (struct Minibus* this); 
-// };
-
-// struct Minibus
-// {
-//     struct PublicTransport publicBase;
-//     int m_numSeats;    
-// };
-
 struct MinibusPtr Minibus_vtable = 
 {
-    &MinibusWash,
+    &MinibusDtor,
     &MinibusDisplay,
-    &MinibusDtor
+    &MinibusWash
 };
 
 struct Minibus MinibusCtor(struct Minibus* this)
@@ -130,21 +108,11 @@ void MinibusDisplay(struct Minibus* this)
 
 /*********TAXI****************************************************************/
 
-// struct TaxiPtr
-// {
-//     void (*TaxiDsplay)(struct Taxi* this);
-//     void (*TaxiDtor)(struct Taxi* this);
-// };
-
-// struct Taxi
-// {
-//     struct PublicTransport publicBase;
-// };
 
 struct TaxiPtr Taxi_vtable = 
 {
-    &TaxtDisplay,
-    &TaxiDtor
+    &TaxiDtor,
+    &TaxtDisplay
 };
 
 struct Taxi TaxiCtor(struct Taxi* this)
@@ -154,7 +122,7 @@ struct Taxi TaxiCtor(struct Taxi* this)
     printf("Taxi::Ctor()\n");
     return *this;
 }
-struct Taxi TaxiCopyCtor(struct Taxi* this, struct Taxi* other_)
+struct Taxi TaxiCopyCtor(struct Taxi* this, struct Taxi *other_)
 {
     PublicTransportCopyCtor(&this->publicBase, &other_->publicBase);
     this->publicBase._vptr = (BaseClassPtr *)&Taxi_vtable;
@@ -176,21 +144,11 @@ void TaxtDisplay(struct Taxi* this)
 
 /*********SPECIAL TAXI********************************************************/
 
-// struct SpecialTaxiPtr
-// {
-//     void (*SpecialTaxiDisplay)(struct SpecialTaxi* this);
-//     void (*SpecialTaxiDtor)(struct SpecialTaxi* this);
-// };
-
-// struct SpecialTaxi
-// {
-//     struct Taxi taxiBase;
-// };
 
 struct SpecialTaxiPtr SpecialTaxi_vtable =
 {
-    &SpecialTaxiDisplay,
-    &SpecialTaxiDtor
+    &SpecialTaxiDtor,
+    &SpecialTaxiDisplay
 };
 
 struct SpecialTaxi SpecialTaxiCtor(struct SpecialTaxi* this)
@@ -241,7 +199,6 @@ void Minibus_print_info(struct Minibus *m)
 struct PublicTransport Public_print_info(int i)
 {
     struct PublicTransport p;
-    // PublicTransportCtor(&p);
     struct Minibus ret;
     MinibusCtor(&ret);
     printf("print_info(int i)\n");
@@ -254,6 +211,87 @@ struct PublicTransport Public_print_info(int i)
 void taxi_display(struct Taxi* s)
 {
     ((TaxPrtr *)(s->publicBase._vptr))->TaxiDsplay(s);
+}
+/**********************************/
+
+// struct PublicConvoy
+// {
+//     struct PublicTransport publicBase;
+//     struct PublicTrasport *m_ptr1;
+// 	struct PublicTrasport *m_ptr2;
+//     struct Minibus m_m;
+//     struct Taxi m_t;
+// };
+
+
+// struct PublicConvoyPtr
+// {
+//     void (*const Dtor)(struct PublicConvoy *const);
+// 	    void (*const Display)(struct PublicConvoy *const);
+// };
+
+struct PublicConvoyPtr PublicConvoy_vtable = 
+{
+    &PublicConvoyDtor,
+	&PublicConvoyDisplay
+};
+
+struct PublicConvoy PublicConvoyCtor(struct PublicConvoy* this)
+{
+    PublicTransportCtor(&this->publicBase);
+    this->publicBase._vptr = (BaseClassPtr *)&PublicConvoy_vtable;
+
+    this->m_ptr1 = malloc(sizeof(struct Minibus));
+    MinibusCtor((struct Minibus*)this->m_ptr1);
+
+    this->m_ptr2 = malloc(sizeof(struct Taxi));
+    TaxiCtor((struct Taxi*)this->m_ptr2);
+
+    MinibusCtor(&this->m_m);
+    TaxiCtor(&this->m_t);
+
+    return *this;
+}
+
+struct PublicConvoy PublicConvoyCopyCtor(struct PublicConvoy* this, struct PublicConvoy* other_)
+{
+    PublicTransportCopyCtor(&this->publicBase, &other_->publicBase);
+    this->publicBase._vptr = (BaseClassPtr *)&PublicConvoy_vtable;
+
+    this->m_ptr1 = malloc(sizeof(struct Minibus));
+    MinibusCtor((struct Minibus*)this->m_ptr1);
+
+    this->m_ptr2 = malloc(sizeof(struct Taxi));
+    TaxiCtor((struct Taxi*)this->m_ptr2);
+
+    MinibusCopyCtor(&this->m_m, &other_->m_m);
+    TaxiCopyCtor(&this->m_t, &other_->m_t);
+    
+    return *this;
+}
+
+void PublicConvoyDtor(struct PublicConvoy* this)
+{
+
+    this->publicBase._vptr = (BaseClassPtr *)&PublicConvoy_vtable;
+
+    // this->m_ptr1->publicBase._vptr->Dtor(this->m_ptr1);
+	// free(this->m_ptr1);
+   
+	// this->m_ptr2->_vptr->Dtor(this->m_ptr2);
+	// free(this->m_ptr2);
+
+	TaxiDtor(&this->m_t);
+	MinibusDtor(&this->m_m);
+	PublicTransportDtor(&this->publicBase);
+}
+
+void PublicConvoyDisplay(struct PublicConvoy *this)
+{   
+	// this->m_ptr1->vptr->Display(this->m_ptr1);
+	// this->m_ptr2->vptr->Display(this->m_ptr2);
+	MinibusDisplay(&this->m_m);
+	TaxtDisplay(&this->m_t);
 }
 
 
@@ -268,19 +306,12 @@ int main()
     p._vptr->display(&p);
     PublicTransportDtor(&p);
 
-    // MinibusCtor(&m);
-    // struct Taxi t;
-    // TaxiCtor(&t);
-    // PublicTransportCtor(&p);
-    
-    printf("___________________\n");
-    struct PublicTransport * arr[3] = 
+    struct PublicTransport *arr[3] = 
     {
         malloc(sizeof(struct Minibus)),
         malloc(sizeof(struct Taxi)),
         malloc(sizeof(struct Minibus))
     };
-    printf("___________________\n");
 
     MinibusCtor((struct Minibus *)arr[0]);
     TaxiCtor((struct Taxi *)arr[1]);
@@ -293,51 +324,66 @@ int main()
 
     for (int i = 0; i < 3; ++i) {
 
-        arr[i]->_vptr->PublicTransportDtor(arr[i]);
+        arr[i]->_vptr->Dtor(arr[i]);
         free(arr[i]);
     }
-    // struct PublicTrasport arr2[3];
-	// struct Minibus mm;
-	// MinibusCtor(&mm);
-	// PublicCCtor(&arr2[0] , &m.public_obj);
-	// MinibusDtor(&mm);
+
+    struct PublicTransport arr2[3];
+
+	struct Minibus mm;
+	MinibusCtor(&mm);
+	PublicTransportCopyCtor(&arr2[0] , &m.publicBase);
+	MinibusDtor(&mm);
     
+    struct Taxi t;
+	TaxiCtor(&t);
+	PublicTransportCopyCtor(&arr2[1], &t.publicBase);
+	TaxiDtor(&t);
+
+    PublicTransportCtor(&arr2[2]);
+
+	for(int i = 0; i < 3; ++i)
+	{
+		display(&arr2[i]);
+	}
+	
+	PublicTransport_print_info(&arr2[0]);
+	print_count();
+	struct Minibus m2;
+	MinibusCtor(&m2);
+	print_count();
 
 
+    struct Minibus arr3[4];
+	for(int i = 0; i < 4; ++i)
+	{
+		MinibusCtor(&arr3[i]);
+	}
+
+    struct Taxi *arr4 = malloc(sizeof(struct Taxi) * 4);
+	for (int i = 0; i < 4; ++i)
+	{
+		TaxiCtor(&arr4[i]);
+	}
+	for(int i = 3; i >=0; --i)
+	{
+		TaxiDtor(&arr4[i]);
+	}
+	free(arr4);
+
+    printf("%d\n",max_func(1, 2));
+	printf("%f\n",max_func(1, 2.0f));
+
+    struct SpecialTaxi st;
+	SpecialTaxiCtor(&st);
+	struct Taxi tempp;
+	TaxiCopyCtor(&tempp, &st.taxiBase);
+	TaxtDisplay(&tempp);
+	TaxiDtor(&tempp);
 
 
-
-
-
-
-
-
-
-
-
-    // struct PublicTransport p;
-    // PublicTransportCtor(&p);
-    // p._vptr->display(&p);
-
-    // MinibusCtor(&m);
-    // MinibusDisplay(&m);
-
-    // struct Taxi t;
-    // TaxiCtor(&t);
-    // TaxtDisplay(&t);
-
-    // struct SpecialTaxi st;
-    // SpecialTaxiCtor(&st);
-    // SpecialTaxiDisplay(&st);
-
-
-    // PublicTransport_print_info(&p);
-    // print_info();
-    // Minibus_print_info(&m);
-
-    // taxi_display(&t);
-
-
+    struct PublicConvoy *c1 = malloc(sizeof(struct PublicConvoy));
+	PublicConvoyCtor(c1);
 
 
 
