@@ -1,4 +1,5 @@
 #include <iostream> //cout
+#include <cstdlib>
 using namespace std;
 
 class PublicTransport {
@@ -140,6 +141,11 @@ public:
     {
     
     }
+    // PublicConvoy(const PublicConvoy &other) 
+    // {
+    //     cout<< "COPY" << endl;
+    // }
+ 
 
     ~PublicConvoy()
     {
@@ -227,15 +233,19 @@ int main(int argc, char **argv, char **envp)
     SpecialTaxi st;
     taxi_display(st);
 
-
-
-
-
     PublicConvoy *ts1 = new PublicConvoy();
     PublicConvoy *ts2 = new PublicConvoy(*ts1);
+    // PublicConvoy *ts1 = (PublicConvoy *)malloc(sizeof(PublicConvoy *));
+
+    // new(ts1) PublicConvoy();
+     
+
+    
+
     ts1->display();
     ts2->display();
     delete ts1;
+
     ts2->display(); // this crashes. fix the bug!
     delete ts2;
 

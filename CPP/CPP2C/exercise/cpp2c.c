@@ -5,10 +5,6 @@
 static int s_count;
 
 
-
-
-
-
 /*********PUBLIC**************************************************************/
 
 struct PublicTransportPtr PublicTransport_vtable =
@@ -183,7 +179,7 @@ void SpecialTaxiDisplay(struct SpecialTaxi* this)
 
 void PublicTransport_print_info(struct PublicTransport *a)
 {
-    a->_vptr->display(a);
+    a->_vptr->Display(a);
 }
 
 void print_info()
@@ -202,7 +198,7 @@ struct PublicTransport Public_print_info(int i)
     struct Minibus ret;
     MinibusCtor(&ret);
     printf("print_info(int i)\n");
-    ((MinPtr *)(ret.publicBase._vptr))->MinibusDisplay(&ret);
+    ((MinPtr *)(ret.publicBase._vptr))->Display(&ret);
     PublicTransportCopyCtor(&p, &ret.publicBase);
     MinibusDtor(&ret);
     return p;
@@ -210,7 +206,7 @@ struct PublicTransport Public_print_info(int i)
 
 void taxi_display(struct Taxi* s)
 {
-    ((TaxPrtr *)(s->publicBase._vptr))->TaxiDsplay(s);
+    ((TaxPrtr *)(s->publicBase._vptr))->Display(s);
 }
 /**********************************/
 
@@ -272,24 +268,25 @@ struct PublicConvoy PublicConvoyCopyCtor(struct PublicConvoy* this, struct Publi
 
 void PublicConvoyDtor(struct PublicConvoy* this)
 {
-
     this->publicBase._vptr = (BaseClassPtr *)&PublicConvoy_vtable;
 
-    // this->m_ptr1->publicBase._vptr->Dtor(this->m_ptr1);
-	// free(this->m_ptr1);
-   
-	// this->m_ptr2->_vptr->Dtor(this->m_ptr2);
-	// free(this->m_ptr2);
+    this->m_ptr1->_vptr->Dtor(this->m_ptr1);
+    free(this->m_ptr1);
+
+    this->m_ptr2->_vptr->Dtor(this->m_ptr2);
+    free(this->m_ptr2);
 
 	TaxiDtor(&this->m_t);
 	MinibusDtor(&this->m_m);
+
 	PublicTransportDtor(&this->publicBase);
 }
 
 void PublicConvoyDisplay(struct PublicConvoy *this)
 {   
-	// this->m_ptr1->vptr->Display(this->m_ptr1);
-	// this->m_ptr2->vptr->Display(this->m_ptr2);
+	this->m_ptr1->_vptr->Display(this->m_ptr1);
+	this->m_ptr2->_vptr->Display(this->m_ptr2);
+
 	MinibusDisplay(&this->m_m);
 	TaxtDisplay(&this->m_t);
 }
@@ -302,8 +299,9 @@ int main()
     Minibus_print_info(&m);
 
     struct PublicTransport p;
+    
     p = Public_print_info(3);
-    p._vptr->display(&p);
+    p._vptr->Display(&p);
     PublicTransportDtor(&p);
 
     struct PublicTransport *arr[3] = 
@@ -319,7 +317,7 @@ int main()
 
 
     for (int i = 0; i < 3; ++i) {
-        arr[i]->_vptr->display(arr[i]);
+        arr[i]->_vptr->Display(arr[i]);
     }
 
     for (int i = 0; i < 3; ++i) {
@@ -372,7 +370,7 @@ int main()
 	free(arr4);
 
     printf("%d\n",max_func(1, 2));
-	printf("%f\n",max_func(1, 2.0f));
+	printf("%d\n",max_func(1, 2.0));
 
     struct SpecialTaxi st;
 	SpecialTaxiCtor(&st);
@@ -382,8 +380,34 @@ int main()
 	TaxiDtor(&tempp);
 
 
-    struct PublicConvoy *c1 = malloc(sizeof(struct PublicConvoy));
-	PublicConvoyCtor(c1);
+    struct PublicConvoy *ts1 = malloc(sizeof(struct PublicConvoy));
+	PublicConvoyCtor(ts1);
+
+    struct PublicConvoy *ts2 = malloc(sizeof(struct PublicConvoy));
+	PublicConvoyCopyCtor(ts2, ts1);
+	ts1->publicBase._vptr->Display((struct PublicTransport*)ts1);
+	ts2->publicBase._vptr->Display((struct PublicTransport*)ts2);
+	PublicConvoyDtor(ts1);
+	free(ts1);
+
+
+
+    ts2->publicBase._vptr->Display((struct PublicTransport*)ts2);
+	PublicConvoyDtor(ts2);
+	free(ts2);
+
+	SpecialTaxiDtor(&st);
+
+	for(int i = 3; i >= 0; --i)
+	{
+		MinibusDtor(&arr3[i]);
+	}
+
+	MinibusDtor(&m2);
+	PublicTransportDtor(&arr2[2]);
+	PublicTransportDtor(&arr2[1]);
+	PublicTransportDtor(&arr2[0]);
+	MinibusDtor(&m); 
 
 
 

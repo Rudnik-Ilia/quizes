@@ -5,7 +5,7 @@ typedef struct PublicTransportPtr BaseClassPtr;
 typedef struct MinibusPtr MinPtr;
 typedef struct TaxiPtr TaxPrtr;
 
-typedef struct PublicTrasport PublicTrasport;
+// typedef struct PublicTrasport PublicTrasport;
 
 
 
@@ -19,7 +19,7 @@ struct PublicTransport
 struct PublicTransportPtr
 {
     void (*Dtor) (struct PublicTransport* pub_trans);
-    void (*display) (struct PublicTransport* pub_trans); 
+    void (*Display) (struct PublicTransport* pub_trans); 
 };
 
 
@@ -35,7 +35,7 @@ struct Minibus
 struct MinibusPtr
 {
     void (*Dtor) (struct Minibus* this); 
-    void (*MinibusDisplay) (struct Minibus* this); 
+    void (*Display) (struct Minibus* this); 
     void (*MinibusWash) (int minutes, struct Minibus* this);
 };
 
@@ -52,7 +52,7 @@ struct Taxi
 struct TaxiPtr
 {
     void (*Dtor)(struct Taxi* this);
-    void (*TaxiDsplay)(struct Taxi* this);
+    void (*Display)(struct Taxi* this);
 };
 
 
@@ -67,7 +67,7 @@ struct SpecialTaxi
 struct SpecialTaxiPtr
 {
     void (*Dtor)(struct SpecialTaxi* this);
-    void (*SpecialTaxiDisplay)(struct SpecialTaxi* this);
+    void (*Display)(struct SpecialTaxi* this);
 };
 
 void SpecialTaxiDisplay(struct SpecialTaxi* this);
@@ -77,8 +77,8 @@ void SpecialTaxiDtor(struct SpecialTaxi* this);
 struct PublicConvoy
 {
     struct PublicTransport publicBase;
-    struct PublicTrasport *m_ptr1;
-	struct PublicTrasport *m_ptr2;
+    struct PublicTransport *m_ptr1;
+	struct PublicTransport *m_ptr2;
     struct Minibus m_m;
     struct Taxi m_t;
 };
