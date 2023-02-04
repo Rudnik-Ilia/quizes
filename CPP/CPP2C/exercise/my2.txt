@@ -1,11 +1,11 @@
 PublicTransport::Ctor()1
 Minibus::Ctor()
-Minibus::wash(3) ID:1
+Minibus::wash(3) ID: 1 
 PublicTransport::Ctor()2
 Minibus::Ctor()
 print_info(int i)
-Minibus::display() ID:2 num seats:20
-PublicTransport::CCtor() 3
+Minibus::display() ID: 2 num seats: 20
+PublicTransport::CCtor()3
 Minibus::Dtor()
 PublicTransport::Dtor()2
 PublicTransport::display(): 3
@@ -16,9 +16,9 @@ PublicTransport::Ctor()3
 Taxi::Ctor()
 PublicTransport::Ctor()4
 Minibus::Ctor()
-Minibus::display() ID:2 num seats:20
-Taxi::display() ID:3
-Minibus::display() ID:4 num seats:20
+Minibus::display() ID: 2 num seats: 20
+Taxi::display() ID: 3
+Minibus::display() ID: 4 num seats: 20
 Minibus::Dtor()
 PublicTransport::Dtor()2
 Taxi::Dtor()
@@ -27,12 +27,12 @@ Minibus::Dtor()
 PublicTransport::Dtor()4
 PublicTransport::Ctor()2
 Minibus::Ctor()
-PublicTransport::CCtor() 3
+PublicTransport::CCtor()3
 Minibus::Dtor()
 PublicTransport::Dtor()2
 PublicTransport::Ctor()3
 Taxi::Ctor()
-PublicTransport::CCtor() 4
+PublicTransport::CCtor()4
 Taxi::Dtor()
 PublicTransport::Dtor()3
 PublicTransport::Ctor()4
@@ -40,10 +40,10 @@ PublicTransport::display(): 3
 PublicTransport::display(): 4
 PublicTransport::display(): 4
 PublicTransport::display(): 3
-s_count: 4
+s_count:  4
 PublicTransport::Ctor()5
 Minibus::Ctor()
-s_count: 5
+s_count:  5
 PublicTransport::Ctor()6
 Minibus::Ctor()
 PublicTransport::Ctor()7
@@ -73,9 +73,9 @@ PublicTransport::Dtor()10
 PublicTransport::Ctor()10
 Taxi::Ctor()
 SpecialTaxi::Ctor()
-PublicTransport::CCtor() 11
+PublicTransport::CCtor()11
 Taxi::CCtor()
-Taxi::display() ID:11
+Taxi::display() ID: 11
 Taxi::Dtor()
 PublicTransport::Dtor()11
 PublicTransport::Ctor()11
@@ -87,27 +87,23 @@ PublicTransport::Ctor()14
 Minibus::Ctor()
 PublicTransport::Ctor()15
 Taxi::Ctor()
-PublicConvoy::Ctor()
-PublicTransport::CCtor() 16
+PublicTransport::CCtor()16
 PublicTransport::Ctor()17
 Minibus::Ctor()
 PublicTransport::Ctor()18
 Taxi::Ctor()
-PublicTransport::Ctor()19
-Minibus::Ctor()
-PublicTransport::Ctor()20
-Taxi::Ctor()
-PublicConvoy::Cctor()
-Minibus::display() ID:12 num seats:20
-Taxi::display() ID:13
-Minibus::display() ID:14 num seats:20
-Taxi::display() ID:15
-PublicConvoy::display()
-Minibus::display() ID:19 num seats:20
-Taxi::display() ID:20
-Minibus::display() ID:17 num seats:20
-Taxi::display() ID:18
-PublicConvoy::display()
+PublicTransport::CCtor()19
+Minibus::CCtor()
+PublicTransport::CCtor()20
+Taxi::CCtor()
+Minibus::display() ID: 12 num seats: 20
+Taxi::display() ID: 13
+Minibus::display() ID: 14 num seats: 20
+Taxi::display() ID: 15
+Minibus::display() ID: 17 num seats: 20
+Taxi::display() ID: 18
+Minibus::display() ID: 19 num seats: 20
+Taxi::display() ID: 20
 Minibus::Dtor()
 PublicTransport::Dtor()12
 Taxi::Dtor()
@@ -117,19 +113,18 @@ PublicTransport::Dtor()15
 Minibus::Dtor()
 PublicTransport::Dtor()14
 PublicTransport::Dtor()11
-Minibus::display() ID:19 num seats:20
-Taxi::display() ID:20
-Minibus::display() ID:17 num seats:20
-Taxi::display() ID:18
-PublicConvoy::display()
-Minibus::Dtor()
-PublicTransport::Dtor()19
-Taxi::Dtor()
-PublicTransport::Dtor()20
-Taxi::Dtor()
-PublicTransport::Dtor()18
+Minibus::display() ID: 17 num seats: 20
+Taxi::display() ID: 18
+Minibus::display() ID: 19 num seats: 20
+Taxi::display() ID: 20
 Minibus::Dtor()
 PublicTransport::Dtor()17
+Taxi::Dtor()
+PublicTransport::Dtor()18
+Taxi::Dtor()
+PublicTransport::Dtor()20
+Minibus::Dtor()
+PublicTransport::Dtor()19
 PublicTransport::Dtor()16
 SpecialTaxi::Dtor()
 Taxi::Dtor()

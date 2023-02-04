@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cpp2c.h"
-#define max_func(t1, t2) ((t1 > t2) ? t1 : t2)
+#define TEMPLATE_MAX(T) T max_##T(T a, T b){ return a > b ? a : b;} 
+TEMPLATE_MAX(int)
+
 static int s_count;
 
 
@@ -369,8 +371,9 @@ int main()
 	}
 	free(arr4);
 
-    printf("%d\n",max_func(1, 2));
-	printf("%d\n",max_func(1, 2.0));
+    printf("%d\n", max_int(1, 2));
+    printf("%d\n", max_int(1, 2.0f));
+
 
     struct SpecialTaxi st;
 	SpecialTaxiCtor(&st);
