@@ -7,15 +7,15 @@
 #include "ext2.h"
 
 #define OFFSET_1024 (1024)
-#define BLOCK_OFFSET(block) (OFFSET_1024+(block-1)*block_size)
+#define BLOCK_OFFSET(block) (block * (block_size)*2)
 
-static unsigned int block_size = 1024;
+int block_size = 0;
 
 
 void FindGroup(struct ext2_group_desc* group_desc, int fd)
 {
     struct ext2_super_block super_block = {0};
-    int block_size = 0;
+    // block_size = 0;
     int group_count = 0;
     int descr_list_size = 0;
 
@@ -31,9 +31,9 @@ void FindGroup(struct ext2_group_desc* group_desc, int fd)
     lseek(fd, block_size, SEEK_SET);
     read(fd, group_desc, sizeof(* group_desc));
 
-    group_count = 1 + (super_block.s_blocks_count-1) / super_block.s_blocks_per_group;
-    descr_list_size = group_count * sizeof(* group_desc);
-    close(fd);
+    // group_count = 1 + (super_block.s_blocks_count-1) / super_block.s_blocks_per_group;
+    // descr_list_size = group_count * sizeof(* group_desc);
+    // close(fd);
 
     printf("Reading super-block from device :\n"
         "Inodes count            : %u\n"
@@ -76,8 +76,10 @@ void FindGroup(struct ext2_group_desc* group_desc, int fd)
     
 }
 
-void Read_Inode(int fd, struct ext2_group_desc *group_descriptor, int inode_number, struct ext2_inode *inode)
+void Read_Inode(int fd, int inode_no, struct  ext2_group_desc *group,  struct ext2_inode *inode)
 {
-    lseek(fd, BLOCK_OFFSET(group_descriptor->bg_inode_table) + (inode_number - 1) * sizeof(struct ext2_inode), SEEK_SET);
+    lseek(fd, BLOCK_OFFSET(group->bg_inode_table) + inode_no * 256, SEEK_SET);
 	read(fd, inode, sizeof(struct ext2_inode));
+
+
 }
