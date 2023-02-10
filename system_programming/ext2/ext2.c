@@ -78,7 +78,7 @@ void ReadInode(int fd, int inode_no, struct ext2_group_desc *group,  struct ext2
 	read(fd, inode, sizeof(struct ext2_inode));
 }
 
-int Find_File_Dir(int fd, struct ext2_group_desc *group_descriptor, struct ext2_inode *inode, char *path, struct ext2_inode *ret_inode)
+int Find_File_Dir(int fd, struct ext2_group_desc *group_descriptor, struct ext2_inode *inode, const char *path, struct ext2_inode *ret_inode)
 {
     void* block;
     size_t i = 0;
@@ -121,12 +121,9 @@ int Find_File_Dir(int fd, struct ext2_group_desc *group_descriptor, struct ext2_
 
 void PrintDataFromFileByPath(int fd, const char *path, struct ext2_group_desc *desc)
 {
-    char *string = malloc(strlen(path) + 1);
+    char *string = strdup(path);
+    struct ext2_inode inode = {0};
     char *token = NULL;
-    struct ext2_inode inode;
-    int inode_no = 1;
-
-    strcpy(string, path);
     token = strtok(string, "/");
 
     ReadInode(fd, 2, desc,  &inode);
