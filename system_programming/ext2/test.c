@@ -8,8 +8,8 @@
 
 #include "ext2.h"
 
-#define PATH ("/dev/ram0")
-#define NEED_TO_FIND  ("papka/txt.txt")
+// #define PATH ("/dev/ram0")
+// #define NEED_TO_FIND  ("papka/txt.txt")
 
 
 int main(int argc, char *argv[])
@@ -27,14 +27,14 @@ int main(int argc, char *argv[])
     }
 
     FindGroup(&group_desc, fd);
-    // ReadInode(fd, 2, &group_desc, &inode);
+   
 
     PrintDataFromFileByPath(fd, argv[2], &group_desc); 
 
     Find_File_Dir(fd, &group_desc, &inode, argv[2], &inode);
    
     ReadData(fd, &inode);
-    
+
     close(fd);
 
     return 0;

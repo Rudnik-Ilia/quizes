@@ -14,7 +14,6 @@
 #define BLOCK_OFFSET(block) (block * block_size)
 
 int block_size = 0;
-int inode_table_offset_in_blocks = 0;
 
 void FindGroup(struct ext2_group_desc* group_desc, int fd)
 {
@@ -131,21 +130,15 @@ void PrintDataFromFileByPath(int fd, const char *path, struct ext2_group_desc *d
     token = strtok(string, "/");
 
     ReadInode(fd, 2, desc,  &inode);
-    printf("inode size %d\n", inode.i_size);
     while(NULL != token)
     {
-        puts("loop iteration");
         if (0 != Find_File_Dir(fd, desc, &inode, token, &inode))
         {
-            
-            perror("Find_File_Dir err");
+            fprintf(stderr, "ERROR %d\n", errno);
             free(string);
             return;
         } 
-        printf("inode size %d\n", inode.i_size);
-
         ReadData(fd, &inode);
-
         token = strtok(NULL, "/");
     }
     free(string);
@@ -154,16 +147,14 @@ void PrintDataFromFileByPath(int fd, const char *path, struct ext2_group_desc *d
 void ReadData(int fd, struct ext2_inode *inode)
 {
     int i = 0;
-    int block;
-    char *buff= malloc(sizeof(block_size));
-    
+    int block = 0;
+    char buff[block_size];
     for(i = 0; i < 12 && inode->i_block[i]; i++)
     {
         block = inode->i_block[i];
-        printf("block number: %d content: %d\n", i, block);
+        printf("block  %d\n", block);
         lseek(fd, block_size * block, SEEK_SET);
-        read(fd, buff, block_size); 
+        read(fd, &buff, block_size); 
         printf("                        CONTENT: %s\n", buff);
     }
-    free(buff);
 }
