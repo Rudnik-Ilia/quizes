@@ -6,4 +6,9 @@
 
 
 void FindGroup(struct ext2_group_desc* group_block, int fd);
-void Read_Inode(int fd, int inode_no, struct  ext2_group_desc *group,  struct ext2_inode *inode);
+void ReadInode(int fd, int inode_no, struct  ext2_group_desc *group,  struct ext2_inode *inode);
+int Find_File_Dir(int fd, struct ext2_group_desc *group_descriptor, struct ext2_inode *inode, char *path, struct ext2_inode *ret_inode);
+
+
+void ReadData(int fd, struct ext2_inode *inode);
+void PrintDataFromFileByPath(int fd, const char *path, struct ext2_group_desc *desc);
