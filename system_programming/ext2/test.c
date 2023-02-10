@@ -27,14 +27,8 @@ int main(int argc, char *argv[])
     }
 
     FindGroup(&group_desc, fd);
-   
-
     PrintDataFromFileByPath(fd, argv[2], &group_desc); 
-
-    Find_File_Dir(fd, &group_desc, &inode, argv[2], &inode);
-   
     ReadData(fd, &inode);
-
     close(fd);
 
     return 0;
