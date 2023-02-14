@@ -31,17 +31,7 @@ int main()
 
 	servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT); 
-/*
-
     servaddr.sin_addr.s_addr = INADDR_ANY; 
-*/
-
-    if (inet_aton("127.0.0.1", &servaddr.sin_addr) == 0) 
-    {
-        perror("inet_aton");
-        return 1;
-    }
-
 
     conn_fd = connect(sock_fd,(struct sockaddr*)&servaddr, len);
 	if(conn_fd < 0)
@@ -64,3 +54,4 @@ int main()
 	}
 
 }
+

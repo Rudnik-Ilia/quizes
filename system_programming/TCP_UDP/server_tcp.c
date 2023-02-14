@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <arpa/inet.h> 
+
 #include "header.h"
 
 
@@ -21,24 +22,25 @@ int main()
     socklen_t len = sizeof(struct sockaddr_in);
     char buffer[SIZE]; 
     int nbytes = 0;
-    
+
+    system("clear");
+    system("fuser -k 8888/tcp");
+
 	listen_fd = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
     if(listen_fd < 0)
     {
         perror("listen");
     }
-
+  
 	server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(PORT);
     server_addr.sin_addr.s_addr = INADDR_ANY; 
 
-    system("clear");
     
 
 	if(0 > bind(listen_fd,(struct sockaddr *)&server_addr,sizeof(server_addr)))
     {
         fprintf(stderr, " BIND failed. errno: %d\n", errno);
-        system("fuser -k 1234/tcp");
         return 1;
     }
 	listen(listen_fd,3);
@@ -58,8 +60,10 @@ int main()
             sprintf(buffer, "Pong");
             write(new_conn, buffer, strlen(buffer));
         }
+        puts("WORK");
         close(new_conn);
     }
 
 		
 }
+
