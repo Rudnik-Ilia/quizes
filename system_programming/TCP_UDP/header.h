@@ -15,4 +15,6 @@
 void Fill_Struct(struct sockaddr_in *server_addr);
 int Make_Socket(int *sock_fd);
 void CheckValue(int val);
+
 void Create_UDP_Client();
+void Create_UDP_Server();
