@@ -42,7 +42,6 @@ int main()
     while(1)
 	{
 		sprintf(buffer, "Ping");
-
 		write(sock_fd, buffer, SIZE);
 		nbytes = read(sock_fd, buffer, SIZE);
 		

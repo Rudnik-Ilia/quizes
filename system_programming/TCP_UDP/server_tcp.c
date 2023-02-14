@@ -11,8 +11,6 @@
 
 #include "header.h"
 
-
-
 int main()
 {
 	int listen_fd = 0;
@@ -24,7 +22,6 @@ int main()
     int nbytes = 0;
 
     system("clear");
-    system("fuser -k 8888/tcp");
 
 	listen_fd = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
     if(listen_fd < 0)
@@ -36,11 +33,11 @@ int main()
     server_addr.sin_port = htons(PORT);
     server_addr.sin_addr.s_addr = INADDR_ANY; 
 
-    
 
 	if(0 > bind(listen_fd,(struct sockaddr *)&server_addr,sizeof(server_addr)))
     {
         fprintf(stderr, " BIND failed. errno: %d\n", errno);
+        system("fuser -k 8887/tcp");
         return 1;
     }
 	listen(listen_fd,3);
@@ -58,12 +55,12 @@ int main()
             buffer[nbytes] = 0;
             printf("Received message: '%s' from client\n", buffer);
             sprintf(buffer, "Pong");
-            write(new_conn, buffer, strlen(buffer));
+            write(new_conn, buffer, SIZE);
         }
-        puts("WORK");
+        puts("STILL WORK");
         close(new_conn);
     }
-
 		
 }
+
 
