@@ -8,37 +8,58 @@
 #include <unistd.h>
 #include <errno.h>
 #include <arpa/inet.h> 
+#include "header.h"
 
-#define PORT 1234
 
-int main(int argc, char *argv[])
+
+int main()
 {
-	int listenfd=0,connfd=0;
-	struct sockaddr_in servaddr = {0};
-
-	
-	listenfd = socket(AF_INET,SOCK_STREAM,0);
-  
-
-	servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(PORT);
-   	
-    serveraddr.sin_addr.s_addr = INADDR_ANY; 
-
-	bind(listenfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr));
+	int listen_fd = 0;
+	struct sockaddr_in server_addr = {0};
+    struct sockaddr_in client_addr = {0};
+    int new_conn = 0;
+    socklen_t len = sizeof(struct sockaddr_in);
+    char buffer[SIZE]; 
+    int nbytes = 0;
     
-	listen(listenfd,3);
-
-    connfd = accept(listenfd,(struct sockaddr *)NULL, NULL);
-
-    printf("Hello\n");
-    while(1)
+	listen_fd = socket(AF_INET,SOCK_STREAM, IPPROTO_TCP);
+    if(listen_fd < 0)
     {
-        scanf("%s",sendBuff);
-        write(connfd,sendBuff,1000);
-        read(connfd,s,1000);
-        printf("\nclient : %s\n",s);
+        perror("listen");
     }
+
+	server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(PORT);
+    server_addr.sin_addr.s_addr = INADDR_ANY; 
+
+    system("clear");
+    
+
+	if(0 > bind(listen_fd,(struct sockaddr *)&server_addr,sizeof(server_addr)))
+    {
+        fprintf(stderr, " BIND failed. errno: %d\n", errno);
+        system("fuser -k 1234/tcp");
+        return 1;
+    }
+	listen(listen_fd,3);
+    
+     while (1) {
+        if ((new_conn = accept(listen_fd, (struct sockaddr *) &client_addr, &len)) == -1) 
+        {
+            perror("accept");
+            continue;
+        }
+        
+        while ((nbytes = read(new_conn, buffer, SIZE)) > 0) 
+        {
+            puts("----------------------");
+            buffer[nbytes] = 0;
+            printf("Received message: '%s' from client\n", buffer);
+            sprintf(buffer, "Pong");
+            write(new_conn, buffer, strlen(buffer));
+        }
+        close(new_conn);
+    }
+
 		
-		close(connfd);
 }
