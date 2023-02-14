@@ -31,7 +31,7 @@ int main()
   
 	server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(PORT);
-    server_addr.sin_addr.s_addr = INADDR_ANY; 
+    server_addr.sin_addr.s_addr = inet_addr("10.10.1.187"); 
 
 
 	if(0 > bind(listen_fd,(struct sockaddr *)&server_addr,sizeof(server_addr)))
@@ -41,24 +41,28 @@ int main()
         return 1;
     }
 	listen(listen_fd,3);
-    
-     while (1) {
         if ((new_conn = accept(listen_fd, (struct sockaddr *) &client_addr, &len)) == -1) 
         {
             perror("accept");
-            continue;
+           
         }
+    
+     while (1) {
         
-        while ((nbytes = read(new_conn, buffer, SIZE)) > 0) 
-        {
-            puts("----------------------");
-            buffer[nbytes] = 0;
-            printf("Received message: '%s' from client\n", buffer);
-            sprintf(buffer, "Pong");
-            write(new_conn, buffer, SIZE);
-        }
-        puts("STILL WORK");
+        nbytes = read(new_conn, buffer, SIZE);
+        
+        
+        puts("----------------------");
+        printf("Received message: '%s' from client\n", buffer);
+        /*
+        buffer[nbytes] = 0;
+        sprintf(buffer, "Pong");
+        
+        write(new_conn, buffer, SIZE);
         close(new_conn);
+        */
+        
+       
     }
 		
 }
