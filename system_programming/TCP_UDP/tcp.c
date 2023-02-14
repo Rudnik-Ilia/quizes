@@ -17,34 +17,23 @@ int main()
 	int sock_fd = 0;
     int conn_fd = 0;
     struct sockaddr_in servaddr = {0}; 
-    socklen_t len = sizeof(servaddr);
     char buffer[SIZE]; 
     int nbytes = 0;
+  
+	Make_Socket(&sock_fd, 0);
+	CheckValue(sock_fd);
 
-       
-	sock_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if(sock_fd < 0)
-	{
-		fprintf(stderr, "Sockfd failed. errno: %d\n", errno);
-        return 1;
-	}
+	Fill_Struct(&servaddr);
 
-	servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(PORT); 
-    servaddr.sin_addr.s_addr = INADDR_ANY; 
+    conn_fd = connect(sock_fd,(struct sockaddr*)&servaddr, LENGHT);
+	CheckValue(conn_fd);
 
-    conn_fd = connect(sock_fd,(struct sockaddr*)&servaddr, len);
-	if(conn_fd < 0)
-	{
-		fprintf(stderr, "Connect failed. errno: %d\n", errno);
-        return 1;
-	}
     while(1)
 	{
 		sprintf(buffer, "Ping");
 		write(sock_fd, buffer, SIZE);
+        printf("Sended message: '%s' from server\n", buffer);
 		nbytes = read(sock_fd, buffer, SIZE);
-		
 		if (nbytes > 0) 
 		{
 		    buffer[nbytes] = 0;

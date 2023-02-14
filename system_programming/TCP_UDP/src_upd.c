@@ -10,26 +10,29 @@
 void Fill_Struct(struct sockaddr_in *server_addr)
 {
     (*server_addr).sin_family = AF_INET;
-    (*server_addr).sin_addr.s_addr = INADDR_ANY; 
     (*server_addr).sin_port = htons(PORT);
+    (*server_addr).sin_addr.s_addr = INADDR_ANY; 
 }
 
-int Make_Socket(int *sock_fd)
+int Make_Socket(int *sock_fd, int x)
 {
-    *sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    *sock_fd = socket(AF_INET,(x == 1 ? SOCK_DGRAM : SOCK_STREAM), 0);
     if (0 > *sock_fd) 
     { 
         fprintf(stderr, "SOCKED failed. errno: %d\n", errno);
         return 1;
     }
+    return 0;
 }
 
-void CheckValue(int val)
+int CheckValue(int val)
 {
     if (0 > val)
     {
         fprintf(stderr, "Something failed. errno: %d\n", errno);
+        return 1;
     }
+    return 0;
 }
 
 void Create_UDP_Client()
@@ -39,7 +42,7 @@ void Create_UDP_Client()
     socklen_t len = LENGHT;
     char buffer[SIZE]; 
 
-    Make_Socket(&sockfd);
+    Make_Socket(&sockfd, 1);
     Fill_Struct(&server_addr);
 
     while (1)
@@ -62,7 +65,7 @@ void Create_UDP_Server()
     system("clear");
     system("fuser -k 1236/udp");
 
-    Make_Socket(&udp_server_fd);
+    Make_Socket(&udp_server_fd, 1);
     Fill_Struct(&server_addr); 
 
     CheckValue(bind(udp_server_fd, (const struct sockaddr*)&server_addr, sizeof(server_addr)));

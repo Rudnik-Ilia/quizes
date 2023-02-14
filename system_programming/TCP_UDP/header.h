@@ -7,14 +7,14 @@
 #include <string.h>
 
 #define PORT (8383)
-#define SIZE (4)
+#define SIZE (5)
 #define SO_REUSEPORT (1)
 #define LENGHT sizeof(struct sockaddr_in)
 
 
 void Fill_Struct(struct sockaddr_in *server_addr);
-int Make_Socket(int *sock_fd);
-void CheckValue(int val);
+int Make_Socket(int *sock_fd, int x);
+int CheckValue(int val);
 
 void Create_UDP_Client();
 void Create_UDP_Server();
