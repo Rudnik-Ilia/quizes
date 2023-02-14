@@ -13,6 +13,6 @@ int main()
 {
     system("clear");
     system("fuser -k 8383/udp");
-    Create_UDP_Server();
+    Create_TCP_UDP_Server(1);  
     return 0;
 }
