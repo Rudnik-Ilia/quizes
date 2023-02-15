@@ -11,11 +11,13 @@
 #define SO_REUSEPORT (1)
 #define LENGHT sizeof(struct sockaddr_in)
 
-/*
+extern socklen_t len;
 
 void Fill_Struct(struct sockaddr_in *server_addr);
 int Make_Socket(int *sock_fd, int x);
 int CheckValue(int val);
+/*
+
 void Create_UDP_Server();
 void Create_TCP_Server();
 

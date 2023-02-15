@@ -9,6 +9,8 @@
 
 #include "../header.h"
 
+int WORK = 1;
+
 int main()
 {
     int i = 0;
@@ -25,8 +27,10 @@ int main()
     fd_set set_desc = {0};
     fd_set set_desc_copy = {0};
 
-    tv.tv_sec = 5;
+    tv.tv_sec = 77;
     tv.tv_usec = 5;
+
+    system("clear");
 
     Fill_Struct(&server_addr);
 
@@ -46,10 +50,14 @@ int main()
     FD_SET(udp_server_fd, &set_desc);
     FD_SET(STDIN_FILENO, &set_desc);
 
-    while (1)
+    while (WORK)
     {
         set_desc_copy = set_desc;
-        CheckValue(select(FD_SETSIZE, &set_desc_copy, NULL, NULL, &tv));
+        CheckValue(retval = select(FD_SETSIZE, &set_desc_copy, NULL, NULL, &tv));
+        if(retval==0)
+        {
+            printf("NO ACTIONS!\n");
+        }
         for(i = 0; i < FD_SETSIZE; ++i)
         {
             if (FD_ISSET(i, &set_desc_copy))
@@ -58,34 +66,57 @@ int main()
                 {
                     int new_conn;
                     struct sockaddr_in client_addr = {0};
-                    fprintf (stderr, "TCP Server is READY\n");
+                    printf("TCP server is ready============================================================================================!\n");
                     new_conn = accept(tcp_server_fd, (struct sockaddr *)&client_addr, &len);
                     CheckValue(new_conn);
                     FD_SET(new_conn, &set_desc);
                 }
                 if(i == udp_server_fd)
                 {
+                    struct sockaddr_in client_addr = {0};
+                    char buffer[SIZE]; 
+                    printf("UDP server is ready!==============================================================================================\n");
 
-
+                    CheckValue(recvfrom(udp_server_fd, buffer, SIZE, MSG_WAITALL, (struct sockaddr*)&client_addr, &len)); 
+                    fprintf(stderr, "server received %s\n", buffer);
+                    CheckValue(sendto(i, "pong", SIZE, MSG_CONFIRM, (const struct sockaddr*)&client_addr, LENGHT));
+                    fprintf(stderr, "server sent %s\n", buffer);
                 }
                 if(i == STDIN_FILENO)
                 {
+                    char buffer[SIZE];
+                    read(STDIN_FILENO, buffer, SIZE);
+                    buffer[SIZE] = ' ';
+                    if(0 == strcmp(buffer, "quit "))
+                    {
+                        WORK = 0;
+                    }
+                    else
+                    {
+                        printf("%ld - %ld\n",strlen("quit "), strlen(buffer));
+                    }
+                    fprintf(stderr, "server received %s\n", buffer);
 
+                }
+                else
+                {   
+                    char buffer[SIZE];
+                    int nbytes = read(i, buffer, SIZE);
+                    if(nbytes < 0)
+                    {
 
+                    }
+                    printf("Received message: '%s' from client\n", buffer);
+                    buffer[nbytes] = 0;
+                    sprintf(buffer, "Pong");
+                    write(i, buffer, SIZE);
+                    printf("Send message: '%s' from client\n", buffer);
                 }
             }
         }
 
     }
     
-
-
-
-
-
-
-
-
 
     return 0;
 }

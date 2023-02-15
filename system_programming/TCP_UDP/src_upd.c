@@ -8,14 +8,14 @@
 
 socklen_t len = LENGHT;
 
-static void Fill_Struct(struct sockaddr_in *server_addr)
+void Fill_Struct(struct sockaddr_in *server_addr)
 {
-    (*server_addr).sin_family = AF_INET;
+    (*server_addr).sin_family = AF_INET;        
     (*server_addr).sin_port = htons(PORT);
     (*server_addr).sin_addr.s_addr = INADDR_ANY; 
 }
 
-static int Make_Socket(int *sock_fd, int x)
+int Make_Socket(int *sock_fd, int x)
 {
     *sock_fd = socket(AF_INET,(x == 1 ? SOCK_DGRAM : SOCK_STREAM), 0);
     if (0 > *sock_fd) 
@@ -26,7 +26,7 @@ static int Make_Socket(int *sock_fd, int x)
     return 0;
 }
 
-static int CheckValue(int val)
+int CheckValue(int val)
 {
     if (0 > val)
     {
