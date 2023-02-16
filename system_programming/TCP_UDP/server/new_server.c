@@ -18,6 +18,7 @@ int main()
     int udp_server_fd = 0;
     fd_set set = {0};
     struct timeval tv;
+    int record = 1;
 
     int permission_tcp = 1;
     int permission_udp = 1;
@@ -69,7 +70,11 @@ int main()
                     struct sockaddr_in client_addr = {0};
                     char buffer[SIZE] = {0};
                     int nbytes;
-                    Logger("Server UDP was started");
+                    if(record)
+                    {
+                        Logger("Server UDP was started");
+                        record = 0;
+                    }
                     nbytes = recvfrom(udp_server_fd, buffer, SIZE, MSG_WAITALL, (struct sockaddr*)&client_addr, &len); 
                     CheckValue(nbytes);
                     fprintf (stderr, "server received %s\n", buffer);
@@ -82,6 +87,11 @@ int main()
                 {
                     char buffer[SIZE + 1] = {0};
                     Logger("Server get message from STDIN");
+                    if(record)
+                    {
+                        Logger("Server UDP was started");
+                        record = 0;
+                    }
                     read(STDIN_FILENO, buffer, SIZE);
                     if (0 == strcmp(buffer, "ping\n"))
                     {
@@ -108,10 +118,7 @@ int main()
                         close (i);
                         FD_CLR(i, &set); 
                     }
-                    else
-                    {
-                        fprintf (stderr, "Server recieve message: %s\n", buffer);
-                    }
+                    fprintf (stderr, "Server recieve message: %s\n", buffer);
                     nbytes = send(i, "pong", SIZE, MSG_CONFIRM);
                     CheckValue(nbytes);   
                     fprintf (stderr, "Server send message: pong\n");

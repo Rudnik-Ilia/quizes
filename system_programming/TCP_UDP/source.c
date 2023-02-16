@@ -13,12 +13,12 @@ socklen_t len = LENGHT;
 
 void Logger(char *str)
 {
+    FILE *file = NULL;
     struct tm *newtime;
     time_t ltime;
     time(&ltime);
     newtime = localtime(&ltime);
 
-    FILE *file;
     file = fopen("./jornal.txt","a");
     if(file == NULL)
     {  
