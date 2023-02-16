@@ -4,9 +4,30 @@
 #include <stdlib.h>         
 #include <errno.h>        
 #include <string.h>
+#include <time.h>   
+
 #include "header.h"
 
 socklen_t len = LENGHT;
+
+
+void Logger(char *str)
+{
+    struct tm *newtime;
+    time_t ltime;
+    time(&ltime);
+    newtime = localtime(&ltime);
+
+    FILE *file;
+    file = fopen("./jornal.txt","a");
+    if(file == NULL)
+    {  
+        exit(1);             
+    }
+    fprintf (file, "Event: %s , %s\n", str, asctime(newtime));
+    fclose(file);
+}
+
 
 void Fill_Struct(struct sockaddr_in *server_addr)
 {

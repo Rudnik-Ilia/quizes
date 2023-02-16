@@ -15,7 +15,13 @@ extern socklen_t len;
 void Fill_Struct(struct sockaddr_in *server_addr);
 int Make_Socket(int *sock_fd, int x);
 int CheckValue(int val);
+void Logger(char *str);
 
+void Create_UDP_Client();
+
+void Create_TCP_Client();
+
+void Create_TCP_UDP_Server(int x_udp);
 /*
 #define SO_REUSEPORT (1)
 
@@ -23,10 +29,3 @@ void Create_UDP_Server();
 void Create_TCP_Server();
 
 */
-
-void Create_UDP_Client();
-
-void Create_TCP_Client();
-
-
-void Create_TCP_UDP_Server(int x_udp);

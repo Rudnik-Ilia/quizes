@@ -42,13 +42,13 @@ int main()
     FD_SET(udp_server_fd, &set);
     FD_SET(STDIN_FILENO, &set);
 
+    Logger("General server was started!");
     while (WORK)
     {
         int i = 0;
         fd_set set_copy = set;
         tv.tv_sec = 7;
         tv.tv_usec = 0;
-
         CheckValue(select(FD_SETSIZE, &set_copy, NULL, NULL, &tv));
         
         for (i = 0; i < FD_SETSIZE; ++i)
@@ -59,7 +59,7 @@ int main()
                 {
                     int new_conn;
                     struct sockaddr_in client_addr = {0};
-
+                    Logger("Server TCP was started");
                     new_conn = accept (tcp_server_fd, (struct sockaddr*)&client_addr, &len);
                     CheckValue(new_conn);
                     FD_SET(new_conn, &set);
@@ -69,7 +69,7 @@ int main()
                     struct sockaddr_in client_addr = {0};
                     char buffer[SIZE] = {0};
                     int nbytes;
-
+                    Logger("Server UDP was started");
                     nbytes = recvfrom(udp_server_fd, buffer, SIZE, MSG_WAITALL, (struct sockaddr*)&client_addr, &len); 
                     CheckValue(nbytes);
                     fprintf (stderr, "server received %s\n", buffer);
@@ -81,13 +81,16 @@ int main()
                 else if (i == STDIN_FILENO)        
                 {
                     char buffer[SIZE + 1] = {0};
+                    Logger("Server get message from STDIN");
                     read(STDIN_FILENO, buffer, SIZE);
                     if (0 == strcmp(buffer, "ping\n"))
                     {
+                        Logger("Server get PING, and send PONG");
                         CheckValue(write(STDOUT_FILENO, "pong\n", SIZE));
                     }
                     if (0 == strcmp(buffer, "quit\n"))
                     {
+                        Logger("Server get QUIT command from STDIN");
                         WORK = 0;
                         break;
                     }
@@ -116,7 +119,7 @@ int main()
             }
         }   
     }
-
+    Logger("Server shut down!");
     close(udp_server_fd);
     close(tcp_server_fd);
 
