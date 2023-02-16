@@ -1,11 +1,12 @@
-#include <stdio.h>          
-#include <sys/types.h>      
-#include <unistd.h>         
+#include <stdio.h>         
+#include <sys/types.h>     
+#include <unistd.h>        
 #include <arpa/inet.h>      
 #include <stdlib.h>         
-#include <string.h>         
+#include <string.h>        
 #include <time.h>           
 #include <sys/select.h>
+
 
 #include "../header.h"
 
@@ -66,7 +67,8 @@ int main()
                 {
                     int new_conn;
                     struct sockaddr_in client_addr = {0};
-                    printf("TCP server is ready============================================================================================!\n");
+                    fprintf(stderr, "TCP server is ready============================================================================================!\n");
+
                     new_conn = accept(tcp_server_fd, (struct sockaddr *)&client_addr, &len);
                     CheckValue(new_conn);
                     FD_SET(new_conn, &set_desc);
@@ -75,7 +77,7 @@ int main()
                 {
                     struct sockaddr_in client_addr = {0};
                     char buffer[SIZE]; 
-                    printf("UDP server is ready!==============================================================================================\n");
+                    fprintf(stderr, "TCP server is ready============================================================================================!\n");
 
                     CheckValue(recvfrom(udp_server_fd, buffer, SIZE, MSG_WAITALL, (struct sockaddr*)&client_addr, &len)); 
                     fprintf(stderr, "server received %s\n", buffer);
@@ -84,7 +86,7 @@ int main()
                 }
                 if(i == STDIN_FILENO)
                 {
-                    char buffer[SIZE];
+                    char buffer[SIZE] = {0};
                     read(STDIN_FILENO, buffer, SIZE);
                     buffer[SIZE] = ' ';
                     if(0 == strcmp(buffer, "quit "))
@@ -102,21 +104,29 @@ int main()
                 {   
                     char buffer[SIZE];
                     int nbytes = read(i, buffer, SIZE);
-                    if(nbytes < 0)
+                    if(nbytes == 0)
                     {
-
+                        close (i);
+                        FD_CLR(i, &set_desc);
                     }
-                    printf("Received message: '%s' from client\n", buffer);
-                    buffer[nbytes] = 0;
-                    sprintf(buffer, "Pong");
-                    write(i, buffer, SIZE);
-                    printf("Send message: '%s' from client\n", buffer);
+                    else
+                    {
+                        fprintf (stderr, "Server: got message: %s\n", buffer);
+                    }
+                    nbytes = send(i, "pong", SIZE, MSG_CONFIRM);
+                    if (nbytes < 0)
+                    {
+                        perror ("send");
+                    }   
+                    fprintf (stderr, "Server: send message: pong\n");
+
                 }
             }
         }
 
     }
+    close(udp_server_fd);
+    close(tcp_server_fd);
     
-
     return 0;
 }
