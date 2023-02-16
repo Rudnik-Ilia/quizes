@@ -1,44 +1,20 @@
-Event: General server was started! , Thu Feb 16 11:19:41 2023
+Event: General server was started!................................  Thu Feb 16 11:54:04 2023
 
-Event: Server TCP was started , Thu Feb 16 11:19:44 2023
+Event: Server TCP was started.....................................  Thu Feb 16 11:54:09 2023
 
-Event: Server TCP was started , Thu Feb 16 11:20:12 2023
+Event: General server was started!................................  Thu Feb 16 11:54:16 2023
 
-Event: General server was started! , Thu Feb 16 11:21:30 2023
+Event: Server UDP was started.....................................  Thu Feb 16 11:54:20 2023
 
-Event: Server UDP was started , Thu Feb 16 11:21:47 2023
+Event: Server TCP was started.....................................  Thu Feb 16 11:54:23 2023
 
-Event: Server TCP was started , Thu Feb 16 11:21:49 2023
+Event: Server TCP was started.....................................  Thu Feb 16 11:54:26 2023
 
-Event: Server get message from STDIN , Thu Feb 16 11:21:55 2023
+Event: Server TCP was started.....................................  Thu Feb 16 11:54:29 2023
 
-Event: Server get message from STDIN , Thu Feb 16 11:21:59 2023
+Event: Server TCP was started.....................................  Thu Feb 16 11:54:31 2023
 
-Event: Server get PING, and send PONG , Thu Feb 16 11:21:59 2023
+Event: Server TCP was started.....................................  Thu Feb 16 11:54:34 2023
 
-Event: Server get message from STDIN , Thu Feb 16 11:22:03 2023
-
-Event: Server get QUIT command from STDIN , Thu Feb 16 11:22:03 2023
-
-Event: Server shut down! , Thu Feb 16 11:22:03 2023
-
-Event: General server was started! , Thu Feb 16 11:22:57 2023
-
-Event: Server TCP was started , Thu Feb 16 11:23:04 2023
-
-Event: General server was started! , Thu Feb 16 11:23:13 2023
-
-Event: Server UDP was started , Thu Feb 16 11:23:17 2023
-
-Event: Server TCP was started , Thu Feb 16 11:23:20 2023
-
-Event: Server get message from STDIN , Thu Feb 16 11:23:31 2023
-
-Event: Server get message from STDIN , Thu Feb 16 11:23:31 2023
-
-Event: Server get PING, and send PONG , Thu Feb 16 11:23:31 2023
-
-Event: Server get message from STDIN , Thu Feb 16 11:23:35 2023
-
-Event: Server TCP was started , Thu Feb 16 11:23:42 2023
+Event: Server TCP was started.....................................  Thu Feb 16 11:54:36 2023
 

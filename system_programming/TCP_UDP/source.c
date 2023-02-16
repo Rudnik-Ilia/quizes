@@ -10,21 +10,35 @@
 
 socklen_t len = LENGHT;
 
-
 void Logger(char *str)
 {
     FILE *file = NULL;
+    int lenght = strlen(str);
+    int i = 0;
+    char buffer[SIZE_LOG_BUFF];
     struct tm *newtime;
+    int count = SIZE_LOG_BUFF - strlen(str);
     time_t ltime;
     time(&ltime);
     newtime = localtime(&ltime);
 
     file = fopen("./jornal.txt","a");
-    if(file == NULL)
+    if(file == NULL || lenght > SIZE_LOG_BUFF)
     {  
         exit(1);             
     }
-    fprintf (file, "Event: %s , %s\n", str, asctime(newtime));
+
+    if(count)
+    {
+        memcpy(buffer, str, lenght);
+        while (--count)
+        {
+            buffer[lenght + (i++)] = '.';
+        }
+        buffer[lenght + (i)] = '\0';
+    }
+
+    fprintf (file, "Event: %s  %s\n", buffer, asctime(newtime));
     fclose(file);
 }
 

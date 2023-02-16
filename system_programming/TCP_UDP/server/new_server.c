@@ -9,7 +9,7 @@
 
 #include "../header.h"
  
-int WORK = 1;
+int WORK = 1; /*main detail*/
 
 int main()
 {

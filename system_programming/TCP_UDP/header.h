@@ -9,6 +9,7 @@
 #define PORT (8080)
 #define SIZE (5)
 #define LENGHT sizeof(struct sockaddr_in)
+#define SIZE_LOG_BUFF (60)
 
 extern socklen_t len;
 
