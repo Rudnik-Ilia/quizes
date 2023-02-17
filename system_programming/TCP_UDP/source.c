@@ -52,11 +52,7 @@ void Fill_Struct(struct sockaddr_in *server_addr)
 int Make_Socket(int *sock_fd, int x)
 {
     *sock_fd = socket(AF_INET,(x == 1 ? SOCK_DGRAM : SOCK_STREAM), 0);
-    if (0 > *sock_fd) 
-    { 
-        fprintf(stderr, "SOCKED failed. errno: %d\n", errno);
-        return 1;
-    }
+    CheckValue(*sock_fd, __LINE__, __FILE__); 
     return 0;
 }
 
@@ -262,7 +258,7 @@ void Create_TCP_Server()
 
 
 
-  
+
 
 
 */
