@@ -6,6 +6,8 @@
 #include <string.h>        
 #include <time.h>           
 #include <sys/select.h>
+ #include <fcntl.h>
+ #include <signal.h>
 
 #include "../header.h"
  
@@ -25,30 +27,33 @@ int main()
 
     system("clear");
 
+    signal(SIGINT, Handler);
     Fill_Struct(&server_addr);
 
     Make_Socket(&tcp_server_fd, 0);
     Make_Socket(&udp_server_fd, 1);
 
-    CheckValue(bind(tcp_server_fd, (struct sockaddr *)&server_addr, LENGHT), __LINE__, __FILE__);
-    CheckValue(bind(udp_server_fd, (struct sockaddr *)&server_addr, LENGHT), __LINE__, __FILE__);
-
     setsockopt(tcp_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &permission_tcp, sizeof(permission_tcp));
     setsockopt(udp_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &permission_udp, sizeof(permission_udp));
 
-    CheckValue(listen(tcp_server_fd, 3), __LINE__, __FILE__);
+    CheckValue(bind(tcp_server_fd, (struct sockaddr *)&server_addr, LENGHT), __LINE__, __FILE__);
+    CheckValue(bind(udp_server_fd, (struct sockaddr *)&server_addr, LENGHT), __LINE__, __FILE__);
 
-    FD_ZERO(&set);
+    CheckValue(listen(tcp_server_fd, BACKLOG), __LINE__, __FILE__);
+
+    FD_ZERO(&set);  
     FD_SET(tcp_server_fd, &set);
     FD_SET(udp_server_fd, &set);
     FD_SET(STDIN_FILENO, &set);
 
     Logger("General server was started!");
+    printf("Starting  TCP/UDP server at 127.0.0.1:%d\n", PORT);
+
     while (WORK)
     {
         int i = 0;
         fd_set set_copy = set;
-        tv.tv_sec = 3;
+        tv.tv_sec = 7;
         tv.tv_usec = 0;
         if(3 == CheckValue(select(FD_SETSIZE, &set_copy, NULL, NULL, &tv), __LINE__, __FILE__))
         {   
@@ -66,6 +71,7 @@ int main()
                     struct sockaddr_in client_addr = {0};
                     Logger("Server TCP was started");
                     new_conn = accept (tcp_server_fd, (struct sockaddr*)&client_addr, &len);
+                    fcntl(new_conn, F_SETFL, O_NONBLOCK);
                     CheckValue(new_conn, __LINE__, __FILE__);
                     FD_SET(new_conn, &set);
                 }
@@ -108,11 +114,9 @@ int main()
                         WORK = 0;
                         break;
                     }
-
                 }
                 else
                 {
-                    puts("_________________________________________________-");
                     char buffer[SIZE] = {0};
                     int nbytes;
 
@@ -120,13 +124,15 @@ int main()
                     nbytes = read(i, buffer, SIZE);
                     if (0 == nbytes)
                     {
-                        close (i);
+                        Logger("Some TCP leave us");
+                        close(i);
                         FD_CLR(i, &set); 
                     }
                     fprintf (stderr, "Server recieve message: %s\n", buffer);
                     nbytes = send(i, "pong", SIZE, MSG_CONFIRM);
-                    CheckValue(nbytes, __LINE__, __FILE__);   
+                    // CheckValue(nbytes, __LINE__, __FILE__);   
                     fprintf (stderr, "Server send message: pong\n");
+                    sleep(1);
                 }
             }
         }   

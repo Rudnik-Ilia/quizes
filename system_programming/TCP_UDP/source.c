@@ -38,16 +38,15 @@ void Logger(char *str)
         buffer[lenght + (i)] = '\0';
     }
 
-    fprintf (file, "Event: %s  %s\n", buffer, asctime(newtime));
+    fprintf (file,"Event: %s  %s\n", buffer, asctime(newtime));
     fclose(file);
 }
 
-
 void Fill_Struct(struct sockaddr_in *server_addr)
 {
-    (*server_addr).sin_family = AF_INET;        
-    (*server_addr).sin_port = htons(PORT);
-    (*server_addr).sin_addr.s_addr = INADDR_ANY; 
+    server_addr->sin_family = AF_INET;        
+    server_addr->sin_port = htons(PORT);
+    server_addr->sin_addr.s_addr = INADDR_ANY; 
 }
 
 int Make_Socket(int *sock_fd, int x)
@@ -61,12 +60,19 @@ int Make_Socket(int *sock_fd, int x)
     return 0;
 }
 
-int CheckValue(int val)
+int CheckValue(int val, int line, char *name)
 {
+    char buffer[100];
     if (0 > val)
-    {
+    {   
+        sprintf(buffer, "ERROR: %d LINE: %d FILE: %s", errno, line, name);
+        Logger(buffer);
         fprintf(stderr, "Something failed. errno: %d\n", errno);
         return 1;
+    }
+    else if(0 == val)
+    {
+        return 3;
     }
     return 0;
 }
@@ -82,9 +88,9 @@ void Create_UDP_Client()
 
     while (1)
     {
-        CheckValue(sendto(sockfd, "ping", SIZE, MSG_CONFIRM, (const struct sockaddr *) &server_addr, LENGHT)); 
+        CheckValue(sendto(sockfd, "ping", SIZE, MSG_CONFIRM, (const struct sockaddr *) &server_addr, LENGHT), __LINE__, __FILE__); 
         printf("ping message sent.\n"); 
-        CheckValue(recvfrom(sockfd, buffer, SIZE, MSG_WAITALL, (struct sockaddr *)&server_addr, &len)); 
+        CheckValue(recvfrom(sockfd, buffer, SIZE, MSG_WAITALL, (struct sockaddr *)&server_addr, &len), __LINE__, __FILE__); 
         printf("Server : %s\n", buffer);
     }   
 }
@@ -99,7 +105,7 @@ void Create_TCP_Client()
 	Make_Socket(&sock_fd, 0);
 	Fill_Struct(&servaddr);
 
-    CheckValue(connect(sock_fd,(struct sockaddr*)&servaddr, LENGHT));
+    CheckValue(connect(sock_fd,(struct sockaddr*)&servaddr, LENGHT), __LINE__, __FILE__);
     while(1)
 	{
 		sprintf(buffer, "Ping");
@@ -124,17 +130,17 @@ void Create_TCP_UDP_Server(int x_udp)
     int nbytes = 0;
 
     Make_Socket(&listen_fd, x_udp);
-    CheckValue(listen_fd);
+    CheckValue(listen_fd, __LINE__, __FILE__);
     Fill_Struct(&server_addr);
-    CheckValue(bind(listen_fd, (struct sockaddr *)&server_addr, LENGHT));
+    CheckValue(bind(listen_fd, (struct sockaddr *)&server_addr, LENGHT), __LINE__, __FILE__);
 
     if(x_udp)
     {
         while(1)
         {
-            CheckValue(recvfrom(listen_fd, buffer, SIZE, MSG_WAITALL, (struct sockaddr*)&client_addr, &len)); 
+            CheckValue(recvfrom(listen_fd, buffer, SIZE, MSG_WAITALL, (struct sockaddr*)&client_addr, &len), __LINE__, __FILE__); 
             fprintf(stderr, "server received %s\n", buffer);
-            CheckValue(sendto(listen_fd, "pong", SIZE, MSG_CONFIRM, (const struct sockaddr*)&client_addr, LENGHT));
+            CheckValue(sendto(listen_fd, "pong", SIZE, MSG_CONFIRM, (const struct sockaddr*)&client_addr, LENGHT), __LINE__, __FILE__);
             fprintf(stderr, "server sent %s\n", buffer);  
             sleep(1);
         }
@@ -142,7 +148,7 @@ void Create_TCP_UDP_Server(int x_udp)
     else
     {
         listen(listen_fd,3);
-        CheckValue(new_conn = accept(listen_fd, (struct sockaddr *) &client_addr, &len));
+        CheckValue(new_conn = accept(listen_fd, (struct sockaddr *) &client_addr, &len), __LINE__, __FILE__);
 
         while (1) 
         {
@@ -158,7 +164,8 @@ void Create_TCP_UDP_Server(int x_udp)
             printf("Send message: '%s' from client\n", buffer);
         }
     }
-    
+
+}
 
 /*
 
@@ -216,6 +223,52 @@ void Create_TCP_Server()
         printf("Send message: '%s' from client\n", buffer);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 */
 
+void Handler()
+{
+    Logger("Exit by CTRL+C");
+    puts("\n***STACK SMASHING DETECTED***");
+    sleep(2);
+    puts("Segmentation fault.");
+    sleep(2);
+    puts(COLOR_red"***KERNEL WARNING!!!***\n"OFFCOLOR);
+    puts(COLOR_red"You need to restart your computer. Hold down the Power button for several seconds or press the Restart button.\n"OFFCOLOR);
+    puts(COLOR_red"Veuillez redémarrer votre ordinateur. Maintenez la touche de démarrage enfoncée pendant plusieurs secondes ou bien appuyez sur le bouton de réinitialisation.\n"OFFCOLOR);
+    puts(COLOR_red"Sie müssen Ihren Computer neu starten. Halten Sie dazu die Einschalttaste einige Sekunden gedrückt oder drücken.Sie die Neustart-Taste.\n"OFFCOLOR);
+    sleep(100);
+    exit(1);
 }
