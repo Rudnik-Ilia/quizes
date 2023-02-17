@@ -264,3 +264,27 @@ Event: Some TCP leave us..........................................  Thu Feb 16 1
 
 Event: Exit by CTRL+C.............................................  Thu Feb 16 18:27:19 2023
 
+Event: General server was started!................................  Fri Feb 17 09:59:33 2023
+
+Event: Server TCP was started.....................................  Fri Feb 17 09:59:38 2023
+
+Event: Some TCP leave us..........................................  Fri Feb 17 09:59:44 2023
+
+Event: Exit by CTRL+C.............................................  Fri Feb 17 09:59:52 2023
+
+Event: General server was started!................................  Fri Feb 17 10:01:25 2023
+
+Event: Server TCP was started.....................................  Fri Feb 17 10:01:29 2023
+
+Event: Some TCP leave us..........................................  Fri Feb 17 10:01:37 2023
+
+Event: Exit by CTRL+C.............................................  Fri Feb 17 10:01:44 2023
+
+Event: General server was started!................................  Fri Feb 17 10:03:46 2023
+
+Event: Exit by CTRL+C.............................................  Fri Feb 17 10:03:47 2023
+
+Event: General server was started!................................  Fri Feb 17 10:04:33 2023
+
+Event: Exit by CTRL+C.............................................  Fri Feb 17 10:04:35 2023
+
