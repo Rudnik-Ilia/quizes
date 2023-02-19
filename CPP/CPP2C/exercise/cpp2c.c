@@ -1,4 +1,5 @@
 #pragma pack (1)
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -49,7 +50,7 @@ void display(struct PublicTransport* this)
 
 void print_count()
 {
-    printf("public_count:  %d\n", public_count);
+    printf("s_count:  %d\n", public_count);
 }
 
 int get_id(struct PublicTransport* this)

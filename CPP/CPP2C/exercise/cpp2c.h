@@ -65,7 +65,6 @@ struct SpecialTaxiPtr
 void SpecialTaxiDisplay(struct SpecialTaxi* this);
 void SpecialTaxiDtor(struct SpecialTaxi* this);
 
-
 struct PublicConvoy
 {
     struct PublicTransport publicBase;
@@ -75,13 +74,11 @@ struct PublicConvoy
     struct Taxi m_t;
 };
 
-
 struct PublicConvoyPtr
 {
     void (*const Dtor)(struct PublicConvoy *const);
 	void (*const Display)(struct PublicConvoy *const);
 };
-
 
 void PublicConvoyDtor(struct PublicConvoy* this);
 void PublicConvoyDisplay(struct PublicConvoy *this);
