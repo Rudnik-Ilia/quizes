@@ -78,17 +78,22 @@ void Create_UDP_Client()
     int sockfd = 0; 
     struct sockaddr_in server_addr = {0}; 
     char buffer[SIZE]; 
+    int pings = 0;
 
     Make_Socket(&sockfd, 1);
     Fill_Struct(&server_addr);
 
-    while (1)
+    pings = rand() % 7;
+    pings += 3;
+    while (pings)
     {
+        --pings;
         CheckValue(sendto(sockfd, "ping", SIZE, MSG_CONFIRM, (const struct sockaddr *) &server_addr, LENGHT), __LINE__, __FILE__); 
         printf("ping message sent.\n"); 
         CheckValue(recvfrom(sockfd, buffer, SIZE, MSG_WAITALL, (struct sockaddr *)&server_addr, &len), __LINE__, __FILE__); 
         printf("Server : %s\n", buffer);
-    }   
+    }  
+    close(sockfd); 
 }
 
 void Create_TCP_Client()
@@ -97,13 +102,21 @@ void Create_TCP_Client()
     struct sockaddr_in servaddr = {0}; 
     char buffer[SIZE]; 
     int nbytes = 0;
+    int pings = 0;
   
 	Make_Socket(&sock_fd, 0);
 	Fill_Struct(&servaddr);
 
     CheckValue(connect(sock_fd,(struct sockaddr*)&servaddr, LENGHT), __LINE__, __FILE__);
-    while(1)
+
+    srand(time(0)); 
+
+    pings = rand() % 7;
+    pings += 3;
+
+    while(pings)
 	{
+        --pings;
 		sprintf(buffer, "Ping");
 		write(sock_fd, buffer, SIZE);
         printf("Sended message: '%s' from server\n", buffer);
@@ -114,6 +127,7 @@ void Create_TCP_Client()
 		    printf("Received message: '%s' from server\n", buffer);
     	}
 	}
+    close(sock_fd);
 }
 
 void Create_TCP_UDP_Server(int x_udp)

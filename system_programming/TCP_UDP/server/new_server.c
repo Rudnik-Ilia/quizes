@@ -6,8 +6,8 @@
 #include <string.h>        
 #include <time.h>           
 #include <sys/select.h>
- #include <fcntl.h>
- #include <signal.h>
+#include <fcntl.h>
+#include <signal.h>
 
 #include "../header.h"
  
@@ -27,7 +27,7 @@ int main()
 
     system("clear");
 
-    signal(SIGINT, Handler);
+    // signal(SIGINT, Handler);
     Fill_Struct(&server_addr);
 
     Make_Socket(&tcp_server_fd, 0);
