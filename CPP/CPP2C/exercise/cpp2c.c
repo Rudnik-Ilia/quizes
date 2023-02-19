@@ -1,11 +1,13 @@
+#pragma pack (1)
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "cpp2c.h"
+
 #define TEMPLATE_MAX(T) T max_##T(T a, T b){ return a > b ? a : b;} 
 TEMPLATE_MAX(int)
 
-static int s_count;
-
+static int public_count;
 
 /*********PUBLIC**************************************************************/
 
@@ -15,31 +17,27 @@ struct PublicTransportPtr PublicTransport_vtable =
     &display
 };
 
-/******/
-
 struct PublicTransport PublicTransportCtor(struct PublicTransport* this)
 {
     this->_vptr = &PublicTransport_vtable;
-    this->m_license_plate = ++s_count;
+    this->m_license_plate = ++public_count;
     printf("PublicTransport::Ctor()%d\n", this->m_license_plate);
     return *this;
 
 };
 
-
 void PublicTransportDtor(struct PublicTransport* this)
 {
     this->_vptr = &PublicTransport_vtable;
-    --s_count;
+    --public_count;
     printf("PublicTransport::Dtor()%d\n", this->m_license_plate);
     
 }
 
-
 struct PublicTransport PublicTransportCopyCtor(struct PublicTransport* this, struct PublicTransport* other_ )
 {
     this->_vptr = &PublicTransport_vtable;
-    this->m_license_plate = ++s_count;
+    this->m_license_plate = ++public_count;
     printf("PublicTransport::CCtor()%d\n", this->m_license_plate);
     return *this;
 }
@@ -51,7 +49,7 @@ void display(struct PublicTransport* this)
 
 void print_count()
 {
-    printf("s_count:  %d\n", s_count);
+    printf("public_count:  %d\n", public_count);
 }
 
 int get_id(struct PublicTransport* this)
@@ -106,7 +104,6 @@ void MinibusDisplay(struct Minibus* this)
 
 /*********TAXI****************************************************************/
 
-
 struct TaxiPtr Taxi_vtable = 
 {
     &TaxiDtor,
@@ -120,7 +117,7 @@ struct Taxi TaxiCtor(struct Taxi* this)
     printf("Taxi::Ctor()\n");
     return *this;
 }
-struct Taxi TaxiCopyCtor(struct Taxi* this, struct Taxi *other_)
+struct Taxi TaxiCopyCtor(struct Taxi *this, struct Taxi *other_)
 {
     PublicTransportCopyCtor(&this->publicBase, &other_->publicBase);
     this->publicBase._vptr = (BaseClassPtr *)&Taxi_vtable;
@@ -140,8 +137,7 @@ void TaxtDisplay(struct Taxi* this)
     printf("Taxi::display() ID: %d\n", get_id(&this->publicBase));
 }
 
-/*********SPECIAL TAXI********************************************************/
-
+/*********SPECIAL TAXI*************************************************************/
 
 struct SpecialTaxiPtr SpecialTaxi_vtable =
 {
@@ -177,7 +173,7 @@ void SpecialTaxiDisplay(struct SpecialTaxi* this)
     printf("SpecialTaxi::display() ID: %d \n", get_id(&this->taxiBase.publicBase));
 }
 
-/***********************************************************************/
+/******************************FUNCTIONS*******************************************************/
 
 void PublicTransport_print_info(struct PublicTransport *a)
 {
@@ -210,23 +206,8 @@ void taxi_display(struct Taxi* s)
 {
     ((TaxPrtr *)(s->publicBase._vptr))->Display(s);
 }
-/**********************************/
 
-// struct PublicConvoy
-// {
-//     struct PublicTransport publicBase;
-//     struct PublicTrasport *m_ptr1;
-// 	struct PublicTrasport *m_ptr2;
-//     struct Minibus m_m;
-//     struct Taxi m_t;
-// };
-
-
-// struct PublicConvoyPtr
-// {
-//     void (*const Dtor)(struct PublicConvoy *const);
-// 	    void (*const Display)(struct PublicConvoy *const);
-// };
+/************************PUBLIC CONVOY*********************************************************/
 
 struct PublicConvoyPtr PublicConvoy_vtable = 
 {
@@ -393,8 +374,6 @@ int main()
 	PublicConvoyDtor(ts1);
 	free(ts1);
 
-
-
     ts2->publicBase._vptr->Display((struct PublicTransport*)ts2);
 	PublicConvoyDtor(ts2);
 	free(ts2);
@@ -411,9 +390,6 @@ int main()
 	PublicTransportDtor(&arr2[1]);
 	PublicTransportDtor(&arr2[0]);
 	MinibusDtor(&m); 
-
-
-
 
     return 0;
 }

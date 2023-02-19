@@ -1,14 +1,8 @@
 #pragma once
 
-
 typedef struct PublicTransportPtr BaseClassPtr;
 typedef struct MinibusPtr MinPtr;
 typedef struct TaxiPtr TaxPrtr;
-
-// typedef struct PublicTrasport PublicTrasport;
-
-
-
 
 struct PublicTransport
 {
@@ -21,7 +15,6 @@ struct PublicTransportPtr
     void (*Dtor) (struct PublicTransport* pub_trans);
     void (*Display) (struct PublicTransport* pub_trans); 
 };
-
 
 void PublicTransportDtor(struct PublicTransport* this);
 void display(struct PublicTransport* this);
@@ -36,9 +29,9 @@ struct MinibusPtr
 {
     void (*Dtor) (struct Minibus* this); 
     void (*Display) (struct Minibus* this); 
+    
     void (*MinibusWash) (int minutes, struct Minibus* this);
 };
-
 
 void MinibusDtor(struct Minibus* this);
 void MinibusWash(int min, struct Minibus* this);
@@ -54,7 +47,6 @@ struct TaxiPtr
     void (*Dtor)(struct Taxi* this);
     void (*Display)(struct Taxi* this);
 };
-
 
 void TaxtDisplay(struct Taxi* this);
 void TaxiDtor(struct Taxi* this);
