@@ -44,7 +44,15 @@ namespace ilrd
     template <typename T>
     SharedPointer<T>& SharedPointer<T>::operator=(const SharedPointer<T>& other_)
     {
+        SharedPtr <T> tmp(*this);
+        --(*m_counter);
+
+        m_counter = other_.m_counter;
+        m_rawPtr = other_.m_rawPtr;
         
+        ++(*m_counter);
+        return *this;
+
     }
 
 
