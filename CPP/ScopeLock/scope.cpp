@@ -5,7 +5,6 @@
 
 using namespace ilrd;
 
-
 int main()
 {
     pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
@@ -16,7 +15,7 @@ int main()
     }
 
     std::cout << "trylock: " << pthread_mutex_trylock(&lock) << std::endl;
-    pthread_mutex_lock(&lock);
+
 
     return 0;
 }
