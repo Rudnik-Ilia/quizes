@@ -33,7 +33,7 @@ namespace ilrd
     inline bool operator==(const SharedPointer<T>& lhs_, const SharedPointer<T>& rhs_);
     
     template <typename T>
-    SharedPointer<T>::SharedPointer(T *data) : m_rawPtr(ptr) , m_counter(new size_t(1)){}
+    SharedPointer<T>::SharedPointer(T *ptr_) : m_rawPtr(ptr_) , m_counter(new size_t(1)){}
 
     template <typename T>
     SharedPointer<T>::SharedPointer(const SharedPointer<T>& other_): m_rawPtr(other_.m_rawPtr) , m_counter(other_.m_counter)
@@ -58,7 +58,6 @@ namespace ilrd
         }
     }
 
-
     template <typename T>
     const T *SharedPointer<T>::GetPtr() const
     {
@@ -69,6 +68,30 @@ namespace ilrd
     size_t SharedPointer<T>::UseCount() const
     {
         return *m_counter;
+    }
+
+    template <typename T>
+    T* SharedPointer<T>::operator->() const
+    {
+        return m_rawPtr;
+    }
+
+    template <typename T>
+    T& SharedPointer<T>::operator*() const
+    {
+        return *m_rawPtr;
+    }
+
+    template <typename T>
+    bool operator==(const SharedPointer<T>& lhs_, const SharedPointer<T>& rhs_)
+    {
+        return (lhs_.GetPtr() == rhs_.GetPtr());
+    }
+
+    template <typename T>
+    bool operator!=(const SharedPointer<T>& lhs_, const SharedPointer<T>& rhs_)
+    {
+        return !(lhs_ == rhs_);
     }
 
 
