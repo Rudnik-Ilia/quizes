@@ -38,7 +38,7 @@ namespace ilrd
     template <typename T>
     SharedPointer<T>::SharedPointer(const SharedPointer<T>& other_): m_rawPtr(other_.m_rawPtr) , m_counter(other_.m_counter)
     {
-        ++(*m_cnt);
+        ++(*m_counter);
     }
 
     template <typename T>
@@ -48,13 +48,10 @@ namespace ilrd
     }
 
 
-
-
-
     template <typename T>
     SharedPointer<T>::~SharedPointer()
     {	
-        if((--(*m_cnt)) == 0)
+        if((--(*m_counter)) == 0)
         {
             delete m_counter;
             delete m_rawPtr;

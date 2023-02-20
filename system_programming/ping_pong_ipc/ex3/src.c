@@ -44,7 +44,12 @@ int ReadWrite(char* pathname, char *message, int check)
             fprintf(stderr, "Read pipe failed. errno: %d\n", errno);
             return 1;
         }
-        printf("%s\n", buff);
+
+        if(check)
+        {
+            printf(COLOR_blue"%s\n"OFFCOLOR, buff);
+        }
+        printf(COLOR_red"%s\n"OFFCOLOR, buff);
         close(pipe);
         check = 1;
     }

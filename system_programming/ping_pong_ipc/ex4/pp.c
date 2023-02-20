@@ -51,8 +51,7 @@ int main()
         puts("I've sent and died!");
         return 0;
 	}
-
-    sleep(1);
+    wait(NULL);
 
     for (i = 0; i < 3; ++i)
     {

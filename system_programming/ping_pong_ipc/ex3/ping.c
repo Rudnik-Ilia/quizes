@@ -15,6 +15,7 @@
 int main(int argc, char *argv[])
 {
 	pid_t child_pid = 0;
+
 	(void)argc;
 
 
@@ -28,7 +29,6 @@ int main(int argc, char *argv[])
     }
 
 	child_pid = fork();
-
 	if(0 == child_pid)
 	{
 		execv(argv[1], argv);
