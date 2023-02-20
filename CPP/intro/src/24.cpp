@@ -10,11 +10,12 @@ struct X
 
     void Inc();
     void Dec();
+    void Deca();
 
     int m_a;
     int m_b;
 
-    double z;
+    // double z;
 };
 
 X::X(int a, int b): m_a(a), m_b(b) 
@@ -32,11 +33,16 @@ void X::Dec()
     --m_b;
     cout << this << endl;
 }
+void X::Deca()
+{
+    --m_a;
+    --m_b;
+    cout << this << endl;
+}
 
 
 void Inc()
 {
-    
     cout << "VOID" << endl;
 }
 
@@ -44,6 +50,8 @@ int main()
 {
     X x1(7, 55);
     X x2(x1);
+    cout << &x1 << endl;
+    cout << &x2 << endl;
 
 
 
@@ -53,15 +61,16 @@ int main()
     x1.Inc();
     x2.Dec();
 
+
     cout << x1.m_a << ' ' << x1.m_b << endl;
     cout << x2.m_a << ' ' << x2.m_b << endl;
 
     
    
-    cout << sizeof(x1) << endl;
-    cout << sizeof(X) << endl;
+    // cout << sizeof(x1) << endl;
+    // cout << sizeof(x2) << endl;
 
 
-
+    
     return 0;
 }

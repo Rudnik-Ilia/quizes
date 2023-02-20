@@ -49,11 +49,13 @@ int main()
 {
 
     X x1(1);
+    X x1(2);
 
     x1.Foo();
     // x1.Bar();
     Fifi(x1);
     Fifi(x1);
+
 
 
 

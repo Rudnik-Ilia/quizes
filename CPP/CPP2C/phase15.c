@@ -45,14 +45,14 @@ struct B_func_ptr b_vable =
 
 void ACtor(A* a)
 {
-    a->_vptr = &a_vable;
     a->x = 99;
+    a->_vptr = &a_vable;
 }
 
 void BCtor(B* b)
 {
-    b->_vptr = (A*)&b_vable;
     b->x = 11;
+    b->_vptr = (A*)&b_vable;
 }
 
 void Foo(A* a)

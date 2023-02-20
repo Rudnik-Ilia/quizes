@@ -29,6 +29,7 @@ int main()
     A b = {2};
     b.Foo();
     
+    
 
    
     

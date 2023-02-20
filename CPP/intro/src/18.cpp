@@ -17,7 +17,7 @@ int main()
     
   
     // cout << &ip << endl;
-    cout <<  d << endl;
+    cout <<  &d << endl;
 
   
 

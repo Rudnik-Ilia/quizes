@@ -11,9 +11,11 @@ namespace ilrd
         explicit String(const char *str = "");        
         explicit String(const String&);        
         String &operator=(const String&);       
-        
-        ~String();                              
-    
+        ~String();
+
+        char &operator[](size_t x);
+        const char &operator[](size_t idx) const;                            
+
         std::size_t Length() const;             
         const char *Cstr() const;
 
@@ -24,6 +26,8 @@ namespace ilrd
     bool operator==(const String& x, const String& y);
     bool operator>(const String& one, const String& two);
     bool operator<(const String& one, const String& two);
+    std::ostream& operator<<(std::ostream& os_, const String& string_);
+    std::istream& operator>>(std::istream& is_, const String& string_);
 } 
 
 

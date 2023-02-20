@@ -8,6 +8,7 @@
 
 #include <cstdlib>
 #include <cstring> 
+#include <ostream>
 #include "string.hpp"
 
 namespace ilrd
@@ -23,10 +24,21 @@ String::String(const String&  other): m_str(new char[other.Length()+1])
      memcpy(m_str, other.m_str, other.Length() + 1);
 }
 
+
 String::~String()
 {
     delete[] m_str;
     m_str = NULL;
+}
+
+char& String::operator[](size_t x)
+{
+    return m_str[x];
+}
+
+const char& String::operator[](size_t idx) const
+{
+    return m_str[idx];
 }
 
 size_t String::Length() const
@@ -61,11 +73,20 @@ bool operator>(const String& one, const String& two)
 {
 	return (strcmp(one.Cstr(), two.Cstr()) > 0);
 }
+
+std::ostream& operator<<(std::ostream& os, const ilrd::String& string_)
+{
+	return os << string_.Cstr();
 }
-// ostream& operator<<(ostream& os_, const ilrd::String& string_)
-// {
-// 	return os_ << string_.Cstr();
-// }
+
+std::istream& operator>>(std::istream& is, String& string_)
+{
+	
+    is.getline();
+
+}
+}
+
 
 
 // SECOND VARIANT---------------------------------------------------------------------------------
