@@ -1,6 +1,9 @@
 #ifndef __ILRD_RD132_SHARED_POINTER_HPP__    
 #define __ILRD_RD132_SHARED_POINTER_HPP__    
 
+#include <iostream>
+using std::cout;
+using std::endl;
 #include <cstddef> // size_t    
 
 namespace ilrd
@@ -12,7 +15,14 @@ namespace ilrd
     public:
         inline explicit SharedPointer(T* ptr_ = NULL);
         inline explicit SharedPointer(const SharedPointer<T>& other_);
+
         inline SharedPointer<T>& operator=(const SharedPointer<T>& other_);
+
+        template <typename U>
+        inline explicit SharedPointer(const SharedPointer<U>& other_);
+        template <typename U>
+        inline SharedPointer<T>& operator=(const SharedPointer<U>& other_);
+
         inline ~SharedPointer();
 
         inline T& operator*() const;
@@ -22,6 +32,7 @@ namespace ilrd
         inline const T* GetPtr() const;
 
     private:
+        template <class U> friend class SharedPointer;
         T* m_rawPtr;
         std::size_t* m_counter;
     };
@@ -42,19 +53,27 @@ namespace ilrd
     }
 
     template <typename T>
-    SharedPointer<T>& SharedPointer<T>::operator=(const SharedPointer<T>& other_)
+    template <typename U>
+    SharedPointer<T>::SharedPointer(const SharedPointer<U>& other_): m_rawPtr(other_.m_rawPtr) , m_counter(other_.m_counter)
     {
-        SharedPtr <T> tmp(*this);
+        ++(*m_counter);
+    }
+
+    template <typename T>
+    template <typename U>
+    SharedPointer<T>& SharedPointer<T>::operator=(const SharedPointer<U>& other_)
+    {
+        SharedPointer <T> tmp(*this);
         --(*m_counter);
 
         m_counter = other_.m_counter;
         m_rawPtr = other_.m_rawPtr;
-        
+
         ++(*m_counter);
+
         return *this;
 
     }
-
 
     template <typename T>
     SharedPointer<T>::~SharedPointer()
@@ -64,6 +83,7 @@ namespace ilrd
             delete m_counter;
             delete m_rawPtr;
         }
+        cout << "Dtor PTR" << endl;
     }
 
     template <typename T>
