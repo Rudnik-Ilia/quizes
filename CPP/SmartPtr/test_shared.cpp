@@ -3,6 +3,7 @@ using std::cout;
 using std::endl;
 
 #include "shared.hpp"
+// #include "walt.hpp"
 using namespace ilrd;
 
 class Base
@@ -68,23 +69,16 @@ int main()
 
     SharedPointer<Base> ptr6(new Base(10));
     SharedPointer<Derived> ptr4(new Derived(10));
-    // SharedPointer<Base> ptr5(new Derived(10));
+    SharedPointer<Base> ptr5(new Derived(10));
 
     ptr6 = ptr4;
 
-
     SharedPointer<Some> ptr7(new Some(7));
-
     // ptr6 = ptr7;
-
     ptr6 = ptr6;
 
-    
-    
-
-
-
-
-
+    SharedPointer<Base>bsp;
+    SharedPointer<Derived>dsp(new Derived(15));
+    bsp = dsp;
     return 0;
 }

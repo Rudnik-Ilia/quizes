@@ -38,10 +38,10 @@ namespace ilrd
         std::size_t* m_counter;
     };
 
-    template <class T>
+    template <typename T>
     inline bool operator!=(const SharedPointer<T>& lhs_, const SharedPointer<T>& rhs_);
 
-    template <class T>
+    template <typename T>
     inline bool operator==(const SharedPointer<T>& lhs_, const SharedPointer<T>& rhs_);
     
     template <typename T>
