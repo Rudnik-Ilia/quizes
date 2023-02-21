@@ -10,11 +10,11 @@ class Base
     public:
         Base(int size)
         {
-            memory = operator new(size);
+            memory = ::operator new(size);
         }
         ~Base()
         {
-            delete (char*)memory;
+            ::operator delete(memory);
             cout << "Dtor BASE" << endl;
         }
 
@@ -76,6 +76,8 @@ int main()
     SharedPointer<Some> ptr7(new Some(7));
 
     // ptr6 = ptr7;
+
+    ptr6 = ptr6;
 
     
     

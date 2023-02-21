@@ -20,6 +20,7 @@ namespace ilrd
 
         template <typename U>
         inline explicit SharedPointer(const SharedPointer<U>& other_);
+
         template <typename U>
         inline SharedPointer<T>& operator=(const SharedPointer<U>& other_);
 
@@ -62,6 +63,20 @@ namespace ilrd
     template <typename T>
     template <typename U>
     SharedPointer<T>& SharedPointer<T>::operator=(const SharedPointer<U>& other_)
+    {
+        SharedPointer <T> tmp(*this);
+        --(*m_counter);
+
+        m_counter = other_.m_counter;
+        m_rawPtr = other_.m_rawPtr;
+
+        ++(*m_counter);
+
+        return *this;
+
+    }
+    template <typename T>
+    SharedPointer<T>& SharedPointer<T>::operator=(const SharedPointer<T>& other_)
     {
         SharedPointer <T> tmp(*this);
         --(*m_counter);
