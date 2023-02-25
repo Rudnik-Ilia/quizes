@@ -6,9 +6,6 @@ using std::endl;
 using namespace ilrd;
 
 
-
-
-
 int main()
 {
     const size_t s = 127;
@@ -39,8 +36,9 @@ int main()
     b2.set(1, false);
     cout << (b1 == b2) << endl;
 
-    b1 |= b2;
-   
+    // b1 |= b2;
+   b1 &= b2;
+   b1 ^= b2;
  
   
     for(int i = 0; i < 128 ; ++i)

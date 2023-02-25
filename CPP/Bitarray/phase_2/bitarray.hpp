@@ -9,25 +9,11 @@ using std::endl;
 #include <bitset> 
 #include <string.h>
 
+#include "staff.hpp"
+
 #define BYTE (8)
 #define WORD (64)
-
 #define ALIGNED_SIZE(Size) ((Size / WORD)) + ((Size % WORD) ? 1 : 0)
-
-#define POSTOINDEX(pos) (pos / 64)
-
-class BiAddition
-{
-    public:
-        BiAddition(size_t* other_arr) : array(other_arr){};
-        size_t operator()(size_t x)
-        {
-           return x |= *array++;
-        }
-
-    private:
-        size_t* array;
-};
 
 namespace ilrd
 {
@@ -112,16 +98,7 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::set(std::size_t index_, bool value_) throw(std::out_of_range)
     {
-
-        if(value_ == true)
-        {
-            m_array[index_/WORD] |= 1UL << (index_ % WORD);
-        }
-        else
-        {
-            m_array[index_/WORD] &= ~(1UL << (index_ % WORD));
-        }
-
+        value_ ? m_array[index_/WORD] |= 1UL << (index_ % WORD) :  m_array[index_/WORD] &= ~(1UL << (index_ % WORD));
     }
 
     template <size_t Size> 
@@ -168,7 +145,9 @@ namespace ilrd
     template <size_t Size>
     BitArray<Size>& BitArray<Size>::operator&=(const BitArray& other_)
     {
-
+        BiMulti functor(const_cast<size_t*>(other_.m_array));
+        std::transform(m_array, m_array + s_kNumWords, m_array, functor);
+	    return *this;
     }
     template <size_t Size>
     BitArray<Size>& BitArray<Size>::operator|=(const BitArray& other_)
@@ -180,26 +159,16 @@ namespace ilrd
     template <size_t Size>
     BitArray<Size>& BitArray<Size>::operator^=(const BitArray& other_)
     {
-
+        BiBird functor(const_cast<size_t*>(other_.m_array));
+        std::transform(m_array, m_array + s_kNumWords, m_array, functor);
+	    return *this;
     }
 
-   
-
-
-
-
-
-
-
-    /***********************************************************************88*/
+    /***************************************************************************/
 
     template <size_t Size> 
-    BitArray<Size>::BitProxy::BitProxy(BitArray& owner_, size_t index_): m_owner(owner_), m_index(index_)
-    {
-        cout << "BitProxy Ctor" << endl;
-    }
+    BitArray<Size>::BitProxy::BitProxy(BitArray& owner_, size_t index_): m_owner(owner_), m_index(index_){}
     
-
     template <size_t Size>
     typename BitArray<Size>::BitProxy& BitArray<Size>::BitProxy::operator=(bool value_)
     {
@@ -220,10 +189,5 @@ namespace ilrd
         return m_owner.get(m_index);
     }
     
-
-
-
-
-
 
 } 
