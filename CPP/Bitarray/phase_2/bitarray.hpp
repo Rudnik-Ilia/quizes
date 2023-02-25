@@ -36,6 +36,10 @@ namespace ilrd
         inline BitArray& operator^=(const BitArray& other_);
         inline BitArray& operator|=(const BitArray& other_);
 
+        inline void SafetyShift();
+        inline void Check(size_t idx);
+
+
 
         inline void set(bool value_); // setAll 
         inline void set(std::size_t index_, bool value_) throw(std::out_of_range);
@@ -43,9 +47,7 @@ namespace ilrd
         inline void flip(std::size_t index_) throw(std::out_of_range);
 
         inline bool get(std::size_t index_) const; 
-
-        inline std::size_t count() const;
-
+        inline std::size_t count();
         inline std::string to_string() const; 
 
  
@@ -64,7 +66,6 @@ namespace ilrd
         inline BitProxy& operator=(bool value_);
         inline BitProxy& operator=(const BitProxy& other_);
         inline operator bool() const;
-        inline bool operator!() const;
 
     private:
         BitArray& m_owner;
@@ -74,10 +75,7 @@ namespace ilrd
     /*******************************************************************************************/
 
     template <size_t Size>
-    BitArray<Size>::BitArray(): m_array()
-    {
-        cout << "Bitarray Ctor" << endl;
-    }
+    BitArray<Size>::BitArray(): m_array(){}
 
     template <size_t Size>
     bool BitArray<Size>::operator[](size_t index_) const
@@ -99,6 +97,7 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::set(std::size_t index_, bool value_) throw(std::out_of_range)
     {
+        // Check(index_);
         value_ ? m_array[index_/WORD] |= 1UL << (index_ % WORD) :  m_array[index_/WORD] &= ~(1UL << (index_ % WORD));
     }
 
@@ -106,6 +105,12 @@ namespace ilrd
     void BitArray<Size>::set(bool value_)
     {
         memset((void*)m_array, (value_ ? 0xff : 0x00), sizeof(m_array)); 
+    }
+
+    template <size_t Size> 
+    void BitArray<Size>::SafetyShift()
+    {
+        m_array[s_kNumWords - 1] &= (-1lu >> (s_kNumWords * WORD - Size));
     }
 
     template <size_t Size> 
@@ -117,6 +122,7 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::flip(size_t index_) throw(std::out_of_range)
     {
+        Check(index_);
         set(index_, !(get(index_)));
     }
 
@@ -166,14 +172,23 @@ namespace ilrd
     }
 
     template <size_t Size>
-    std::size_t BitArray<Size>::count() const
+    std::size_t BitArray<Size>::count() 
     {
         Counter functor(Size);
+        SafetyShift();
         return std::accumulate(m_array, m_array + s_kNumWords, 0, functor); 
     }
 
+    template <size_t Size>
+    void BitArray<Size>::Check(size_t idx) 
+    {
+       if(idx >= Size)
+       {
+            throw std::out_of_range("Check the size!");
+       }
+    }
 
-    /***************************************************************************/
+    /****************************************************************************************/
 
     template <size_t Size> 
     BitArray<Size>::BitProxy::BitProxy(BitArray& owner_, size_t index_): m_owner(owner_), m_index(index_){}

@@ -8,7 +8,7 @@ using namespace ilrd;
 
 int main()
 {
-    const size_t s = 127;
+    const size_t s = 120;
     std::string str;
 
     BitArray<s> b1, b2;
@@ -32,14 +32,16 @@ int main()
 
     b1.set(0, false);
     b1.set(2, false);
-    b1.set(126, false);
+   
     b2.set(1, false);
     cout << (b1 == b2) << endl;
 
     // b1 |= b2;
-   b1 &= b2;
-   b1 ^= b2;
-   b1.set(8, true);
+    b1 &= b2;
+    b1 ^= b2;
+    b1.set(8, true);
+    b1.set(119, true);
+    b1.set(122, true);
  
   
     for(int i = 0; i < 128 ; ++i)
@@ -71,7 +73,6 @@ int main()
         }
         cout << b2.get(i) << ' ';
     }
-
     cout <<'\n'<< b1.count() << endl;
     
 

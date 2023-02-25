@@ -56,6 +56,7 @@ class Counter
 {
     public:
         Counter(size_t size) : m_size(size){};
+
         size_t operator()(int summ, size_t x)
         {
             unsigned char* ptr = (unsigned char*)&x;
@@ -67,6 +68,5 @@ class Counter
             return summ;
         }
     private:
-        size_t m_size;
-        
+        size_t m_size;     
 };
