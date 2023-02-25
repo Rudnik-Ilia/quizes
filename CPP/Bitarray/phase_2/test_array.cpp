@@ -23,9 +23,13 @@ int main()
     b1.set(true);
 
     b1.set(63, false);
-    b1.set(0, false);
     b1.set(true);
-    b1.flip();
+    b1.set(0, false);
+    b1.flip(5);
+    b1.flip(5);
+    b1.flip(0);
+    b1[0] = false;
+ 
   
     for(int i = 0; i < 128 ; ++i)
     {
@@ -41,9 +45,8 @@ int main()
         }
         cout << b1.get(i) << ' ';
     }
-    str = b1.to_string();
-   
-    cout << str << endl;
+    
+
 
 
 

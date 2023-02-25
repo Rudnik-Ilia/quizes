@@ -128,21 +128,66 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::flip(size_t index_) throw(std::out_of_range)
     {
-        set(!(get(index_)), index_);
+        set(index_, !(get(index_)));
     }
 
-    template <size_t size>
-    std::string BitArray<size>::to_string() const
+    template <size_t Size>
+    std::string BitArray<Size>::to_string() const
     {
         std::string temp;
-        for(size_t i = 0; i < size; ++i)
+        for(size_t i = 0; i < Size; ++i)
         {
             temp += get(i) + '0';
         }
         return temp;
     }
 
+    template <size_t Size>
+    bool operator==(const BitArray<Size>& lhs, const BitArray<Size>& rhs)
+    {
+        for(size_t i = 0; i < Size; ++i)
+        {
+            if(lhs.Get(i) != rhs.Get(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    template <size_t Size>
+    bool operator!=(const BitArray<Size>& lhs, const BitArray<Size>& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    /***********************************************************************88*/
+
+    template <size_t Size> 
+    BitArray<Size>::BitProxy::BitProxy(BitArray& owner_, size_t index_): m_owner(owner_), m_index(index_)
+    {
+        cout << "BitProxy Ctor" << endl;
+    }
+    
+
+    template <size_t Size>
+    typename BitArray<Size>::BitProxy& BitArray<Size>::BitProxy::operator=(bool value_)
+    {
+        m_owner.set(m_index, value_);
+        return *this;
+    }
+
+    template <size_t Size>
+    typename BitArray<Size>::BitProxy& BitArray<Size>::BitProxy::operator=(const BitProxy& other_)
+    {
+        m_owner.set(other_.m_owner.get(other_.m_index), m_index);
+        return *this;
+    }
+
+    template <size_t size>
+    BitArray<size>::BitProxy::operator bool() const
+    {
+        return m_owner.get(m_index);
+    }
     
 
 
