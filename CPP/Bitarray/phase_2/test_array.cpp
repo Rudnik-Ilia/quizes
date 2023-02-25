@@ -39,6 +39,7 @@ int main()
     // b1 |= b2;
    b1 &= b2;
    b1 ^= b2;
+   b1.set(8, true);
  
   
     for(int i = 0; i < 128 ; ++i)
@@ -70,6 +71,8 @@ int main()
         }
         cout << b2.get(i) << ' ';
     }
+
+    cout <<'\n'<< b1.count() << endl;
     
 
 

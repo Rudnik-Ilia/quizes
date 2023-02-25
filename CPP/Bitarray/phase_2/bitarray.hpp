@@ -8,6 +8,7 @@ using std::endl;
 #include <algorithm> // for stl algorithms
 #include <bitset> 
 #include <string.h>
+#include <numeric>
 
 #include "staff.hpp"
 
@@ -163,6 +164,14 @@ namespace ilrd
         std::transform(m_array, m_array + s_kNumWords, m_array, functor);
 	    return *this;
     }
+
+    template <size_t Size>
+    std::size_t BitArray<Size>::count() const
+    {
+        Counter functor(Size);
+        return std::accumulate(m_array, m_array + s_kNumWords, 0, functor); 
+    }
+
 
     /***************************************************************************/
 
