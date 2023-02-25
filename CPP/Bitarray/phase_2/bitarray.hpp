@@ -16,6 +16,18 @@ using std::endl;
 
 #define POSTOINDEX(pos) (pos / 64)
 
+class BiAddition
+{
+    public:
+        BiAddition(size_t* other_arr) : array(other_arr){};
+        size_t operator()(size_t x)
+        {
+           return x |= *array++;
+        }
+
+    private:
+        size_t* array;
+};
 
 namespace ilrd
 {
@@ -100,15 +112,14 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::set(std::size_t index_, bool value_) throw(std::out_of_range)
     {
-        int arr_index = POSTOINDEX(index_);
 
         if(value_ == true)
         {
-            m_array[arr_index] |= 1UL << (index_ % WORD);
+            m_array[index_/WORD] |= 1UL << (index_ % WORD);
         }
         else
         {
-            m_array[arr_index] &= ~(1UL << (index_ % WORD));
+            m_array[index_/WORD] &= ~(1UL << (index_ % WORD));
         }
 
     }
@@ -122,7 +133,7 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::flip()
     {
-        // std::transform(m_array, m_array + sizeof(m_array), m_array, std::bit_not());
+        std::transform(m_array, m_array + s_kNumWords , m_array, std::bit_not<size_t>());
     }
 
     template <size_t Size> 
@@ -143,23 +154,43 @@ namespace ilrd
     }
 
     template <size_t Size>
-    bool operator==(const BitArray<Size>& lhs, const BitArray<Size>& rhs)
+    bool BitArray<Size>::operator==(const BitArray<Size>& other_) const
     {
-        for(size_t i = 0; i < Size; ++i)
-        {
-            if(lhs.Get(i) != rhs.Get(i))
-            {
-                return false;
-            }
-        }
-        return true;
+        return std::equal(m_array, m_array + s_kNumWords, other_.m_array);
     }
 
     template <size_t Size>
-    bool operator!=(const BitArray<Size>& lhs, const BitArray<Size>& rhs)
+    bool BitArray<Size>::operator!=(const BitArray<Size>& other_) const
     {
-        return !(lhs == rhs);
+        return !(*this == other_);
     }
+
+    template <size_t Size>
+    BitArray<Size>& BitArray<Size>::operator&=(const BitArray& other_)
+    {
+
+    }
+    template <size_t Size>
+    BitArray<Size>& BitArray<Size>::operator|=(const BitArray& other_)
+    {
+        BiAddition functor(const_cast<size_t*>(other_.m_array));
+        std::transform(m_array, m_array + s_kNumWords, m_array, functor);
+	    return *this;
+    }
+    template <size_t Size>
+    BitArray<Size>& BitArray<Size>::operator^=(const BitArray& other_)
+    {
+
+    }
+
+   
+
+
+
+
+
+
+
     /***********************************************************************88*/
 
     template <size_t Size> 
