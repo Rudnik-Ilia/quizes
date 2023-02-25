@@ -9,6 +9,7 @@ using std::endl;
 #include <bitset> 
 #include <string.h>
 #include <numeric>
+#include <stdio.h>
 
 #include "staff.hpp"
 
@@ -36,10 +37,8 @@ namespace ilrd
         inline BitArray& operator^=(const BitArray& other_);
         inline BitArray& operator|=(const BitArray& other_);
 
-        inline void SafetyShift();
+        inline void SafetyShift() const;
         inline void Check(size_t idx);
-
-
 
         inline void set(bool value_); // setAll 
         inline void set(std::size_t index_, bool value_) throw(std::out_of_range);
@@ -47,7 +46,7 @@ namespace ilrd
         inline void flip(std::size_t index_) throw(std::out_of_range);
 
         inline bool get(std::size_t index_) const; 
-        inline std::size_t count();
+        inline std::size_t count() const;
         inline std::string to_string() const; 
 
  
@@ -108,9 +107,12 @@ namespace ilrd
     }
 
     template <size_t Size> 
-    void BitArray<Size>::SafetyShift()
+    void BitArray<Size>::SafetyShift() const
     {
-        m_array[s_kNumWords - 1] &= (-1lu >> (s_kNumWords * WORD - Size));
+        char *ptr = (char*)this;
+        size_t *ptr2 = (size_t*)(ptr);
+        ptr2[s_kNumWords - 1] &= (-1lu >> (s_kNumWords * WORD - Size));
+        // m_array[s_kNumWords - 1] &= (-1lu >> (s_kNumWords * WORD - Size));
     }
 
     template <size_t Size> 
@@ -172,7 +174,7 @@ namespace ilrd
     }
 
     template <size_t Size>
-    std::size_t BitArray<Size>::count() 
+    std::size_t BitArray<Size>::count() const
     {
         Counter functor(Size);
         SafetyShift();

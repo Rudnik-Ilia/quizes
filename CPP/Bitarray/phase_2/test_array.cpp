@@ -39,9 +39,10 @@ int main()
     // b1 |= b2;
     b1 &= b2;
     b1 ^= b2;
-    b1.set(8, true);
+    // b1.set(8, true);
     b1.set(119, true);
     b1.set(122, true);
+    b1.set(1, true);
  
   
     for(int i = 0; i < 128 ; ++i)
