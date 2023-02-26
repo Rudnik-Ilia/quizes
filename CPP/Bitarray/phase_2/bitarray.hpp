@@ -96,7 +96,7 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::set(std::size_t index_, bool value_) throw(std::out_of_range)
     {
-        // Check(index_);
+        Check(index_);
         value_ ? m_array[index_/WORD] |= 1UL << (index_ % WORD) :  m_array[index_/WORD] &= ~(1UL << (index_ % WORD));
     }
 
@@ -112,7 +112,6 @@ namespace ilrd
         char *ptr = (char*)this;
         size_t *ptr2 = (size_t*)(ptr);
         ptr2[s_kNumWords - 1] &= (-1lu >> (s_kNumWords * WORD - Size));
-        // m_array[s_kNumWords - 1] &= (-1lu >> (s_kNumWords * WORD - Size));
     }
 
     template <size_t Size> 
@@ -205,7 +204,7 @@ namespace ilrd
     template <size_t Size>
     typename BitArray<Size>::BitProxy& BitArray<Size>::BitProxy::operator=(const BitProxy& other_)
     {
-        m_owner.set(other_.m_owner.get(other_.m_index), m_index);
+        m_owner.set(m_index, other_.m_owner.get(other_.m_index));
         return *this;
     }
 
