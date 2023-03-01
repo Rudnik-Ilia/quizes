@@ -77,7 +77,6 @@ namespace ilrd
             }
         }
 
-
         // if(false == m_nonEmptyCond.wait_for(lock, time_ms_, !m_container.empty))
         // {
         //     return false;

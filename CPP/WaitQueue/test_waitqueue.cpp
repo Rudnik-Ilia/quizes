@@ -23,7 +23,7 @@ void Thread1()
     {
         cout << "PUT()  " << x << endl;
         mq1.Push(x++);
-        // sleep(1);
+        sleep(1);
     }
    
 }
@@ -58,20 +58,20 @@ void Thread3()
     while(1)
     {
         mq1.Pop(timeout, tmp);
-        cout << tmp << endl;
+        cout << "TAKE(3)  " << tmp << endl;
     }  
 }
 
 int main()
 {
     thread t1(&Thread1);
-    thread t2(&Thread2);
-    thread t2_1(&Thread2_1);
+    // thread t2(&Thread2);
+    // thread t2_1(&Thread2_1);
 
-    // thread t3(&Thread3);
+    thread t3(&Thread3);
 
     t1.join(); 
-    t2.join(); 
+    // t2.join(); 
     // t3.join();
 
 
