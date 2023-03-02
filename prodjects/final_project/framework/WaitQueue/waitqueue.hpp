@@ -31,8 +31,6 @@ namespace ilrd
     mutable std::mutex m_mutex{};
     std::condition_variable m_nonEmptyCond{};
 
-    bool fake_wakeup = false;
-
     }; // class WQueue
 
 
@@ -43,7 +41,6 @@ namespace ilrd
         m_container.push(element);
         lock.unlock();
         m_nonEmptyCond.notify_one();
-        fake_wakeup = true;
     }
 
     template<typename T, typename CONTAINER> 
@@ -57,32 +54,22 @@ namespace ilrd
     void WaitableQueue<T, CONTAINER>::Pop(T &outparam_)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        while(m_container.empty())
-        {
-            m_nonEmptyCond.wait(lock, [&]{return !this->fake_wakeup;});
-        }
+        m_nonEmptyCond.wait(lock, [&]{return this->m_container.empty() == false;});
         outparam_ = m_container.front();
         m_container.pop();
-        fake_wakeup = false;
     }
 
     template<typename T, typename CONTAINER> 
     bool WaitableQueue<T, CONTAINER>::Pop(std::chrono::milliseconds time_ms_, T &outparam_)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        std::chrono::time_point<std::chrono::system_clock> time_until = std::chrono::system_clock::now() + time_ms_;
-
-        while(m_container.empty())
+        if(false == m_nonEmptyCond.wait_for(lock, time_ms_, [&]{return this->m_container.empty() == false;}))
         {
-            if(std::cv_status::timeout == m_nonEmptyCond.wait_until(lock, time_until))
-            {
-                return false;
-            }
+            return false;
         }
-
+        
         outparam_ = m_container.front();
         m_container.pop();
-        fake_wakeup = false;
 
         return true;
     }
