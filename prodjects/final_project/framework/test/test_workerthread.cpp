@@ -2,6 +2,8 @@
 using std::cout;
 using std::endl;
 
+#include <unistd.h>
+
 #include "WorkerThread.hpp"
 #include "ITask.hpp"
 #include "ThreadPool.hpp"
@@ -25,17 +27,12 @@ std::shared_ptr<ITask> getTask()
 
 int main()
 {
-    // MyTask my;
-    // std::shared_ptr<ITask> p_task(new MyTask);
-
-
-    // (getTask())->Execute();
-
     std::function<std::shared_ptr<ITask>()> send_func = std::bind(getTask);
 
     // send_func().get()->Execute();
 
     WorkerThread *work = new WorkerThread(send_func);
+    sleep(1);
 
     return 0;
 }
