@@ -27,9 +27,9 @@ namespace ilrd
     bool IsEmpty() const;
 
     private:
-    CONTAINER m_container{};
-    mutable std::mutex m_mutex{};
-    std::condition_variable m_nonEmptyCond{};
+    CONTAINER m_container;
+    mutable std::mutex m_mutex;
+    std::condition_variable m_nonEmptyCond;
 
     }; // class WQueue
 
@@ -37,9 +37,10 @@ namespace ilrd
     template<typename T, typename CONTAINER> 
     void WaitableQueue<T, CONTAINER>::Push(const T &element)
     {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_container.push(element);
-        lock.unlock();
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_container.push(element);
+        }
         m_nonEmptyCond.notify_one();
     }
 
