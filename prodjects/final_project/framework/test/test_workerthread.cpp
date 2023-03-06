@@ -4,21 +4,17 @@ using std::endl;
 
 #include "WorkerThread.hpp"
 #include "ITask.hpp"
+#include "ThreadPool.hpp"
 using namespace ilrd;
 
-typedef std::function<std::shared_ptr<ITask>> f_task;
-
-typedef std::shared_ptr<ITask> p_task;
 
 class MyTask: public ITask
 {
     public:
     void Execute()
     {
-        cout << "Thread Run" << endl;
+            cout << "Thread Run" << endl;  
     }
-
-    private:
 
 };
 
@@ -29,18 +25,17 @@ std::shared_ptr<ITask> getTask()
 
 int main()
 {
-    MyTask my;
-    std::shared_ptr<ITask> p_task(new MyTask);
+    // MyTask my;
+    // std::shared_ptr<ITask> p_task(new MyTask);
 
 
-    (getTask())->Execute();
+    // (getTask())->Execute();
 
-    std::function<std::shared_ptr<ITask>()>  send_func = std::bind(getTask);
+    std::function<std::shared_ptr<ITask>()> send_func = std::bind(getTask);
 
+    // send_func().get()->Execute();
 
-    
-
-    // WorkerThread();
+    WorkerThread *work = new WorkerThread(send_func);
 
     return 0;
 }
