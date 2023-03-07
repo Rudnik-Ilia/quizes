@@ -59,7 +59,7 @@ class MySleep: public ITask
     public:
     void Execute()
     {
-        sleep(5);
+        sleep(2);
     }
 
 };
@@ -79,11 +79,20 @@ int main()
     ThreadPool *pool = new ThreadPool(1);
 
     pool->AddTask(std::shared_ptr<MySleep>(new MySleep()), ThreadPool::PRIORITY_HIGH);
+
     pool->AddTask(std::shared_ptr<MyTaskLow>(new MyTaskLow()), ThreadPool::PRIORITY_LOW);
     pool->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), ThreadPool::PRIORITY_NORMAL);
+
+    sleep(2);
+    pool->Pause();
+    sleep(5);
+    cout << "After sleep" << endl;
+    pool->Resume();
+    cout << "Wake up and go futher" << endl;
     pool->AddTask(std::shared_ptr<MyTaskHigh>(new MyTaskHigh()), ThreadPool::PRIORITY_HIGH);
 
-    sleep(16);
+    sleep(11);
+
     
 
     return 0;

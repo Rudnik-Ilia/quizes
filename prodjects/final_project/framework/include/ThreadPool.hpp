@@ -4,6 +4,8 @@
 #include <thread> // thread
 #include <atomic>
 #include <iostream>
+#include <condition_variable>
+#include <mutex>
 
 #include "WaitableQueue.hpp"
 #include "PriorityQueue.hpp"
@@ -11,7 +13,26 @@
 #include "ThreadMap.hpp"
 
 namespace ilrd
-{
+{   
+    class PauseTask: public ITask
+    {
+        public:
+            PauseTask(std::mutex* mu, std::condition_variable *con, std::atomic<bool> *m_pau): mu_mutex(mu) , cond_var(con), m_paused(m_pau){};
+            void Execute()
+            {
+                std::unique_lock<std::mutex> lock(*mu_mutex);
+
+                while(m_paused)
+                {
+                    cond_var->wait(lock);
+                }
+            }
+
+        private:
+            std::mutex *mu_mutex;
+            std::condition_variable *cond_var;
+            std::atomic<bool> *m_paused;
+    };
 
     class ThreadPool
     {
@@ -41,6 +62,8 @@ namespace ilrd
             void Stop();
 
             std::size_t m_numOfThreads;
+
+            std::mutex m_mutex;
             std::condition_variable m_conditon_var;
 
             ThreadMap m_workingThreads;
@@ -50,21 +73,19 @@ namespace ilrd
             std::atomic<bool> m_paused;
             std::shared_ptr<ITask> GetTask();
 
-            std::function<void()> pause_func;
-           
+            std::shared_ptr<ITask> pause_func;   
     };
 
-    ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false)
+    ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false), pause_func()
     {
-        std::cout << "NUM " << std::thread::hardware_concurrency() << std::endl;
         if(0 == numOfThreads)
         {
             m_numOfThreads = 10;
         }
-
+        size_t tmp = m_numOfThreads;
         std::function<std::shared_ptr<ITask>()>  wrap_for_func = std::bind(&ThreadPool::GetTask, this);
-
-        while(m_numOfThreads--)
+    
+        while(tmp--)
         {
             WorkerThread * work_thread = new WorkerThread(wrap_for_func);
             m_workingThreads.Insert({work_thread->GetTID(), std::shared_ptr<WorkerThread>(work_thread)});
@@ -100,14 +121,22 @@ namespace ilrd
     void ThreadPool::Pause()
     {
         m_paused = true;  
+        std::cout << "NUMOF:  " <<  m_numOfThreads << std::endl;
+
+
+        for (size_t i = 0; i < m_numOfThreads; ++i)
+        {
+            m_Tasks.Push(TaskPair(std::shared_ptr<PauseTask>(new PauseTask(&m_mutex, &m_conditon_var, &m_paused)), ThreadPool::PRIORITY_HIGH));
+            // std::cout << "!!!" << std::endl;
+        }
     }
 
-    void ThreadPool::PauseON()
+    void ThreadPool::Resume()
     {
-       
+        std::unique_lock<std::mutex> lock(m_mutex);
+        m_paused = false;
+        m_conditon_var.notify_all();
     }
-
-
 
 
     bool operator<(const ThreadPool::TaskPair &lhs, const ThreadPool::TaskPair &rhs)
