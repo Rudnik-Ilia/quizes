@@ -17,7 +17,11 @@ class MyTaskNormal: public ITask
     void Execute()
     {
    
-        cout << "Thread Run NORMAL" << endl;  
+        for(int i = 0; i < 3; ++i)
+        {
+            cout << "Thread Run NORMAL" << endl; 
+            sleep(1);    
+        } 
         
     }
 
@@ -27,8 +31,11 @@ class MyTaskHigh: public ITask
     public:
     void Execute()
     {
-    
-        cout << "Thread Run HIGH" << endl;  
+        for(int i = 0; i < 3; ++i)
+        {
+            cout << "Thread Run HIGH" << endl; 
+            sleep(1);    
+        }
         
     }
 
@@ -38,8 +45,21 @@ class MyTaskLow: public ITask
     public:
     void Execute()
     {
-        cout << "Thread Run LOW" << endl;  
-        
+        for(int i = 0; i < 3; ++i)
+        {
+            cout << "Thread Run LOW" << endl;
+            sleep(1);    
+        }
+
+    }
+
+};
+class MySleep: public ITask
+{
+    public:
+    void Execute()
+    {
+        sleep(5);
     }
 
 };
@@ -56,13 +76,14 @@ int main()
 
     // WorkerThread *work = new WorkerThread(send_func);
 
-    ThreadPool *pool = new ThreadPool(10);
+    ThreadPool *pool = new ThreadPool(1);
 
+    pool->AddTask(std::shared_ptr<MySleep>(new MySleep()), ThreadPool::PRIORITY_HIGH);
+    pool->AddTask(std::shared_ptr<MyTaskLow>(new MyTaskLow()), ThreadPool::PRIORITY_LOW);
     pool->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), ThreadPool::PRIORITY_NORMAL);
     pool->AddTask(std::shared_ptr<MyTaskHigh>(new MyTaskHigh()), ThreadPool::PRIORITY_HIGH);
-    pool->AddTask(std::shared_ptr<MyTaskLow>(new MyTaskLow()), ThreadPool::PRIORITY_LOW);
 
-    sleep(3);
+    sleep(16);
     
 
     return 0;
