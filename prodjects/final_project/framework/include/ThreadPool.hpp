@@ -3,6 +3,7 @@
 
 #include <thread> // thread
 #include <atomic>
+#include <iostream>
 
 #include "WaitableQueue.hpp"
 #include "PriorityQueue.hpp"
@@ -15,10 +16,9 @@ namespace ilrd
     class ThreadPool
     {
         public:
-            enum TaskPriority { PRIORITY_HIGH = 1, PRIORITY_NORMAL = 2, PRIORITY_LOW = 3 };
+            enum TaskPriority { PRIORITY_LOW = 0, PRIORITY_NORMAL = 1, PRIORITY_HIGH = 2};
 
             typedef std::pair<std::shared_ptr<ITask>, TaskPriority> TaskPair;
-
             typedef PriorityQueue<TaskPair, std::vector<TaskPair>, std::less<TaskPair> > TaskPQ;
 
             explicit ThreadPool(std::size_t numOfThreads = std::thread::hardware_concurrency()); // check in ctor body 0 == numOfThreads
@@ -41,31 +41,27 @@ namespace ilrd
             void Stop();
 
             std::size_t m_numOfThreads;
+            std::condition_variable m_conditon_var;
+
             ThreadMap m_workingThreads;
             WaitableQueue<TaskPair, TaskPQ> m_Tasks;
-            WaitableQueue<std::thread> m_availableThreads;
+            WaitableQueue<std::shared_ptr<WorkerThread> > m_availableThreads;
 
             std::atomic<bool> m_paused;
             std::shared_ptr<ITask> GetTask();
 
-            class Compare
-            {
-                public:
-                    bool operator() (TaskPair a, TaskPair b)
-                    {
-                        return (a.first > b.first);
-                    }
-            };
-
+            std::function<void()> pause_func;
            
     };
 
     ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false)
     {
+        std::cout << "NUM " << std::thread::hardware_concurrency() << std::endl;
         if(0 == numOfThreads)
         {
             m_numOfThreads = 10;
         }
+
         std::function<std::shared_ptr<ITask>()>  wrap_for_func = std::bind(&ThreadPool::GetTask, this);
 
         while(m_numOfThreads--)
@@ -91,15 +87,36 @@ namespace ilrd
 
     void ThreadPool::AddTask(std::shared_ptr<ITask> task, TaskPriority taskPriority_)
     {
-        TaskPair task_pair(task, taskPriority_);
-        m_Tasks.Push(task_pair);
+        m_Tasks.Push(TaskPair(task, taskPriority_));
     }
 
     std::shared_ptr<ITask> ThreadPool::GetTask()
     {
         TaskPair task_pair;
-        // m_Tasks.Pop();q
+        m_Tasks.Pop(task_pair);
+        return task_pair.first;
     }
+
+    void ThreadPool::Pause()
+    {
+        m_paused = true;  
+    }
+
+    void ThreadPool::PauseON()
+    {
+       
+    }
+
+
+
+
+    bool operator<(const ThreadPool::TaskPair &lhs, const ThreadPool::TaskPair &rhs)
+    {
+        return lhs.second < rhs.second;
+    }
+
+
+
 
 }
 

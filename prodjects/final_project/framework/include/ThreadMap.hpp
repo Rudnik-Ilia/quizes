@@ -34,7 +34,7 @@ namespace ilrd
             WorkerThread::State GetState(Key key_) const;
         
         private:
-            std::mutex m_mutex;
+            mutable std::mutex m_mutex;
             std::unordered_map<Key, Value> m_threadMap;
     }; 
 
@@ -58,6 +58,7 @@ namespace ilrd
 
     WorkerThread::State ThreadMap::GetState(Key key_) const
     {
+        std::unique_lock<std::mutex> lock(m_mutex);
         return  m_threadMap.find(key_)->second->GetState();
     }
 
