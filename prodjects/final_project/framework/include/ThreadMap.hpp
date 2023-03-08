@@ -22,7 +22,7 @@ namespace ilrd
 
             ThreadMap() = default;
             ThreadMap(ThreadMap &&) = delete;
-            ThreadMap(const ThreadMap &) = delete;
+            ThreadMap(const ThreadMap &) = delete;  
             ThreadMap &operator=(ThreadMap &&) = delete;
             ThreadMap &operator=(const ThreadMap &) = delete;
             ~ThreadMap() = default;

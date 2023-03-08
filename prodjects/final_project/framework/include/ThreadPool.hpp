@@ -6,6 +6,7 @@
 #include <iostream>
 #include <condition_variable>
 #include <mutex>
+#include <stdlib.h> /*abs*/
 
 #include "WaitableQueue.hpp"
 #include "PriorityQueue.hpp"
@@ -14,35 +15,52 @@
 
 namespace ilrd
 {   
+    class StopTask: public ITask
+    {
+        public:
+            StopTask(ThreadMap &map_arg, WaitableQueue<std::shared_ptr<WorkerThread> > &wq_arg): m_workingThreads(map_arg), m_availableThreads(wq_arg){}
+            void Execute()
+            {
+                ThreadMap::iterator iter;
+                iter = m_workingThreads.Find(std::this_thread::get_id());
+                iter->second->SwitchState();
+                m_availableThreads.Push(iter->second);
+                m_workingThreads.Remove(iter);
+            }
+
+        private:
+            ThreadMap &m_workingThreads;
+            WaitableQueue<std::shared_ptr<WorkerThread> > &m_availableThreads;
+    };
+
     class PauseTask: public ITask
     {
         public:
-            PauseTask(std::mutex* mu, std::condition_variable *con, std::atomic<bool> *m_pau): mu_mutex(mu) , cond_var(con), m_paused(m_pau){};
+            PauseTask(std::mutex &mu, std::condition_variable &con, std::atomic<bool> &m_pau): mu_mutex(mu) , cond_var(con), m_paused(m_pau){};
             void Execute()
             {
-                std::unique_lock<std::mutex> lock(*mu_mutex);
-
+                std::unique_lock<std::mutex> lock(mu_mutex);
                 while(m_paused)
                 {
-                    cond_var->wait(lock);
+                    cond_var.wait(lock);
                 }
             }
 
         private:
-            std::mutex *mu_mutex;
-            std::condition_variable *cond_var;
-            std::atomic<bool> *m_paused;
+            std::mutex &mu_mutex;
+            std::condition_variable &cond_var;
+            std::atomic<bool> &m_paused;
     };
 
     class ThreadPool
     {
         public:
-            enum TaskPriority { PRIORITY_LOW = 0, PRIORITY_NORMAL = 1, PRIORITY_HIGH = 2};
+            enum TaskPriority {PRIORITY_LOW = 0, PRIORITY_NORMAL = 1, PRIORITY_HIGH = 2};
 
             typedef std::pair<std::shared_ptr<ITask>, TaskPriority> TaskPair;
             typedef PriorityQueue<TaskPair, std::vector<TaskPair>, std::less<TaskPair> > TaskPQ;
 
-            explicit ThreadPool(std::size_t numOfThreads = std::thread::hardware_concurrency()); // check in ctor body 0 == numOfThreads
+            explicit ThreadPool(std::size_t numOfThreads = std::thread::hardware_concurrency()); 
             
             ThreadPool(ThreadPool &&) = delete;
             ThreadPool(const ThreadPool &) = delete;
@@ -56,10 +74,11 @@ namespace ilrd
             void Resume(void);
             void SetThreadNum(std::size_t n_);
 
-
         private:
+            void MyJoin();
+            void Stop(size_t times);
 
-            void Stop();
+            enum TaskPrioritySuper{PRIORITY_SUPER = 3};
 
             std::size_t m_numOfThreads;
 
@@ -72,42 +91,56 @@ namespace ilrd
 
             std::atomic<bool> m_paused;
             std::shared_ptr<ITask> GetTask();
-
-            std::shared_ptr<ITask> pause_func;   
     };
 
-    ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false), pause_func()
+
+    ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false)
     {
         if(0 == numOfThreads)
         {
-            m_numOfThreads = 10;
+            m_numOfThreads = 5;
         }
+
         size_t tmp = m_numOfThreads;
         std::function<std::shared_ptr<ITask>()>  wrap_for_func = std::bind(&ThreadPool::GetTask, this);
     
         while(tmp--)
         {
-            WorkerThread * work_thread = new WorkerThread(wrap_for_func);
+            WorkerThread *work_thread = new WorkerThread(wrap_for_func);
             m_workingThreads.Insert({work_thread->GetTID(), std::shared_ptr<WorkerThread>(work_thread)});
         }
     }
 
     ThreadPool::~ThreadPool()
     {
-        Stop();
+        std::cout << "Dtor" << std::endl;
+        Stop(m_numOfThreads);
     }
 
-    void ThreadPool::Stop()
+    void ThreadPool::Stop(size_t times)
     {
-        for (size_t i = 0; i < m_numOfThreads; ++i)
+        for (size_t i = 0; i < times; ++i)
         {
-            
+            m_Tasks.Push(TaskPair(std::shared_ptr<StopTask>(new StopTask(m_workingThreads, m_availableThreads)), ThreadPool::PRIORITY_HIGH));
+            std::cout << "???" << std::endl;
         }
-        
+
+        for (size_t i = 0; i < times; ++i)
+        {
+           MyJoin();
+        } 
+    }
+
+    void ThreadPool::MyJoin()
+    {
+        std::shared_ptr<WorkerThread> work_thread;
+        m_availableThreads.Pop(work_thread);
+        work_thread->JoinThread();
     }
 
     void ThreadPool::AddTask(std::shared_ptr<ITask> task, TaskPriority taskPriority_)
     {
+        std::cout << "PUSH"<< std::endl;
         m_Tasks.Push(TaskPair(task, taskPriority_));
     }
 
@@ -121,31 +154,43 @@ namespace ilrd
     void ThreadPool::Pause()
     {
         m_paused = true;  
-        std::cout << "NUMOF:  " <<  m_numOfThreads << std::endl;
-
 
         for (size_t i = 0; i < m_numOfThreads; ++i)
         {
-            m_Tasks.Push(TaskPair(std::shared_ptr<PauseTask>(new PauseTask(&m_mutex, &m_conditon_var, &m_paused)), ThreadPool::PRIORITY_HIGH));
-            // std::cout << "!!!" << std::endl;
+            m_Tasks.Push(TaskPair(std::shared_ptr<PauseTask>(new PauseTask(m_mutex, m_conditon_var, m_paused)), ThreadPool::PRIORITY_HIGH));
+            std::cout << "!!!" << std::endl;
         }
     }
 
     void ThreadPool::Resume()
-    {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_paused = false;
+    {   
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_paused = false;
+        }
         m_conditon_var.notify_all();
     }
 
+    void ThreadPool::SetThreadNum(size_t n_)
+    {
+        int check = n_ - m_numOfThreads;
+
+        if(check < 0)
+        {
+            Stop(abs(check));
+        }
+        if(check > 0)
+        {
+            
+        }
+
+
+    }
 
     bool operator<(const ThreadPool::TaskPair &lhs, const ThreadPool::TaskPair &rhs)
     {
         return lhs.second < rhs.second;
     }
-
-
-
 
 }
 

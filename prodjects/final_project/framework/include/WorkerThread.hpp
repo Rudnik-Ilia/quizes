@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <functional>
+#include <iostream>
 
 #include "ITask.hpp"
 
@@ -25,12 +26,14 @@ namespace ilrd
             State GetState() const;
             std::thread::id GetTID() const;
 
+            void SwitchState();
+            void JoinThread();
+
         private:
             State m_state;
             std::function<std::shared_ptr<ITask>()> m_taskGetter;
             std::thread m_thread;
             void Run();
-
     };
 
     WorkerThread::WorkerThread(std::function<std::shared_ptr<ITask>()> fGetTask_): m_state(RUNNING), m_taskGetter(fGetTask_), m_thread(std::bind(&WorkerThread::Run, this)){}
@@ -52,10 +55,22 @@ namespace ilrd
 
     void WorkerThread::Run()
     {
+        std::cout << "before LOOP" << std::endl;
         while (m_state == RUNNING)
         {
+            std::cout << "LOOP" << std::endl;
             m_taskGetter().get()->Execute();
         } 
+    }
+
+    void WorkerThread::SwitchState()
+    {
+        m_state = STOPPED;
+    }
+
+    void WorkerThread::JoinThread()
+    {
+        m_thread.join();
     }
 }
 
