@@ -55,7 +55,7 @@ namespace ilrd
     class ThreadPool
     {
         public:
-            enum TaskPriority {PRIORITY_LOW = 0, PRIORITY_NORMAL = 1, PRIORITY_HIGH = 2};
+            enum TaskPriority {PRIORITY_LOW = 0, PRIORITY_NORMAL = 1, PRIORITY_HIGH = 2, PRIORITY_SUPER = 3};
 
             typedef std::pair<std::shared_ptr<ITask>, TaskPriority> TaskPair;
             typedef PriorityQueue<TaskPair, std::vector<TaskPair>, std::less<TaskPair> > TaskPQ;
@@ -75,10 +75,10 @@ namespace ilrd
             void SetThreadNum(std::size_t n_);
 
         private:
+
             void MyJoin();
             void Stop(size_t times);
-
-            enum TaskPrioritySuper{PRIORITY_SUPER = 3};
+            void CreateAndPushThread();
 
             std::size_t m_numOfThreads;
 
@@ -91,10 +91,12 @@ namespace ilrd
 
             std::atomic<bool> m_paused;
             std::shared_ptr<ITask> GetTask();
+
+            std::function<std::shared_ptr<ITask>()>  wrap_for_func;
     };
 
 
-    ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false)
+    ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false), wrap_for_func(std::bind(&ThreadPool::GetTask, this))
     {
         if(0 == numOfThreads)
         {
@@ -102,12 +104,10 @@ namespace ilrd
         }
 
         size_t tmp = m_numOfThreads;
-        std::function<std::shared_ptr<ITask>()>  wrap_for_func = std::bind(&ThreadPool::GetTask, this);
-    
+        
         while(tmp--)
         {
-            WorkerThread *work_thread = new WorkerThread(wrap_for_func);
-            m_workingThreads.Insert({work_thread->GetTID(), std::shared_ptr<WorkerThread>(work_thread)});
+            CreateAndPushThread();
         }
     }
 
@@ -121,7 +121,7 @@ namespace ilrd
     {
         for (size_t i = 0; i < times; ++i)
         {
-            m_Tasks.Push(TaskPair(std::shared_ptr<StopTask>(new StopTask(m_workingThreads, m_availableThreads)), ThreadPool::PRIORITY_HIGH));
+            m_Tasks.Push(TaskPair(std::shared_ptr<StopTask>(new StopTask(m_workingThreads, m_availableThreads)), ThreadPool::PRIORITY_SUPER));
             std::cout << "???" << std::endl;
         }
 
@@ -157,7 +157,7 @@ namespace ilrd
 
         for (size_t i = 0; i < m_numOfThreads; ++i)
         {
-            m_Tasks.Push(TaskPair(std::shared_ptr<PauseTask>(new PauseTask(m_mutex, m_conditon_var, m_paused)), ThreadPool::PRIORITY_HIGH));
+            m_Tasks.Push(TaskPair(std::shared_ptr<PauseTask>(new PauseTask(m_mutex, m_conditon_var, m_paused)), ThreadPool::PRIORITY_SUPER));
             std::cout << "!!!" << std::endl;
         }
     }
@@ -181,10 +181,18 @@ namespace ilrd
         }
         if(check > 0)
         {
-            
+            for(int i = 0; i < check; ++i)
+            {
+               CreateAndPushThread();
+            }
         }
+        this->m_numOfThreads = n_;
+    }
 
-
+    void ThreadPool::CreateAndPushThread()
+    {
+        WorkerThread *work_thread = new WorkerThread(wrap_for_func);
+        m_workingThreads.Insert({work_thread->GetTID(), std::shared_ptr<WorkerThread>(work_thread)});
     }
 
     bool operator<(const ThreadPool::TaskPair &lhs, const ThreadPool::TaskPair &rhs)

@@ -55,7 +55,6 @@ namespace ilrd
 
     void WorkerThread::Run()
     {
-        std::cout << "before LOOP" << std::endl;
         while (m_state == RUNNING)
         {
             std::cout << "LOOP" << std::endl;

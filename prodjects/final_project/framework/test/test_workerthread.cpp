@@ -8,6 +8,8 @@ using std::endl;
 #include "ITask.hpp"
 #include "ThreadPool.hpp"
 
+// gp11 test_workerthread.cpp -lpthread -I ../include
+
 using namespace ilrd;
 
 
@@ -50,6 +52,19 @@ class MyTaskLow: public ITask
     }
 };
 
+class MyTaskLongLong: public ITask
+{
+    public:
+    void Execute()
+    {
+        for(int i = 0; i < 10; ++i)
+        {
+            cout << "Thread Run LONG-LONG" << endl;
+            sleep(1);    
+        }
+    }
+};
+
 class MySleep: public ITask
 {
     public:
@@ -78,13 +93,28 @@ int main()
         pool->AddTask(std::shared_ptr<MyTaskLow>(new MyTaskLow()), ThreadPool::PRIORITY_LOW);
         pool->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), ThreadPool::PRIORITY_NORMAL);
 
+        pool->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), ThreadPool::PRIORITY_NORMAL);
+        pool->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), ThreadPool::PRIORITY_NORMAL);
+        pool->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), ThreadPool::PRIORITY_NORMAL);
+
         sleep(5);
+        cout << "Going sleep" << endl;
         pool->Pause();
+
+        pool->SetThreadNum(7);
         sleep(10);
         cout << "After sleep" << endl;
         pool->Resume();
         cout << "Wake up and go futher" << endl;
+
+        pool->AddTask(std::shared_ptr<MySleep>(new MySleep()), ThreadPool::PRIORITY_HIGH);
+        pool->SetThreadNum(1);
+        pool->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), ThreadPool::PRIORITY_NORMAL);
         pool->AddTask(std::shared_ptr<MyTaskHigh>(new MyTaskHigh()), ThreadPool::PRIORITY_HIGH);
+
+        pool->AddTask(std::shared_ptr<MyTaskLongLong>(new MyTaskLongLong()), ThreadPool::PRIORITY_NORMAL);
+
+        pool->SetThreadNum(10);
 
         sleep(10);
         delete pool;
