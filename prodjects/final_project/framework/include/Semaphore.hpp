@@ -21,6 +21,7 @@ namespace ilrd
 
             inline void Wait();
             inline void Post();
+            inline bool TryWait();
 
         private:
             int m_counter;
@@ -47,5 +48,16 @@ namespace ilrd
                 condition.wait(lock);
             }
             --m_counter;
+        }
+
+        bool Semaphore::TryWait()
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            if(m_counter)
+            {
+                --m_counter;
+                return true;
+            }
+            return false;
         }
 }

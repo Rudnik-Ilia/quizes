@@ -110,6 +110,7 @@ namespace ilrd
 
     ThreadPool::~ThreadPool()
     {
+        Resume();
         std::cout << "Dtor" << std::endl;
         Stop(m_numOfThreads);
     }
