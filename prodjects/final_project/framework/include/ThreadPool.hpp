@@ -39,10 +39,13 @@ namespace ilrd
             PauseTask(std::mutex &mu, std::condition_variable &con, std::atomic<bool> &m_pau): mu_mutex(mu) , cond_var(con), m_paused(m_pau){};
             void Execute()
             {
-                std::unique_lock<std::mutex> lock(mu_mutex);
                 while(m_paused)
                 {
-                    cond_var.wait(lock);
+                    std::unique_lock<std::mutex> lock(mu_mutex);
+                    while(m_paused)
+                    {
+                        cond_var.wait(lock);
+                    }
                 }
                 
             }
@@ -97,7 +100,6 @@ namespace ilrd
 
             TaskPriority ILIA = static_cast<TaskPriority>(3);
     };
-
 
     ThreadPool::ThreadPool(std::size_t numOfThreads): m_numOfThreads(numOfThreads), m_paused(false), wrap_for_func(std::bind(&ThreadPool::GetTask, this))
     {

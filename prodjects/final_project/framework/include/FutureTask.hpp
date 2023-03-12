@@ -7,10 +7,10 @@
 namespace ilrd
 {
     template<int ...>
-    struct seq { };
+    struct seq {};
 
     template<int N, int ...S>
-    struct gens : gens<N-1, N-1, S...> { };
+    struct gens : gens<N-1, N-1, S...> {};
 
     template<int ...S>
     struct gens<0, S...> {
@@ -32,7 +32,10 @@ namespace ilrd
             mutable Semaphore m_semaphore;
 
             template<int ...S>
-            void callFunc(seq<S...>){ m_result = m_func(std::get<S>(m_args)...); }
+            void callFunc(seq<S...>)
+            { 
+                m_result = m_func(std::get<S>(m_args)...); 
+            }
 
     };
 
@@ -42,7 +45,7 @@ namespace ilrd
     template <class T, class... ARGS>
     void FutureTask<T, ARGS...>::Execute()
     {
-        callFunc(typename gens<sizeof...(ARGS) > ::type());
+        callFunc(typename gens<sizeof...(ARGS)>::type());
         m_semaphore.Post();
     }
 
