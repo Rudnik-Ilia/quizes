@@ -38,7 +38,7 @@ namespace ilrd
         static std::mutex s_mutex;
 
         T *tmp = s_ptr;
-        
+
         __sync_synchronize();
 
         if(0 == tmp)
@@ -50,6 +50,7 @@ namespace ilrd
             {
                 tmp = new T;
                 __sync_synchronize();
+                
                 s_ptr = tmp;
                 atexit(CleanUp);
             }
