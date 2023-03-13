@@ -66,7 +66,7 @@ struct ArgsForWrite: public FactoryArgs
 
     string &m_str;
     size_t m_num;
-};\
+};
 
 struct ArgsForDelete: public FactoryArgs
 {

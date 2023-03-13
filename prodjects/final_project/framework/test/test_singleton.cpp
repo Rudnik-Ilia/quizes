@@ -9,6 +9,7 @@ using std::string;
 
 using namespace ilrd;
 
+typedef Factory<ITask, string> factory_p;
 
 class WriteFunc: public ITask
 {
@@ -43,7 +44,13 @@ int main()
 
     string str1 = "Im reader";
 
-    Factory<ITask, string> factor;
+    // factory_p* ptr =  Singleton<factory_p>::GetInstance();
+    
+    Singleton<factory_p>::GetInstance();
+    
+
+
+
     
 
 

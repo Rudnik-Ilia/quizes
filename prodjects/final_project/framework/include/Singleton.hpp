@@ -2,6 +2,7 @@
 #define __ILRD_RD132_SINGLETON_HPP__
 
 #include <atomic>
+#include <functional>
 #include <mutex>
 
 namespace ilrd
@@ -21,32 +22,39 @@ namespace ilrd
         static T *GetInstance();
         
     private:
-        static T *s_ptr = NULL;
-        static std::mutex s_mutex;
+        static T *s_ptr;
+        // static std::mutex s_mutex;
         static void CleanUp();
     };
+    
+    template<class T>
+    T* Singleton<T>::s_ptr;
 
     template<class T>
     T* Singleton<T>::GetInstance()
     {
-        static Singleton<T> singleton_p; 
+        // static Singleton<T> singleton_p; 
 
-        T *tmp = singleton_p.s_ptr;
+        static std::mutex s_mutex;
+
+        T *tmp = s_ptr;
+        
         __sync_synchronize();
 
         if(0 == tmp)
         {
             std::lock_guard<std::mutex> lock(s_mutex);
-            tmp = singleton_p.m_instance;
+            tmp = s_ptr;
 
             if(0 == tmp)
             {
-                tmp = new T();
+                tmp = new T;
                 __sync_synchronize();
-                singleton_p.m_instance = tmp;
+                s_ptr = tmp;
+                atexit(CleanUp);
             }
         }
-        return *tmp;
+        return tmp;
     }
 
     template<class T>
