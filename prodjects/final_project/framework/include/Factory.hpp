@@ -34,7 +34,6 @@ namespace ilrd
 
     private:
         std::unordered_map<Key, Value> m_creators;
-        
     };
 
     template <class Base, class Key>

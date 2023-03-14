@@ -4,6 +4,7 @@ using std::endl;
 using std::string;
 #include <thread>
 using std::thread;
+#include <unistd.h>
 
 #include "Factory.hpp"
 #include "Singleton.hpp"
@@ -19,11 +20,14 @@ class WriteFunc: public ITask
         WriteFunc(string &str): m_str(str){}
         void Execute()
         {
-            cout << m_str << endl;
+            // ++WriteFunc::x;
+            cout << m_str << ' '<< this << ' ' << endl;
         }
 
     private:
         string &m_str;
+        static size_t x;
+
 };
 
 struct ArgsForWrite: public FactoryArgs
@@ -39,8 +43,28 @@ std::shared_ptr<ITask> CreaterWrite(FactoryArgs &arguments)
     return std::shared_ptr<WriteFunc>(new WriteFunc(args.m_str));
 }
 
-void CreatorSingleton()
+void CreatorSingleton(ArgsForWrite args)
 {
+
+    for(size_t i; i < 10; ++i)
+    {
+        factory_p* f = Singleton<factory_p>::GetInstance();
+        f->Register("W", CreaterWrite);
+        f->Create("W", args)->Execute();
+        cout << f << endl;
+    }
+}
+
+void CreatorSingleton2(ArgsForWrite args)
+{
+
+    for(size_t i; i < 10; ++i)
+    {
+        factory_p fac;
+        fac.Register("W", CreaterWrite);
+        fac.Create("W", args)->Execute();
+        cout << &fac << endl;
+    }
     
 }
 
@@ -51,28 +75,34 @@ int main()
 
     ArgsForWrite writer(str);
 
-    auto ptr1 = new factory_p();
-    auto ptr4 = new factory_p();
+    factory_p fac;
+    factory_p fac2;
 
     factory_p* ptr2 =  Singleton<factory_p>::GetInstance();
     factory_p* ptr3 =  Singleton<factory_p>::GetInstance();
 
-    cout << ptr1 << ' ' << ptr4 << endl;
+    cout << &fac << ' ' << &fac2 << endl;
     cout << ptr2 << ' ' << ptr3 << endl;
 
-    ptr1->Register("W", CreaterWrite);
+    fac.Register("W", CreaterWrite);
+    fac2.Register("W", CreaterWrite);
+
     ptr2->Register("W", CreaterWrite);
     ptr3->Register("W", CreaterWrite);
-    ptr4->Register("W", CreaterWrite);
 
-    ptr1->Create("W", writer)->Execute();
+    fac.Create("W", writer)->Execute();
+    fac2.Create("W", writer)->Execute();
+
     ptr2->Create("W", writer)->Execute();
     ptr3->Create("W", writer)->Execute();
-    ptr4->Create("W", writer)->Execute();
     
-    thread t1();
-    thread t2();
+    thread t1(&CreatorSingleton, writer);
+    thread t2(&CreatorSingleton2, writer);
 
+    sleep(5);
+
+    t1.join();
+    t2.join();
 
 
     return 0;

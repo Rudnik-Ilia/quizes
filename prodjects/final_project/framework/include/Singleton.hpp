@@ -22,23 +22,21 @@ namespace ilrd
         static T *GetInstance();
         
     private:
-        static T *s_ptr;
-        // static std::mutex s_mutex;
+        static std::atomic<T*> s_ptr;
         static void CleanUp();
     };
     
+    #ifdef CREATOR
+
     template<class T>
-    T* Singleton<T>::s_ptr;
+    std::atomic<T*> Singleton<T>::s_ptr;
 
     template<class T>
     T* Singleton<T>::GetInstance()
     {
-        // static Singleton<T> singleton_p; 
-
         static std::mutex s_mutex;
 
         T *tmp = s_ptr;
-
         __sync_synchronize();
 
         if(0 == tmp)
@@ -50,7 +48,7 @@ namespace ilrd
             {
                 tmp = new T;
                 __sync_synchronize();
-                
+
                 s_ptr = tmp;
                 atexit(CleanUp);
             }
@@ -63,7 +61,7 @@ namespace ilrd
     {
         delete s_ptr;
     }
-
+    #endif
 
 }
 #endif //__ILRD_RD132_SINGLETON_HPP__
