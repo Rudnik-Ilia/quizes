@@ -113,7 +113,9 @@ namespace ilrd
     ThreadPool::~ThreadPool()
     {
         Resume();
+        #ifdef NDEBUG
         std::cout << "Dtor" << std::endl;
+        #endif
         Stop(m_numOfThreads);
     }
 
@@ -122,7 +124,6 @@ namespace ilrd
         for (size_t i = 0; i < times; ++i)
         {
             m_Tasks.Push(TaskPair(std::shared_ptr<StopTask>(new StopTask(m_workingThreads, m_availableThreads)), ThreadPool::ILIA));
-            std::cout << "???" << std::endl;
         }
 
         for (size_t i = 0; i < times; ++i)
@@ -140,7 +141,9 @@ namespace ilrd
 
     void ThreadPool::AddTask(std::shared_ptr<ITask> task, TaskPriority taskPriority_)
     {
+        #ifdef NDEBUG
         std::cout << "PUSH"<< std::endl;
+        #endif
         m_Tasks.Push(TaskPair(task, taskPriority_));
     }
 

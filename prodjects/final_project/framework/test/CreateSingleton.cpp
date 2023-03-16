@@ -3,14 +3,16 @@
 #include <iostream>
 #include <dlfcn.h>
 
-#include "Singleton.hpp"
+#include "Handleton.hpp"
 #include "Factory.hpp"
 #include "ITask.hpp"
 #include "test_class.hpp"
+
+#include "Logger.hpp"
 
 using namespace ilrd;
 
 extern "C"
 {
-    SimpleTest *simpletest = ilrd::Singleton<SimpleTest>::GetInstance(); 
+    Logger *logger = ilrd::Handleton<Logger>::GetInstance();
 }

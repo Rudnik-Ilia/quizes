@@ -8,10 +8,11 @@
 #include <queue>
 #include <chrono>
 
-namespace ilrd 
+namespace ilrd  
 {
 
-    template <typename T, typename CONTAINER = std::queue<T>> class WaitableQueue 
+    template <typename T, typename CONTAINER = std::queue<T>> 
+    class WaitableQueue 
     {
     public:
     explicit WaitableQueue() = default;

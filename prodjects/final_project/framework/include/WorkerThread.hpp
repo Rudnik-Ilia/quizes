@@ -57,7 +57,9 @@ namespace ilrd
     {
         while (m_state == RUNNING)
         {
+            #ifdef NDEBUG
             std::cout << "LOOP" << std::endl;
+            #endif
             m_taskGetter().get()->Execute();
         } 
     }

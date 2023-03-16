@@ -26,7 +26,6 @@ namespace ilrd
         static void CleanUp();
     };
     
-    #ifdef CREATOR
 
     template<class T>
     std::atomic<T*> Singleton<T>::s_ptr;
@@ -64,7 +63,6 @@ namespace ilrd
     {
         delete s_ptr;
     }
-    #endif
 
 }
 #endif //__ILRD_RD132_SINGLETON_HPP__

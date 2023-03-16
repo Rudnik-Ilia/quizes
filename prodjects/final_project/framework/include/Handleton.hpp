@@ -27,7 +27,7 @@ namespace ilrd
             static void CleanUp();
     };
 
-    // #ifdef CREATOR
+    #ifdef CREATOR
 
     template<class T>
     std::atomic<T*> Handleton<T>::s_ptr;
@@ -67,7 +67,7 @@ namespace ilrd
         delete s_ptr;
     }
 
-// #endif //CREATOR
+#endif //CREATOR
 
 }
 #endif //__ILRD_RD132_HANDLETON_HPP__

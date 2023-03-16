@@ -3,7 +3,15 @@
 
 namespace ilrd
 {
-    enum LogLevel { ALL = 0, TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF };
+    enum LogLevel { ALL = 0, 
+                    TRACE, 
+                    DEBUG, 
+                    INFO, 
+                    WARN, 
+                    ERROR, 
+                    FATAL, 
+                    OFF 
+                };
 }
     
 #endif // __ILRD_RD132_LOG_LEVEL_HPP__
