@@ -1,0 +1,43 @@
+#include <iostream>
+#include <fstream>
+#include <cstring>
+
+#include "ITask.hpp"
+#include "LogMessage.hpp"
+#include "LogLevel.hpp"
+#include "LogTask.hpp"
+
+
+namespace ilrd
+{
+    LogTask::LogTask(const std::string &message, const LogLevel &level): m_message(message) , m_level(level){}
+
+    void LogTask::Execute()
+    {
+        std::ofstream fout("txt.txt", std::ios_base::app);
+
+        int lenght = m_message.length();
+        int i = 0;
+        char buffer[FORMAT_PRINT];
+        struct tm *newtime;
+        int count = FORMAT_PRINT - lenght;
+        time_t ltime;
+        time(&ltime);
+        newtime = localtime(&ltime);
+
+        if(count)
+        {
+            while (--count)
+            {
+                buffer[i++] = '.';
+            }
+            buffer[i] = '\0';
+        }
+
+        fout << m_message << buffer << asctime(newtime) << std::endl;
+        std::cout << m_message << buffer << asctime(newtime) << std::endl;
+        fout.close();
+    }
+
+
+}

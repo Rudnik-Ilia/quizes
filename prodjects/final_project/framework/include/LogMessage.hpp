@@ -21,19 +21,18 @@ namespace ilrd
             const std::string m_string;
             LogLevel m_level;
             
-
     };
 
-    LogMessage::LogMessage(const std::string& s_, LogLevel level_): m_string(s_), m_level(level_){} 
+    // LogMessage::LogMessage(const std::string& s_, LogLevel level_): m_string(s_), m_level(level_){} 
 
-    std::string LogMessage::GetMessage() const
-    {
-        return m_string;
-    }
-    LogLevel LogMessage::GetLogLevel() const
-    {
-        return m_level;
-    }
+    // std::string LogMessage::GetMessage() const
+    // {
+    //     return m_string;
+    // }
+    // LogLevel LogMessage::GetLogLevel() const
+    // {
+    //     return m_level;
+    // }
 
 }
     

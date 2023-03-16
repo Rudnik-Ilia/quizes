@@ -1,5 +1,7 @@
 #pragma once 
 
+#define FORMAT_PRINT (90)
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -21,34 +23,32 @@ namespace ilrd
             const LogLevel m_level;
     };
 
-    LogTask::LogTask(const std::string &message, const LogLevel &level): m_message(message) , m_level(level){}
+    // LogTask::LogTask(const std::string &message, const LogLevel &level): m_message(message) , m_level(level){}
 
-    void LogTask::Execute()
-    {
-        std::ofstream fout("txt.txt", std::ios_base::app);
+    // void LogTask::Execute()
+    // {
+    //     std::ofstream fout("txt.txt", std::ios_base::app);
 
-        int lenght = m_message.length();
-        int i = 0;
-        char buffer[60];
-        struct tm *newtime;
-        int count = 60 - lenght;
-        time_t ltime;
-        time(&ltime);
-        newtime = localtime(&ltime);
+    //     int lenght = m_message.length();
+    //     int i = 0;
+    //     char buffer[FORMAT_PRINT];
+    //     struct tm *newtime;
+    //     int count = FORMAT_PRINT - lenght;
+    //     time_t ltime;
+    //     time(&ltime);
+    //     newtime = localtime(&ltime);
 
-        if(count)
-        {
-            while (--count)
-            {
-                buffer[ i++] = '.';
-            }
-            buffer[i] = '\0';
-        }
+    //     if(count)
+    //     {
+    //         while (--count)
+    //         {
+    //             buffer[i++] = '.';
+    //         }
+    //         buffer[i] = '\0';
+    //     }
 
-        fout << m_message << buffer << asctime(newtime) << std::endl;
-        std::cout << m_message << buffer << asctime(newtime) << std::endl;
-        fout.close();
-
-    }
-
+    //     fout << m_message << buffer << asctime(newtime) << std::endl;
+    //     std::cout << m_message << buffer << asctime(newtime) << std::endl;
+    //     fout.close();
+    // }
 }

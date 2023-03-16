@@ -25,12 +25,12 @@ namespace ilrd
     bool Pop(std::chrono::milliseconds time_ms_, T &outparam_);
     void Pop(T &outparam_);
     void Push(const T &element);
-    bool IsEmpty() const;
+    bool isEmpty() const;
 
     private:
-    CONTAINER m_container;
-    mutable std::mutex m_mutex;
-    std::condition_variable m_nonEmptyCond;
+    CONTAINER m_container{};
+    mutable std::mutex m_mutex{};
+    std::condition_variable m_nonEmptyCond{};
 
     }; // class WQueue
 
@@ -39,24 +39,25 @@ namespace ilrd
     void WaitableQueue<T, CONTAINER>::Push(const T &element)
     {
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> m_lock(m_mutex);
             m_container.push(element);
         }
+        
         m_nonEmptyCond.notify_one();
     }
 
     template<typename T, typename CONTAINER> 
-    bool WaitableQueue<T, CONTAINER>::IsEmpty() const
+    bool WaitableQueue<T, CONTAINER>::isEmpty() const
     {
-        std::unique_lock<std::mutex> lock(m_mutex);
+        std::unique_lock<std::mutex> m_lock(m_mutex);
         return m_container.empty();
     }
 
     template<typename T, typename CONTAINER> 
     void WaitableQueue<T, CONTAINER>::Pop(T &outparam_)
     {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_nonEmptyCond.wait(lock, [&]{return this->m_container.empty() == false;});
+        std::unique_lock<std::mutex> m_lock(m_mutex);
+        m_nonEmptyCond.wait(m_lock, [&]{return this->m_container.empty() == false;});
         outparam_ = m_container.front();
         m_container.pop();
     }
@@ -64,8 +65,8 @@ namespace ilrd
     template<typename T, typename CONTAINER> 
     bool WaitableQueue<T, CONTAINER>::Pop(std::chrono::milliseconds time_ms_, T &outparam_)
     {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        if(false == m_nonEmptyCond.wait_for(lock, time_ms_, [&]{return this->m_container.empty() == false;}))
+        std::unique_lock<std::mutex> m_lock(m_mutex);
+        if(false == m_nonEmptyCond.wait_for(m_lock, time_ms_, [&]{return this->m_container.empty() == false;}))
         {
             return false;
         }
