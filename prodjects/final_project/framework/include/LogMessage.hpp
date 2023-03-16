@@ -20,6 +20,7 @@ namespace ilrd
         private: 
             const std::string m_string;
             LogLevel m_level;
+            
 
     };
 

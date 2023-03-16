@@ -8,7 +8,7 @@ using namespace ilrd;
 
 int main()
 {   
-    Singleton<Logger>::GetInstance()->Log(TraceLog("trace")).Log(DebugLog("debug")).Log(InfoLog("Info")).Log(WarnLog("warn")).Log(ErrorLog("error")).Log(FatalLog("fatal"));
+    Singleton<Logger>::GetInstance()->SetLevel(INFO).Log(TraceLog("trace")).Log(DebugLog("debug")).Log(InfoLog("Info")).Log(WarnLog("warn")).Log(ErrorLog("error")).Log(FatalLog("fatal"));
     
     sleep(1);
 

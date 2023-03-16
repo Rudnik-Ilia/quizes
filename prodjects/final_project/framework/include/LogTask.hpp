@@ -1,6 +1,8 @@
 #pragma once 
 
 #include <iostream>
+#include <fstream>
+#include <cstring>
 
 #include "ITask.hpp"
 #include "LogMessage.hpp"
@@ -23,7 +25,30 @@ namespace ilrd
 
     void LogTask::Execute()
     {
-        std::cout << m_message << m_level << std::endl;
+        std::ofstream fout("txt.txt", std::ios_base::app);
+
+        int lenght = m_message.length();
+        int i = 0;
+        char buffer[60];
+        struct tm *newtime;
+        int count = 60 - lenght;
+        time_t ltime;
+        time(&ltime);
+        newtime = localtime(&ltime);
+
+        if(count)
+        {
+            while (--count)
+            {
+                buffer[ i++] = '.';
+            }
+            buffer[i] = '\0';
+        }
+
+        fout << m_message << buffer << asctime(newtime) << std::endl;
+        std::cout << m_message << buffer << asctime(newtime) << std::endl;
+        fout.close();
+
     }
 
 }
