@@ -5,10 +5,8 @@
 #include "Logger.hpp"
 #include "Singleton.hpp"
 #include "LogInherited.hpp"
-#include "Logger.hpp"
-#include "LogInherited.hpp"
 
-
+// g++ -shared -fPIC -o lib_logger.so ../src/*.cpp -I ../include
 using namespace ilrd;
 // gp11 test_logger.cpp ../src/LogInherited.cpp ../src/LogMessage.cpp  ../src/LogTask.cpp ../src/Logger.cpp ../src/ThreadPool.cpp ../src/WorkerThread.cpp ../src/ThreadMap.cpp  -I ../include -lpthread
 int main()
@@ -31,8 +29,6 @@ int main()
     //     std::cout << "ERROR2" << std::endl;
     //     return 0;
     // }
-
-    
 
     // std::cout << "!!!" << std::endl;
 

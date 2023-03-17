@@ -22,19 +22,6 @@ namespace ilrd
             LogLevel m_level;
             
     };
-
-    // LogMessage::LogMessage(const std::string& s_, LogLevel level_): m_string(s_), m_level(level_){} 
-
-    // std::string LogMessage::GetMessage() const
-    // {
-    //     return m_string;
-    // }
-    // LogLevel LogMessage::GetLogLevel() const
-    // {
-    //     return m_level;
-    // }
-
 }
-    
 
 #endif // __ILRD_RD132_LOG_MESSAGE_HPP__

@@ -8,7 +8,7 @@ using std::endl;
 #include "ITask.hpp"
 #include "ThreadPool.hpp"
 
-// gp11 test_workerthread.cpp -lpthread -I ../include
+// gp11 test_vitya_2.cpp ../src/ThreadPool.cpp ../src/WorkerThread.cpp ../src/ThreadMap.cpp -lpthread -I ../include
 
 using namespace ilrd;
 

@@ -1,15 +1,12 @@
-#define CREATOR
-
-#include <iostream>
-#include <dlfcn.h>
 
 #include "Singleton.hpp"
-// #include "Handleton.hpp"
+#define CREATOR
+#include "Handleton.hpp"
 // #include "Factory.hpp"
-#include "ITask.hpp"
+// #include "ITask.hpp"
 #include "Logger.hpp"
-#include "LogTask.hpp"
-#include "LogInherited.hpp"
+// #include "LogTask.hpp"
+// #include "LogInherited.hpp"
 
 using namespace ilrd;
 

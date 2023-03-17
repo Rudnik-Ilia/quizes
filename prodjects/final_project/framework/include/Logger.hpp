@@ -1,14 +1,12 @@
 #ifndef __ILRD_RD132_LOGGER_HPP__
 #define __ILRD_RD132_LOGGER_HPP__
 
-#include <iostream>
-
 #include "LogMessage.hpp"
 #include "Singleton.hpp"
 #include "Handleton.hpp"
 #include "ThreadPool.hpp"
 #include "LogTask.hpp"
-// gp11 test_logger.cpp ../src/LogInherited.cpp ../src/LogMessage.cpp  ../src/LogTask.cpp ../src/Logger.cpp -I ../include -lpthread 
+
 namespace ilrd
 {
     class Logger
@@ -32,24 +30,6 @@ namespace ilrd
             friend Singleton<Logger>;
             friend Handleton<Logger>;
     };
-
-    // Logger::Logger(): m_pool(1), m_level(ALL){}
- 
-    // Logger& Logger::Log(const LogMessage &msg_)
-    // {
-    //     if(msg_.GetLogLevel() >= this->m_level)
-    //     {
-    //         m_pool.AddTask(std::shared_ptr<LogTask>(new LogTask(msg_.GetMessage(), msg_.GetLogLevel())));
-    //     }
-    //     return *this;
-    // }
-
-    // Logger& Logger::SetLevel(LogLevel level_)
-    // {
-    //     m_level = level_;
-    //     return *this;
-    // }
-
 
 } // namespace ilrd
 

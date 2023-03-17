@@ -1,7 +1,3 @@
-#include <unordered_map>
-#include <mutex>
-#include <thread> // std::thread::id
-#include <memory> // shared_ptr
 
 #include "WorkerThread.hpp"
 #include "ThreadMap.hpp"
@@ -31,6 +27,5 @@ namespace ilrd
         std::unique_lock<std::mutex> lock(m_mutex);
         return  m_threadMap.find(key_)->second->GetState();
     }
-
 
 }

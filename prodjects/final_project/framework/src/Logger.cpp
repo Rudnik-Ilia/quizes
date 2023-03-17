@@ -1,10 +1,5 @@
-#include <iostream>
 
 #include "LogMessage.hpp"
-#include "Singleton.hpp"
-#include "Handleton.hpp"
-#include "ThreadPool.hpp"
-#include "LogTask.hpp"
 #include "Logger.hpp"
 
 

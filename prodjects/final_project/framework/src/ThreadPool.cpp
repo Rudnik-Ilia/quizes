@@ -1,13 +1,6 @@
-#include <atomic>
-#include <iostream>
-#include <condition_variable>
-#include <mutex>
+
 #include <stdlib.h> /*abs*/
 
-#include "WaitableQueue.hpp"
-#include "PriorityQueue.hpp"
-#include "ITask.hpp"
-#include "ThreadMap.hpp"
 #include "ThreadPool.hpp"
 
 

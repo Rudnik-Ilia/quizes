@@ -1,5 +1,4 @@
-#include <iostream>
-#include <cstring>
+
 #include "LogMessage.hpp"
 #include "LogInherited.hpp"
 

@@ -1,12 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <cstring>
 
-#include "ITask.hpp"
-#include "LogMessage.hpp"
-#include "LogLevel.hpp"
 #include "LogTask.hpp"
-
 
 namespace ilrd
 {

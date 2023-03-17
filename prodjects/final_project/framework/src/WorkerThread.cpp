@@ -1,8 +1,6 @@
-#include <thread>
-#include <functional>
+
 #include <iostream>
 
-#include "ITask.hpp"
 #include "WorkerThread.hpp"
 
 
