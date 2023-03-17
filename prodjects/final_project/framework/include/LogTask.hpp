@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef __ILRD_RD132_LOG_TASK_HPP__
+#define __ILRD_RD132_LOG_TASK_HPP__
 
 #define FORMAT_PRINT (90)
 
@@ -19,3 +20,5 @@ namespace ilrd
     };
 
 }
+
+#endif // __ILRD_RD132_LOG_TASK_HPP__

@@ -2,6 +2,10 @@
 #include "LogMessage.hpp"
 #include "LogInherited.hpp"
 
+#define COLOR_RED "\033[1;31m" 
+#define COLOR_BLUE "\033[1;34m" 
+#define OFFCOLOR "\033[0m" 
+
 namespace ilrd
 {
 

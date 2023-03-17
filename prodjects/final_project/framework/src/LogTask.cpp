@@ -9,13 +9,12 @@ namespace ilrd
 
     void LogTask::Execute()
     {
-        std::ofstream fout("txt.txt", std::ios_base::app);
+        std::ofstream fout("log.txt", std::ios_base::app);
 
-        int lenght = m_message.length();
         int i = 0;
         char buffer[FORMAT_PRINT];
         struct tm *newtime;
-        int count = FORMAT_PRINT - lenght;
+        int count = FORMAT_PRINT - m_message.length();
         time_t ltime;
         time(&ltime);
         newtime = localtime(&ltime);
@@ -30,9 +29,7 @@ namespace ilrd
         }
 
         fout << m_message << buffer << asctime(newtime) << std::endl;
-        std::cout << m_message << buffer << asctime(newtime) << std::endl;
         fout.close();
     }
-
 
 }

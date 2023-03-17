@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __ILRD_RD132_LOGINHERITED_HPP__
+#define __ILRD_RD132_LOGINHERITED_HPP__
 
 #include "LogMessage.hpp"
 
@@ -58,4 +59,7 @@ namespace ilrd
             virtual LogLevel GetLogLevel() const;
     };
 
+
 }
+
+#endif //__ILRD_RD132_LOGINHERITED_HPP__

@@ -9,6 +9,7 @@
 
 using namespace ilrd;
 typedef Logger*(*func)();
+
 // gp11 test_logger.cpp ../src/LogInherited.cpp ../src/LogMessage.cpp  ../src/LogTask.cpp ../src/Logger.cpp ../src/ThreadPool.cpp ../src/WorkerThread.cpp ../src/ThreadMap.cpp  -I ../include -lpthread
 int main()
 {   
@@ -24,7 +25,7 @@ int main()
         return 0;
     }
 
-    func logger_getter = reinterpret_cast<func> (dlsym(dl_handle, "GetLoggerInstance"));
+    func logger_getter = reinterpret_cast<func> (dlsym(dl_handle, "GetInstance"));
     if (logger_getter == NULL) 
     {
         std::cout << "ERROR2" << std::endl;
@@ -33,13 +34,8 @@ int main()
 
     Logger *logger = logger_getter();
 
-
-    std::cout << "Before" << std::endl;
-
-    logger->SetLevel(ALL);
-    logger->Log(DebugLog("someinfo"));
-
-    std::cout << "After" << std::endl;
+    logger->Log(TraceLog("Check My Code! ")).Log(DebugLog("hi....my name LOGGERQ")).Log(InfoLog("Info")).Log(WarnLog("warn")).Log(ErrorLog("Mayday! error")).Log(FatalLog("You are in trouble! fatal"));
+    logger->SetLevel(DEBUG).Log(TraceLog("trace")).Log(DebugLog("debug")).Log(InfoLog("Info")).Log(WarnLog("Somethng is brokenQ")).Log(ErrorLog("error")).Log(FatalLog("fatal"));
 
     sleep(1);
 
