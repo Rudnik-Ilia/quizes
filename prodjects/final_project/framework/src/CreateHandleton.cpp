@@ -1,16 +1,14 @@
 
-#include "Singleton.hpp"
 #define CREATOR
 #include "Handleton.hpp"
-// #include "Factory.hpp"
-// #include "ITask.hpp"
-#include "Logger.hpp"
-// #include "LogTask.hpp"
-// #include "LogInherited.hpp"
 
-using namespace ilrd;
+#include "Logger.hpp"
 
 extern "C"
 {
-    Logger *logger = ilrd::Singleton<Logger>::GetInstance();
+    ilrd::Logger* GetInstance()
+    {
+        return ilrd::Handleton<ilrd::Logger>::GetInstance();
+    }
+
 }

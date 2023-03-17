@@ -1,7 +1,6 @@
 
-#include "LogMessage.hpp"
 #include "Logger.hpp"
-
+#include "LogMessage.hpp"
 
 namespace ilrd
 {
