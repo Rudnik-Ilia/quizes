@@ -25,7 +25,7 @@ int main()
         return 0;
     }
 
-    func logger_getter = reinterpret_cast<func> (dlsym(dl_handle, "GetInstance"));
+    func logger_getter = reinterpret_cast<func>(dlsym(dl_handle, "GetInstance"));
     if (logger_getter == NULL) 
     {
         std::cout << "ERROR2" << std::endl;
