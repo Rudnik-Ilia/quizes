@@ -1,6 +1,8 @@
 #ifndef __ILRD_RD132_DISPATCHER_HPP__
 #define __ILRD_RD132_DISPATCHER_HPP__
 
+
+#include <iostream>
 #include <functional>
 #include <set>
 
@@ -29,7 +31,7 @@ namespace ilrd
         private:
             Handler m_function;
             friend class Dispatcher<EventArgs...>;
-            void Notify(const EventArgs &... arg_);
+            void Notify(const EventArgs &...) const;
         }; 
 
         template <typename... EventArgs>
@@ -37,7 +39,8 @@ namespace ilrd
         {
         public:
 
-            Dispatcher() = default;
+            Dispatcher(){}
+
             Dispatcher(Dispatcher &&) = default;
             Dispatcher(const Dispatcher &) = default;
             Dispatcher &operator=(Dispatcher &&) = default;
@@ -50,7 +53,7 @@ namespace ilrd
             void Dispatch(const EventArgs &...args_) const;
 
         private:
-            std::set<Callback<EventArgs...>> m_subscribers;
+            std::set<const Callback<EventArgs...> *> m_subscribers;
         };
 
         /*****************************************************************************************/
@@ -60,28 +63,26 @@ namespace ilrd
         template <typename... EventArgs>
         bool Callback<EventArgs...>::operator<(const Callback &rhs_) const
         {
-            (void)rhs_;
-            return true;
+            return &(this->m_function) < &rhs_.m_function;
         }
 
         template <typename... EventArgs>
-        void Callback<EventArgs...>::Notify(const EventArgs &... arg_)
+        void Callback<EventArgs...>::Notify(const EventArgs &... arg_) const
         {
             m_function(arg_...);
         }
-
 
         /*****************************************************************************************/
         template <typename... EventArgs>
         void Dispatcher<EventArgs...>::Subscribe(const Callback<EventArgs...> &callback_)
         {
-            m_subscribers.insert(callback_);
+            m_subscribers.insert(&callback_);
         }
 
         template <typename... EventArgs>
         void Dispatcher<EventArgs...>::Unsubscribe(const Callback<EventArgs...> &callback_)
         {
-            m_subscribers.erase(callback_);
+            m_subscribers.erase(&callback_);
         }
 
         template <typename... EventArgs>
@@ -89,7 +90,7 @@ namespace ilrd
         {
             for(auto iter: m_subscribers)
             {
-                iter.Notify(args_...);
+                iter->Notify(args_...);
             }
         }
 
