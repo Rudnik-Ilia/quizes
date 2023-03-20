@@ -45,7 +45,8 @@ namespace ilrd
     template <class Base, class Key>
     std::shared_ptr<Base> Factory<Base, Key>::Create(const Key& key_, FactoryArgs& args)
     {
-        return ((m_creators.find(key_))->second)(args);
+        // return ((m_creators.find(key_))->second)(args);
+        return (m_creators.at(key_))(args);
     }
 
 

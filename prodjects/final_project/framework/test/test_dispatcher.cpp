@@ -116,7 +116,7 @@ class Observer1: public Observer0
         {
             m_subject.m_disp.Unsubscribe(m_func);
         }
-        
+
         ~Observer1()
         {
             m_subject.m_disp.Unsubscribe(m_func);
@@ -153,7 +153,9 @@ class Observer3: public Observer0
 
         ~Observer3()
         {
+           
             m_subject.m_disp.Unsubscribe(m_func);
+            
         }
 
     private:
@@ -207,6 +209,7 @@ int main()
         Observer1 obs1(subject);
         {
             Observer2 obs2(subject);
+            Observer2 obs7(subject);
             Observer3 obs3(subject);
             subject.ChangState(99, 2);
             Observer3 obs6(subject);
