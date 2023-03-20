@@ -27,6 +27,7 @@ namespace ilrd
         std::string m_path;
         std::thread m_thread;
 
+        void Monitor();
         void Start();
     }; 
 

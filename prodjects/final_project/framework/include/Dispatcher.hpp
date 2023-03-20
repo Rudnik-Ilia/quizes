@@ -86,9 +86,9 @@ namespace ilrd
         template <typename... EventArgs>
         void Dispatcher<EventArgs...>::Unsubscribe(const Callback<EventArgs...> &callback_)
         {
-            cout << m_subscribers.size() << endl;
+            std::cout << m_subscribers.size() << std::endl;
             m_subscribers.erase(&callback_);
-            cout << m_subscribers.size() << endl;
+            std::cout << m_subscribers.size() << std::endl;
         }
 
         template <typename... EventArgs>
