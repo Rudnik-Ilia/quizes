@@ -76,6 +76,11 @@ class Subject
 {
     public:
         Subject(){}
+        ~Subject()
+        {
+            m_disp.~Dispatcher();
+            cout << "Subject is destroyed!" << endl;
+        }
 
         void ChangState(int x, int y)
         {
@@ -93,16 +98,25 @@ class Subject
 class Observer0
 {
     public:
-        int x;
+    
+    private:
+
 };
 
-class Observer1
+class Observer1: public Observer0
 {
     public:
         Observer1(Subject &sub): m_func(Foo), m_subject(sub)
         {
             m_subject.m_disp.Subscribe(m_func);
+            // m_subject.m_disp.~Dispatcher();
         }
+
+        void SelfDelete()
+        {
+            m_subject.m_disp.Unsubscribe(m_func);
+        }
+        
         ~Observer1()
         {
             m_subject.m_disp.Unsubscribe(m_func);
@@ -113,7 +127,7 @@ class Observer1
         Subject &m_subject;
 };
 
-class Observer2
+class Observer2: public Observer0
 {
     public:
         Observer2(Subject &sub): m_func(Faa), m_subject(sub)
@@ -129,7 +143,7 @@ class Observer2
         Subject &m_subject;
 };
 
-class Observer3
+class Observer3: public Observer0
 {
     public:
         Observer3(Subject &sub): m_func(Bar), m_subject(sub)
@@ -147,7 +161,6 @@ class Observer3
         Subject &m_subject;
 };
 
-
 class Changer
 {
     public:
@@ -158,21 +171,23 @@ class Changer
             m_disp.ChangState(x,y);
         }
 
+        void Delete(Callback<int, int> &some_call)
+        {
+            m_disp.m_disp.Unsubscribe(some_call);
+        }
+
     private:
         Subject &m_disp;
 
 };
 
-
-
-
 int main()
 {
     /***********************************************************************/
     // Dispatcher<int, int> disp;
-    // std::function<void(const int&, const int&)> wrap1 = Foo;
+    std::function<void(const int&, const int&)> wrap1 = Foo;
     // std::function<void(const int&, const int&)> wrap2 = Bar;
-    // Callback<int, int> summ(wrap1);
+    Callback<int, int> summ(wrap1);
     // Callback<int, int> dev(wrap2);
     // disp.Subscribe(summ);
     // disp.Subscribe(dev);
@@ -187,25 +202,39 @@ int main()
     // control.SetState(9,9);
 
     /***********************************************************************/
+    {
+        Subject subject;
+        Observer1 obs1(subject);
+        {
+            Observer2 obs2(subject);
+            Observer3 obs3(subject);
+            subject.ChangState(99, 2);
+            Observer3 obs6(subject);
+        }
+        cout << "______________________________" << endl;
+
+        Observer2 obs4(subject);
+        Observer3 obs5(subject);
+
+        subject.ChangState(99, 2);
+        cout << "______________________________" << endl;
+
+        
+        Observer3 obs6(subject);
+        subject.ChangState(9,9);
+        cout << "______________________________" << endl;
+
+        Changer changer(subject);
+        changer.Change(10,10);
+        cout << "______________________________" << endl;
+
+        // changer.Delete(summ);
+        obs1.SelfDelete();
+        changer.Change(10,10);
+        cout << "______________________________" << endl;
+        changer.Change(5,9);
+        cout << "______________________________" << endl;
+    }
     
-    Subject subject;
-
-    Observer1 obs1(subject);
-    Observer2 obs2(subject);
-    Observer3 obs3(subject);
-
-    subject.ChangState(99, 2);
-
-    obs3.~Observer3();
-
-    subject.ChangState(9,9);
-
-    Changer changer(subject);
-
-    changer.Change(10,10);
-
-
-
-
     return 0;
 }
