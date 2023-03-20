@@ -1,7 +1,6 @@
 #ifndef __ILRD_RD132_DISPATCHER_HPP__
 #define __ILRD_RD132_DISPATCHER_HPP__
 
-
 #include <iostream>
 #include <functional>
 #include <set>
@@ -32,20 +31,21 @@ namespace ilrd
             Handler m_function;
             friend class Dispatcher<EventArgs...>;
             void Notify(const EventArgs &...) const;
+            bool callback_alive;
         }; 
 
         template <typename... EventArgs>
         class Dispatcher
         {
         public:
-
-            Dispatcher(){}
-
+            Dispatcher(): dispatcher_alive(true){};
             Dispatcher(Dispatcher &&) = default;
             Dispatcher(const Dispatcher &) = default;
             Dispatcher &operator=(Dispatcher &&) = default;
             Dispatcher &operator=(const Dispatcher &) = default;
-            ~Dispatcher() = default;
+
+
+            ~Dispatcher();
         
 
             void Subscribe(const Callback<EventArgs...> &callback_);
@@ -54,11 +54,12 @@ namespace ilrd
 
         private:
             std::set<const Callback<EventArgs...> *> m_subscribers;
+            bool dispatcher_alive;
         };
 
         /*****************************************************************************************/
         template <typename... EventArgs>
-        Callback<EventArgs...>::Callback(Handler function) : m_function(function){}
+        Callback<EventArgs...>::Callback(Handler function) : m_function(function), callback_alive(true){}
 
         template <typename... EventArgs>
         bool Callback<EventArgs...>::operator<(const Callback &rhs_) const
@@ -78,11 +79,17 @@ namespace ilrd
         {
             m_subscribers.insert(&callback_);
         }
+        template <typename... EventArgs>
+        Dispatcher<EventArgs...>::~Dispatcher()
+        {
+            dispatcher_alive = false;
+        }
 
         template <typename... EventArgs>
         void Dispatcher<EventArgs...>::Unsubscribe(const Callback<EventArgs...> &callback_)
         {
             m_subscribers.erase(&callback_);
+            cout << m_subscribers.size() << endl;
         }
 
         template <typename... EventArgs>
