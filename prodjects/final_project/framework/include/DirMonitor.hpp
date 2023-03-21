@@ -3,6 +3,7 @@
 
 #include <string> // std::string
 #include <thread> // std:: thread
+
 #include "Dispatcher.hpp"
 
 namespace ilrd
@@ -22,15 +23,18 @@ namespace ilrd
         void RemoveLoader(const Callback<std::string> &dll_loader_);
         ~DirMonitor();
 
+        void Monitor();
     private:
         Dispatcher<std::string> m_dispatcher;
+
         std::string m_path;
         std::thread m_thread;
 
-        void Monitor();
         void Start();
+        void ReadEvents();
 
         int m_inotify_fd;
+        int m_stop;
     }; 
 
 /*******************************************************************************/
