@@ -16,7 +16,7 @@ void* Ping()
    {
        
         puts("PING");
-        sleep(1);
+      
         sem_post(&one);
         sem_wait(&two); 
    }
@@ -28,20 +28,47 @@ void* Pong()
 
     while (1)
     {
-        if(FLAG == 0)
+        if(FLAG == 0)   
         {
             sem_wait(&one);
             FLAG = 1;
         }
         puts("PONG");
-        sleep(1);
+      
         sem_post(&two);
         sem_wait(&one);
     }
     
 }
+/*
 
+void* Ping()
+{
+   while (1)
+   {
+       
+        puts("PING");
+        
+        sem_wait(&two); 
+        sem_post(&one);
+   }
+    
+}
 
+void* Pong()
+{
+
+    while (1)
+    {
+        sem_post(&two);
+        puts("PONG");
+        
+        sem_wait(&one);
+    }
+    
+}
+
+*/
 int main()
 {
     

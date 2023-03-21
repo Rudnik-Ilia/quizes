@@ -3,6 +3,7 @@
 
 #include <string> // std::string
 #include <thread> // std:: thread
+#include <list>
 
 #include "Dispatcher.hpp"
 
@@ -31,7 +32,7 @@ namespace ilrd
         std::thread m_thread;
 
         void Start();
-        void ReadEvents();
+        void ReadEvents(int m_fd);
 
         int m_inotify_fd;
         int m_stop;
@@ -54,6 +55,7 @@ namespace ilrd
     private:
         Callback<std::string> m_subscriber;
         DirMonitor &m_monitor;
+        // std::list<
     }; 
 
 } // namespace ilrd

@@ -1,10 +1,10 @@
 #include <sys/inotify.h>
-#include <fstream>
 #include <sys/select.h>
 #include <fcntl.h>
 #include <unistd.h>
-
+#include <dlfcn.h> // dlopen
 #include <iostream>
+
 #include "DirMonitor.hpp"
 
 #define BUFF_SIZE (1024)
@@ -68,15 +68,14 @@ namespace ilrd
             
             int retval = select(FD_SETSIZE, &set_copy, NULL, NULL, &tv);
 
-            if (retval == -1)
+            if(retval == -1)
             {
                 std::cout<< "ERROR select (-1)" << std::endl;
             }
-            else if (retval)
+            else if(retval)
             {
                 std::cout<< "DATA IS READY!" << std::endl;
-                /* FD_ISSET(0, &rfds) will be true. */
-                ReadEvents();
+                ReadEvents(m_inotify_fd);
             }
             else
             {
@@ -85,7 +84,7 @@ namespace ilrd
         }
     }
 
-    void DirMonitor::ReadEvents()
+    void DirMonitor::ReadEvents(int m_fd)
     {   
         std::cout<< "read events" << std::endl;
         char buffer[BUFF_SIZE];
@@ -93,18 +92,16 @@ namespace ilrd
 
     }
 
-    /*******************************************************************************/
-
-
-    DllLoader::DllLoader(DirMonitor &monitor_): m_monitor(monitor_)
+    DllLoader::DllLoader(DirMonitor &monitor_): m_subscriber([&](const std::string &filepath_)) , m_monitor(monitor_)
     {
-        
+        m_monitor.AddLoader(m_subscriber);
     }
-  
+
+
 
     // DllLoader::~DllLoader()
     // {
-
+    //     m_monitor.RemoveLoader(m_subscriber);
     // }
 
 }

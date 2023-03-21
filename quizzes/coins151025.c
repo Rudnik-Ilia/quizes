@@ -16,7 +16,7 @@ int Change(int summ)
     {
         res += Change(summ - 25);
     }
-    if(summ >= 0)
+    if(summ >= 0) 
     {
         res += Change(summ - 10);
     }
@@ -30,9 +30,6 @@ int Change(int summ)
     }
     return res;
 }
-
-
-
 
 
 
