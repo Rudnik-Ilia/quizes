@@ -6,7 +6,7 @@ using std::cout;
 
 using namespace ilrd;
 
-// gp11 test_dirmonitor.cpp ../src/DirMonitor.cpp -I ../include -lpthread
+// gp11 test_dirmonitor.cpp ../src/DirMonitor.cpp -I ../include -lpthread -ldl
 
 
 int main()

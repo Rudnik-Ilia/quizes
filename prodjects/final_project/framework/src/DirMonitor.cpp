@@ -7,7 +7,7 @@
 
 #include "DirMonitor.hpp"
 
-#define BUFF_SIZE (1024)
+#define BUFF_SIZE (4096)
 
 namespace ilrd
 {
@@ -19,10 +19,11 @@ namespace ilrd
             std::cout<< "ERROR inotify init" << std::endl;
         }
 
-        int watch_desc = inotify_add_watch(m_inotify_fd, m_path.c_str(), IN_ALL_EVENTS);
+        int watch_desc = inotify_add_watch(m_inotify_fd, m_path.c_str(), IN_CREATE);
 
         if(watch_desc < 0)
         {
+            close(m_inotify_fd);
             std::cout<< "ERROR inotify_add_watch" << std::endl;
         }
 
@@ -87,21 +88,56 @@ namespace ilrd
     void DirMonitor::ReadEvents(int m_fd)
     {   
         std::cout<< "read events" << std::endl;
+        const struct inotify_event *event;
         char buffer[BUFF_SIZE];
-        int length = read(m_inotify_fd, buffer, BUFF_SIZE);
+        char *ptr;
 
+        while (m_stop)
+        {
+            int len = read(m_fd, buffer, BUFF_SIZE);
+
+            if (len == -1 && errno != EAGAIN) 
+            {
+               std::cout<< "ERROR len" << std::endl;
+            }
+            if (len <= 0)
+            {
+                break;
+            }
+            for(ptr = buffer; ptr < buffer + len; ptr += sizeof(event) + event->len)
+            {
+                event = (const struct inotify_event *)ptr;
+                // if (event->name)
+                // {
+                //     std::cout << "WRITE" << std::endl;
+                // }
+                std::cout << event->name << std::endl;
+            }
+        }
+        
     }
+/******************************************************************************************************/
 
-    DllLoader::DllLoader(DirMonitor &monitor_): m_subscriber([&](const std::string &filepath_)) , m_monitor(monitor_)
+    DllLoader::DllLoader(DirMonitor &monitor_): m_subscriber([&](const std::string &filepath_)                                            
+                                                { 
+                                                    void *dl_handle = dlopen(filepath_.c_str(), RTLD_LAZY);
+                                                    if (0 != dl_handle)
+                                                    {
+                                                        m_container.push_back(dl_handle);
+                                                    }
+                                                }
+                                                ), m_monitor(monitor_)
     {
         m_monitor.AddLoader(m_subscriber);
     }
 
-
-
-    // DllLoader::~DllLoader()
-    // {
-    //     m_monitor.RemoveLoader(m_subscriber);
-    // }
+    DllLoader::~DllLoader()
+    {
+        m_monitor.RemoveLoader(m_subscriber);
+        for(auto iter: m_container)
+        {
+            dlclose(iter);
+        }
+    }
 
 }

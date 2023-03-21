@@ -55,7 +55,7 @@ namespace ilrd
     private:
         Callback<std::string> m_subscriber;
         DirMonitor &m_monitor;
-        // std::list<
+        std::list<void*> m_container;
     }; 
 
 } // namespace ilrd
