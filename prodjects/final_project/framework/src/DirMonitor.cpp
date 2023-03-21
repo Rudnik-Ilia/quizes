@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <dlfcn.h> // dlopen
 #include <iostream>
+#include <boost/algorithm/string/predicate.hpp>
 
 #include "DirMonitor.hpp"
 
@@ -14,6 +15,7 @@ namespace ilrd
     DirMonitor::DirMonitor(std::string dirpath): m_path(dirpath), m_thread(), m_inotify_fd(), m_stop(1)
     {
         m_inotify_fd = inotify_init();
+
         if(m_inotify_fd < 0)
         {
             std::cout<< "ERROR inotify init" << std::endl;
@@ -32,9 +34,10 @@ namespace ilrd
     }
 
     DirMonitor::~DirMonitor()
-    {
-        m_thread.join();
+    {   
+        m_stop = 0;
         close(m_inotify_fd);
+        m_thread.join();
     }
 
     void DirMonitor::AddLoader(const Callback<std::string> &dll_loader_)
@@ -96,7 +99,7 @@ namespace ilrd
         {
             int len = read(m_fd, buffer, BUFF_SIZE);
 
-            if (len == -1 && errno != EAGAIN) 
+            if (len == -1) 
             {
                std::cout<< "ERROR len" << std::endl;
             }
@@ -107,14 +110,15 @@ namespace ilrd
             for(ptr = buffer; ptr < buffer + len; ptr += sizeof(event) + event->len)
             {
                 event = (const struct inotify_event *)ptr;
-                // if (event->name)
-                // {
-                //     std::cout << "WRITE" << std::endl;
-                // }
-                std::cout << event->name << std::endl;
+                std::string suffix = ".so";
+
+                if (boost::algorithm::ends_with(std::string(event->name), suffix))
+                {
+                    std::cout << "WRITE" << std::endl;
+                    m_dispatcher.Dispatch(std::string(m_path + '/' + event->name));
+                }
             }
-        }
-        
+        }  
     }
 /******************************************************************************************************/
 
