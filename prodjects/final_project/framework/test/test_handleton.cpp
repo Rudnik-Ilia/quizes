@@ -10,7 +10,6 @@ using std::thread;
 #include "Factory.hpp"
 #include "Singleton.hpp"
 #include "ITask.hpp"
-#include "test_class.hpp"
 
 using namespace ilrd;
 typedef Factory<ITask, string> factory_p;
