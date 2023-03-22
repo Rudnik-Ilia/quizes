@@ -86,9 +86,14 @@ namespace ilrd
         template <typename... EventArgs>
         void Dispatcher<EventArgs...>::Unsubscribe(const Callback<EventArgs...> &callback_)
         {
+            #ifdef NDEBUG
             std::cout << m_subscribers.size() << std::endl;
+            #endif 
             m_subscribers.erase(&callback_);
+             #ifdef NDEBUG
             std::cout << m_subscribers.size() << std::endl;
+            #endif
+
         }
 
         template <typename... EventArgs>
@@ -99,8 +104,6 @@ namespace ilrd
                 iter->Notify(args_...);
             }
         }
-
-
 } // namespace ilrd
 
 #endif /* __ILRD_RD132_DISPATCHER_HPP__ */

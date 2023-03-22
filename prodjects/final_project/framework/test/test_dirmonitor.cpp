@@ -12,8 +12,7 @@ using namespace ilrd;
 int main()
 {
     DirMonitor monitor("/home/ilia53/git/prodjects/final_project/framework/test/TEST_FOLDER");
-    // monitor.Monitor();
-
+   
     DllLoader loader(monitor);
 
     sleep(30);

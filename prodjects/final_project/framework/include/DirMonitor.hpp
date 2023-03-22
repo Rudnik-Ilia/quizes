@@ -24,7 +24,6 @@ namespace ilrd
         void RemoveLoader(const Callback<std::string> &dll_loader_);
         ~DirMonitor();
 
-        void Monitor();
     private:
         Dispatcher<std::string> m_dispatcher;
 
@@ -35,7 +34,7 @@ namespace ilrd
         void ReadEvents(int m_fd);
 
         int m_inotify_fd;
-        int m_stop;
+        bool m_stop;
     }; 
 
 /*******************************************************************************/
@@ -56,6 +55,8 @@ namespace ilrd
         Callback<std::string> m_subscriber;
         DirMonitor &m_monitor;
         std::list<void*> m_container;
+
+        void HandleCall(const std::string &filepath_);
     }; 
 
 } // namespace ilrd
