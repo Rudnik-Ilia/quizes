@@ -16,20 +16,13 @@ void Foo()
 
 int main()
 {
-
-
     std::unique_ptr<Listener> p_lis(new Listener());
 
     Reactor reactor(std::move(p_lis));
 
-    reactor.Register();
+    // reactor.Register();
 
     
     
-    
-
-
-
-
     return 0;
 }

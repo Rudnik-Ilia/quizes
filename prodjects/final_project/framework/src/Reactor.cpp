@@ -6,10 +6,7 @@
 namespace ilrd
 {
 
-    Reactor::Reactor(ListenerPtr listener_) : m_listener(std::move(listener_)) 
-    {
-
-    }
+    Reactor::Reactor(ListenerPtr listener_) : m_listener(std::move(listener_)){}
 
     Reactor::~Reactor()
     {   
@@ -29,11 +26,11 @@ namespace ilrd
     void Reactor::Run()
     {
         while(!m_stop_flag)
-        {
-            std::list<Reactor::EventKey> ready_staff = m_listener->Listen(m_connections);
-            for(auto iter: ready_staff)
+        {   
+            auto readyness = m_listener->Listen(m_connections);
+            for(auto iter: readyness)
             {
-                iter.second();
+                iter.second;
             }
         }
     }
