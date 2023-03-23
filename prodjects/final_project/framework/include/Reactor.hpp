@@ -15,9 +15,9 @@ namespace ilrd
         public:
             enum class ioMode
             {
-                READ,
+                READ = 0,
                 WRITE
-            };
+            };  
 
             using EventCallback = std::function<void()>;
 

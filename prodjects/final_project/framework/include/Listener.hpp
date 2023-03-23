@@ -27,18 +27,18 @@ namespace ilrd
                 {
                     switch (iter.first.second)
                     {
-                    case Reactor::ioMode::READ:
+                        case Reactor::ioMode::READ:
 
-                        FD_SET(iter.first.first, &Read_fd);
-                        break;
+                            FD_SET(iter.first.first, &Read_fd);
+                            break;
 
-                    case Reactor::ioMode::WRITE:
+                        case Reactor::ioMode::WRITE:
 
-                        FD_SET(iter.first.first, &Write_fd);
-                        break;
-                    
-                    default:
-                        break;
+                            FD_SET(iter.first.first, &Write_fd);
+                            break;
+                        
+                        default:
+                            break;
                     }
 
                     struct timeval tv;
@@ -60,23 +60,19 @@ namespace ilrd
                     {
                         if(FD_ISSET(i, &Read_fd))
                         {
-                            Ready_fd.pop_back(Reactor::EventKey(i, Reactor::ioMode::READ))
+                            Reactor::EventKey key(i, Reactor::ioMode::READ);
+                            Ready_fd.push_back(key);
                         }
                         if(FD_ISSET(i, &Write_fd))
                         {
-
+                            Reactor::EventKey key(i, Reactor::ioMode::WRITE);
+                            Ready_fd.push_back(key);
                         }
 
-                    }
-                    
-                        
+                    }      
                 }
+                return Ready_fd;
             }
-
-
-
-
-        private:
 
     };
 

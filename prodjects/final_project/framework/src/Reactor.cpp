@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include "Listener.hpp"
 #include "Reactor.hpp"
 
@@ -30,7 +30,7 @@ namespace ilrd
             auto readyness = m_listener->Listen(m_connections);
             for(auto iter: readyness)
             {
-                iter.second;
+                m_connections.at(iter)();
             }
         }
     }
