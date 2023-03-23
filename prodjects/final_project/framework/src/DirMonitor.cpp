@@ -67,7 +67,7 @@ namespace ilrd
             
             int retval = select(FD_SETSIZE, &set, NULL, NULL, &tv);
 
-            if(retval == -1 && errno != EAGAIN)
+            if(retval == -1)
             {
                 std::cout<< "ERROR select (-1)" << std::endl;
                 throw std::runtime_error("ERROR select (-1)");

@@ -95,15 +95,8 @@ class Subject
         int pos_y{0};
 };
 
-class Observer0
-{
-    public:
-    
-    private:
 
-};
-
-class Observer1: public Observer0
+class Observer1
 {
     public:
         Observer1(Subject &sub): m_func(Foo), m_subject(sub)
@@ -127,7 +120,7 @@ class Observer1: public Observer0
         Subject &m_subject;
 };
 
-class Observer2: public Observer0
+class Observer2
 {
     public:
         Observer2(Subject &sub): m_func(Faa), m_subject(sub)
@@ -143,7 +136,7 @@ class Observer2: public Observer0
         Subject &m_subject;
 };
 
-class Observer3: public Observer0
+class Observer3
 {
     public:
         Observer3(Subject &sub): m_func(Bar), m_subject(sub)
@@ -180,7 +173,6 @@ class Changer
 
     private:
         Subject &m_disp;
-
 };
 
 int main()
@@ -222,7 +214,8 @@ int main()
         subject.ChangState(99, 2);
         cout << "______________________________" << endl;
 
-        
+        // subject.m_disp.~Dispatcher();
+
         Observer3 obs6(subject);
         subject.ChangState(9,9);
         cout << "______________________________" << endl;

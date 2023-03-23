@@ -5,6 +5,8 @@
 #include <functional>
 #include <set>
 
+// gp11 test_dispatcher.cpp -I ../include
+
 namespace ilrd
 {
     template <typename... EventArgs>
@@ -31,7 +33,7 @@ namespace ilrd
             Handler m_function;
             friend class Dispatcher<EventArgs...>;
             void Notify(const EventArgs &...) const;
-            bool callback_alive;
+            virtual void Death() const;
         }; 
 
         template <typename... EventArgs>
@@ -57,7 +59,7 @@ namespace ilrd
 
         /*****************************************************************************************/
         template <typename... EventArgs>
-        Callback<EventArgs...>::Callback(Handler function) : m_function(function), callback_alive(true){}
+        Callback<EventArgs...>::Callback(Handler function) : m_function(function){}
 
         template <typename... EventArgs>
         bool Callback<EventArgs...>::operator<(const Callback &rhs_) const
@@ -77,10 +79,22 @@ namespace ilrd
         {
             m_subscribers.insert(&callback_);
         }
+
+        template <typename... EventArgs>
+        void Callback<EventArgs...>::Death() const
+        {
+            std::cout << "The DISPATCHER is OVER!!!" << std::endl;
+        }
+
         template <typename... EventArgs>
         Dispatcher<EventArgs...>::~Dispatcher()
         {
             dispatcher_alive = false;
+
+            for (auto iter : m_subscribers)
+            {
+                iter->Death();
+            }
         }
 
         template <typename... EventArgs>
