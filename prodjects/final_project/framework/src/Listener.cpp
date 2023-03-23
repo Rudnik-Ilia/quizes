@@ -1,13 +1,11 @@
 
-#include "Listener.hpp"
+// #include "Listener.hpp"
+// #include "Reactor.hpp"
 
 
-namespace ilrd
-{
-    std::list<Reactor::EventKey> Listener::Listen(const Reactor::ConnectionMap &)
-    {
-
-    }
+// namespace ilrd
+// {
+   
 
 
 
@@ -15,4 +13,4 @@ namespace ilrd
 
 
 
-}
+// }

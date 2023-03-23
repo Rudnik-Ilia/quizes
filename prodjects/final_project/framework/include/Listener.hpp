@@ -1,26 +1,22 @@
-#ifndef __ILRD_RD132_LISTENER_HPP__
-#define __ILRD_RD132_LISTENER_HPP__
+#pragma once
 
 #include "Reactor.hpp"
 
 namespace ilrd
 {
-
-    class Listener: IFDListener
+    class Listener: public IFDListener
     {
-        Listener() = default;
-        Listener(Listener &&) = default;
-        Listener(const Listener &) = default;
-        Listener &operator=(Listener &&) = default;
-        Listener &operator=(const Listener &) = default;
+        public:
 
-        virtual ~Listener() = default;
+            std::list<Reactor::EventKey> Listen(const Reactor::ConnectionMap &map_key_connection) 
+            {
+                for(auto iter: map_key_connection)
+                {
+                    iter.first.first;
+                }
+            }
+        private:
 
-        std::list<Reactor::EventKey> Listen(const Reactor::ConnectionMap &);
     };
 
 }
-
-
-
-#endif /* __ILRD_RD132_LISTENER_HPP__ */

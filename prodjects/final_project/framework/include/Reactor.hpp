@@ -36,13 +36,13 @@ namespace ilrd
 
             void Register(const EventKey &key_, EventCallback handler_);
             void Unregister(const EventKey &key_);
-            
+
             void Run();
             void Stop();
 
         private:
             ConnectionMap m_connections;
-            ListenerPtr &m_listener;
+            ListenerPtr m_listener;
             bool m_stop_flag{false};
     };
 
@@ -59,7 +59,7 @@ namespace ilrd
 
             virtual ~IFDListener() = default;
             virtual std::list<Reactor::EventKey> Listen(const Reactor::ConnectionMap &) = 0;
-        };
+    };
 }
 
 #endif /* __ILRD_RD132_REACTOR_HPP__ */
