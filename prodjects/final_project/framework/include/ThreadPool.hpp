@@ -49,7 +49,7 @@ namespace ilrd
 
             ThreadMap m_workingThreads;
             WaitableQueue<TaskPair, TaskPQ> m_Tasks;
-            WaitableQueue<std::shared_ptr<WorkerThread> > m_availableThreads;
+            WaitableQueue<std::shared_ptr<WorkerThread>> m_availableThreads;
 
             std::atomic<bool> m_paused;
             std::shared_ptr<ITask> GetTask();
