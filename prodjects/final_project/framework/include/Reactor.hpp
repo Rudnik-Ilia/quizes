@@ -7,7 +7,7 @@
 #include <memory>
 
 namespace ilrd
-{
+{   
     class IFDListener;
 
     class Reactor
@@ -20,10 +20,8 @@ namespace ilrd
             };  
 
             using EventCallback = std::function<void()>;
-
             using EventKey = std::pair<int, ioMode>;
             using ConnectionMap = std::map<EventKey, EventCallback>;
-
             using ListenerPtr = std::unique_ptr<IFDListener>;
 
             Reactor(ListenerPtr listener_);

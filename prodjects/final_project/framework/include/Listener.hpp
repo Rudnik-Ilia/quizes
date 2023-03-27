@@ -42,10 +42,11 @@ namespace ilrd
                     }
 
                     struct timeval tv;
-                    tv.tv_sec = 3;
+                    tv.tv_sec = 2;
                     tv.tv_usec = 0;
 
                     int retval = select(FD_SETSIZE, &Read_fd, &Write_fd, NULL, &tv);
+
                     if(retval == -1)
                     {
                         std::cout<< "ERROR select (-1)" << std::endl;
@@ -60,17 +61,18 @@ namespace ilrd
                     {
                         if(FD_ISSET(i, &Read_fd))
                         {
-                            Reactor::EventKey key(i, Reactor::ioMode::READ);
-                            Ready_fd.push_back(key);
+                            Reactor::EventKey fd_mode_key(i, Reactor::ioMode::READ);
+                            Ready_fd.push_back(fd_mode_key);
                         }
                         if(FD_ISSET(i, &Write_fd))
                         {
-                            Reactor::EventKey key(i, Reactor::ioMode::WRITE);
-                            Ready_fd.push_back(key);
+                            Reactor::EventKey fd_mode_key(i, Reactor::ioMode::WRITE);
+                            Ready_fd.push_back(fd_mode_key);
                         }
 
                     }      
                 }
+                
                 return Ready_fd;
             }
 

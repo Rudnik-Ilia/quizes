@@ -5,6 +5,16 @@
 
 namespace ilrd
 {
+    
+    // class Functor
+    // {
+    //     public:
+    //         void operator()(std::list<Reactor::EventKey> readyFD){
+
+    //         }
+
+
+    // };
 
     Reactor::Reactor(ListenerPtr listener_) : m_listener(std::move(listener_)){}
 
@@ -25,12 +35,17 @@ namespace ilrd
 
     void Reactor::Run()
     {
-        while(!m_stop_flag)
+        while(!m_stop_flag && !m_connections.empty())
         {   
-            auto readyness = m_listener->Listen(m_connections);
-            for(auto iter: readyness)
-            {
-                m_connections.at(iter)();
+            std::list<Reactor::EventKey> readyFD = m_listener->Listen(m_connections);
+            
+            for(auto iter: readyFD)
+            {   
+                if(m_stop_flag)
+                {
+                    break;
+                }
+                m_connections.at(iter)();   
             }
         }
     }
