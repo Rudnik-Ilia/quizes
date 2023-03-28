@@ -5,34 +5,18 @@
 // gp11 test_scheduler.cpp -I ../include -lrt
 using namespace ilrd;
 
-class MyTaskNormal: public ITask
+class MyTask: public ITask
 {
     public:
+    MyTask(int x): m_time(x){}
     void Execute()
     {
-        std::cout << "Thread Run NORMAL" << std::endl; 
+        std::cout << "Thread Run : " << m_time << std::endl; 
     }
+    int m_time;
 };
 
-class MyTaskLow: public ITask
-{
-    public:
-    void Execute()
-    {
 
-        std::cout << "Thread Run LOW" << std::endl; 
-
-    }
-};
-
-class MyTaskHigh: public ITask
-{
-    public:
-    void Execute()
-    {
-        std::cout << "Thread Run HIGH" << std::endl; 
-    }
-};
 
 
 int main()
@@ -47,15 +31,15 @@ int main()
 
     Scheduler* sched = Singleton<Scheduler>::GetInstance();
 
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(5)), m_interval_5);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(1)), m_interval_1);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(10)), m_interval_10);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(2)), m_interval_2);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(3)), m_interval_3);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(15)), m_interval_15);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(20)), m_interval_20);
 
-    // sched->AddTask(std::shared_ptr<MyTaskLow>(new MyTaskLow()), m_interval_5);
-
-    // sched->AddTask(std::shared_ptr<MyTaskHigh>(new MyTaskHigh()), m_interval_3);
-
-    sched->AddTask(std::shared_ptr<MyTaskNormal>(new MyTaskNormal()), m_interval_1); 
-    sched->AddTask(std::shared_ptr<MyTaskHigh>(new MyTaskHigh()), m_interval_10);
-
-    sleep(20);
+    sleep(30);
 
     return 0;
 }

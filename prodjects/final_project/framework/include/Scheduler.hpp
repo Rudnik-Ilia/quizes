@@ -66,7 +66,7 @@ namespace ilrd
 
     Scheduler::~Scheduler()
     {
-        timer_delete(m_timer);
+        // timer_delete(m_timer);
     }
 
     void Scheduler::AddTask(std::shared_ptr<ITask> task_, std::chrono::milliseconds interval_)
@@ -91,33 +91,31 @@ namespace ilrd
     void Scheduler::Handler()
     {
         std::cout << "Handler" << std::endl;
-        if(m_tasks.isEmpty())
-        {
-            std::cout << "Empty" << std::endl;
-        }
 
         QPair m_pair;
         m_tasks.Pop(m_pair);
         m_pair.first->Execute();
 
+        if(m_tasks.isEmpty())
+        {
+            std::cout << "Empty" << std::endl;
+            timer_delete(m_timer);
+            return;
+        }
+
         m_tasks.Pop(m_pair);
         std::chrono::milliseconds new_interval = std::chrono::duration_cast<std::chrono::milliseconds>(m_pair.second - std::chrono::system_clock::now());
         SetTimer(new_interval);
         m_tasks.Push(m_pair);
-        
-        // while (!m_tasks.isEmpty())
-        // {
-        //     QPair m_pair;
-        //     m_tasks.Pop(m_pair);
-        //     m_pair.first->Execute();
-        //     sleep(2);
-        // }
     }
 
     void Scheduler::SetTimer(std::chrono::milliseconds interval_)
     {
         struct timespec curr;
         struct itimerspec new_value;
+
+        memset(&curr, 0, sizeof(struct timespec));
+        memset(&new_value, 0, sizeof(struct itimerspec));
 
         curr.tv_sec = interval_.count() / 1000;
         curr.tv_nsec = (interval_.count() % 1000) * 1000000;
