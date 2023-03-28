@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <assert.h>
 #include <iostream>
+#include <cstring>
 
 #include "Handleton.hpp"
 #include "Singleton.hpp"
@@ -14,18 +15,18 @@
 #include "PriorityQueue.hpp"
 #include "ITask.hpp"
 
-typedef void(*foo)(union sigval);
-
 namespace ilrd
 {
     class Scheduler
     {
-        using QPair = std::pair<std::shared_ptr<ITask>, std::chrono::milliseconds>;
+        using QPair = std::pair<std::shared_ptr<ITask>, std::chrono::time_point<std::chrono::system_clock>>;
 
         public:
             void AddTask(std::shared_ptr<ITask> task_, std::chrono::milliseconds interval_);
 
         private:
+            friend bool operator<(Scheduler::QPair &left, Scheduler::QPair &right);
+
             Scheduler();
 
             Scheduler(Scheduler &&) = delete;
@@ -42,22 +43,19 @@ namespace ilrd
 
             static void AlarmHandler(union sigval sig);
             void Handler();
+            void SetTimer(std::chrono::milliseconds interval_);
 
             WaitableQueue<QPair, PriorityQueue<QPair>> m_tasks;
 
-            std::shared_ptr<ITask> m_curr_task; 
-
-            std::function<void(union sigval)> call_back;
+            QPair m_close_pair; 
 
 
     };
 
-    Scheduler::Scheduler(): m_curr_task(nullptr)
+    Scheduler::Scheduler(): m_close_pair()
     {
-        // , call_back(std::bind(&Scheduler::AlarmHandler, this, std::placeholders::_1))
-        // (foo*)(&Scheduler::AlarmHandler);
-        //  *call_back.target<void(*)(union sigval)>();
-        struct sigevent sev = {0};
+        struct sigevent sev;
+        memset(&sev, 0, sizeof(struct sigevent));
         sev.sigev_notify = SIGEV_THREAD;
         sev.sigev_notify_function = &AlarmHandler;
         sev.sigev_notify_attributes = NULL;
@@ -65,13 +63,6 @@ namespace ilrd
 
         assert(timer_create(CLOCK_MONOTONIC, &sev, &m_timer) == 0);
 
-        struct itimerspec its = {0};
-
-        its.it_interval.tv_sec = 4;
-        its.it_interval.tv_nsec = 0;
-        its.it_value.tv_sec = 1;
-        its.it_value.tv_nsec = 0;
-        timer_settime(m_timer, 0, &its, NULL);
     }
 
     Scheduler::~Scheduler()
@@ -81,17 +72,17 @@ namespace ilrd
 
     void Scheduler::AddTask(std::shared_ptr<ITask> task_, std::chrono::milliseconds interval_)
     { 
-        // if(!m_curr_task)
-        // {
-        //     m_curr_task = task_;
-        // }
-        // else
-        // {
-        //     QPair m_pair(task_, interval_);
-        //     m_tasks.Push(m_pair);
-        // }
-            QPair m_pair(task_, interval_);
-            m_tasks.Push(m_pair);
+        std::chrono::time_point<std::chrono::system_clock> time_to_execute = std::chrono::system_clock::now() + interval_;
+
+        QPair new_pair(task_, time_to_execute);
+
+        if(m_tasks.isEmpty() || new_pair > m_close_pair)
+        {
+            std::cout << "Lesser" << std::endl;
+            m_close_pair = new_pair;
+            SetTimer(interval_);
+        }
+        m_tasks.Push(new_pair);
     }
 
     void Scheduler::AlarmHandler(union sigval sig)
@@ -103,16 +94,35 @@ namespace ilrd
     void Scheduler::Handler()
     {
         std::cout << "Handler" << std::endl;
-
-        while (!m_tasks.isEmpty())
+        if(m_tasks.isEmpty())
         {
-            QPair m_pair;
-            m_tasks.Pop(m_pair);
-            std::cout << m_pair.second.max << std::endl;
-            m_pair.first.get()->Execute();  
-        }  
+            std::cout << "Empty" << std::endl;
+        }
+      
+        QPair m_pair;
+        m_tasks.Pop(m_pair);
+        m_pair.first.get()->Execute();
+         
     }
 
+    void Scheduler::SetTimer(std::chrono::milliseconds interval_)
+    {
+        struct timespec curr;
+        struct itimerspec new_value;
+
+        curr.tv_sec = interval_.count() / 1000;
+        curr.tv_nsec = (interval_.count() % 1000) * 1000000;
+        new_value.it_interval.tv_sec = 0;
+        new_value.it_interval.tv_nsec = 0;
+        new_value.it_value = curr;
+
+        assert(0 == timer_settime(m_timer, 0, &new_value, NULL));
+    }
+
+    bool operator<(Scheduler::QPair &left, Scheduler::QPair &right)
+    {
+        return (left.second > right.second);
+    }
 
 } // namespace ilrd
     
