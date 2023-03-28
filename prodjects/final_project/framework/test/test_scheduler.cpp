@@ -2,7 +2,9 @@
 
 #include "Scheduler.hpp"
 #include "ITask.hpp"
-// gp11 test_scheduler.cpp -I ../include -lrt
+
+// gp11 test_scheduler.cpp ../src/Scheduler.cpp -I ../include -lrt
+
 using namespace ilrd;
 
 class MyTask: public ITask
@@ -16,9 +18,6 @@ class MyTask: public ITask
     int m_time;
 };
 
-
-
-
 int main()
 {
     auto m_interval_1 = std::chrono::milliseconds(1000);
@@ -31,15 +30,15 @@ int main()
 
     Scheduler* sched = Singleton<Scheduler>::GetInstance();
 
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(20)), m_interval_20);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(15)), m_interval_15);
+    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(10)), m_interval_10);
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(5)), m_interval_5);
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(1)), m_interval_1);
-    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(10)), m_interval_10);
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(2)), m_interval_2);
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(3)), m_interval_3);
-    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(15)), m_interval_15);
-    sched->AddTask(std::shared_ptr<MyTask>(new MyTask(20)), m_interval_20);
 
-    sleep(30);
+    sleep(22);
 
     return 0;
 }
