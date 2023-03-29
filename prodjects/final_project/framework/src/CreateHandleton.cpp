@@ -2,6 +2,7 @@
 #define CREATOR
 #include <iostream>
 #include "Handleton.hpp"
+#include "Scheduler.hpp"
 
 #include "Logger.hpp"
 
@@ -19,9 +20,14 @@ void __attribute__((destructor)) Bye()
 
 extern "C"
 {
-    ilrd::Logger* GetInstance()
+    ilrd::Logger* GetInstanceLogger()
     {
         return ilrd::Handleton<ilrd::Logger>::GetInstance();
+    }
+
+    ilrd::Scheduler* GetInstanceScheduler()
+    {
+        return ilrd::Handleton<ilrd::Scheduler>::GetInstance();
     }
 
 }

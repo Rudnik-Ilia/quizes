@@ -40,7 +40,7 @@ namespace ilrd
             friend Handleton<Scheduler>;
             friend Singleton<Scheduler>;    
 
-            timer_t m_timer;      
+            timer_t m_timer;  
 
             static void AlarmHandler(union sigval sig);
             void Handler();
@@ -48,7 +48,7 @@ namespace ilrd
 
             WaitableQueue<QPair, PriorityQueue<QPair>> m_tasks;
             TP m_early_time;
-
+            struct sigevent* sev;    
     };
 
 } // namespace ilrd
