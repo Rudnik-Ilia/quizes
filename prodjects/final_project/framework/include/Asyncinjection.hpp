@@ -35,12 +35,12 @@ namespace ilrd
                     {
                         if(m_action())
                         {
-                            std::cout << "TRUE" << std::endl;
                             my_injector->m_sched->AddTask(my_injector->m_shared_task, my_injector->m_interval);
                         }
                         else
                         {
-                            std::cout << "FALSE" << std::endl;
+                            std::cout << "STOP" << std::endl;
+                            // delete my_injector;
                         }
                     }
 
@@ -52,7 +52,7 @@ namespace ilrd
             std::shared_ptr<AsyncTask> m_shared_task;
 
             friend Singleton<Scheduler>; 
-            ~AsyncInjection() = delete;
+            ~AsyncInjection();
 
             static Scheduler *m_sched;
             AsyncTask* m_task;
@@ -65,6 +65,10 @@ namespace ilrd
     AsyncInjection::AsyncInjection(const std::function<bool()> &action_, std::chrono::milliseconds timeout_): m_shared_task(std::shared_ptr<AsyncTask>(new AsyncTask(action_, this))), m_interval(timeout_)
     {
         m_sched->AddTask(std::shared_ptr<AsyncTask>(m_shared_task), m_interval);
+    }
+    AsyncInjection::~AsyncInjection()
+    {
+
     }
     
 } // namespace ilrd
