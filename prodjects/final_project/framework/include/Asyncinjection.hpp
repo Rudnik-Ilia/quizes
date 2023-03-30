@@ -29,20 +29,8 @@ namespace ilrd
             class AsyncTask : public ITask
             {
                 public:
-                    AsyncTask(const std::function<bool()> &action_, AsyncInjection* injector_): m_action(action_), my_injector(injector_){}
-
-                    void Execute()
-                    {
-                        if(m_action())
-                        {
-                            my_injector->m_sched->AddTask(my_injector->m_shared_task, my_injector->m_interval);
-                        }
-                        else
-                        {
-                            std::cout << "STOP" << std::endl;
-                            // delete my_injector;
-                        }
-                    }
+                    AsyncTask(const std::function<bool()> &action_, AsyncInjection* injector_);
+                    void Execute();
 
                 private:
                     std::function<bool()> m_action;
@@ -56,20 +44,8 @@ namespace ilrd
 
             static Scheduler *m_sched;
             AsyncTask* m_task;
-            Ms m_interval;
-            
+            Ms m_interval;   
     };
-
-    Scheduler* AsyncInjection::m_sched = Singleton<Scheduler>::GetInstance();
-
-    AsyncInjection::AsyncInjection(const std::function<bool()> &action_, std::chrono::milliseconds timeout_): m_shared_task(std::shared_ptr<AsyncTask>(new AsyncTask(action_, this))), m_interval(timeout_)
-    {
-        m_sched->AddTask(std::shared_ptr<AsyncTask>(m_shared_task), m_interval);
-    }
-    AsyncInjection::~AsyncInjection()
-    {
-
-    }
     
 } // namespace ilrd
 

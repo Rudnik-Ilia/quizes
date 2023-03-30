@@ -45,9 +45,11 @@ int main()
     // new AsyncInjection(Bar, std::chrono::milliseconds(m_interval_5));
 
     Functor func(7);
-    new AsyncInjection(func, std::chrono::milliseconds(m_interval_3));
 
-    sleep(30);
+    AsyncInjection *inj_1 = new AsyncInjection(func, std::chrono::milliseconds(m_interval_3));
+    AsyncInjection *inj_2 = new AsyncInjection(Foo, std::chrono::milliseconds(m_interval_1));
+
+    sleep(20);
 
     return 0;
 

@@ -21,7 +21,6 @@ namespace ilrd
     Scheduler::~Scheduler()
     {
         timer_delete(m_timer);
-        // free(sev);
     }
 
     void Scheduler::AddTask(std::shared_ptr<ITask> task_, Ms interval_)
