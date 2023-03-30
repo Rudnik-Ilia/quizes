@@ -2,23 +2,26 @@
 
 namespace ilrd
 {
-    Scheduler::Scheduler(): m_early_time(TP::max()), sev(static_cast<struct sigevent*>(calloc(1, sizeof(struct sigevent))))
+    Scheduler::Scheduler(): m_early_time(TP::max())
     {
-        // struct sigevent sev{};
-        // memset(&sev, 0, sizeof(struct sigevent));
-        sev->sigev_notify = SIGEV_THREAD;
-        sev->sigev_notify_function = &AlarmHandler;
-        sev->sigev_notify_attributes = NULL;
-        sev->sigev_value.sival_ptr = (void*)this;
-        sev->sigev_signo = SIGALRM;
+        struct sigevent sev{};
+        memset(&sev, 0, sizeof(struct sigevent));
+        sev.sigev_notify = SIGEV_THREAD;
+        sev.sigev_notify_function = &AlarmHandler;
+        sev.sigev_notify_attributes = NULL;
+        sev.sigev_value.sival_ptr = (void*)this;
+        sev.sigev_signo = SIGALRM;
 
-        assert(timer_create(CLOCK_MONOTONIC, sev, &m_timer) == 0);
+        if(timer_create(CLOCK_MONOTONIC, &sev, &m_timer) == -1)
+        {
+            throw std::runtime_error("Timer create error");
+        }
     }
 
     Scheduler::~Scheduler()
     {
         timer_delete(m_timer);
-        free(sev);
+        // free(sev);
     }
 
     void Scheduler::AddTask(std::shared_ptr<ITask> task_, Ms interval_)
@@ -33,12 +36,20 @@ namespace ilrd
             
             m_early_time = time_to_execute;
             SetTimer(interval_);
+
         }
         m_tasks.Push({task_, time_to_execute});
+
+        #ifdef NDEBUG
+        std::cout << "Lesser bottom" << std::endl;
+        #endif
     }
 
     void Scheduler::AlarmHandler(union sigval sig)
     {
+        #ifdef NDEBUG
+        std::cout << "Alarm Handler" << std::endl;
+        #endif
         Scheduler *obj= reinterpret_cast<Scheduler *>(sig.sival_ptr);
         obj->Handler();
     }
@@ -69,6 +80,9 @@ namespace ilrd
 
     void Scheduler::SetTimer(Ms interval_)
     {
+        #ifdef NDEBUG
+        std::cout << "Set timer" << std::endl;
+        #endif
         struct timespec curr;
         struct itimerspec new_value;
 
@@ -81,7 +95,11 @@ namespace ilrd
         new_value.it_interval.tv_nsec = 0;
         new_value.it_value = curr;
 
-        assert(0 == timer_settime(m_timer, 0, &new_value, NULL));
+        if(timer_settime(m_timer, 0, &new_value, NULL) == -1)
+        {
+            throw std::runtime_error("Set timer error!");
+        }
+
     }
 
     bool operator<(const Scheduler::QPair &left, const Scheduler::QPair &right)

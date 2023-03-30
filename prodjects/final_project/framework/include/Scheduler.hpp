@@ -48,7 +48,7 @@ namespace ilrd
 
             WaitableQueue<QPair, PriorityQueue<QPair>> m_tasks;
             TP m_early_time;
-            struct sigevent* sev;    
+            // struct sigevent* sev;    
     };
 
 } // namespace ilrd

@@ -14,6 +14,7 @@ class MyTask: public ITask
     void Execute()
     {
         std::cout << "Thread Run : " << m_time << std::endl; 
+        // sleep(1);
     }
     int m_time;
 };
@@ -36,6 +37,7 @@ int main()
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(20)), m_interval_20);
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(15)), m_interval_15);
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(10)), m_interval_10);
+    // sched->AddTask(std::shared_ptr<MyTask>(new MyTask(10)), m_interval_10); 
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(5)), m_interval_5);
 
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(3)), m_interval_3);
@@ -44,8 +46,7 @@ int main()
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(1)), m_interval_1);
     sched->AddTask(std::shared_ptr<MyTask>(new MyTask(333)), m_interval_333);
 
-
-    sleep(22);
+    sleep(25);
 
     return 0;
 }
