@@ -8,7 +8,12 @@ void Swap(int **x, int **y)
     *y = tmp;
 }
 
-
+void Swap3(int **x, int **y)
+{
+    int tmp = **x;
+    *x = *y;
+    *y = &tmp;
+}
 
 
 int main()

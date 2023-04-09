@@ -52,7 +52,6 @@ void Traverse3(struct Node* root)
 
 void Mirror(struct Node* root)
 {
-
     struct Node* tmp;
     if(root == NULL)
     {
@@ -65,6 +64,7 @@ void Mirror(struct Node* root)
     tmp = root->left;
     root->left = root->right;
     root->right = tmp;
+
 }
 
 
@@ -83,9 +83,8 @@ int main()
     node1->right = node4;
     node2->right = node5;
 
+    Mirror(root);
     Traverse1(root);
-    Traverse2(root);
-    Traverse3(root);
 
 
 
