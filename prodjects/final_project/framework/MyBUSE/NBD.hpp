@@ -36,7 +36,7 @@ struct buse_operations
 class NBDServer 
 {
     public:
-        NBDServer(int sk, const struct buse_operations* aop, void* userdata, const char* dev_file) : sk_(sk), aop_(aop), userdata_(userdata) , dev_file(dev_file){}
+        NBDServer(struct buse_operations* aop, void* userdata, const char* dev_file) : sk_(0), aop_(aop), userdata_(userdata) , dev_file(dev_file){}
         ~NBDServer() = default;
 
         static void disconnect_nbd(int signal) 
@@ -260,7 +260,7 @@ class NBDServer
             Init();
 
             pid_t pid = fork();
-            
+
             if (pid == 0) 
             {
                 /* Block all signals to not get interrupted in ioctl(NBD_DO_IT), as
@@ -381,15 +381,11 @@ class NBDServer
 
         u_int64_t ntohll(u_int64_t a) 
         {
-            #ifdef WORDS_BIGENDIAN
-            return a;
-            #else
             u_int32_t lo = a & 0xffffffff;
             u_int32_t hi = a >> 32U;
             lo = ntohl(lo);
             hi = ntohl(hi);
             return ((u_int64_t) lo) << 32U | hi;
-            #endif
         }
 };
 
