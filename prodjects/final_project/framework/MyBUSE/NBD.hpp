@@ -58,34 +58,34 @@ class NBDServer
 
         int write_all(int fd, char* buf, size_t count)
         {
-        int bytes_written;
+            int bytes_written;
 
-        while (count > 0) 
-        {
-            bytes_written = write(fd, buf, count);
-            assert(bytes_written > 0);
-            buf += bytes_written;
-            count -= bytes_written;
-        }
-        assert(count == 0);
+            while (count > 0) 
+            {
+                bytes_written = write(fd, buf, count);
+                assert(bytes_written > 0);
+                buf += bytes_written;
+                count -= bytes_written;
+            }
+            assert(count == 0);
 
-        return 0;
+            return 0;
         }
 
         int read_all(int fd, char* buf, size_t count)
         {
-        int bytes_read;
+            int bytes_read;
 
-        while (count > 0) 
-        {
-            bytes_read = read(fd, buf, count);
-            assert(bytes_read > 0);
-            buf += bytes_read;
-            count -= bytes_read;
-        }
-        assert(count == 0);
+            while (count > 0) 
+            {
+                bytes_read = read(fd, buf, count);
+                assert(bytes_read > 0);
+                buf += bytes_read;
+                count -= bytes_read;
+            }
+            assert(count == 0);
 
-        return 0;
+            return 0;
         }
 
         int set_sigaction(int sig, const struct sigaction * act) 

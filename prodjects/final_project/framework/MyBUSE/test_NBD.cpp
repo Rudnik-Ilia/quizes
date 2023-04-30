@@ -96,7 +96,7 @@ static unsigned long long strtoull_with_prefix(const char * str, char * * end)
 /* Parse a single option. */
 static error_t parse_opt(int key, char *arg, struct argp_state *state) 
 {
-    struct arguments *arguments = state->input;
+    struct arguments *arguments = (struct arguments *)state->input;
 
     char *endptr;
 
@@ -131,9 +131,10 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
         break;
 
     case ARGP_KEY_END:
-        if (state->arg_num < 2) {
-        warnx("not enough arguments");
-        argp_usage(state);
+        if (state->arg_num < 2) 
+        {
+            warnx("not enough arguments");
+            argp_usage(state);
         }
         break;
 
@@ -144,11 +145,10 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 }
 
 static struct argp argp = {
-  .options = options,
-  .parser = parse_opt,
-  .args_doc = "SIZE DEVICE",
-  .doc = "BUSE virtual block device that stores its content in memory.\n"
-         "`SIZE` accepts suffixes K, M, G. `DEVICE` is path to block device, for example \"/dev/nbd0\".",
+    .options = options,
+    .parser = parse_opt,
+    .args_doc = "SIZE DEVICE",
+    .doc = "BUSE virtual block device that stores its content in memory.\n""`SIZE` accepts suffixes K, M, G. `DEVICE` is path to block device, for example \"/dev/nbd0\".",
 };
 
 
@@ -177,7 +177,8 @@ int main(int argc, char *argv[])
     }
 
     NBDServer nbd(&aop,(void *)&arguments.verbose, arguments.device);
-    
+    nbd.Buse_main();
+
 
     return 0;
 }
