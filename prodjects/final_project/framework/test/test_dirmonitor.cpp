@@ -15,12 +15,7 @@ int main()
    
     DllLoader loader(monitor);
 
-
     sleep(60);
-
-
-
-
 
     return 0;
 }
