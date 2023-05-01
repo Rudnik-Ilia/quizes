@@ -96,7 +96,7 @@ static unsigned long long strtoull_with_prefix(const char * str, char * * end)
 /* Parse a single option. */
 static error_t parse_opt(int key, char *arg, struct argp_state *state) 
 {
-    struct arguments *arguments = (struct arguments *)state->input;
+    struct arguments *arguments = (struct arguments *)(state->input);
 
     char *endptr;
 
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
         err(EXIT_FAILURE, "failed to alloc space for data");
     }
 
-    NBDServer nbd(&aop,(void *)&arguments.verbose, arguments.device);
+    NBDServer nbd(&aop, arguments.device, (void *)&arguments.verbose);
     nbd.Buse_main();
 
 

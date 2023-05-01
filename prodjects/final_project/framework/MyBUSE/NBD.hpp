@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <iostream>
 
 #ifndef BUSE_DEBUG
 #define BUSE_DEBUG (0)
@@ -36,7 +37,7 @@ struct buse_operations
 class NBDServer 
 {
     public:
-        NBDServer(struct buse_operations* aop, void* userdata, const char* dev_file) : sk_(0), aop_(aop), userdata_(userdata) , dev_file(dev_file){}
+        NBDServer(struct buse_operations* aop, const char* dev_file, void* userdata ) : aop_(aop), dev_file(dev_file), userdata_(userdata){}
         ~NBDServer() = default;
 
         static void disconnect_nbd(int signal) 
@@ -111,7 +112,9 @@ class NBDServer
             reply.magic = htonl(NBD_REPLY_MAGIC);
             reply.error = htonl(0);
 
-            while ((bytes_read = read(sk_, &request, sizeof(request))) > 0) 
+            // std::cout << sk_ << std::endl;
+
+            while ((bytes_read = read(sp[0], &request, sizeof(request))) > 0) 
             {
                 assert(bytes_read == sizeof(request));
 
@@ -146,8 +149,8 @@ class NBDServer
                         /* If user not specified read operation, return EPERM error */
                             reply.error = htonl(EPERM);
                         }
-                        write_all(sk_, (char*)&reply, sizeof(struct nbd_reply));
-                        write_all(sk_, (char*)chunk, len);
+                        write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
+                        write_all(sp[0], (char*)chunk, len);
 
                         free(chunk);
                         break;
@@ -159,7 +162,7 @@ class NBDServer
                         }
                         chunk = malloc(len);
 
-                        read_all(sk_, (char*)chunk, len);
+                        read_all(sp[0], (char*)chunk, len);
 
                         if (aop_->write) 
                         {
@@ -171,7 +174,7 @@ class NBDServer
                             reply.error = htonl(EPERM);
                         }
                         free(chunk);
-                        write_all(sk_, (char*)&reply, sizeof(struct nbd_reply));
+                        write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
                         break;
 
                     case NBD_CMD_DISC:
@@ -196,7 +199,7 @@ class NBDServer
                         {
                             reply.error = aop_->flush(userdata_);
                         }
-                        write_all(sk_, (char*)&reply, sizeof(struct nbd_reply));
+                        write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
                         break;
                         #endif
 
@@ -206,7 +209,7 @@ class NBDServer
                         if (aop_->trim) {
                         reply.error = aop_->trim(from, len, userdata_);
                         }
-                        write_all(sk_, (char*)&reply, sizeof(struct nbd_reply));
+                        write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
                         break;
                         #endif
 
@@ -259,7 +262,7 @@ class NBDServer
         {
             Init();
 
-            pid_t pid = fork();
+            pid = fork();
 
             if (pid == 0) 
             {
@@ -275,7 +278,8 @@ class NBDServer
 
                 /* The child needs to continue setting things up. */
                 close(sp[0]);
-                sk_ = sp[1];
+
+                int sk_ = sp[1];
 
                 if(ioctl(nbd, NBD_SET_SOCK, sk_) == -1)
                 {
@@ -370,14 +374,15 @@ class NBDServer
         }
 
     private:
-
         static int nbd_dev_to_disconnect;
-        int sk_;
         const struct buse_operations* aop_;
         void* userdata_;
         const char* dev_file;
         int sp[2];
-        int nbd, err, flags;
+        int nbd;
+        int err;
+        int flags;
+        pid_t pid; 
 
         u_int64_t ntohll(u_int64_t a) 
         {
