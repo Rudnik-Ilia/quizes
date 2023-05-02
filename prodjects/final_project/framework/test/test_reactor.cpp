@@ -39,12 +39,7 @@ int main()
     // reactor.Register(Reactor::EventKey(STDIN_FILENO, Reactor::ioMode::READ), callback);
     reactor.Register({STDIN_FILENO, Reactor::ioMode::READ}, callbackStop);
 
-    reactor.Run();
-
-
-
-
-    
+    reactor.Run(); 
     
     return 0;
 }
