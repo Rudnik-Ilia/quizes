@@ -29,7 +29,7 @@ static int xmp_write(const void *buf, u_int32_t len, u_int64_t offset, void *use
     {
         fprintf(stderr, "W - %lu, %u\n", offset, len);
     }
-  memcpy((char *)data + offset, buf, len);
+    memcpy((char *)data + offset, buf, len);
 
   return 0;
 }
@@ -74,7 +74,7 @@ struct arguments
     int verbose;
 };
 
-static unsigned long long strtoull_with_prefix(const char * str, char * * end) 
+static unsigned long long strtoull_with_prefix(const char *str, char **end) 
 {
     unsigned long long v = strtoull(str, end, 0);
     switch (**end) 
