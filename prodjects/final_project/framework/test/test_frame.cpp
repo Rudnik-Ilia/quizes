@@ -10,11 +10,21 @@ using namespace ilrd;
 
 static void *data;
 
+void Show(const void *data)
+{
+    for(int i = 0; i < 100; ++i)
+    {
+        std::cout << *(((char*)(data)) + i);
+    }
+    std::cout << '\n';
+}
+
 int my_read(void *buf, u_int32_t len, u_int64_t offset, void *userdata)
 {   
     (void*)userdata;
     std::cout << "My_read" << std::endl;
     memcpy(buf, (char *)data + offset, len);
+    Show(buf);
     return 0;
 }
 
@@ -23,7 +33,7 @@ int my_write(const void *buf, u_int32_t len, u_int64_t offset, void *userdata)
     (void*)userdata;
     std::cout << "My_write" << std::endl;
     memcpy((char *)data + offset, buf, len);
-
+    Show(buf);
   return 0;
 }
 
@@ -168,8 +178,9 @@ int main(int argc, char *argv[])
     
     NBDServer nbd(&aop, arguments.device, (void *)&arguments.verbose);
     FRAME frame(nbd);
-    frame.Register_Callback();
     frame.Run_Reactor();
+
+    
 
 
     return 0;   

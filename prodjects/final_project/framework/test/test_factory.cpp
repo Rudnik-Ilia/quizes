@@ -93,9 +93,6 @@ std::shared_ptr<ITask> CreaterDelete(FactoryArgs &arguments)
     return std::shared_ptr<DeleteFunc>(new DeleteFunc(args.m_a ,args.m_b, args.m_c));
 }
 
-
-
-
 int main()
 {   
     string str1 = "Im reader";
