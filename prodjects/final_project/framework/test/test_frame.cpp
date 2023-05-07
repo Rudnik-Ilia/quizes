@@ -24,7 +24,7 @@ int my_read(void *buf, u_int32_t len, u_int64_t offset, void *userdata)
     (void*)userdata;
     std::cout << "My_read" << std::endl;
     memcpy(buf, (char *)data + offset, len);
-    Show(buf);
+    // Show(buf);
     return 0;
 }
 
@@ -33,7 +33,7 @@ int my_write(const void *buf, u_int32_t len, u_int64_t offset, void *userdata)
     (void*)userdata;
     std::cout << "My_write" << std::endl;
     memcpy((char *)data + offset, buf, len);
-    Show(buf);
+    // Show(buf);x
   return 0;
 }
 
@@ -66,7 +66,7 @@ static struct argp_option options[] = {
 struct arguments 
 {
     unsigned long long size;
-    char * device;
+    char *device;
     int verbose;
 };
 
