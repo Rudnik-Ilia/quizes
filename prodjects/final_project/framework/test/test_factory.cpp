@@ -100,6 +100,7 @@ int main()
 
     ArgsForRead reader(str1);
     ArgsForWrite writer(str2, 555);
+    
     struct ArgsForDelete deleter;
     deleter.m_a = 11;
     deleter.m_b = 22;
