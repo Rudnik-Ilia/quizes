@@ -33,11 +33,7 @@ int my_write(const void *buf, u_int32_t len, u_int64_t offset)
 
 
 int main(int argc, char *argv[])
-{
-    // std::string str1 = "ilia";
-    // ArgsForRead arg_read(str1);
-    // ArgsForWrite arg_write(str1, 777);
-    
+{  
     struct buse_operations aop = {
         .read = my_read,
         .write = my_write,
@@ -50,11 +46,10 @@ int main(int argc, char *argv[])
         err(EXIT_FAILURE, "failed to alloc space for data");
     }
 
-    Factory<ITask, Reactor::ioMode> factory;
     NBDServer nbd(&aop, "/dev/nbd0");
 
-    FRAME frame(nbd, factory);
-    
+    FRAME frame(nbd);
+
     frame.Register(Reactor::ioMode::READ, Creator::Get_Read_Task);
     frame.Register(Reactor::ioMode::WRITE, Creator::Get_Write_Task);
 
