@@ -7,14 +7,11 @@
     
 namespace ilrd
 {
-
-// any arguments that user wants to pass to creator_ should be publicly inherited from FactoryArgs
     struct FactoryArgs 
     {
         inline virtual ~FactoryArgs() = default;
     };
-
-
+    
     template <class Base, class Key>
     class Factory
     {
@@ -25,7 +22,7 @@ namespace ilrd
         Factory(Factory &&) = delete;
         Factory(const Factory &) = delete;
         Factory &operator=(Factory &&) = delete;
-        Factory &operator=(const Factory &) = delete;
+        Factory &operator=(const Factory &) = delete;   
         ~Factory() = default;
 
         void Register(const Key& key_, Value creator_);
@@ -45,7 +42,6 @@ namespace ilrd
     template <class Base, class Key>
     std::shared_ptr<Base> Factory<Base, Key>::Create(const Key& key_, FactoryArgs& args)
     {
-        // return ((m_creators.find(key_))->second)(args);
         return (m_creators.at(key_))(args);
     }
 

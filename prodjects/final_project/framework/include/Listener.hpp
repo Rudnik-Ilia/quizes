@@ -16,7 +16,7 @@ namespace ilrd
             std::list<Reactor::EventKey> Listen(const Reactor::ConnectionMap &map_key_connection) 
             {
                 std::list<Reactor::EventKey> Ready_fd;
-
+                 
                 fd_set Read_fd = {0};
                 fd_set Write_fd = {0};
 
@@ -42,8 +42,8 @@ namespace ilrd
                     }
 
                     struct timeval tv;
-                    tv.tv_sec = 2;
-                    tv.tv_usec = 0;
+                    tv.tv_sec = 0;
+                    tv.tv_usec = 10;
 
                     int retval = select(FD_SETSIZE, &Read_fd, &Write_fd, NULL, &tv);
 
@@ -54,7 +54,7 @@ namespace ilrd
                     }
                     else if(retval == 0)
                     {
-                        std::cout<< "Wait for data..." << std::endl;
+                        // std::cout<< "Wait for data..." << std::endl;
                     }
 
                     for(size_t i = 0; i < FD_SETSIZE; ++i)
@@ -69,13 +69,11 @@ namespace ilrd
                             Reactor::EventKey fd_mode_key(i, Reactor::ioMode::WRITE);
                             Ready_fd.push_back(fd_mode_key);
                         }
-
                     }      
                 }
                 
                 return Ready_fd;
             }
-
     };
 
 }
