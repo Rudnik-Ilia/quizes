@@ -7,12 +7,32 @@
 #include <sys/wait.h>
 #include <vector>
 
-// namespace ilrd
-// {
-//     struct Protocol_Reply
-//     {
-//         u_int32_t type;
-//         std::shared_ptr<std::vector<char>> &data;
+#define BLOCK (4096)
 
-//     }__attribute__((packed));
-// }
+namespace ilrd
+{
+    struct Reply
+    {
+ 
+
+        char data[BLOCK];
+    }__attribute__((packed));
+
+    struct Request
+    {
+
+
+        char data[BLOCK];
+    }__attribute__((packed));
+
+    struct Header
+    {
+        size_t id;
+        size_t size_of_block;
+        size_t num_of_block;
+
+        char data[BLOCK];
+        
+    }__attribute__((packed));
+    
+}

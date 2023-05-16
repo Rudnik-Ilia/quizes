@@ -75,7 +75,7 @@ namespace ilrd
         return r;
     }
 
-    void NBDServer::Serve() 
+    int NBDServer::Serve() 
     {
         u_int64_t from;
         u_int32_t len;
@@ -151,7 +151,7 @@ namespace ilrd
                     {
                         aop_->disc();
                     }
-                    // return EXIT_SUCCESS;
+                    return EXIT_SUCCESS;
 
                 #ifdef NBD_FLAG_SEND_FLUSH
                 case NBD_CMD_FLUSH:
@@ -191,8 +191,10 @@ namespace ilrd
         if (bytes_read == -1)
         {
             warn("error reading userside of nbd socket");
-            // return EXIT_FAILURE;
+            return EXIT_FAILURE;
         }
+
+        return EXIT_SUCCESS;
     }
 
 

@@ -15,13 +15,13 @@
 
 namespace ilrd
 {
-    class Proxy_Server
+    class Sender
     {
         public:
-            explicit Proxy_Server(int port)
+            explicit Sender(int port)
             {
                 struct sockaddr_in server_addr;
-                memset(&server_addr, 0, LENGHT);
+                bzero(&server_addr,LENGHT);
 
                 if (0 > (m_fd = socket(AF_INET, SOCK_DGRAM, 0)))
                 {
@@ -36,7 +36,7 @@ namespace ilrd
                     fprintf(stderr, "Bind from Ctor failed. errno: %d\n", errno);
                 }
             }
-            ~Proxy_Server()
+            ~Sender()
             {
                 close(m_fd);
             }
@@ -44,7 +44,7 @@ namespace ilrd
             int Write_Smt(char *data, size_t data_size, int port)
             {
                 struct sockaddr_in client_addr;
-                memset(&client_addr, 0, LENGHT);
+                bzero(&client_addr,LENGHT);
 
                 client_addr.sin_family = AF_INET; 
                 client_addr.sin_port = htons(port); 

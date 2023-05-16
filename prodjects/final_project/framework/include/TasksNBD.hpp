@@ -4,9 +4,9 @@
 #include "ITask.hpp"
 #include "Factory.hpp"
 
+
 namespace ilrd
 {
-
     struct ArgumentsForTask : public FactoryArgs
     {
         ArgumentsForTask(std::shared_ptr<std::vector<char>> data, u_int64_t from, u_int32_t len, u_int32_t type): m_data(data), m_from(from), m_len(len), m_type(type){}
@@ -26,7 +26,7 @@ namespace ilrd
             {   
                 std::cout << "HI FROM READ TASK!" << '\n';
                 std::cout << "OFFSET: " << m_from << '\n';
-                std::cout << "LENGHT: " << m_len << '\n'; 
+                std::cout << "SIZEOF VECTOR: " << m_data.get()->size() << '\n'; 
             }
             
         private:
@@ -46,7 +46,8 @@ namespace ilrd
             {
                 std::cout << "HI FROM WRITE TASK!" << '\n';
                 std::cout << "OFFSET: " << m_from << '\n';
-                std::cout << "LENGHT: " << m_len << '\n'; 
+                std::cout << "LEN: " << m_len << '\n';
+                std::cout << "SIZEOF VECTOR: " << m_data.get()->size() << '\n'; 
             }
 
         private:
@@ -55,7 +56,7 @@ namespace ilrd
             u_int32_t m_len;
     };
 
-    /********************************************************************************************************/
+    /**********************************************************************************************************/
 
     class Creator
     {

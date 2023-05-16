@@ -67,7 +67,7 @@ namespace ilrd
             int read_all(int fd, char* buf, size_t count);
             int set_sigaction(int sig, const struct sigaction * act); 
      
-            void Serve(); 
+            int Serve(); 
             int Init();
             int HandlerStaff();
             int Buse_main();

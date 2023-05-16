@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <errno.h>
 #include "Singleton.hpp"
 #include "NBD.hpp"
 #include "Reactor.hpp"
@@ -12,6 +13,15 @@
 
 namespace ilrd
 {
+    class IDriver
+    {
+        public:
+            virtual int GetDescriptor() = 0;
+            virtual std::shared_ptr<struct ArgumentsForTask>& GetArguments() = 0;
+        private:
+        
+    };
+
     class FRAME
     {
         void Show(void *dat, u_int64_t offset, u_int32_t len)
@@ -33,24 +43,20 @@ namespace ilrd
 
             void Run_NBD()
             {
-                m_nbd.Serve();
-                
+                if(m_nbd.Serve() == EXIT_FAILURE)
+                {
+                    fprintf(stderr, "m_nbd.Serve(). errno: %d\n", errno);
+                    return;
+                }
+
                 if(m_nbd.GetArguments().get()->m_type == NBD_CMD_READ)
                 {
-                    std::cout << "READING" << std::endl;
-                    std::cout <<  m_nbd.GetArguments().get()->m_from << std::endl;
-                    std::cout << m_nbd.GetArguments().get()->m_len << std::endl;
-                    std::cout << m_nbd.GetArguments().get()->m_type << std::endl;
                     auto task = m_factory.Create(Reactor::ioMode::READ, *(m_nbd.GetArguments().get()));
                     m_pool.AddTask(task, ThreadPool::PRIORITY_HIGH);
                     return;
                 }
                 if(m_nbd.GetArguments().get()->m_type == NBD_CMD_WRITE)
                 {
-                    std::cout << "WRITING" << std::endl;
-                    std::cout <<  m_nbd.GetArguments().get()->m_from << std::endl;
-                    std::cout << m_nbd.GetArguments().get()->m_len << std::endl;
-                    std::cout << m_nbd.GetArguments().get()->m_type << std::endl;
                     auto task = m_factory.Create(Reactor::ioMode::WRITE, *(m_nbd.GetArguments().get()));
                     m_pool.AddTask(task, ThreadPool::PRIORITY_HIGH);
                     return;
@@ -69,6 +75,7 @@ namespace ilrd
             }
   
         private:
+        
             void StopFunc()
             {
                 char buffer[2] = {0};
