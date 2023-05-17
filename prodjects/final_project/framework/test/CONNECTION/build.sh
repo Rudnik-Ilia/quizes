@@ -2,4 +2,4 @@
 
 g++ receiver.cpp -o server 
 
-g++ sender.cpp -o client 
+g++ test_sender.cpp -o client 

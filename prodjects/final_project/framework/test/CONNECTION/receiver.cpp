@@ -3,13 +3,19 @@
 #include <cstring>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <unordered_set>
+#include <memory>
 
 #define MAX_DATAGRAM_SIZE 64000
+#define HEADER (sizeof(uint32_t) * 3)
 
 struct Datagram 
 {
     uint32_t m_id;
-    char m_data[MAX_DATAGRAM_SIZE];
+    uint32_t m_num_packed;
+    uint32_t m_size;
+    char m_data[MAX_DATAGRAM_SIZE - HEADER];
+
 }__attribute__((packed));
 
 int main() 
@@ -40,7 +46,12 @@ int main()
         std::cerr << "Error binding socket" << std::endl;
     }
 
+    std::unordered_set<uint32_t> receivedPackets;
+    std::shared_ptr<std::vector<char>> Data = std::make_shared<std::vector<char>>();
     std::vector<char> receivedData;
+
+    bool completed = false;
+    uint32_t expected_id = 1;
 
     while (1) 
     {
@@ -56,22 +67,22 @@ int main()
 
         receivedData.insert(receivedData.end(), acknoledge.m_data, acknoledge.m_data + receivedBytes);
 
-        if (receivedBytes < MAX_DATAGRAM_SIZE) 
+        if (receivedBytes < MAX_DATAGRAM_SIZE - HEADER) 
         {
-            std::cout << "ID : " <<  acknoledge.m_id << std::endl;
 
-            if(acknoledge.m_id == receivedData.size() - sizeof(uint32_t))
+            if(acknoledge.m_size == receivedData.size())
             {
                 std::cout << "Everything is OK!" << std::endl;
             }
+            std::cout << "ID : " <<  acknoledge.m_size << std::endl;
             std::cout << "Received data size: " << receivedData.size() << std::endl;
             std::cout << "DATA : " << receivedData.data() << std::endl;
             receivedBytes = 0;
             receivedData.clear();
             std::cout << "Final data size: " << receivedData.size() << std::endl;
+
         }
     }
-
     close(sockfd);
 
     return 0;
