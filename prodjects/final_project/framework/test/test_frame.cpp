@@ -3,14 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "FRAME.hpp"
-#include "TasksNBD.hpp"
 
+#include "FRAME.hpp"
+// #include "TasksNBD.hpp"LDg++ test_frame.cpp ../src/NBD.cpp ../src/Reactor.cpp ../src/ThreadPool.cpp ../src/WorkerThread.cpp ../src/ThreadMap.cpp -lpthread -I ../include
 // g++ test_frame.cpp ../src/NBD.cpp ../src/Reactor.cpp ../src/ThreadPool.cpp ../src/WorkerThread.cpp ../src/ThreadMap.cpp -lpthread -I ../include
 
 using namespace ilrd;
 static void *data;
-
 
 int my_read(void *buf, u_int32_t len, u_int64_t offset)
 {   
@@ -44,6 +43,8 @@ int main(int argc, char *argv[])
     frame.Register(Reactor::ioMode::WRITE, Creator::Get_Write_Task);
 
     frame.Run_Reactor();
+
+    free(data);
 
     return 0;   
 }

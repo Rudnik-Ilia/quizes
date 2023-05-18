@@ -6,33 +6,22 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <vector>
+#include <iostream>
+#include <cstring>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <unordered_set>
+#include <memory>
 
-#define BLOCK (4096)
+#define MAX_DATAGRAM_SIZE 64000
+#define HEADER (sizeof(uint32_t) * 3)
 
-namespace ilrd
+struct Datagram 
 {
-    struct Reply
-    {
- 
+    uint32_t m_id;
+    uint32_t m_num_packed;
+    uint32_t m_size;
+    char m_data[MAX_DATAGRAM_SIZE - HEADER];
 
-        char data[BLOCK];
-    }__attribute__((packed));
-
-    struct Request
-    {
-
-
-        char data[BLOCK];
-    }__attribute__((packed));
-
-    struct Header
-    {
-        size_t id;
-        size_t size_of_block;
-        size_t num_of_block;
-
-        char data[BLOCK];
-        
-    }__attribute__((packed));
-    
-}
+}__attribute__((packed));
+  

@@ -1,9 +1,9 @@
 #include <vector>
+
 #include "NBD.hpp" 
 #include "Singleton.hpp"
 #include "Reactor.hpp"
 #include "ThreadPool.hpp"
-#include "Protocol.hpp"
 
 namespace ilrd
 {
@@ -95,6 +95,7 @@ namespace ilrd
             from = ntohll(request.from);
 
             assert(request.magic == htonl(NBD_REQUEST_MAGIC));
+
             auto chunk = std::make_shared<std::vector<char>>(len); 
 
             switch(ntohl(request.type)) 
@@ -126,10 +127,11 @@ namespace ilrd
                         fprintf(stderr, "Request for write of size %d\n", len);
                     }
 
-                    read_all(sp[0], (char*)chunk.get()->data(), len);
+                    read_all(sp[0], chunk.get()->data(), len);
                     
                     if (aop_->write) 
                     {
+                        // std::cout << "++++++++++++++++++++" << chunk << std::endl;
                         reply.error = aop_->write(chunk.get()->data(), len, from); 
                         m_args = std::make_shared<struct ArgumentsForTask>(chunk, from, len, 1);
                     } 

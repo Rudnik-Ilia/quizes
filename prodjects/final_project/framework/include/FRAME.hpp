@@ -2,14 +2,16 @@
 
 #include <iostream>
 #include <errno.h>
+
 #include "Singleton.hpp"
 #include "NBD.hpp"
 #include "Reactor.hpp"
 #include "Listener.hpp"
 #include "Factory.hpp"
 #include "ITask.hpp"
-#include "TasksNBD.hpp"
+// #include "TasksNBD.hpp"
 #include "ThreadPool.hpp"
+
 
 namespace ilrd
 {
@@ -24,13 +26,7 @@ namespace ilrd
 
     class FRAME
     {
-        void Show(void *dat, u_int64_t offset, u_int32_t len)
-        {
-            for (size_t i = 0; i < len; i++)
-            {
-                std::cout<<  *((char*)dat + offset + i);
-            }  
-        }
+ 
         public:
             FRAME(NBDServer& nbd): m_nbd(nbd) , m_reactor(std::move(std::unique_ptr<Listener>(new Listener()))), m_pool(3), m_factory()
             {
@@ -91,4 +87,6 @@ namespace ilrd
             ThreadPool m_pool;
             Factory<ITask, Reactor::ioMode> m_factory;
     };
+
+    // FRAME::FRAME()
 }

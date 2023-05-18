@@ -17,7 +17,6 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "Protocol.hpp"
 #include "TasksNBD.hpp"
 
 #ifndef BUSE_DEBUG

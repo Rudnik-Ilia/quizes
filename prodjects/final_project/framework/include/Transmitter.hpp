@@ -1,33 +1,16 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <cstring>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <memory>
-
-#define MAX_DATAGRAM_SIZE (size_t)64000
-#define HEADER (sizeof(uint32_t) * 3)
-
-struct Datagram 
-{
-    uint32_t m_id;
-    uint32_t m_num_packed;
-    uint32_t m_size;
-    char m_data[MAX_DATAGRAM_SIZE - HEADER];
-
-}__attribute__((packed));
+#include "Protocol.hpp"
 
 namespace ilrd
 {
     class Transmitter
     {
         public:
-            explicit Transmitter(std::shared_ptr<std::vector<char>> dataToSend);
-            ~Transmitter();
+            inline explicit Transmitter(std::shared_ptr<std::vector<char>> dataToSend);
+            inline ~Transmitter();
     
-            void Send();
+            inline void Send();
          
         private:
             int m_sockfd;
@@ -37,6 +20,8 @@ namespace ilrd
 
     Transmitter::Transmitter(std::shared_ptr<std::vector<char>> dataToSend): m_sockfd(0), m_dataToSend(dataToSend)
     {
+        memset(&receiverAddr, 0, sizeof(struct sockaddr_in ));
+
         m_sockfd = socket(AF_INET, SOCK_DGRAM, 0);
         if (m_sockfd < 0) 
         {
@@ -64,7 +49,6 @@ namespace ilrd
         {
             Datagram datagram;
             datagram.m_size = m_dataToSend->size() + HEADER;
-            std::cout << sizeof(Datagram) << std::endl;
             // datagram.m_id = assign_id;
 
             size_t dataLength = std::min((m_dataToSend->size() + HEADER) - totalSentBytes, MAX_DATAGRAM_SIZE - HEADER);
@@ -79,7 +63,6 @@ namespace ilrd
             totalSentBytes += sentBytes;
             // ++assign_id;
         }
-
-
-}
+        
+    }
 }

@@ -8,23 +8,25 @@ using namespace ilrd;
 
 void Thread1()
 {
-    auto chunk = std::make_shared<std::vector<char>>(9, 'W'); 
+    auto chunk = std::make_shared<std::vector<char>>(5, 'O'); 
     Transmitter sender(chunk);
     sender.Send();
 }
 
 // void Thread2()
 // {
-//     auto chunk = std::make_shared<std::vector<char>>(250, 'A');
+//     auto chunk = std::make_shared<std::vector<char>>(5, 'A');
 //     Transmitter sender(chunk);
 //     sender.Send();
 // }
+
 // void Thread3()
 // {
 //     auto chunk = std::make_shared<std::vector<char>>(250, 'J');
 //     Transmitter sender(chunk);
 //     sender.Send();
 // }
+
 // void Thread4()
 // {
 //     auto chunk = std::make_shared<std::vector<char>>(25, 'D');
@@ -40,7 +42,9 @@ int main()
     // std::thread t2(Thread2);
     // std::thread t3(Thread3);
     // std::thread t4(Thread4);
+
     sleep(1);
+
     t1.join();
     // t2.join();
     // t3.join();
