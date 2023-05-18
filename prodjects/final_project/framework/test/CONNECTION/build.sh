@@ -1,5 +1,5 @@
 #!/bin/bash
 
-g++ receiver.cpp -o server 
+g++ receiver.cpp -o server -lpthread -g
 
-g++ test_sender.cpp -o client 
+g++ test_sender.cpp -o client -lpthread -g

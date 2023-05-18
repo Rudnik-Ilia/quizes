@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include <vector>
 #include "ITask.hpp"
 #include "Factory.hpp"
 
@@ -54,6 +54,7 @@ namespace ilrd
             std::shared_ptr<std::vector<char>> m_data;
             u_int64_t m_from;
             u_int32_t m_len;
+            
     };
 
     /**********************************************************************************************************/

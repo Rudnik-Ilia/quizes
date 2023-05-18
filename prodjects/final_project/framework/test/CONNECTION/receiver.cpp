@@ -32,7 +32,7 @@ int main()
         std::cerr << "Error creating socket" << std::endl;
     }
 
-    int bufferSize = 65536;
+    int bufferSize = 64000;
 
     setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &bufferSize, sizeof(bufferSize));
 
@@ -40,7 +40,6 @@ int main()
     receiverAddr.sin_port = htons(8080); 
     receiverAddr.sin_addr.s_addr = INADDR_ANY;
 
-  
     if (bind(sockfd, (struct sockaddr*)&receiverAddr, sizeof(receiverAddr)) < 0) 
     {
         std::cerr << "Error binding socket" << std::endl;
@@ -58,7 +57,7 @@ int main()
         Datagram acknoledge;
         socklen_t senderAddrLen = sizeof(senderAddr);
 
-        ssize_t receivedBytes = recvfrom(sockfd, &acknoledge, MAX_DATAGRAM_SIZE , 0, (struct sockaddr*)&senderAddr, &senderAddrLen);
+        ssize_t receivedBytes = recvfrom(sockfd, &acknoledge, MAX_DATAGRAM_SIZE, 0, (struct sockaddr*)&senderAddr, &senderAddrLen);
         if (receivedBytes < 0) 
         {
             std::cerr << "Error receiving data" << std::endl;
@@ -67,22 +66,24 @@ int main()
 
         receivedData.insert(receivedData.end(), acknoledge.m_data, acknoledge.m_data + receivedBytes);
 
-        if (receivedBytes < MAX_DATAGRAM_SIZE - HEADER) 
+        if (receivedBytes + HEADER < MAX_DATAGRAM_SIZE) 
         {
-
             if(acknoledge.m_size == receivedData.size())
             {
                 std::cout << "Everything is OK!" << std::endl;
             }
-            std::cout << "ID : " <<  acknoledge.m_size << std::endl;
+            std::cout << "SIZE : " <<  acknoledge.m_size << std::endl;
             std::cout << "Received data size: " << receivedData.size() << std::endl;
             std::cout << "DATA : " << receivedData.data() << std::endl;
+
             receivedBytes = 0;
             receivedData.clear();
-            std::cout << "Final data size: " << receivedData.size() << std::endl;
 
+            // std::cout << "Final data size: " << receivedData.size() << std::endl;
+            // std::cout << "id : " << acknoledge.m_id << std::endl;
         }
     }
+
     close(sockfd);
 
     return 0;

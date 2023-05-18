@@ -51,9 +51,11 @@ namespace ilrd
     {
         close(m_sockfd);
     }
-
     void Transmitter::Send()
     {
+        system("clear");
+
+        std::cout << m_dataToSend->size() << std::endl;
 
         size_t totalSentBytes = 0;
         uint32_t assign_id = 1;
@@ -61,10 +63,11 @@ namespace ilrd
         while (totalSentBytes < m_dataToSend->size()) 
         {
             Datagram datagram;
-            datagram.m_size = m_dataToSend->size();
+            datagram.m_size = m_dataToSend->size() + HEADER;
+            std::cout << sizeof(Datagram) << std::endl;
             // datagram.m_id = assign_id;
 
-            size_t dataLength = std::min(m_dataToSend->size() - totalSentBytes, MAX_DATAGRAM_SIZE - HEADER);
+            size_t dataLength = std::min((m_dataToSend->size() + HEADER) - totalSentBytes, MAX_DATAGRAM_SIZE - HEADER);
 
             memcpy(&datagram.m_data, &(*m_dataToSend)[totalSentBytes], dataLength);
 
