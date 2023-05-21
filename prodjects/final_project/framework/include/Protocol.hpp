@@ -14,12 +14,13 @@
 #include <memory>
 
 #define MAX_DATAGRAM_SIZE 64000
-#define HEADER (sizeof(uint32_t) * 3)
+#define HEADER (sizeof(uint32_t) * 3 + sizeof(u_int64_t))
 
 struct Datagram 
 {
     uint32_t m_id;
     uint32_t m_num_packed;
+    u_int64_t m_from;
     uint32_t m_size;
     char m_data[MAX_DATAGRAM_SIZE - HEADER];
 

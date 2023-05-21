@@ -6,8 +6,8 @@ using namespace ilrd;
 
 int main()
 {
-    Receiver r;
-    r.Listen();
+    Receiver minion;
+    minion.Listen();
 
     std::cout << "STOP SERVER" << std::endl;
 

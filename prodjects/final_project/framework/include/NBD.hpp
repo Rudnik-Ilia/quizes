@@ -55,7 +55,12 @@ namespace ilrd
         u_int64_t size_blocks;
     };
 
-    class NBDServer 
+    class IDriver
+    {
+        public:
+            IDriver() = default;
+    };
+    class NBDServer : public IDriver
     {
         public:
             NBDServer(struct buse_operations* aop, const char* dev_file);

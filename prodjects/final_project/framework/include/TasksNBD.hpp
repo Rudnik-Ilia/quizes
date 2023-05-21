@@ -44,14 +44,14 @@ namespace ilrd
     class WriteFunc: public ITask
     {
         public:
-            WriteFunc(std::shared_ptr<std::vector<char>> data, u_int64_t from, u_int32_t len): m_data(data), m_from(from), m_len(len), m_transmitter(data){}
+            WriteFunc(std::shared_ptr<std::vector<char>> data, u_int64_t from, u_int32_t len): m_data(data), m_from(from), m_len(len), m_transmitter(){}
             void Execute()
             {
                 std::cout << "HI FROM WRITE TASK!" << '\n';
                 std::cout << "OFFSET: " << m_from << '\n';
                 std::cout << "LEN: " << m_len << '\n';
                 std::cout << "SIZEOF VECTOR: " << m_data.get()->size() << '\n'; 
-                m_transmitter.Send();
+                m_transmitter.Send(m_data, m_from);
             }
 
         private:
