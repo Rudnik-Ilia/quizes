@@ -98,6 +98,10 @@ namespace ilrd
             {
                 std::cout << "I've got the answer, and check it!" << std::endl;
             }
+            else
+            {
+                std::cout << "We lost something..........Sorry!" << std::endl;
+            }
 
             // sleep(2);
         } 

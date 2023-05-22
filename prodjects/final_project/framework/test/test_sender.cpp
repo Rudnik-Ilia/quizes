@@ -6,11 +6,11 @@
 
 using namespace ilrd;
 
-void Thread1()
+void Thread1(size_t times)
 {
-    auto chunk = std::make_shared<std::vector<char>>(50, 'O'); 
+    auto chunk = std::make_shared<std::vector<char>>(times, 'X'); 
     Transmitter sender;
-    sender.Send(chunk, 55);
+    sender.Send(chunk, 0);
 }
 
 void Thread2()
@@ -50,17 +50,17 @@ void Thread4()
 }   
 
 
-int main()
+int main(int argc, char *argv[])
 {
-
-    // std::thread t1(Thread1);
+    size_t param = atoi(argv[1]);
+    std::thread t1(Thread1, param);
     // std::thread t2(Thread2);
     std::thread t3(Thread3);
     // std::thread t4(Thread4);
 
     sleep(1);
 
-    // t1.join();
+    t1.join();
     // t2.join();
     t3.join();
     // t4.join();

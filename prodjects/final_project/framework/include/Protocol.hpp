@@ -16,12 +16,12 @@
 #define MAX_DATAGRAM_SIZE 64000
 #define HEADER (sizeof(uint32_t) * 3 + sizeof(u_int64_t))
 
-
 enum status_code
 {
     ERROR = 0,
     CORRECT
 };
+
 struct Datagram 
 {
     uint32_t m_id;
