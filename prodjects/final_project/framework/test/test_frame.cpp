@@ -41,7 +41,6 @@ int main(int argc, char *argv[])
     FRAME frame(nbd);
     frame.Register(Reactor::ioMode::READ, Creator::Get_Read_Task);
     frame.Register(Reactor::ioMode::WRITE, Creator::Get_Write_Task);
-
     frame.Run_Reactor();
 
     free(data);

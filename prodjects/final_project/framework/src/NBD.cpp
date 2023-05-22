@@ -131,7 +131,6 @@ namespace ilrd
                     
                     if (aop_->write) 
                     {
-                        // std::cout << "++++++++++++++++++++" << chunk << std::endl;
                         reply.error = aop_->write(chunk.get()->data(), len, from); 
                         m_args = std::make_shared<struct ArgumentsForTask>(chunk, from, len, 1);
                     } 

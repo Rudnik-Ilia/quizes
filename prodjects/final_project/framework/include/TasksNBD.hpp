@@ -51,6 +51,7 @@ namespace ilrd
                 std::cout << "OFFSET: " << m_from << '\n';
                 std::cout << "LEN: " << m_len << '\n';
                 std::cout << "SIZEOF VECTOR: " << m_data.get()->size() << '\n'; 
+                
                 m_transmitter.Send(m_data, m_from);
             }
 

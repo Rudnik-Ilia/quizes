@@ -15,7 +15,6 @@
 
 namespace ilrd
 {
-
     class FRAME
     {
         public:
@@ -28,7 +27,6 @@ namespace ilrd
             void Register(const Reactor::ioMode& key, std::function<std::shared_ptr<ITask> (FactoryArgs&)> creator);
   
         private:
-        
             inline void StopFunc()
             {
                 char buffer[2] = {0};

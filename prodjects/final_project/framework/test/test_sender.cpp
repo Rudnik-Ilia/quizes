@@ -28,7 +28,7 @@ void Thread2()
 void Thread3()
 {
     std::string word = "RUDNIK"; 
-    int arr[] = {150000,150000,150000,150000,150000, 150000}; 
+    int arr[] = {100000,150000,200000,133000,50000, 5000}; 
     for(int i = 0; i < word.size();  ++i)
     {
         auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
