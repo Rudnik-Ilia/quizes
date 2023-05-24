@@ -19,13 +19,15 @@
 enum status_code
 {
     ERROR = 0,
-    CORRECT
+    CORRECT, 
+    READ,
+    WRITE
 };
 
 struct Datagram 
 {
     uint32_t m_id;
-    uint32_t m_num_packed;
+    uint32_t m_type;
     u_int64_t m_from;
     uint32_t m_size;
     char m_data[MAX_DATAGRAM_SIZE - HEADER];

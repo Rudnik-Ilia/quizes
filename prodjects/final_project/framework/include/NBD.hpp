@@ -20,7 +20,7 @@
 #include "TasksNBD.hpp"
 
 #ifndef BUSE_DEBUG
-#define BUSE_DEBUG (1)
+#define BUSE_DEBUG (0)
 #endif
 
 #define htonll ntohll

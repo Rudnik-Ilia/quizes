@@ -10,7 +10,7 @@ void Thread1(size_t times)
 {
     auto chunk = std::make_shared<std::vector<char>>(times, 'X'); 
     Transmitter sender;
-    sender.Send(chunk, 0);
+    sender.Send(chunk, 0, 1);
 }
 
 void Thread2()
@@ -21,19 +21,19 @@ void Thread2()
     {
         auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
         Transmitter sender;
-        sender.Send(chunk, 77);
+        sender.Send(chunk, 77, 1);
     }
 }
 
 void Thread3()
 {
     std::string word = "RUDNIK"; 
-    int arr[] = {100000,150000,200000,133000,50000, 5000}; 
+    int arr[] = {123000,151000,222000,133000,57000, 9000}; 
     for(int i = 0; i < word.size();  ++i)
     {
         auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
         Transmitter sender;
-        sender.Send(chunk, 0);
+        sender.Send(chunk, 0, 1);
     }
 }
 
@@ -45,7 +45,7 @@ void Thread4()
     {
         auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
         Transmitter sender;
-        sender.Send(chunk, 111);
+        sender.Send(chunk, 111, 1);
     }
 }   
 

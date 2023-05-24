@@ -12,11 +12,10 @@ namespace ilrd
             inline explicit Transmitter();
             inline ~Transmitter();
     
-            inline void Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from);
+            inline void Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from,  uint32_t type);
          
         private:
             int m_sockfd;
-            // std::shared_ptr<std::vector<char>> m_dataToSend;
             struct sockaddr_in receiverAddr;
             mutable std::mutex m_mutex{};
             struct timeval tv;
@@ -34,6 +33,7 @@ namespace ilrd
         {
             std::cerr << "Error creating socket" << std::endl;
         }
+        
         receiverAddr.sin_family = AF_INET;
         receiverAddr.sin_port = htons(8080); 
         receiverAddr.sin_addr.s_addr = INADDR_ANY;
@@ -52,12 +52,12 @@ namespace ilrd
         close(m_sockfd);
     }
 
-    void Transmitter::Send(std::shared_ptr<std::vector<char>> m_dataToSend, u_int64_t from)
+    void Transmitter::Send(std::shared_ptr<std::vector<char>> m_dataToSend, u_int64_t from,  uint32_t type)
     {
         std::unique_lock<std::mutex> m_lock(m_mutex);
         {
             // system("clear");
-
+label_1:
             std::cout << "--------------------" << std::endl;
             std::cout << "Size to send: " << m_dataToSend->size() << std::endl;
 
@@ -69,6 +69,7 @@ namespace ilrd
                 Datagram datagram;
                 datagram.m_size = m_dataToSend->size() + HEADER;
                 datagram.m_from = from;
+                datagram.m_type = type;
 
                 size_t dataLength = std::min((m_dataToSend->size() + HEADER) - totalSentBytes, MAX_DATAGRAM_SIZE - HEADER);
 
@@ -85,12 +86,12 @@ namespace ilrd
             }
 
             Acknoledge ack;
-
             std::cout << "Wait for acknoledge " << std::endl;
 
             ssize_t receivedBytes = recvfrom(m_sockfd, &ack, sizeof(ack), 0, (struct sockaddr*)&receiverAddr, &len);
             if (receivedBytes < 0) 
             {
+                goto label_1;
                 std::cout << "Error receiving data: timeout" << std::endl;
             }
 
@@ -98,12 +99,11 @@ namespace ilrd
             {
                 std::cout << "I've got the answer, and check it!" << std::endl;
             }
-            else
+            if(ack.m_code == ERROR)
             {
+                goto label_1;
                 std::cout << "We lost something..........Sorry!" << std::endl;
             }
-
-            // sleep(2);
         } 
     }
 }
