@@ -64,8 +64,7 @@ namespace ilrd
             u_int64_t m_from;
             u_int32_t m_len;
             uint32_t m_type;
-            Transmitter m_transmitter;
-            
+            Transmitter m_transmitter;  
     };
 
     /**********************************************************************************************************/

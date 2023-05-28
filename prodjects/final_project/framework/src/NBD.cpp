@@ -180,7 +180,6 @@ namespace ilrd
                     }
 
                     write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
-                    
                     break;
                     #endif
 

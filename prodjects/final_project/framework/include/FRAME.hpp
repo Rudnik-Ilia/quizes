@@ -41,6 +41,7 @@ namespace ilrd
             Reactor m_reactor;
             ThreadPool m_pool;
             Factory<ITask, Reactor::ioMode> m_factory;
+            Transmitter m_transmitter;
     };
 
 }

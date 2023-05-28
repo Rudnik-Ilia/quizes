@@ -33,14 +33,14 @@ void Thread3()
     {
         auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
         Transmitter sender;
-        sender.Send(chunk, 0, 1);
+        sender.Send(chunk, 0, 0);
     }
 }
 
 void Thread4()
 {
-    std::string word = "QWERTY"; 
-    int arr[] = {3,5,7,8,9}; 
+    std::string word = "QW"; 
+    int arr[] = {33000,170000}; 
     for(int i = 0; i < word.size();  ++i)
     {
         auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
@@ -56,14 +56,14 @@ int main(int argc, char *argv[])
     std::thread t1(Thread1, param);
     // std::thread t2(Thread2);
     std::thread t3(Thread3);
-    // std::thread t4(Thread4);
+    std::thread t4(Thread4);
 
     sleep(1);
 
     t1.join();
     // t2.join();
     t3.join();
-    // t4.join();
+    t4.join();
 
     return 0;
 }

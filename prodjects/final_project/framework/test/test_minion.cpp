@@ -1,13 +1,13 @@
 #include <iostream>
 
-#include "Receiver.hpp"
+#include "Minion.hpp"
 
 using namespace ilrd;
 
 int main()
 {
-    Receiver minion(8080);
-    minion.Listen();
+    Minion minion(8080);
+    minion.Wait();
 
     std::cout << "STOP SERVER" << std::endl;
 
