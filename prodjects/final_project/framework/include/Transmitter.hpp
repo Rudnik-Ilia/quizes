@@ -13,7 +13,7 @@ namespace ilrd
             inline explicit Transmitter();
             inline ~Transmitter();
     
-            inline void Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from,  uint32_t type);
+            inline void Send(std::vector<char> &dataToSend, u_int64_t m_from,  uint32_t type);
             inline void SendRead(uint32_t size, u_int64_t from,  uint32_t type);
             inline int GetFD();
          
@@ -57,30 +57,33 @@ namespace ilrd
         close(m_sockfd);
     }
 
-    void Transmitter::Send(std::shared_ptr<std::vector<char>> m_dataToSend, u_int64_t from,  uint32_t type)
+    void Transmitter::Send(std::vector<char> &m_dataToSend, u_int64_t from,  uint32_t type)
     {
         std::lock_guard<std::mutex> m_lock(m_mutex);
         {
             // system("clear");
 label_1:
             std::cout << "--------------------" << std::endl;
-            std::cout << "Size to send: " << m_dataToSend->size() << std::endl;
+            std::cout << "Size to send: " << m_dataToSend.size() << std::endl;
 
             socklen_t len = sizeof(receiverAddr);
             size_t totalSentBytes = 0;
 
-            while (totalSentBytes < m_dataToSend->size()) 
+            while (totalSentBytes < m_dataToSend.size()) 
             {
                 Datagram datagram;
                 memset(&datagram, 0, sizeof(datagram));
 
-                datagram.m_size = m_dataToSend->size() + HEADER;
+                datagram.m_size = m_dataToSend.size() + HEADER;
                 datagram.m_from = from;
                 datagram.m_type = type;
 
-                size_t dataLength = std::min((m_dataToSend->size() + HEADER) - totalSentBytes, MAX_DATAGRAM_SIZE - HEADER);
+                size_t dataLength = std::min((m_dataToSend.size() + HEADER) - totalSentBytes, MAX_DATAGRAM_SIZE - HEADER);
 
-                memcpy(&datagram.m_data, &(*m_dataToSend)[totalSentBytes], dataLength);
+                std::cout <<"dataLength: " << dataLength << std::endl;
+                std::cout <<"totalSentBytes: " << totalSentBytes << std::endl;
+
+                memcpy(&datagram.m_data, &m_dataToSend[totalSentBytes], dataLength);
 
                 ssize_t sentBytes = sendto(m_sockfd, &datagram, dataLength, 0, (struct sockaddr*)&receiverAddr, sizeof(receiverAddr));
                 if (sentBytes < 0) 
