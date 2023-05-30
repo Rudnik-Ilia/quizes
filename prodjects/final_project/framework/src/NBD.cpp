@@ -96,7 +96,7 @@ namespace ilrd
 
             assert(request.magic == htonl(NBD_REQUEST_MAGIC));
 
-            auto chunk = std::make_shared<std::vector<char>>(len); 
+            auto chunk = std::make_shared<std::vector<char>>(len, 0); 
 
             switch(ntohl(request.type)) 
             {
@@ -252,6 +252,7 @@ namespace ilrd
             return EXIT_FAILURE;
         }
         close(sp[1]);
+        // exit(0);
         return 0;
     }
     int NBDServer::Buse_main()

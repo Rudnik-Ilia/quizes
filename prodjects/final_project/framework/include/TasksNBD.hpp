@@ -24,18 +24,18 @@ namespace ilrd
     class ReadFunc: public ITask
     {
         public:
-            ReadFunc(std::shared_ptr<std::vector<char>> data, u_int64_t from, u_int32_t len, uint32_t type): m_data(data), m_from(from), m_len(len), m_type(type), m_transmitter(){}
+            ReadFunc(std::shared_ptr<std::vector<char>> &data, u_int64_t from, u_int32_t len, uint32_t type): m_data(data), m_from(from), m_len(len), m_type(type), m_transmitter(){}
             void Execute()
             {   
                 std::cout << "HI FROM READ TASK!" << '\n';
                 std::cout << "OFFSET: " << m_from << '\n';
                 std::cout << "SIZEOF VECTOR: " << m_data.get()->size() << '\n'; 
                 
-                // m_transmitter.Send(m_data, m_from, m_type);
+                // m_transmitter.SendRead(m_len, m_from, m_type);
             }
             
         private:
-            std::shared_ptr<std::vector<char>> m_data;
+            std::shared_ptr<std::vector<char>> &m_data;
             u_int64_t m_from;
             u_int32_t m_len;
             uint32_t m_type;
@@ -48,7 +48,7 @@ namespace ilrd
     class WriteFunc: public ITask
     {
         public:
-            WriteFunc(std::shared_ptr<std::vector<char>> data, u_int64_t from, u_int32_t len, uint32_t type): m_data(data), m_from(from), m_len(len), m_type(type), m_transmitter(){}
+            WriteFunc(std::shared_ptr<std::vector<char>> &data, u_int64_t from, u_int32_t len, uint32_t type): m_data(data), m_from(from), m_len(len), m_type(type), m_transmitter(){}
             void Execute()
             {
                 std::cout << "HI FROM WRITE TASK!" << '\n';
@@ -60,7 +60,7 @@ namespace ilrd
             }
 
         private:
-            std::shared_ptr<std::vector<char>> m_data;
+            std::shared_ptr<std::vector<char>> &m_data;
             u_int64_t m_from;
             u_int32_t m_len;
             uint32_t m_type;

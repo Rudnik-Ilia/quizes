@@ -6,24 +6,20 @@
 
 using namespace ilrd;
 
-void Thread1(size_t times)
-{
-    auto chunk = std::make_shared<std::vector<char>>(times, 'X'); 
-    Transmitter sender;
-    sender.Send(chunk, 0, 1);
-}
+// Transmitter sender;
 
-void Thread2()
-{
-    std::string word = "ABC"; 
-    int arr[] = {3,50,700}; 
-    for(int i = 0; i < word.size();  ++i)
-    {
-        auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
-        Transmitter sender;
-        sender.Send(chunk, 77, 1);
-    }
-}
+// void Thread1(size_t times)
+// {
+//     auto chunk = std::make_shared<std::vector<char>>(times, 'X'); 
+//     Transmitter sender;
+//     sender.Send(chunk, 0, 1);
+// }
+
+// void Thread2()
+// {
+//     auto chunk = std::make_shared<std::vector<char>>(77000, 'X'); 
+//     sender.Send(chunk, 0, 1);
+// }
 
 void Thread3()
 {
@@ -33,7 +29,7 @@ void Thread3()
     {
         auto chunk = std::make_shared<std::vector<char>>(arr[i], word[i]);
         Transmitter sender;
-        sender.Send(chunk, 0, 0);
+        sender.Send(chunk, 0, 1);
     }
 }
 
@@ -52,15 +48,18 @@ void Thread4()
 
 int main(int argc, char *argv[])
 {
-    size_t param = atoi(argv[1]);
-    std::thread t1(Thread1, param);
+    // auto chunk = std::make_shared<std::vector<char>>(9000, 'X'); 
+    // sender.Send(chunk, 0, 1);
+
+    // size_t param = atoi(argv[1]);
+    // std::thread t1(Thread1, param);
     // std::thread t2(Thread2);
     std::thread t3(Thread3);
     std::thread t4(Thread4);
 
     sleep(1);
 
-    t1.join();
+    // t1.join();
     // t2.join();
     t3.join();
     t4.join();

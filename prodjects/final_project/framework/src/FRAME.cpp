@@ -2,17 +2,16 @@
 
 namespace ilrd
 {
-    FRAME::FRAME(NBDServer& nbd): m_nbd(nbd) , m_reactor(std::move(std::unique_ptr<Listener>(new Listener()))), m_pool(6), m_factory(), m_transmitter()
+    FRAME::FRAME(NBDServer& nbd): m_nbd(nbd) , m_reactor(std::move(std::unique_ptr<Listener>(new Listener()))), m_pool(6), m_factory(), m_static_listen()
     {
         m_nbd.Start();
         m_reactor.Register({STDIN_FILENO, Reactor::ioMode::READ}, std::bind(&FRAME::StopFunc, this));
         m_reactor.Register({m_nbd.GetDescriptor(), Reactor::ioMode::READ}, std::bind(&FRAME::Run_NBD, this));
+
+        m_reactor.Register({m_static_listen.GetFD(), Reactor::ioMode::READ}, std::bind(&FRAME::AddReadTask, this));
     };
 
-    FRAME::~FRAME()
-    {
-
-    }
+    FRAME::~FRAME(){}
 
     void FRAME::Run_NBD()
     {
@@ -45,6 +44,13 @@ namespace ilrd
     void FRAME::Register(const Reactor::ioMode& key, std::function<std::shared_ptr<ITask> (FactoryArgs&)> creator)
     {
         m_factory.Register(key, creator);
+    }
+
+    void FRAME::AddReadTask()
+    {
+        std::cout << "REACTOR AddTASK" << std::endl;
+        usleep(10000);
+        // m_static_listen.Receiver();
     }
 
 }

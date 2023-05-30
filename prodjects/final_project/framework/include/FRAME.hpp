@@ -3,6 +3,7 @@
 #include <iostream>
 #include <errno.h>
 
+#include "StaticListener.hpp"
 #include "Singleton.hpp"
 #include "NBD.hpp"
 #include "Reactor.hpp"
@@ -25,6 +26,7 @@ namespace ilrd
             void Run_NBD();
             void Run_Reactor();
             void Register(const Reactor::ioMode& key, std::function<std::shared_ptr<ITask> (FactoryArgs&)> creator);
+            void AddReadTask();
   
         private:
             inline void StopFunc()
@@ -41,7 +43,7 @@ namespace ilrd
             Reactor m_reactor;
             ThreadPool m_pool;
             Factory<ITask, Reactor::ioMode> m_factory;
-            Transmitter m_transmitter;
+            StaticListener m_static_listen;
     };
 
 }
