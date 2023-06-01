@@ -108,7 +108,7 @@ namespace ilrd
                     if (aop_->read) 
                     {
                         reply.error = aop_->read(chunk.get()->data(), len, from);
-                        m_args = std::make_shared<struct ArgumentsForTask>(chunk, from, len, 0);
+                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, from, len, 0, nullptr});
                     } 
                     else 
                     {
@@ -132,7 +132,7 @@ namespace ilrd
                     if (aop_->write) 
                     {
                         reply.error = aop_->write(chunk.get()->data(), len, from); 
-                        m_args = std::make_shared<struct ArgumentsForTask>(chunk, from, len, 1);
+                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, from, len, 1, nullptr});
                     } 
                     else 
                     {

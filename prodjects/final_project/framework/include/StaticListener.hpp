@@ -20,7 +20,6 @@ namespace ilrd
     };
         
 
-    
     StaticListener::StaticListener()
     {
         memset(&rec_addr, 0, sizeof(struct sockaddr_in));
@@ -38,6 +37,11 @@ namespace ilrd
         rec_addr.sin_family = AF_INET;
         rec_addr.sin_port = htons(8082); 
         rec_addr.sin_addr.s_addr = INADDR_ANY;
+        
+        struct timeval read_timeout;
+        read_timeout.tv_sec = 0;
+        read_timeout.tv_usec = 10;
+        setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
 
         if (bind(m_socket, (struct sockaddr*)&rec_addr, sizeof(rec_addr)) < 0) 
         {
@@ -54,7 +58,6 @@ namespace ilrd
     {
         Acknoledge ack;
         socklen_t len = sizeof(sen_addr);
-    
         ssize_t receivedBytes = recvfrom(m_socket, &ack, sizeof(ack), 0, (struct sockaddr*)&sen_addr, &len);
         if (receivedBytes < 0) 
         {
@@ -70,5 +73,4 @@ namespace ilrd
     {
         return m_socket;
     }
-}
-
+}   

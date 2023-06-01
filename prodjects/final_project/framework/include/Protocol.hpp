@@ -13,7 +13,7 @@
 #include <unordered_set>
 #include <memory>
 
-#define MAX_DATAGRAM_SIZE 64000
+#define MAX_DATAGRAM_SIZE (size_t)64000
 #define HEADER (sizeof(uint32_t) * 3 + sizeof(u_int64_t))
 
 enum status_code
