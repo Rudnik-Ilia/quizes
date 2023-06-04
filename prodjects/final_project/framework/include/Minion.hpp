@@ -15,6 +15,7 @@
 #include "ThreadPool.hpp"
 #include "Factory.hpp"
 #include "Reactor.hpp"
+#include "Listener.hpp"
 
 using namespace std;
 
@@ -31,17 +32,27 @@ namespace ilrd
 
 
         private:
+
             Receiver m_receiver;
-            Factory<ITask, Reactor::ioMode> m_factory;
-            ThreadPool m_pool;
+            // Factory<ITask, Reactor::ioMode> m_factory;
+            // ThreadPool m_pool;
+            // Reactor m_reactor;
+            // Transmitter m_transmitter;
     };
 
-    Minion::Minion(uint16_t port): m_receiver(port), m_factory(), m_pool(6){}
+    Minion::Minion(uint16_t port): m_receiver(port)
+    {
+        
+    }
 
-    Minion::~Minion(){}
+    Minion::~Minion()
+    {
+
+    }
 
     void Minion::Wait()
     {
         m_receiver.Listen();
     }
+
 }

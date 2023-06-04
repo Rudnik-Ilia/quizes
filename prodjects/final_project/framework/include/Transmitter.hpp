@@ -10,7 +10,7 @@ namespace ilrd
     class Transmitter
     {
         public:
-            inline explicit Transmitter();
+            inline explicit Transmitter(uint16_t port);
             inline ~Transmitter();
     
             inline void Send(std::shared_ptr<std::vector<char>> &dataToSend, u_int64_t m_from,  uint32_t type);
@@ -19,7 +19,6 @@ namespace ilrd
          
         private:
             int m_sockfd;
-            int m_sockfd_spare;
 
             struct sockaddr_in receiverAddr;
             
@@ -30,7 +29,7 @@ namespace ilrd
     };
 
 
-    Transmitter::Transmitter(): m_sockfd(0), m_sockfd_spare(0)
+    Transmitter::Transmitter(uint16_t port): m_sockfd(0)
     {
         memset(&receiverAddr, 0, sizeof(struct sockaddr_in));
         memset(&tv, 0, sizeof(struct timeval));
@@ -42,7 +41,7 @@ namespace ilrd
         }
         
         receiverAddr.sin_family = AF_INET;
-        receiverAddr.sin_port = htons(8080); 
+        receiverAddr.sin_port = htons(port); 
         receiverAddr.sin_addr.s_addr = INADDR_ANY;
 
         tv.tv_sec = 1;
@@ -114,13 +113,7 @@ label_1:
                 goto label_1;
                 std::cout << "We lost something..........Sorry!" << std::endl;
             }
-            if(ack.m_code == 22)
-            {
-                std::cout << "22 from transmitter!!!!!!" << std::endl;
-
-            }
         } 
-        // std::this_thread::yield();
     }
 
     void Transmitter::SendRead(uint32_t size, u_int64_t from,  uint32_t type)

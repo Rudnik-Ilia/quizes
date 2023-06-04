@@ -6,7 +6,7 @@
 
 using namespace ilrd;
 
-Transmitter sender;
+Transmitter sender(8080);
 
 // void Thread1(size_t times)
 // {

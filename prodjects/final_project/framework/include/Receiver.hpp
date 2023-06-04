@@ -13,19 +13,20 @@ namespace ilrd
 
             void Listen();
             int GetFD();
-            // uint32_t GetReadRequest(u_int64_t from, uint32_t size);
+            void GetReadRequest(u_int64_t from, uint32_t size);
             // std::shared_ptr<std::vector<char>> GetDATA();
 
-            void Send(/*std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from,  uint32_t type*/);
+            void Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from,  uint32_t type);
             
         private:
             int m_sockfd;
             struct sockaddr_in receiverAddr;
             struct sockaddr_in senderAddr;
-            std::ofstream m_FILE;
+            std::fstream m_FILE;
+            std::shared_ptr<std::vector<char>> m_data;
     };
 
-    Receiver::Receiver(uint16_t port): m_FILE("/home/ilia53/git/prodjects/final_project/framework/test/txt.txt", std::ios::binary)
+    Receiver::Receiver(uint16_t port): m_FILE("/home/ilia53/git/prodjects/final_project/framework/test/txt.txt", std::ios::binary | std::ios::in | std::ios::out)
     {
         memset(&receiverAddr, 0, sizeof(struct sockaddr_in ));
         memset(&senderAddr, 0, sizeof(struct sockaddr_in ));
@@ -59,6 +60,9 @@ namespace ilrd
         system("clear");
         
         auto receivedData = std::vector<char>(0);
+        while (1)
+        {
+           
         
         while (1) 
         {
@@ -81,10 +85,11 @@ namespace ilrd
                 std::cout<< "READING**********TASK" << std::endl;
                 std::cout<< "LEN: " << datagram.m_size << std::endl;
 
-                // ack.m_code = GetReadRequest(datagram.m_from, datagram.m_size);
-                Send();
-
+                GetReadRequest(datagram.m_from, datagram.m_size);
+                Send(m_data, datagram.m_from, 0);
+            
                 // goto label_2;
+                break;
             }
 
             receivedData.insert(receivedData.end(), datagram.m_data, datagram.m_data + (receivedBytes - HEADER));
@@ -107,7 +112,6 @@ namespace ilrd
                 std::cout << "Sended data size: " <<  datagram.m_size << std::endl;
                 std::cout << "Received data size: " << receivedData.size() << std::endl;
 
-
                 receivedBytes = 0;
                 std::vector<char>(0).swap(receivedData);
                 std::cout << "Final data size: " << receivedData.size() << std::endl;
@@ -120,28 +124,27 @@ label_2:
                 std::cout << "Sended ack: " << ack.m_code << std::endl;
             }
         }
+        }
         
     }
 
-    // uint32_t Receiver::GetReadRequest(u_int64_t from, uint32_t size)
-    // {
-    //     if(m_FILE.is_open())
-    //     {
-    //         auto buffer = std::make_shared<std::vector<char>>(size);
-    //         m_FILE.seekg(from, std::ios::beg);
-    //         m_FILE.read(buffer.get()->data(), size);
-    //         m_sendedData = buffer;
-    //         std::cout<< "Reading.........." << std::endl;
-    //         return CORRECT;
-    //     }
-    //     return ERROR;
-    // }
+    void Receiver::GetReadRequest(u_int64_t from, uint32_t size)
+    {
+        if(m_FILE.is_open())
+        {
+            auto buffer = std::make_shared<std::vector<char>>(size, 0); 
+            m_FILE.seekg(from, std::ios::beg);
+            m_FILE.read(buffer.get()->data(), size);
+            std::cout<< "Reading.........." <<  buffer.get()->size() << std::endl;
+            
+            m_data = buffer;
+        }
+    }
 
-    void Receiver::Send(/*std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from,  uint32_t type*/)
+    void Receiver::Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from, uint32_t type)
     {   
-        Acknoledge ack;
-        memset(&ack, 0, sizeof(ack));
-        ack.m_code = 22; 
+        Datagram datagram;        
+        memset(&datagram, 0, sizeof(datagram));
 
         sockaddr_in SA;
         memset(&SA, 0, sizeof(SA));
@@ -150,12 +153,35 @@ label_2:
         SA.sin_port = htons(8082); 
         SA.sin_addr.s_addr = INADDR_ANY;
 
-        ssize_t sentBytes = sendto(m_sockfd, &ack, sizeof(ack), 0, (struct sockaddr*)&SA, sizeof(SA));
-        if (sentBytes < 0) 
+        std::cout << "--------------------" << std::endl;
+        std::cout << "Size to send from minion: " << dataToSend->size() << std::endl;
+
+        socklen_t len = sizeof(receiverAddr);
+        size_t totalSentBytes = 0;
+
+        while (totalSentBytes < dataToSend->size()) 
         {
-            std::cerr << "Error sending data" << std::endl;
+            Datagram datagram;
+            memset(&datagram, 0, sizeof(datagram));
+
+            datagram.m_size = dataToSend->size();
+            datagram.m_from = m_from;
+            datagram.m_type = type;
+            
+            size_t dataLength = std::min((dataToSend->size() + HEADER) - totalSentBytes, MAX_DATAGRAM_SIZE);
+
+            memcpy(&datagram.m_data, &(*dataToSend)[totalSentBytes], dataLength - HEADER);
+
+            ssize_t sentBytes = sendto(m_sockfd, &datagram, dataLength, 0, (struct sockaddr*)&SA, sizeof(SA));
+            if (sentBytes < 0) 
+            {
+                std::cerr << "Error sending data" << std::endl;
+            }
+            std::cout <<"sentBytes: " << sentBytes << std::endl;
+            
+            totalSentBytes += (sentBytes - HEADER);
+            std::cout << "Sended bytes: " <<  totalSentBytes << std::endl;
         }
-        std::cout << "Send from receiver::SendRead after getting readTask" << std::endl; 
     }
 
     int Receiver::GetFD()
