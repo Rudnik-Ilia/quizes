@@ -39,14 +39,14 @@ int main(int argc, char *argv[])
         err(EXIT_FAILURE, "failed to alloc space for data");
     }
 
-    // Transmitter *transmitter = new Transmitter();
+
     NBDServer nbd(&aop, "/dev/nbd0");
     FRAME frame(nbd);
+    
     frame.Register(Reactor::ioMode::READ, Creator::Get_Read_Task);
     frame.Register(Reactor::ioMode::WRITE, Creator::Get_Write_Task);
     frame.Run_Reactor();
 
-    // delete transmitter;
     free(data);
 
     return 0;   

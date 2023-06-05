@@ -107,7 +107,7 @@ namespace ilrd
                     }
                     if (aop_->read) 
                     {
-                        reply.error = aop_->read(chunk.get()->data(), len, from);
+                        // reply.error = aop_->read(chunk.get()->data(), len, from);
                         m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, from, len, 0, nullptr});
                     } 
                     else 
@@ -116,7 +116,7 @@ namespace ilrd
                     }
                     
                     write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
-                    write_all(sp[0], (char*)chunk.get()->data(), len);
+                    // write_all(sp[0], (char*)chunk.get()->data(), len);
 
                     break;
 
@@ -131,7 +131,7 @@ namespace ilrd
                     
                     if (aop_->write) 
                     {
-                        reply.error = aop_->write(chunk.get()->data(), len, from); 
+                        // reply.error = aop_->write(chunk.get()->data(), len, from); 
                         m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, from, len, 1, nullptr});
                     } 
                     else 
@@ -241,7 +241,17 @@ namespace ilrd
         act.sa_handler = disconnect_nbd;
         act.sa_flags = SA_RESTART;
 
-        if (sigemptyset(&act.sa_mask) != 0 || sigaddset(&act.sa_mask, SIGINT) != 0 || sigaddset(&act.sa_mask, SIGTERM) != 0) 
+        struct sigaction sa;
+        sa.sa_handler = SIG_IGN;
+        sa.sa_flags = 0;
+
+        if (sigemptyset(&sa.sa_mask) == -1 || sigaction(SIGPIPE, &sa, 0) == -1) 
+        {
+            perror("failed to ignore SIGPIPE; sigaction");
+            exit(EXIT_FAILURE);
+        }
+
+        if(sigemptyset(&act.sa_mask) != 0 || sigaddset(&act.sa_mask, SIGINT) != 0 || sigaddset(&act.sa_mask, SIGTERM) != 0) 
         {
             warn("failed to prepare signal mask in parent");
             return EXIT_FAILURE;
@@ -252,7 +262,6 @@ namespace ilrd
             return EXIT_FAILURE;
         }
         close(sp[1]);
-        // exit(0);
         return 0;
     }
     int NBDServer::Buse_main()
@@ -310,6 +319,8 @@ namespace ilrd
                 warn("failed to perform nbd cleanup actions");
                 exit(EXIT_FAILURE);
             }
+
+            std::cout << "EXIT" << std::endl;
 
             exit(0);
         }

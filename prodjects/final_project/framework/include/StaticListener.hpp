@@ -1,6 +1,8 @@
 #pragma once
 
+#include <cassert>
 #include "Protocol.hpp"
+
 
 namespace ilrd
 {
@@ -9,8 +11,10 @@ namespace ilrd
         public:
             inline StaticListener();
             inline ~StaticListener();
-            inline void Receiver();
+            inline void Receiver(int FD);
             inline int GetFD();
+
+            inline int WriteOnFD(int fd, char* buf, size_t count);
 
         private:
             int m_socket;
@@ -55,7 +59,7 @@ namespace ilrd
         close(m_socket);
     }
            
-    void StaticListener::Receiver()
+    void StaticListener::Receiver(int FD)
     {
         auto receivedData = std::vector<char>(0);
         // while(1)
@@ -89,15 +93,48 @@ namespace ilrd
                 std::cout << "Sended data size  from static: " <<  datagram.m_size << std::endl;
                 std::cout << "Received data size from static: " << receivedData.size() << std::endl;
 
+                WriteOnFD(FD, receivedData.data(), receivedData.size());
+                // send(FD, receivedData.data(), receivedData.size(), MSG_NOSIGNAL);
 
                 receivedBytes = 0;
                 std::vector<char>(0).swap(receivedData);
                 std::cout << "Final data size from static: " << receivedData.size() << std::endl;
+
+
             }
            
 
         // }
         
+    }
+
+    int StaticListener::WriteOnFD(int fd, char* buf, size_t count)
+    {
+        size_t tmp = count;
+
+        while (count > 0) 
+        {
+            int bytes_written = write(fd, buf, count);
+            assert(bytes_written > 0);
+            buf += bytes_written;
+            count -= bytes_written;
+        }
+        assert(count == 0);
+
+        // auto buffer = std::vector<char>(count);
+
+        // count = tmp;
+
+        // while (count > 0) 
+        // {
+        //     int bytes_read = read(fd, buffer.data(), count);
+        //     assert(bytes_read > 0);
+        //     buf += bytes_read;
+        //     count -= bytes_read;
+        // }
+        // assert(count == 0);
+
+        return 0;
     }
 
     int StaticListener::GetFD()

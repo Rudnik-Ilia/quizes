@@ -52,7 +52,7 @@ namespace ilrd
     {
         std::cout << "REACTOR AddTASK" << std::endl;
         // usleep(10000);
-        m_static_listen.Receiver();
+        m_static_listen.Receiver(m_nbd.GetDescriptor());
     }
 
 }

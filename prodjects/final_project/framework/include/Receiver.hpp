@@ -62,68 +62,66 @@ namespace ilrd
         auto receivedData = std::vector<char>(0);
         while (1)
         {
-           
-        
-        while (1) 
-        {
-            Datagram datagram;
-            Acknoledge ack;
-
-            memset(&datagram, 0, sizeof(datagram));
-            memset(&ack, 0, sizeof(ack));
-
-            socklen_t senderAddrLen = sizeof(senderAddr);
-        
-            ssize_t receivedBytes = recvfrom(m_sockfd, &datagram, MAX_DATAGRAM_SIZE, 0, (struct sockaddr*)&senderAddr, &senderAddrLen);
-            if (receivedBytes < 0) 
+            while (1) 
             {
-                std::cerr << "Error receiving data" << std::endl;
-            }
+                Datagram datagram;
+                Acknoledge ack;
 
-            if(datagram.m_type == 0)
-            {
-                std::cout<< "READING**********TASK" << std::endl;
-                std::cout<< "LEN: " << datagram.m_size << std::endl;
+                memset(&datagram, 0, sizeof(datagram));
+                memset(&ack, 0, sizeof(ack));
 
-                GetReadRequest(datagram.m_from, datagram.m_size);
-                Send(m_data, datagram.m_from, 0);
+                socklen_t senderAddrLen = sizeof(senderAddr);
             
-                // goto label_2;
-                break;
+                ssize_t receivedBytes = recvfrom(m_sockfd, &datagram, MAX_DATAGRAM_SIZE, 0, (struct sockaddr*)&senderAddr, &senderAddrLen);
+                if (receivedBytes < 0) 
+                {
+                    std::cerr << "Error receiving data" << std::endl;
+                }
+
+                if(datagram.m_type == 0)
+                {
+                    std::cout<< "READING**********TASK" << std::endl;
+                    std::cout<< "LEN: " << datagram.m_size << std::endl;
+
+                    GetReadRequest(datagram.m_from, datagram.m_size);
+                    Send(m_data, datagram.m_from, 0);
+                
+                    // goto label_2;
+                    break;
+                }
+
+                receivedData.insert(receivedData.end(), datagram.m_data, datagram.m_data + (receivedBytes - HEADER));
+
+                if (receivedBytes < MAX_DATAGRAM_SIZE) 
+                {
+                    if(datagram.m_size == receivedData.size())
+                    {
+                        std::cout << "---Everything is OK!---" << std::endl;
+                        ack.m_code = CORRECT;
+
+                        m_FILE.seekp(datagram.m_from);
+                        m_FILE.write(receivedData.data(), receivedData.size());
+                    }
+                    else
+                    {
+                        std::cout << "WRONG SIZE!" << std::endl;
+                        ack.m_code = ERROR;
+                    }
+                    std::cout << "Sended data size: " <<  datagram.m_size << std::endl;
+                    std::cout << "Received data size: " << receivedData.size() << std::endl;
+
+                    receivedBytes = 0;
+                    std::vector<char>(0).swap(receivedData);
+                    std::cout << "Final data size: " << receivedData.size() << std::endl;
+    label_2:
+                    ssize_t sentBytes = sendto(m_sockfd, &ack, sizeof(ack), 0, (struct sockaddr*)&senderAddr, sizeof(senderAddr));
+                    if (sentBytes < 0) 
+                    {
+                        std::cerr << "Error sending data" << std::endl;
+                    }
+                    std::cout << "Sended ack: " << ack.m_code << std::endl;
+                }
             }
-
-            receivedData.insert(receivedData.end(), datagram.m_data, datagram.m_data + (receivedBytes - HEADER));
-
-            if (receivedBytes < MAX_DATAGRAM_SIZE) 
-            {
-                if(datagram.m_size == receivedData.size())
-                {
-                    std::cout << "---Everything is OK!---" << std::endl;
-                    ack.m_code = CORRECT;
-
-                    m_FILE.seekp(datagram.m_from);
-                    m_FILE.write(receivedData.data(), receivedData.size());
-                }
-                else
-                {
-                    std::cout << "WRONG SIZE!" << std::endl;
-                    ack.m_code = ERROR;
-                }
-                std::cout << "Sended data size: " <<  datagram.m_size << std::endl;
-                std::cout << "Received data size: " << receivedData.size() << std::endl;
-
-                receivedBytes = 0;
-                std::vector<char>(0).swap(receivedData);
-                std::cout << "Final data size: " << receivedData.size() << std::endl;
-label_2:
-                ssize_t sentBytes = sendto(m_sockfd, &ack, sizeof(ack), 0, (struct sockaddr*)&senderAddr, sizeof(senderAddr));
-                if (sentBytes < 0) 
-                {
-                    std::cerr << "Error sending data" << std::endl;
-                }
-                std::cout << "Sended ack: " << ack.m_code << std::endl;
-            }
-        }
         }
         
     }
@@ -153,7 +151,7 @@ label_2:
         SA.sin_port = htons(8082); 
         SA.sin_addr.s_addr = INADDR_ANY;
 
-        std::cout << "--------------------" << std::endl;
+        std::cout << "--------------------------" << std::endl;
         std::cout << "Size to send from minion: " << dataToSend->size() << std::endl;
 
         socklen_t len = sizeof(receiverAddr);

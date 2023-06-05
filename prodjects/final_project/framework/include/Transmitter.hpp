@@ -44,8 +44,8 @@ namespace ilrd
         receiverAddr.sin_port = htons(port); 
         receiverAddr.sin_addr.s_addr = INADDR_ANY;
 
-        tv.tv_sec = 1;
-        tv.tv_usec = 0;
+        tv.tv_sec = 0;
+        tv.tv_usec = 10;
         if (setsockopt(m_sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv)) < 0)
         {
             std::cout << "Error setsockopt" << std::endl;
