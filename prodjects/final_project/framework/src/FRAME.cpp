@@ -7,8 +7,10 @@ namespace ilrd
         m_nbd.Start();
         m_reactor.Register({STDIN_FILENO, Reactor::ioMode::READ}, std::bind(&FRAME::StopFunc, this));
         m_reactor.Register({m_nbd.GetDescriptor(), Reactor::ioMode::READ}, std::bind(&FRAME::Run_NBD, this));
-
         m_reactor.Register({m_static_listen.GetFD(), Reactor::ioMode::READ}, std::bind(&FRAME::AddReadTask, this));
+
+        Register(Reactor::ioMode::READ, Creator::Get_Read_Task);
+        Register(Reactor::ioMode::WRITE, Creator::Get_Write_Task);
     };
 
     FRAME::~FRAME(){}
@@ -51,7 +53,7 @@ namespace ilrd
     void FRAME::AddReadTask()
     {
         std::cout << "REACTOR AddTASK" << std::endl;
-        // usleep(10000);
+        usleep(10000);
         m_static_listen.Receiver(m_nbd.GetDescriptor());
     }
 

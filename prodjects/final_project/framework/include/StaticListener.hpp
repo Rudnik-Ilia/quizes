@@ -1,5 +1,5 @@
 #pragma once
-
+#include <linux/nbd.h>
 #include <cassert>
 #include "Protocol.hpp"
 
@@ -44,8 +44,7 @@ namespace ilrd
         
         struct timeval read_timeout;
         read_timeout.tv_sec = 0;
-        read_timeout.tv_usec = 10;
-
+        read_timeout.tv_usec = 1;
         setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
 
         if (bind(m_socket, (struct sockaddr*)&rec_addr, sizeof(rec_addr)) < 0) 
@@ -61,51 +60,59 @@ namespace ilrd
            
     void StaticListener::Receiver(int FD)
     {
+
+        int stop = 1;
         auto receivedData = std::vector<char>(0);
-        // while(1)
-        // {
+
+        while(stop) 
+        {
             Datagram datagram;
             memset(&datagram, 0, sizeof(datagram));
 
+            struct nbd_reply reply;
+            
             socklen_t len = sizeof(sen_addr);
-
+        
             ssize_t receivedBytes = recvfrom(m_socket, &datagram, MAX_DATAGRAM_SIZE, 0, (struct sockaddr*)&sen_addr, &len);
             if (receivedBytes < 0) 
             {
-                std::cerr << "Error receiving data from static" << std::endl;
+                perror("\033[1;31m SOCKET 8082: \033[0m\n");
                 return;
             }
 
+            reply.error = htonl(0);
+            reply.magic = htonl(NBD_REPLY_MAGIC);
+            memcpy(reply.handle, (char*)&datagram.m_handle, sizeof(reply.handle));
+
+            std::cout << ">>>>>> " << reply.handle << " <<<<<<" << std::endl;
             receivedData.insert(receivedData.end(), datagram.m_data, datagram.m_data + (receivedBytes - HEADER));
+
+            std::cout << "I get from minion  " << receivedData.size() << std::endl;
 
             if (receivedBytes < MAX_DATAGRAM_SIZE) 
             {
                 if(datagram.m_size == receivedData.size())
                 {
-                    std::cout << "---Everything is OK! from static---" << std::endl;
-                    // break;
+                    std::cout << "---Everything is OK!---" << std::endl;
+
+                    WriteOnFD(FD, (char*)&reply, sizeof(struct nbd_reply));
+                    WriteOnFD(FD, receivedData.data(), receivedData.size());
                 }
                 else
                 {
-                    std::cout << "WRONG SIZE!  from static" << std::endl;
-                    // break;
+                    std::cout << "WRONG SIZE!" << std::endl;
                 }
-                std::cout << "Sended data size  from static: " <<  datagram.m_size << std::endl;
-                std::cout << "Received data size from static: " << receivedData.size() << std::endl;
 
-                WriteOnFD(FD, receivedData.data(), receivedData.size());
-                // send(FD, receivedData.data(), receivedData.size(), MSG_NOSIGNAL);
+                std::cout << "Sended data size: " <<  datagram.m_size << std::endl;
+                std::cout << "Received data size: " << receivedData.size() << std::endl;
 
                 receivedBytes = 0;
                 std::vector<char>(0).swap(receivedData);
-                std::cout << "Final data size from static: " << receivedData.size() << std::endl;
-
-
+                std::cout << "Final data size: " << receivedData.size() << std::endl;
+                break;
             }
-           
-
-        // }
-        
+        }
+    
     }
 
     int StaticListener::WriteOnFD(int fd, char* buf, size_t count)
@@ -120,19 +127,6 @@ namespace ilrd
             count -= bytes_written;
         }
         assert(count == 0);
-
-        // auto buffer = std::vector<char>(count);
-
-        // count = tmp;
-
-        // while (count > 0) 
-        // {
-        //     int bytes_read = read(fd, buffer.data(), count);
-        //     assert(bytes_read > 0);
-        //     buf += bytes_read;
-        //     count -= bytes_read;
-        // }
-        // assert(count == 0);
 
         return 0;
     }

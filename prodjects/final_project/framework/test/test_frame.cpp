@@ -43,8 +43,6 @@ int main(int argc, char *argv[])
     NBDServer nbd(&aop, "/dev/nbd0");
     FRAME frame(nbd);
     
-    frame.Register(Reactor::ioMode::READ, Creator::Get_Read_Task);
-    frame.Register(Reactor::ioMode::WRITE, Creator::Get_Write_Task);
     frame.Run_Reactor();
 
     free(data);

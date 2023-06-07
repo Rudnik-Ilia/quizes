@@ -16,7 +16,7 @@ namespace ilrd
             void GetReadRequest(u_int64_t from, uint32_t size);
             // std::shared_ptr<std::vector<char>> GetDATA();
 
-            void Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from,  uint32_t type);
+            void Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from, u_int64_t handle, uint32_t type);
             
         private:
             int m_sockfd;
@@ -84,7 +84,7 @@ namespace ilrd
                     std::cout<< "LEN: " << datagram.m_size << std::endl;
 
                     GetReadRequest(datagram.m_from, datagram.m_size);
-                    Send(m_data, datagram.m_from, 0);
+                    Send(m_data, datagram.m_from, datagram.m_handle, 0);
                 
                     // goto label_2;
                     break;
@@ -133,13 +133,13 @@ namespace ilrd
             auto buffer = std::make_shared<std::vector<char>>(size, 0); 
             m_FILE.seekg(from, std::ios::beg);
             m_FILE.read(buffer.get()->data(), size);
-            std::cout<< "Reading.........." <<  buffer.get()->size() << std::endl;
+            std::cout<< "Reading.......... " <<  buffer.get()->size() << std::endl;
             
             m_data = buffer;
         }
     }
 
-    void Receiver::Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from, uint32_t type)
+    void Receiver::Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from, u_int64_t handle, uint32_t type)
     {   
         Datagram datagram;        
         memset(&datagram, 0, sizeof(datagram));
@@ -162,6 +162,7 @@ namespace ilrd
             Datagram datagram;
             memset(&datagram, 0, sizeof(datagram));
 
+            datagram.m_handle = handle;
             datagram.m_size = dataToSend->size();
             datagram.m_from = m_from;
             datagram.m_type = type;

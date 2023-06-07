@@ -90,6 +90,7 @@ namespace ilrd
         {
             assert(bytes_read == sizeof(request));
             memcpy(reply.handle, request.handle, sizeof(reply.handle));
+            // std::cout << "SERVE: " <<  *(u_int64_t*)reply.handle << std::endl;
             reply.error = htonl(0);
             len = ntohl(request.len);
             from = ntohll(request.from);
@@ -105,17 +106,17 @@ namespace ilrd
                     {
                         fprintf(stderr, "Request for read of size %d\n", len);
                     }
-                    if (aop_->read) 
-                    {
+                    // if (aop_->read) 
+                    // {
                         // reply.error = aop_->read(chunk.get()->data(), len, from);
-                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, from, len, 0, nullptr});
-                    } 
-                    else 
-                    {
-                        reply.error = htonl(EPERM);
-                    }
+                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, *(u_int64_t*)reply.handle, from, len, 0, nullptr});
+                    // } 
+                    // else 
+                    // {
+                    //     reply.error = htonl(EPERM);
+                    // }
                     
-                    write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
+                    // write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
                     // write_all(sp[0], (char*)chunk.get()->data(), len);
 
                     break;
@@ -129,15 +130,15 @@ namespace ilrd
 
                     read_all(sp[0], chunk.get()->data(), len);
                     
-                    if (aop_->write) 
-                    {
+                    // if (aop_->write) 
+                    // {
                         // reply.error = aop_->write(chunk.get()->data(), len, from); 
-                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, from, len, 1, nullptr});
-                    } 
-                    else 
-                    {
-                        reply.error = htonl(EPERM);
-                    }
+                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, *(u_int64_t*)reply.handle, from, len, 1, nullptr});
+                    // } 
+                    // else 
+                    // {
+                    //     reply.error = htonl(EPERM);
+                    // }
                     
                     write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
                     
@@ -231,6 +232,7 @@ namespace ilrd
 
         return 0;
     }
+
     int NBDServer::HandlerStaff()
     {
         assert(nbd_dev_to_disconnect == -1);
@@ -264,6 +266,7 @@ namespace ilrd
         close(sp[1]);
         return 0;
     }
+
     int NBDServer::Buse_main()
     {
         pid = fork();

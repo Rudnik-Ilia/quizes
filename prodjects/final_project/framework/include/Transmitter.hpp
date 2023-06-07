@@ -14,7 +14,7 @@ namespace ilrd
             inline ~Transmitter();
     
             inline void Send(std::shared_ptr<std::vector<char>> &dataToSend, u_int64_t m_from,  uint32_t type);
-            inline void SendRead(uint32_t size, u_int64_t from,  uint32_t type);
+            inline void SendRead(uint32_t size, u_int64_t from,  uint32_t type, u_int64_t handle);
             inline int GetFD();
          
         private:
@@ -116,7 +116,7 @@ label_1:
         } 
     }
 
-    void Transmitter::SendRead(uint32_t size, u_int64_t from,  uint32_t type)
+    void Transmitter::SendRead(uint32_t size, u_int64_t from,  uint32_t type, u_int64_t handle)
     {
         std::lock_guard<std::mutex> m_lock(m_mutex);
         {
@@ -126,6 +126,7 @@ label_1:
             datagram.m_size = size;
             datagram.m_from = from;
             datagram.m_type = type;
+            datagram.m_handle = handle;
 
             ssize_t sentBytes = sendto(m_sockfd, &datagram, MAX_DATAGRAM_SIZE, 0, (struct sockaddr*)&receiverAddr, sizeof(receiverAddr));
             if (sentBytes < 0) 

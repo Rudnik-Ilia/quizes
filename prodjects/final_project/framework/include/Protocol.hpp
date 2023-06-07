@@ -14,7 +14,8 @@
 #include <memory>
 
 #define MAX_DATAGRAM_SIZE (size_t)64000
-#define HEADER (sizeof(uint32_t) * 3 + sizeof(u_int64_t))
+#define HEADER (sizeof(uint32_t) * 3 + sizeof(u_int64_t) * 2)
+#define NBD_REPLY_MAGIC 0x67446698
 
 enum status_code
 {
@@ -26,6 +27,7 @@ enum status_code
 
 struct Datagram 
 {
+    u_int64_t m_handle;	
     uint32_t m_id;
     uint32_t m_type;
     u_int64_t m_from;
