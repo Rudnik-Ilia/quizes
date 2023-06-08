@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     memset(&SA, 0, sizeof(SA));
     
     SA.sin_family = AF_INET;
-    SA.sin_port = htons(8082); 
+    SA.sin_port = htons(1235); 
     SA.sin_addr.s_addr = INADDR_ANY;
 
     int m_sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     setsockopt(m_sockfd, SOL_SOCKET, SO_RCVBUF, &bufferSize, sizeof(bufferSize));
 
     receiverAddr.sin_family = AF_INET;
-    receiverAddr.sin_port = htons(8080); 
+    receiverAddr.sin_port = htons(1234); 
     receiverAddr.sin_addr.s_addr = INADDR_ANY;
 
     if (bind(m_sockfd, (struct sockaddr*)&receiverAddr, sizeof(receiverAddr)) < 0) 

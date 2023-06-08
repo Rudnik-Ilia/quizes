@@ -82,7 +82,7 @@ namespace ilrd
         ssize_t bytes_read;
         struct nbd_request request;
         struct nbd_reply reply;
-
+     
         reply.magic = htonl(NBD_REPLY_MAGIC);
         reply.error = htonl(0);
 
@@ -91,6 +91,7 @@ namespace ilrd
             assert(bytes_read == sizeof(request));
             memcpy(reply.handle, request.handle, sizeof(reply.handle));
             // std::cout << "SERVE: " <<  *(u_int64_t*)reply.handle << std::endl;
+            
             reply.error = htonl(0);
             len = ntohl(request.len);
             from = ntohll(request.from);
@@ -106,19 +107,8 @@ namespace ilrd
                     {
                         fprintf(stderr, "Request for read of size %d\n", len);
                     }
-                    // if (aop_->read) 
-                    // {
-                        // reply.error = aop_->read(chunk.get()->data(), len, from);
-                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, *(u_int64_t*)reply.handle, from, len, 0, nullptr});
-                    // } 
-                    // else 
-                    // {
-                    //     reply.error = htonl(EPERM);
-                    // }
-                    
-                    // write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
-                    // write_all(sp[0], (char*)chunk.get()->data(), len);
 
+                    m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, *(u_int64_t*)request.handle, from, len, 33, nullptr});
                     break;
 
                 case NBD_CMD_WRITE:
@@ -129,22 +119,13 @@ namespace ilrd
                     }
 
                     read_all(sp[0], chunk.get()->data(), len);
-                    
-                    // if (aop_->write) 
-                    // {
-                        // reply.error = aop_->write(chunk.get()->data(), len, from); 
-                        m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, *(u_int64_t*)reply.handle, from, len, 1, nullptr});
-                    // } 
-                    // else 
-                    // {
-                    //     reply.error = htonl(EPERM);
-                    // }
+                    m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, *(u_int64_t*)reply.handle, from, len, 1, nullptr});
                     
                     write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
-                    
                     break;
                     
                 case NBD_CMD_DISC:
+    
                     if (BUSE_DEBUG) 
                     {
                         fprintf(stderr, "Got NBD_CMD_DISC\n");
@@ -157,6 +138,7 @@ namespace ilrd
 
                 #ifdef NBD_FLAG_SEND_FLUSH
                 case NBD_CMD_FLUSH:
+
                     if (BUSE_DEBUG) 
                     {
                         fprintf(stderr, "Got NBD_CMD_FLUSH\n");
@@ -165,12 +147,14 @@ namespace ilrd
                     {
                         reply.error = aop_->flush();
                     }
+                    m_args = std::make_shared<ArgumentsForTask>(ArgumentsForTask{chunk, *(u_int64_t*)reply.handle, from, len, 3, nullptr});
                     write_all(sp[0], (char*)&reply, sizeof(struct nbd_reply));
                     break;
                     #endif
 
                 #ifdef NBD_FLAG_SEND_TRIM
                 case NBD_CMD_TRIM:
+
                     if (BUSE_DEBUG) 
                     {
                         fprintf(stderr, "Got NBD_CMD_TRIM\n");
@@ -188,7 +172,7 @@ namespace ilrd
                     assert(0);
             }
         }
-
+   
         if (bytes_read == -1)
         {
             warn("error reading userside of nbd socket");
@@ -252,7 +236,6 @@ namespace ilrd
             perror("failed to ignore SIGPIPE; sigaction");
             exit(EXIT_FAILURE);
         }
-
         if(sigemptyset(&act.sa_mask) != 0 || sigaddset(&act.sa_mask, SIGINT) != 0 || sigaddset(&act.sa_mask, SIGTERM) != 0) 
         {
             warn("failed to prepare signal mask in parent");
@@ -263,6 +246,7 @@ namespace ilrd
             warn("failed to register signal handlers in parent");
             return EXIT_FAILURE;
         }
+
         close(sp[1]);
         return 0;
     }

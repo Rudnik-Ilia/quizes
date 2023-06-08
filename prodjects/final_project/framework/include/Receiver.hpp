@@ -14,7 +14,6 @@ namespace ilrd
             void Listen();
             int GetFD();
             void GetReadRequest(u_int64_t from, uint32_t size);
-            // std::shared_ptr<std::vector<char>> GetDATA();
 
             void Send(std::shared_ptr<std::vector<char>> dataToSend, u_int64_t m_from, u_int64_t handle, uint32_t type);
             
@@ -78,16 +77,17 @@ namespace ilrd
                     std::cerr << "Error receiving data" << std::endl;
                 }
 
-                if(datagram.m_type == 0)
+                if(datagram.m_type == 33)
                 {
                     std::cout<< "READING**********TASK" << std::endl;
                     std::cout<< "LEN: " << datagram.m_size << std::endl;
 
                     GetReadRequest(datagram.m_from, datagram.m_size);
-                    Send(m_data, datagram.m_from, datagram.m_handle, 0);
+                    Send(m_data, datagram.m_from, datagram.m_handle, 33);
                 
                     // goto label_2;
                     break;
+                    
                 }
 
                 receivedData.insert(receivedData.end(), datagram.m_data, datagram.m_data + (receivedBytes - HEADER));
@@ -148,8 +148,17 @@ namespace ilrd
         memset(&SA, 0, sizeof(SA));
         
         SA.sin_family = AF_INET;
-        SA.sin_port = htons(8082); 
+        SA.sin_port = htons(1235); 
         SA.sin_addr.s_addr = INADDR_ANY;
+
+        int m_second_sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+        if (m_sockfd < 0) 
+        {
+            std::cerr << "Error creating second socket" << std::endl;
+        }
+
+        int bufferSize = 64000;
+        setsockopt(m_second_sockfd, SOL_SOCKET, SO_RCVBUF, &bufferSize, sizeof(bufferSize));
 
         std::cout << "--------------------------" << std::endl;
         std::cout << "Size to send from minion: " << dataToSend->size() << std::endl;
@@ -171,7 +180,7 @@ namespace ilrd
 
             memcpy(&datagram.m_data, &(*dataToSend)[totalSentBytes], dataLength - HEADER);
 
-            ssize_t sentBytes = sendto(m_sockfd, &datagram, dataLength, 0, (struct sockaddr*)&SA, sizeof(SA));
+            ssize_t sentBytes = sendto(m_second_sockfd, &datagram, dataLength, 0, (struct sockaddr*)&SA, sizeof(SA));
             if (sentBytes < 0) 
             {
                 std::cerr << "Error sending data" << std::endl;

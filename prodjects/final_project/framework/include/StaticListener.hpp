@@ -39,7 +39,7 @@ namespace ilrd
         setsockopt(m_socket, SOL_SOCKET, SO_RCVBUF, &bufferSize, sizeof(bufferSize));
 
         rec_addr.sin_family = AF_INET;
-        rec_addr.sin_port = htons(8082); 
+        rec_addr.sin_port = htons(1235); 
         rec_addr.sin_addr.s_addr = INADDR_ANY;
         
         struct timeval read_timeout;
@@ -60,7 +60,6 @@ namespace ilrd
            
     void StaticListener::Receiver(int FD)
     {
-
         int stop = 1;
         auto receivedData = std::vector<char>(0);
 

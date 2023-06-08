@@ -25,7 +25,7 @@ int main()
     }
 
     std::string str = config.lookup("master.TargetNBD");
-    int s = config.lookup("master.SlaveSize");
+    size_t s = atoi(config.lookup("master.SlaveSize"));
     std::cout << str << std::endl;
     std::cout << s << std::endl;
 

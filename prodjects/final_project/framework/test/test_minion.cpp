@@ -7,7 +7,7 @@ using namespace ilrd;
 
 int main()
 {
-    Minion minion(8080);
+    Minion minion(1234);
 
     minion.Wait();
 

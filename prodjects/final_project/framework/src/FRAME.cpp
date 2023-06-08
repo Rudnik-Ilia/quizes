@@ -2,7 +2,7 @@
 
 namespace ilrd
 {
-    FRAME::FRAME(NBDServer& nbd): m_nbd(nbd) , m_reactor(std::move(std::unique_ptr<Listener>(new Listener()))), m_pool(6), m_factory(), m_transmit(new Transmitter(8080)), m_static_listen()
+    FRAME::FRAME(NBDServer& nbd): m_nbd(nbd) , m_reactor(std::move(std::unique_ptr<Listener>(new Listener()))), m_pool(6), m_factory(), m_transmit(new Transmitter(1234)), m_static_listen()
     {
         m_nbd.Start();
         m_reactor.Register({STDIN_FILENO, Reactor::ioMode::READ}, std::bind(&FRAME::StopFunc, this));
@@ -17,6 +17,7 @@ namespace ilrd
 
     void FRAME::Run_NBD()
     {
+    
         if(m_nbd.Serve() == EXIT_FAILURE)
         {
             fprintf(stderr, "m_nbd.Serve(). errno: %d\n", errno);
@@ -24,9 +25,11 @@ namespace ilrd
         }
 
         m_nbd.GetArguments().get()->m_utils = m_transmit;
-
-        if(m_nbd.GetArguments().get()->m_type == NBD_CMD_READ)
+        std::cout << "FRAME STEP OUT" << std::endl;
+        if(m_nbd.GetArguments().get()->m_type == 33)
         {
+            
+            std::cout << "FRAME STEP" << std::endl; 
             auto task = m_factory.Create(Reactor::ioMode::READ, *(m_nbd.GetArguments().get()));
             m_pool.AddTask(task, ThreadPool::PRIORITY_HIGH);
             return;
@@ -35,6 +38,13 @@ namespace ilrd
         {
             auto task = m_factory.Create(Reactor::ioMode::WRITE, *(m_nbd.GetArguments().get()));
             m_pool.AddTask(task, ThreadPool::PRIORITY_HIGH);
+            return;
+        }
+        if(m_nbd.GetArguments().get()->m_type == 3)
+        {
+            std::cout << "FRAME STEP FLUSH" << std::endl; 
+            // auto task = m_factory.Create(Reactor::ioMode::WRITE, *(m_nbd.GetArguments().get()));
+            // m_pool.AddTask(task, ThreadPool::PRIORITY_HIGH);
             return;
         }
 
@@ -53,7 +63,7 @@ namespace ilrd
     void FRAME::AddReadTask()
     {
         std::cout << "REACTOR AddTASK" << std::endl;
-        usleep(10000);
+        // usleep(10000);
         m_static_listen.Receiver(m_nbd.GetDescriptor());
     }
 
