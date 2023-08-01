@@ -6,6 +6,7 @@ using namespace std;
 int Jump(int levels)
 {
     int jumps = 0;
+    
     if(levels == 1)
     {
         return 1;

@@ -4,6 +4,7 @@
 int Change(int summ)
 {
     int res = 0;
+    
     if(summ == 0)
     {
         return 1;

@@ -95,7 +95,7 @@ void ShowTree(node_t* root)
         return;
     }
     ShowTree(root->left);
-    cout << (root->data)<< ' ';
+    cout << (root->data) << ' ';
     ShowTree(root->right);
 
 }
@@ -105,9 +105,10 @@ void ShowBst(bst_t* root)
     bst_t *iter = root;
     while(iter != NULL)
     {
-        cout << (iter->data)<< ' ';
+        cout << (iter->data) << ' ';
         iter = iter->next;
     }
+    cout << '\n';
 }
 
 size_t Size(ll_t* root)
@@ -155,6 +156,7 @@ void FollowList(ll_t *list)
         cout << iter->data << ' ';
         iter = iter->next;
     } 
+    
 }
 
 bst_t *FlipRec(bst_t *p, bst_t *curr)
@@ -172,17 +174,17 @@ bst_t *FlipRec(bst_t *p, bst_t *curr)
     curr = next;
     return FlipRec(prev, curr);
 }
-void Middle(bst_t* root, bst_t** mid, int x)
+bst_t * Middle(bst_t* root, bst_t** mid, int x)
 {
     static int middle;
-
+    
     if(root == NULL)
     {
         middle = x / 2;
-        return;
+        return NULL;
     }
 
-    Middle(root->next, mid, x + 1);
+    bst_t * head = Middle(root->next, mid, x + 1);
 
     middle -= 1;
 
@@ -190,6 +192,7 @@ void Middle(bst_t* root, bst_t** mid, int x)
     {   
         *mid = root;
     }
+    return head;
 
 }
 
@@ -207,6 +210,92 @@ bst_t* FlipRec_2(bst_t* root)
     return head;
 }
 
+bst_t* RemoveFromEnd(bst_t* root, int n)
+{
+    static int mid;
+
+    if(root == NULL)
+    {
+        mid = n;
+        return NULL;
+    }
+
+    bst_t* new_head = RemoveFromEnd(root->next, n);
+
+    mid -= 1;
+
+    if(mid == -1)
+    {
+        root->next = root->next->next;
+    }
+    return new_head;
+}
+
+bst_t* RemoveFromEnd2(bst_t* head, int n)
+{
+    if(head == NULL || head->next == NULL)
+    {
+        return NULL;
+    }
+
+    bst_t * tmp = head;
+    int count = 0;
+    int rest = 0;
+
+    while (tmp != NULL)
+    {
+        ++count;
+        tmp = tmp->next;
+    }
+
+    if((rest = count - n) == 0)
+    {
+        return head->next;
+    }
+
+    tmp = head;
+    bst_t *tmp2 = head;
+
+    for(int i = 0; i < rest; ++i)
+    {
+        tmp = tmp2;
+        tmp2 = tmp2->next;
+    }
+    tmp->next = tmp2->next;
+
+    return head;
+}
+
+bst_t* RemoveFromEnd3(bst_t* head, int n)
+{
+    if(head == NULL || head->next == NULL)
+    {
+        return NULL;
+    }
+
+    bst_t *tmp = CreateBst(0);
+    tmp->next = head;
+
+    bst_t *fast = tmp;
+    bst_t *slow = tmp;
+
+    for(int i = 1; i <= n; ++i)
+    {
+        fast = fast->next;
+        cout << 'Q' << endl;
+    }
+
+    while (fast->next != NULL)
+    {
+        fast = fast->next;
+        slow = slow->next;
+    }
+    slow->next = slow->next->next;
+
+    return tmp->next; 
+}
+
+
 int main()
 {
     // node_t *node1 = CreateNode(10);
@@ -219,20 +308,33 @@ int main()
     bst_t* node1 = CreateBst(1);
     bst_t* node2 = CreateBst(2);
     bst_t* node3 = CreateBst(3);
-    // bst_t* node4 = CreateBst(4);
-    // bst_t* node5 = CreateBst(5);
+    bst_t* node4 = CreateBst(4);
+    bst_t* node5 = CreateBst(5);
 
-    // bst_t *tmp = NULL;
+    bst_t *tmp = NULL;
 
     node1->next = node2;
     node1->next->next = node3;
-    // node1->next->next->next = node4;
-    // node1->next->next->next->next = node5;
+    node1->next->next->next = node4;
+    node1->next->next->next->next = node5;
 
-    // Middle(node1, &tmp, 1);
-
-    FlipRec_2(node1);
     // ShowBst(node1);
+
+    // RemoveFromEnd3(node1, 4);
+    ShowBst(RemoveFromEnd(node1, 3));
+
+
+
+
+
+
+
+
+    // cout <<   Middle(node1, &tmp, 1)->data << endl;
+    // cout << tmp->data << endl;
+
+
+    // FlipRec_2(node1);
     // Flip(node1);
     // FlipRec(NULL, node1);
 

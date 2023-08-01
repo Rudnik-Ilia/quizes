@@ -1,23 +1,29 @@
 #include <stdio.h>
 
-void Hanoi(char from, char to, char helper, int num);
+
+
+void MoveOne(char from, char to)
+{
+    printf("Move a disk from %c to %c\n", from, to);
+}
+
+void MoveAll(char from, char to, char tmp, int N)
+{
+    if(N == 0)
+    {
+        return;
+    }
+    MoveAll(from, tmp, to ,N - 1);
+    MoveOne(from, to);
+    MoveAll(tmp, to, from, N- 1);
+}
 
 int main ()
 {
-    Hanoi('A', 'B', 'C', 3);
+   
+   MoveAll('A', 'B', 'T', 3);
     
     return (0);
 }
 
-void Hanoi(char from, char to, char helper, int num)
-{
-    if (num == 0)
-    {
-        return;
-    }
-    
-    Hanoi(from, helper, to, num - 1);
-    printf("move circle from %c to %c\n", from, to);
-    Hanoi(helper, to, from, num - 1);
-    
-}
+

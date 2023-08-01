@@ -51,25 +51,38 @@ void ReverseN(char *str)
     cout << str << endl;
 }
 
+void FastReverse(char * str)
+{
+    char *start = str;
+    char *end = str + strlen(str) - 1;
 
+    while(start < end)
+    {
+        char tmp = *start;
+        *start = *end;
+        *end = tmp;
+        ++start;
+        --end;
+    }
+}
 
 int main()
 {   
-    char *str = "Rudnik";
+   
     char arr[] = "Rudnik";
-    char arr1[] = "Rudnik";
-    char buff[7] = {0};
+ 
+    
     // Reverse(arr);
     // ReverseRec(arr1, 0, 5);
     // ReverseN(arr);
 
-    memcpy(&buff[1], str+1, 6-2);
-    // memcpy(buff+4, str, 1);
+
+
    
 
 
-
-    cout << buff << endl;
+    FastReverse(arr);
+    cout << arr << endl;
     
 
 

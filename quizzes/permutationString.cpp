@@ -21,9 +21,9 @@ void Perm(char *str, int left, int right)
     {
         for(int i = left; i <= right; ++i)
         {
-            Swap((str + left), (str + i));
+            Swap(&str[left], &str[i]);
             Perm(str, left + 1, right);
-            Swap((str + left), (str + i));
+            Swap(&str[left], &str[i]);
         }
     }
 }

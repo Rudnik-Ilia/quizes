@@ -1,9 +1,9 @@
 #include <stdio.h>
 
 
-void Swap(int **x, int **y)
+void Swap(int *x, int *y)
 {
-    int *tmp = *x;
+    int tmp = *x;
     *x = *y;
     *y = tmp;
 }
@@ -29,7 +29,7 @@ int main()
     p_b = &b;
 
     printf("%d - %d\n", *p_a, *p_b );
-    Swap(&p_a, &p_b);
+    Swap3(&p_a, &p_b);
 
     printf("%d - %d\n", *p_a, *p_b );
 

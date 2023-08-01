@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stack>
+#include <gtest/gtest.h>
 
 typedef std::stack<int> Stack_t;
 
@@ -37,8 +38,52 @@ void SortStack(Stack_t &stack)
     PutStack(stack, tmp);
 }
 
+void IterSort(Stack_t &stack)
+{
+    Stack_t tmp_stack;
 
-int main()
+    while (!stack.empty())
+    {
+        int curr = stack.top();
+        stack.pop();
+
+        if(!tmp_stack.empty() && curr > tmp_stack.top())
+        {
+            stack.push(tmp_stack.top());
+            tmp_stack.pop();
+        }
+
+        tmp_stack.push(curr);
+    }
+
+    while(!tmp_stack.empty())
+    {
+        stack.push(tmp_stack.top());
+        tmp_stack.pop();
+    }  
+   
+}
+
+TEST(IterSort, Test1) 
+{
+    Stack_t stack;
+    stack.push(3);
+    stack.push(5);
+    stack.push(8);
+    stack.push(1);
+    stack.push(23);
+
+    IterSort(stack);
+
+    while(stack.size() > 1)
+    {
+        int tmp = stack.top();
+        stack.pop();
+        ASSERT_TRUE(tmp > stack.top());
+    }
+}
+
+TEST(SortStack, Test1) 
 {
     Stack_t stack;
     stack.push(3);
@@ -49,11 +94,33 @@ int main()
 
     SortStack(stack);
 
-    while(!stack.empty())
+    while(stack.empty() > 1)
     {
-        std::cout << stack.top() << std::endl;
+        int tmp = stack.top();
         stack.pop();
+        ASSERT_TRUE(tmp > stack.top());
     }
+}
+
+int main()
+{
+    // Stack_t stack;
+    // stack.push(3);
+    // stack.push(5);
+    // stack.push(8);
+    // stack.push(1);
+    // stack.push(23);
+
+    // SortStack(stack);
+    // IterSort(stack);
+
+    // while(!stack.empty())
+    // {
+    //     std::cout << stack.top() << std::endl;
+    //     stack.pop();
+    // }
+    testing::InitGoogleTest();
+    return RUN_ALL_TESTS();
 
     return 0;
 }

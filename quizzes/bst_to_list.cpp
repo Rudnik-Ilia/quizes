@@ -20,6 +20,7 @@ node_t *CreateNode(int data)
     node->right = NULL;
     return node;
 }
+
 void Show(node_t* root)
 {
     if(root == NULL)
@@ -30,6 +31,7 @@ void Show(node_t* root)
     cout << root->data << endl;
     Show(root->right);
 }
+
 void Show_List(node_t* root)
 {
     node_t* iter = root;
@@ -40,29 +42,50 @@ void Show_List(node_t* root)
     }
 }
 
-void Convert(node_t* ptr, node_t* head)
+void Convert(node_t* root, node_t* head)
 {
-    if(ptr == NULL)
+    if(root == NULL)
     {
         return;
     }
+
     static node_t* prev = NULL;
 
-    Convert(ptr->left, head);
+    Convert(root->left, head);
+
     if(prev == NULL)
     {
-        head = ptr;
+        head = root;
     }
     else
     {
-        ptr->left = prev;
-        prev->right = ptr;
+        root->left = prev;
+        prev->right = root;
     }
 
-    prev = ptr;
+    prev = root;
 
-    Convert(ptr->right, head);
+    Convert(root->right, head);
 }
+
+int Len(node_t* root)
+{
+    if(root == NULL)
+    {
+        return 0;
+    }
+
+    int left = Len(root->left);
+    int right = Len(root->right);
+
+    std::cout << left << ' ' << right << std::endl;
+
+    return 1 + ((left >= right) ? left : right);
+} 
+
+
+
+
 
 int main()
 {
@@ -71,6 +94,7 @@ int main()
     node_t * node3 = CreateNode(14);
     node_t * node4 = CreateNode(4);
     node_t * node5 = CreateNode(8);
+
     node1->left = node2;
     node1->right = node3;
     node2->left = node4;
@@ -78,12 +102,11 @@ int main()
 
     node_t * ptr = node1;
 
-    // Show(node1);
+    Show(node1);
+
     Convert(ptr, node1);
+
     Show_List(node4);
-
-
-
 
     return 0;
 }

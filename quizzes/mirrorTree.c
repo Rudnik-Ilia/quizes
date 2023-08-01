@@ -29,26 +29,8 @@ void Traverse1(struct Node* root)
     Traverse1(root->right);
 }
 
-void Traverse2(struct Node* root)
-{
-    if(root == NULL)
-    {
-        return;
-    }
-    printf("%d ", root->data);
-    Traverse2(root->left);
-    Traverse2(root->right);
-}
-void Traverse3(struct Node* root)
-{
-    if(root == NULL)
-    {
-        return;
-    }
-    Traverse3(root->left);
-    Traverse3(root->right);
-    printf("%d ", root->data);
-}
+
+
 
 void Mirror(struct Node* root)
 {
@@ -59,14 +41,29 @@ void Mirror(struct Node* root)
     }
 
     Mirror(root->left);
-    Mirror(root->right);
 
     tmp = root->left;
     root->left = root->right;
     root->right = tmp;
 
+    Mirror(root->right);
 }
 
+int Heihgt(struct Node* root)
+{
+    int lef = 0;
+    int rig = 0;
+
+    if(root == NULL)
+    {
+        return 0;
+    }
+
+    lef = Heihgt(root->left);
+    rig = Heihgt(root->right);
+
+    return lef > rig ? lef + 1 : rig + 1;
+}
 
 int main()
 {
@@ -83,15 +80,15 @@ int main()
     node1->right = node4;
     node2->right = node5;
 
-    Mirror(root);
-    Traverse1(root);
-
+    printf("%d ", Heihgt(root));
 
 
     return 0;
 }
 /*
 
+    Mirror(root);
+    Traverse1(root);
 
     Mirror(root);
 

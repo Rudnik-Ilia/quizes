@@ -25,7 +25,6 @@ char *Add(char *num1, char *num2, char *output, size_t l1, size_t l2, size_t l3)
 	{
 		len2 = l2;
 		len1 = l1;
-	
 	}
 	
 	while(len2)
@@ -57,6 +56,6 @@ int main()
 {
 	char output[16] = {0}; 
 	
-	printf("%s\n", Add("99770", "7894418940" ,output, 5, 10, 11) );
+	printf("%s\n", Add("111111", "71111111" ,output, 7, 10, 11) );
 	return 0;
 }

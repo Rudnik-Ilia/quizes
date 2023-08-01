@@ -1,8 +1,9 @@
 #include <iostream>
+#include "Timer.hpp"
 
 using namespace std;
 
-int FibRec(long long x)
+int FibRec(int x)
 {
     if(x == 0)
     {
@@ -12,7 +13,6 @@ int FibRec(long long x)
     {
         return 1;
     }
-
     return FibRec(x - 1) + FibRec(x - 2);
 }
 
@@ -22,7 +22,7 @@ int FibLoop(int x)
     int cur = 1;
     int next = prev + cur;
 
-    for(int i = 1; i < x - 1; ++i)
+    for(int i = 2; i < x; ++i)
     {
         prev = cur;
         cur = next;
@@ -31,10 +31,26 @@ int FibLoop(int x)
     return next;
 }
 
+int fib(int n, int a = 0, int b = 1) 
+{
+    if (n == 0) 
+    {
+        return a;
+    }
+    if (n == 1 || n == 2) 
+    {
+        return b;
+    }
+    return fib(n - 1, b, a + b);
+}
+
+
 int main()
 {
-    cout << FibRec(9) << endl;
-    cout << FibLoop(9) << endl;
+    // MyTimer t;
+    // cout << FibRec(300) << endl;
+    cout << FibLoop(6) << endl;
+    // cout << fib(300) << endl;
 
     return 0;
 }
