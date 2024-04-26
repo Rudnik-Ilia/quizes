@@ -34,18 +34,17 @@ namespace ilrd
     class ReadFunc: public ITask
     {
         public:
-            ReadFunc(std::shared_ptr<std::vector<char>> data, u_int64_t handle, u_int64_t from, u_int32_t len, uint32_t type, void *utils): m_data(data), m_handle(handle), m_from(from), m_len(len), m_type(type), m_utils(utils){}
+            ReadFunc(u_int64_t handle, u_int64_t from, u_int32_t len, uint32_t type, void *utils): m_handle(handle), m_from(from), m_len(len), m_type(type), m_utils(utils){}
             void Execute()
             {   
                 std::cout << "HI FROM READ TASK!" << '\n';
                 std::cout << "OFFSET: " << m_from << '\n';
-                std::cout << "SIZEOF VECTOR: " << m_data.get()->size() << '\n'; 
+                std::cout << "SIZEOF VECTOR: " << m_len << '\n'; 
                 
                 reinterpret_cast<Transmitter*>(m_utils)->SendRead(m_len, m_from, m_type, m_handle);
             }
             
         private:
-            std::shared_ptr<std::vector<char>> m_data;
             u_int64_t m_handle;
             u_int64_t m_from;
             u_int32_t m_len;
@@ -68,7 +67,7 @@ namespace ilrd
                 std::cout << "LEN: " << m_len << '\n';
                 std::cout << "SIZEOF VECTOR: " << m_data.get()->size() << '\n'; 
                 
-                reinterpret_cast<Transmitter*>(m_utils)->Send(m_data, m_from, m_type);
+                reinterpret_cast<Transmitter*>(m_utils)->SendWrite(m_data, m_from, m_type);
             }
 
         private:
@@ -89,7 +88,7 @@ namespace ilrd
             static std::shared_ptr<ITask> Get_Read_Task(FactoryArgs& Args)
             {
                 ArgumentsForTask &args =  dynamic_cast<ArgumentsForTask&>(Args);
-                return std::shared_ptr<ReadFunc>(new ReadFunc(args.m_data, args.m_handle, args.m_from, args.m_len, args.m_type, args.m_utils));
+                return std::shared_ptr<ReadFunc>(new ReadFunc(args.m_handle, args.m_from, args.m_len, args.m_type, args.m_utils));
             }
 
             static std::shared_ptr<ITask> Get_Write_Task(FactoryArgs& Args)

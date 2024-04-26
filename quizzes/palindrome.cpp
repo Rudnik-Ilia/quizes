@@ -29,7 +29,7 @@ bool Check(int x)
 
 bool Check2(int x)
 {
-    return (x & (x -1)) == 0 ? true : false;
+    return (x & (x - 1)) == 0 ? true : false;
 }
 
 bool IterCheck(char * str)

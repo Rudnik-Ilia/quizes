@@ -14,28 +14,28 @@ typedef Logger*(*func)();
 int main()
 {   
 
-    // Singleton<Logger>::GetInstance()->Log(TraceLog("trace")).Log(DebugLog("debug")).Log(InfoLog("Info")).Log(WarnLog("warn")).Log(ErrorLog("error")).Log(FatalLog("fatal"));
+    Singleton<Logger>::GetInstance()->Log(TraceLog("trace")).Log(DebugLog("debug")).Log(InfoLog("Info")).Log(WarnLog("warn")).Log(ErrorLog("error")).Log(FatalLog("fatal"));
     
-    void *dl_handle = nullptr;
+    // void *dl_handle = nullptr;
 
-    dl_handle  = dlopen("./lib_logger.so", RTLD_LAZY);
-    if (dl_handle == NULL) 
-    {
-        std::cout << "ERROR1" << std::endl;
-        return 0;
-    }
+    // dl_handle  = dlopen("./lib_logger.so", RTLD_LAZY);
+    // if (dl_handle == NULL) 
+    // {
+    //     std::cout << "ERROR1" << std::endl;
+    //     return 0;
+    // }
 
-    func logger_getter = reinterpret_cast<func>(dlsym(dl_handle, "GetInstance"));
-    if (logger_getter == NULL) 
-    {
-        std::cout << "ERROR2" << std::endl;
-        return 0;
-    }
+    // func logger_getter = reinterpret_cast<func>(dlsym(dl_handle, "GetInstance"));
+    // if (logger_getter == NULL) 
+    // {
+    //     std::cout << "ERROR2" << std::endl;
+    //     return 0;
+    // }
 
-    Logger *logger = logger_getter();
+    // Logger *logger = logger_getter();
 
-    logger->Log(TraceLog("Check My Code! ")).Log(DebugLog("hi....my name LOGGERQ")).Log(InfoLog("Info")).Log(WarnLog("warn")).Log(ErrorLog("Mayday! error")).Log(FatalLog("You are in trouble! fatal"));
-    logger->SetLevel(DEBUG).Log(TraceLog("trace")).Log(DebugLog("debug")).Log(InfoLog("Info")).Log(WarnLog("Somethng is brokenQ")).Log(ErrorLog("error")).Log(FatalLog("fatal"));
+    // logger->Log(TraceLog("Check My Code! ")).Log(DebugLog("hi....my name LOGGERQ")).Log(InfoLog("Info")).Log(WarnLog("warn")).Log(ErrorLog("Mayday! error")).Log(FatalLog("You are in trouble! fatal"));
+    // logger->SetLevel(DEBUG).Log(TraceLog("trace")).Log(DebugLog("debug")).Log(InfoLog("Info")).Log(WarnLog("Somethng is brokenQ")).Log(ErrorLog("error")).Log(FatalLog("fatal"));
 
     sleep(1);
 

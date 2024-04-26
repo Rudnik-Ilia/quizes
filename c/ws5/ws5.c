@@ -198,9 +198,9 @@ int logger(char *argv[]){
 		scanf("%[^\n]%*c", nameCommand); /* this staff for feading with spaces*/
 		for(i = 0; i < LEN_OF_ARR; ++i)
 		{
-			if( !arrayOFsuper[i] -> Checking(arrayOFsuper[i] -> command, nameCommand) )
+			if(!arrayOFsuper[i]->Checking(arrayOFsuper[i]->command, nameCommand) )
 			{
-				SPECIAL = arrayOFsuper[i] -> Action(argv[1], nameCommand);
+				SPECIAL = arrayOFsuper[i]->Action(argv[1], nameCommand);
 				break;
 			}
 		}	

@@ -16,6 +16,8 @@
 #define MAX_DATAGRAM_SIZE (size_t)64000
 #define HEADER (sizeof(uint32_t) * 3 + sizeof(u_int64_t) * 2)
 #define NBD_REPLY_MAGIC 0x67446698
+#define RED " \033[1;31m "
+#define OFFCOLOR " \033[0m\n "
 
 enum status_code
 {

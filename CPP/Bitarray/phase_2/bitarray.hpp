@@ -109,8 +109,8 @@ namespace ilrd
     template <size_t Size> 
     void BitArray<Size>::SafetyShift() const
     {
-        char *ptr = (char*)this;
-        size_t *ptr2 = (size_t*)(ptr);
+        // char *ptr = (char*)this;
+        size_t *ptr2 = (size_t*)(this);
         ptr2[s_kNumWords - 1] &= (-1lu >> (s_kNumWords * WORD - Size));
     }
 

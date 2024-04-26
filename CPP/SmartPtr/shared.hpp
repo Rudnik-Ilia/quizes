@@ -9,7 +9,7 @@ using std::endl;
 namespace ilrd
 {
 
-    template <class T>
+    template <typename T>
     class SharedPointer
     {
     public:

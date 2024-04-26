@@ -78,37 +78,22 @@ int Fac5(int x, int a)
         return a;
     }
 }
-struct A
-{
-    public:
-    int x;
-    protected:
-    int y;
-    private:
-    int z;
-};
 
-struct B : public A
-{
- 
-};
 
 
 
 
 int main()
 {   
-    MyTimer t;
+    // MyTimer t;
    
 
-    // std::cout << Fac(12) << std::endl;
+    std::cout << Fac(17) << std::endl;
     // std::cout << Fac1(12) << std::endl;
     // std::cout << Fac2(12) << std::endl;
     // std::cout << Fac3(12) << std::endl;
     // std::cout << Fac4(12, 1) << std::endl;
     // std::cout << Fac5(12, 1) << std::endl;
-
-    A* a = new B();
    
     
 

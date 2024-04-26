@@ -50,7 +50,8 @@ void InsertionSort(int *arr, size_t size)
 	
 	assert(NULL != arr);
 	
-	for(i = 1; i < size; ++i){
+	for(i = 1; i < size; ++i)
+	{
 		for(j = i; j > 0 && arr[j-1] > arr[j]; --j)
 		{
 			 Swap(&arr[j], &arr[j-1]);

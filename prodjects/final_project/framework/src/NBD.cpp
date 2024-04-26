@@ -90,7 +90,6 @@ namespace ilrd
         {
             assert(bytes_read == sizeof(request));
             memcpy(reply.handle, request.handle, sizeof(reply.handle));
-            // std::cout << "SERVE: " <<  *(u_int64_t*)reply.handle << std::endl;
             
             reply.error = htonl(0);
             len = ntohl(request.len);
@@ -195,19 +194,10 @@ namespace ilrd
             fprintf(stderr, "Failed to open `%s': %s\n" "Is kernel module `nbd' loaded and you have permissions " "to access the device?\n", dev_file, strerror(errno));
             return 1;
         }
-        if (aop_->blksize) 
-        {
-            err = ioctl(nbd, NBD_SET_BLKSIZE, aop_->blksize);
-            assert(err != -1);
-        }
+
         if (aop_->size) 
         {
             err = ioctl(nbd, NBD_SET_SIZE, aop_->size);
-            assert(err != -1);
-        }
-        if (aop_->size_blocks) 
-        {
-            err = ioctl(nbd, NBD_SET_SIZE_BLOCKS, aop_->size_blocks);
             assert(err != -1);
         }
 

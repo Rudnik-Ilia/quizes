@@ -1,8 +1,6 @@
 #include <stdio.h>
 
 
-
-
 int Find(char *str)
 {
     int count = 0;

@@ -19,7 +19,6 @@
 
 using namespace std;
 
-
 namespace ilrd
 {   
     class Minion
@@ -39,20 +38,4 @@ namespace ilrd
             // Reactor m_reactor;
             // Transmitter m_transmitter;
     };
-
-    Minion::Minion(uint16_t port): m_receiver(port)
-    {
-        
-    }
-
-    Minion::~Minion()
-    {
-
-    }
-
-    void Minion::Wait()
-    {
-        m_receiver.Listen();
-    }
-
 }

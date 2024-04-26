@@ -19,7 +19,7 @@ typedef enum {
 typedef struct
 {
 	type name;
-    void* data;
+    	void* data;
     
 } SuperStruct;
 

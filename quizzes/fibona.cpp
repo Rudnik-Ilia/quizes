@@ -3,26 +3,26 @@
 
 using namespace std;
 
-int FibRec(int x)
+size_t FibRec(size_t x)
 {
     if(x == 0)
     {
         return 0;
     }
-    if((x == 1) | (x == 2))
+    if((x == 1) || (x == 2))
     {
         return 1;
     }
     return FibRec(x - 1) + FibRec(x - 2);
 }
 
-int FibLoop(int x)
+size_t FibLoop(size_t x)
 {
-    int prev = 0;
-    int cur = 1;
-    int next = prev + cur;
+    size_t prev = 0;
+    size_t cur = 1;
+    size_t next = prev + cur;
 
-    for(int i = 2; i < x; ++i)
+    for(size_t i = 2; i < x; ++i)
     {
         prev = cur;
         cur = next;
@@ -48,9 +48,13 @@ int fib(int n, int a = 0, int b = 1)
 int main()
 {
     // MyTimer t;
-    // cout << FibRec(300) << endl;
-    cout << FibLoop(6) << endl;
-    // cout << fib(300) << endl;
+    cout << FibRec(45) << endl;
+    // cout << FibLoop(80) << endl;
+    // cout << fib(11, 1, 1) << endl;
+    // cout << FibRec(11) << endl;
+
+
+
 
     return 0;
 }

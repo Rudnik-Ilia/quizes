@@ -17,7 +17,6 @@ namespace ilrd
 
     void FRAME::Run_NBD()
     {
-    
         if(m_nbd.Serve() == EXIT_FAILURE)
         {
             fprintf(stderr, "m_nbd.Serve(). errno: %d\n", errno);
@@ -25,11 +24,9 @@ namespace ilrd
         }
 
         m_nbd.GetArguments().get()->m_utils = m_transmit;
-        std::cout << "FRAME STEP OUT" << std::endl;
+    
         if(m_nbd.GetArguments().get()->m_type == 33)
         {
-            
-            std::cout << "FRAME STEP" << std::endl; 
             auto task = m_factory.Create(Reactor::ioMode::READ, *(m_nbd.GetArguments().get()));
             m_pool.AddTask(task, ThreadPool::PRIORITY_HIGH);
             return;
@@ -42,9 +39,7 @@ namespace ilrd
         }
         if(m_nbd.GetArguments().get()->m_type == 3)
         {
-            std::cout << "FRAME STEP FLUSH" << std::endl; 
-            // auto task = m_factory.Create(Reactor::ioMode::WRITE, *(m_nbd.GetArguments().get()));
-            // m_pool.AddTask(task, ThreadPool::PRIORITY_HIGH);
+            std::cout << "FLUSH" << std::endl; 
             return;
         }
 
@@ -62,7 +57,7 @@ namespace ilrd
 
     void FRAME::AddReadTask()
     {
-        std::cout << "REACTOR AddTASK" << std::endl;
+        std::cout << "REACTOR EVENT" << std::endl;
         // usleep(10000);
         m_static_listen.Receiver(m_nbd.GetDescriptor());
     }

@@ -1,63 +1,101 @@
 #include <iostream>
+#include <map>
+#include <vector>
 
+#define CAS(ptr, oldone, newone)  __sync_bool_compare_and_swap(ptr, oldone, newone)
 
-#define SHIFT (55)
-
-
-
-
-
-void Check(int * p)
+template<class K, class V>
+class WRRMMap
 {
-    char *needle = (char*)&p;
-    if(*((needle + SHIFT)) == 77)
-    {
-        std::cout << "Yes" << '\n';
-        return;
-    }
-    std::cout << "No" << '\n';
-    std::cout << "Needle int: " << *(needle) << '\n';
+    public:
+        std::map<K,V> *m_pMap;
+        std::vector<std::map<K,V> *> rlist;
 
-}
+
+        static void Retire(std::map<K,V> * pOld)
+        {
+            rlist.push_back(pOld);
+        }
+};
+
+class HPRecType
+{
+    public:
+        void * pHazard;
+
+        static HPRecType *Head()
+        {
+            return pHead;
+        }
+
+        static HPRecType *Acquire()
+        {
+            HPRecType *p = pHead;
+
+            for( ;p ;p->pNext)
+            {
+                if(p->active || !CAS(&p->active, 0, 1))
+                {
+                    continue;
+                }
+                return p;
+            }
+
+            int oldLen;
+
+            do
+            {
+               oldLen = listLen;
+            } while (!CAS(&listLen, oldLen, oldLen + 1));
+
+            HPRecType * pnew= new HPRecType;
+
+            pnew->active = 1;
+            pnew->pHazard = 0;
+
+            HPRecType * old;
+            do
+            {
+                old = pHead; 
+                pnew->pNext = old;
+
+            } while (!CAS(&pHead, old, pnew));
+            
+            return pnew;
+        }
+
+        static void Release(HPRecType * p)
+        {
+            p->pHazard = 0;
+            p->active = 1;
+        }
+
+
+    private:
+        HPRecType * pNext;
+        int active;
+        static HPRecType * pHead;
+        static int listLen;
+};
+
+
+
+
+
 int main()
 {
+    int arr[] = {1,2,3,4};
 
-    int a = 1986;
-    int b = 1999;
-    int c = 2000;
-
-    int *p_a = &a;
-    int *p_b = &b;
-    int *p_c = &c;
-
-   
-
-    char *needle = (char*)&p_a;
-
-    std::cout << &p_a << '\n';
-
-    std::cout << &a << '\n';
-    std::cout << p_a << '\n';
-
-    std::cout << "Origin value: " << *p_a << '\n';
-
-    // std::cout << "Addr : " << &p_a << '\n';
-    // std::cout << "Addr size_t: " <<(size_t)p_a << '\n';
-    // std::cout << "Needle int: " << *(char*)(needle + SHIFT) << '\n';
-
-    *(needle + SHIFT) = 77;
-
-    std::cout << "Origin value: " << *p_a << '\n';
-
-    // std::cout << "Addr : " << &p_a << '\n';
-    // std::cout << "Addr size_t: " <<(size_t)p_a << '\n';
-    // std::cout << "Needle int: " << *(char*)(needle + SHIFT) << '\n';
-
-    // std::cout << "Arr value: " << arr[0] << '\n';
-
-    Check(p_a);
-   
-
+    for(size_t i = 0; i < 5; ++i)
+    {
+        std::cout << arr[i] << std::endl;
+        if(arr[i] == 1)
+        {
+            continue;
+        }
+        return 0;
+    }
+    
 
 
     return 0;

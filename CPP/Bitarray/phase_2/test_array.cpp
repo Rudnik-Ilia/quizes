@@ -51,6 +51,8 @@ int main()
     b1.set(8, true);
     b2.set(5, true);
     b1[5] = b2[5];
+
+    // // b1[126] = true;
     
 
  
@@ -86,6 +88,11 @@ int main()
     }
 
     cout <<'\n'<< b1.count() << endl;
+    b1.set(0, true);
+    
+    cout << b1.to_string() << endl;
+
+    
     
 
     return 0;

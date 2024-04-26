@@ -1,50 +1,57 @@
 #include <iostream>
 #include <unistd.h>
+#include <vector>
+#include <yaml-cpp/yaml.h>
 
 
 class A
 {
     public:
-    A()
+    A(int x, int y): sss(x), ddd(y)
     {
 
     }
-    void Run()
+    void Foo(int var)
     {
-        std::cout << "Run A" << '\n';
+        sss = var;
+        std::cout << "from daddu" << sss << '\n';
     }
+    virtual void Run()
+    {
+        std::cout << "Run A" << sss << '\n';
+    }
+    private:
+        int sss;
+        int ddd;
 
 };
 
 class B: public A
 {
     public:
-        B(){}
+        B(int x, int y): A(x, y)
+        {
+            m_sss = x;
+        }
+
     void Run()
     {
-        std::cout << "Run B" << '\n';
+        std::cout << "Run B" << m_sss << '\n';
     }
+
+    private:
+        int m_sss;
 };
 
-void Foo(B& cl)
-{
-    cl.Run();
-}
 
 
 
-int main()
+int main() 
 {
 
-    // A* a = new B;
-    // B* b = new B;
-
-    A a;
-    B b;
-
-    Foo(a);
-    Foo(b);
-
+    B b(22, 33);
+    b.Run();
+    b.Foo(399);
   
     return 0;
 }

@@ -4,7 +4,6 @@
 
 int Recur(int x)
 {	
-	
 	static int res = 0; 
 	
 	if(0 == x)

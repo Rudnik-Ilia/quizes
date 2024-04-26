@@ -191,7 +191,11 @@ int MainFunc(char *str, double *out, size_t size)
 		step += ARR_FUNC[ACT_LUT[*(char*)StackPeek(operators) - SHIFTASCII][*(str+step) - SHIFTASCII]](numbers, operators, str+step);
 		FINAL_RESULT = RESULT;
 	}
+	
+	#ifdef NDEBUG
 	printf("FINAL: %f\n", FINAL_RESULT);
+	#endif
+	
 	StackDestroy(numbers);
 	StackDestroy(operators);
 	return 0;
@@ -227,7 +231,6 @@ int PushOperatorToStack(stack_t * stack_number, stack_t * stack_operator,char *p
 
 int PushOperatorToNumberStack(stack_t *stack_number, stack_t *stack_operator, char *ptr)
 {
-	
 	int index = *(char*)(StackPeek(stack_operator));
 	
 	assert(NULL != stack_number);
